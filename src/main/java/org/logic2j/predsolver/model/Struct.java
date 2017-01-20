@@ -37,11 +37,7 @@ public final class Struct extends Term {
     // Names of functors
     // ---------------------------------------------------------------------------
 
-    public static final char HEAD_TAIL_SEPARATOR = '|';
-
-    public static final char LIST_CLOSE = ']';
-
-    public static final char LIST_OPEN = '[';
+    public static final String LIST_SEPARATOR = ",".intern(); // In notations pred(a, b, c)
 
     public static final char PAR_CLOSE = ')';
 
@@ -59,13 +55,6 @@ public final class Struct extends Term {
 
     public static final Struct ATOM_CUT = new Struct(FUNCTOR_CUT);
 
-    public static final String FUNCTOR_EMPTY_LIST = "[]".intern(); // The list end marker
-
-    /**
-     * The empty list.
-     */
-    public static final Struct EMPTY_LIST = new Struct(FUNCTOR_EMPTY_LIST, 0);
-
     // ---------------------------------------------------------------------------
     // Some key atoms as singletons
     // ---------------------------------------------------------------------------
@@ -80,8 +69,6 @@ public final class Struct extends Term {
 
     public static final Struct ATOM_FALSE = new Struct(FUNCTOR_FALSE);
 
-    public static final String LIST_SEPARATOR = ",".intern(); // In notations [a,b,c]
-
     /**
      * Indicate the arity of a variable arguments predicate, such as write/N.
      * This is an extension to classic Prolog where only fixed arity is supported.
@@ -95,8 +82,6 @@ public final class Struct extends Term {
 
     // Separator of functor arguments: f(a,b), NOT the ',' functor for logical AND.
     public static final String ARG_SEPARATOR = ", ".intern();
-
-    public static final String LIST_ELEM_SEPARATOR = ",".intern();
 
     public static final char QUOTE = '\'';
 
@@ -200,21 +185,21 @@ public final class Struct extends Term {
         return instance;
     }
 
-//    /**
-//     * Factory to builds a compound, with non-{@link Term} arguments that will be converted
-//     * by {@link TermApi#valueOf(Object, org.logic2j.core.api.TermAdapter.FactoryMode)}.
-//     *
-//     * @note This method is a static factory, not a constructor, to emphasize that arguments
-//     *       are not of the type needed by this class, but need transformation.
-//     */
-//    public static Struct valueOf(String theFunctor, Object... argList) throws InvalidTermException {
-//        final Struct newInstance = new Struct(theFunctor, argList.length);
-//        int i = 0;
-//        for (final Object element : argList) {
-//            newInstance.args[i++] = TermApi.valueOf(element, TermAdapter.FactoryMode.ANY_TERM);
-//        }
-//        return newInstance;
-//    }
+    /**
+     * Factory to builds a compound, with non-{@link Term} arguments that will be converted
+     * by {@link TermApi#valueOf(Object)}.
+     *
+     * @note This method is a static factory, not a constructor, to emphasize that arguments
+     *       are not of the type needed by this class, but need transformation.
+     */
+    public static Struct valueOf(String theFunctor, Object... argList) throws InvalidTermException {
+        final Struct newInstance = new Struct(theFunctor, argList.length);
+        int i = 0;
+        for (final Object element : argList) {
+            newInstance.args[i++] = TermApi.valueOf(element);
+        }
+        return newInstance;
+    }
 
 
     // ---------------------------------------------------------------------------
@@ -315,9 +300,9 @@ public final class Struct extends Term {
         this.signature = (this.name + '/' + this.arity).intern();
     }
 
-    // ---------------------------------------------------------------------------
-    // Methods for Prolog list structures (named "PList" hereafter)
-    // ---------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+    // Accessors
+    // --------------------------------------------------------------------------
 
     /**
      * @return A cloned array of all arguments (cloned to avoid any possibility to mutate)
@@ -380,13 +365,6 @@ public final class Struct extends Term {
         }
         return this.args[1];
     }
-
-
-
-    // ---------------------------------------------------------------------------
-    // Accessors
-    // ---------------------------------------------------------------------------
-
 
     // ---------------------------------------------------------------------------
     // TermVisitor
@@ -523,26 +501,5 @@ public final class Struct extends Term {
         }
         return sb.toString();
     }
-
-    // ---------------------------------------------------------------------------
-    // Graph traversal methods, template methods with "protected" scope, user code should use TermApi methods instead.
-    // Some traversal are implemented by the Visitor design pattern and the #accept() method
-    // ---------------------------------------------------------------------------
-
-    /**
-     * Find the first {@link Term} that is either same, or structurally equal to this.
-     *
-     * @param findWithin
-     * @return The {@link Term} found or null when none found.
-     */
-    protected Object findStructurallyEqualWithin(Collection<Object> findWithin) {
-        for (final Object term : findWithin) {
-            if (term != this && TermApi.structurallyEquals(term, this)) {
-                return term;
-            }
-        }
-        return null;
-    }
-
 
 }

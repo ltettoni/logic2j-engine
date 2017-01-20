@@ -339,84 +339,75 @@ public final class TermApi {
     }
 
 
-//    /**
-//     * Primitive factory for simple {@link Term}s from plain Java {@link Object}s, use this
-//     * with parsimony at low-level.
-//     * Higher-level must use {@link TermAdapter} or {@link TermUnmarshaller} instead which can be
-//     * overridden and defined with user logic and features.
-//     *
-//     * Character input will be converted to Struct or Var according to Prolog's syntax convention:
-//     * when starting with an underscore or an uppercase, this is a {@link Var}.
-//     * This method is not capable of instantiating a compound {@link Struct}, it may only create atoms.
-//     *
-//     * @param theObject Should usually be {@link CharSequence}, {@link Number}, {@link Boolean}
-//     * @param theMode
-//     * @return An instance of a subclass of {@link Term}.
-//     * @throws InvalidTermException If theObject cannot be converted to a Term
-//     */
-//    public static Object valueOf(Object theObject, TermAdapter.FactoryMode theMode) throws InvalidTermException {
-//        if (theObject == null) {
-//            throw new InvalidTermException("Cannot create Term from a null argument");
-//        }
-//        final Object result;
-//        if (theObject instanceof Term) {
-//            // Idempotence
-//            result = theObject;
-//        } else if (theObject instanceof Integer) {
-//            result = theObject;
-//        } else if (theObject instanceof Long) {
-//            result = ((Long)theObject).intValue();
-//        } else if (theObject instanceof Float) {
-//            result = ((Float) theObject).doubleValue();
-//        } else if (theObject instanceof Double) {
-//            result = theObject;
-//        } else if (theObject instanceof Boolean) {
-//            result = (Boolean) theObject ? Struct.ATOM_TRUE : Struct.ATOM_FALSE;
-//        } else if (theObject instanceof CharSequence || theObject instanceof Character) {
-//            // Very very vary rudimentary parsing
-//            final String chars = theObject.toString();
-//            switch (theMode) {
-//            case ATOM:
-//                result = Struct.atom(chars);
-//                break;
-//            default:
-//                if (Var.ANONYMOUS_VAR_NAME.equals(chars)) {
-//                    result = Var.ANONYMOUS_VAR;
-//                } else if (chars.isEmpty()) {
-//                    // Dubious for real programming, but some data sources may contain empty fields, and this is the only way to represent
-//                    // them
-//                    // as a Term
-//                    result = new Struct("");
-//                } else if (Character.isUpperCase(chars.charAt(0)) || chars.startsWith(Var.ANONYMOUS_VAR_NAME)) {
-//                    // Use Prolog's convention re variables starting with uppercase or underscore
-//                    result = new Var<Object>(chars);
-//                } else {
-//                    // Otherwise it's an atom
-//                    // result = new Struct(chars);
-//                    result = chars.intern();
-//                }
-//                break;
-//            }
-//        } else if (theObject instanceof Number) {
-//            // Other types of numbers
-//            final Number nbr = (Number) theObject;
-//            if (nbr.doubleValue() % 1 != 0) {
-//                // Has floating point number
-//                result = nbr.doubleValue();
-//            } else {
-//                // Is just an integer
-//                result = nbr.longValue();
-//            }
-//        } else if (theObject instanceof Enum<?>) {
-//            // Enums are just valid terms
-//            result = theObject;
-//        } else {
-//            // POJOs are also valid terms now
-//            result = theObject;
-//            // throw new InvalidTermException("Cannot (yet) create a Term from '" + theObject + "' of " + theObject.getClass());
-//        }
-//        return result;
-//    }
+    /**
+     * Primitive factory for simple {@link Term}s from plain Java {@link Object}s, use this
+     * with parsimony at low-level.
+     *
+     * Character input will be converted to Struct or Var according to Prolog's syntax convention:
+     * when starting with an underscore or an uppercase, this is a {@link Var}.
+     * This method is not capable of instantiating a compound {@link Struct}, it may only create atoms.
+     *
+     * @param theObject Should usually be {@link CharSequence}, {@link Number}, {@link Boolean}
+     * @return An instance of a subclass of {@link Term}.
+     * @throws InvalidTermException If theObject cannot be converted to a Term
+     */
+    public static Object valueOf(Object theObject) throws InvalidTermException {
+        if (theObject == null) {
+            throw new InvalidTermException("Cannot create Term from a null argument");
+        }
+        final Object result;
+        if (theObject instanceof Term) {
+            // Idempotence
+            result = theObject;
+        } else if (theObject instanceof Integer) {
+            result = theObject;
+        } else if (theObject instanceof Long) {
+            result = ((Long)theObject).intValue();
+        } else if (theObject instanceof Float) {
+            result = ((Float) theObject).doubleValue();
+        } else if (theObject instanceof Double) {
+            result = theObject;
+        } else if (theObject instanceof Boolean) {
+            result = (Boolean) theObject ? Struct.ATOM_TRUE : Struct.ATOM_FALSE;
+        } else if (theObject instanceof CharSequence || theObject instanceof Character) {
+            // Very very vary rudimentary parsing
+            final String chars = theObject.toString();
+
+                if (Var.ANONYMOUS_VAR_NAME.equals(chars)) {
+                    result = Var.ANONYMOUS_VAR;
+                } else if (chars.isEmpty()) {
+                    // Dubious for real programming, but some data sources may contain empty fields, and this is the only way to represent
+                    // them
+                    // as a Term
+                    result = new Struct("");
+                } else if (Character.isUpperCase(chars.charAt(0)) || chars.startsWith(Var.ANONYMOUS_VAR_NAME)) {
+                    // Use Prolog's convention re variables starting with uppercase or underscore
+                    result = new Var<Object>(chars);
+                } else {
+                    // Otherwise it's an atom
+                    // result = new Struct(chars);
+                    result = chars.intern();
+                }
+        } else if (theObject instanceof Number) {
+            // Other types of numbers
+            final Number nbr = (Number) theObject;
+            if (nbr.doubleValue() % 1 != 0) {
+                // Has floating point number
+                result = nbr.doubleValue();
+            } else {
+                // Is just an integer
+                result = nbr.longValue();
+            }
+        } else if (theObject instanceof Enum<?>) {
+            // Enums are just valid terms
+            result = theObject;
+        } else {
+            // POJOs are also valid terms now
+            result = theObject;
+            // throw new InvalidTermException("Cannot (yet) create a Term from '" + theObject + "' of " + theObject.getClass());
+        }
+        return result;
+    }
 
 //    /**
 //     * Extract one {@link Term} from within another ({@link Struct}) using a rudimentary XPath-like expression language.

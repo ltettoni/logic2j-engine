@@ -23,12 +23,17 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * Term class is the root abstract class for all Prolog data types.
+ * Term class is the root abstract class for all Prolog data types. The following notions apply on terms, see also the {@link TermApi} class
+ * for methods to manage {@link Term}s.
  * <ul>
+ * <li>Structural equality, see {@link TermApi#structurallyEquals(Object, Object)}</li>
+ * <li>Factorization, see {@link TermApi#factorize(Object)}</li>
+ * <li>Initialization of {@link Var} indexes, see {@link TermApi#assignIndexes(Object, int)}</li>
  * <li>Normalization: includes initialization of indexes, factorization, and identification of primitive functors</li>
  * </ul>
  *
  * @note Maybe one day we will need a subclass to represent timestamps.
+ * @see Struct
  * @see Var
  */
 public abstract class Term implements Serializable {
@@ -41,6 +46,7 @@ public abstract class Term implements Serializable {
 
     /**
      * For {@link Var}s: defines the unique index to the variable.
+     * For a {@link Struct}: defines the number of distinct variables within all nested substructures.
      * The default value is NO_INDEX.
      * TODO A field must not be public !!!
      */
@@ -51,12 +57,6 @@ public abstract class Term implements Serializable {
      */
     public static final int ANON_INDEX = -2;
 
-    // ---------------------------------------------------------------------------
-    // TermVisitor
-    // ---------------------------------------------------------------------------
-
-    public abstract <T> T accept(TermVisitor<T> theVisitor);
-
 
     // ---------------------------------------------------------------------------
     // Accessors
@@ -66,6 +66,11 @@ public abstract class Term implements Serializable {
         return this.index;
     }
 
+    // ---------------------------------------------------------------------------
+    // TermVisitor
+    // ---------------------------------------------------------------------------
+
+    public abstract <T> T accept(TermVisitor<T> theVisitor);
 
 
     // ---------------------------------------------------------------------------

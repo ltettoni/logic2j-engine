@@ -55,40 +55,20 @@ public class TermApiTest {
         assertTrue(TermApi.structurallyEquals(s2.getArg(0), s2.getArg(1)));
     }
 
-
     @Test
-    public void collectTerms1() {
-        Term term;
-        Var<?> X = new Var<>("X");
-        //
-        term = new Struct("p", X, 2);
-        logger.info("Flat terms: {}", TermApi.collectTerms(term));
-    }
-
-    @Test
-    public void collectTerms2() {
+    public void collectTerms() {
         Term term;
         //
-        term = new Struct("a", new Struct("b"), "c");
+        term = Struct.valueOf("p", "X", 2);
         logger.info("Flat terms: {}", TermApi.collectTerms(term));
-    }
-
-    @Test
-    public void collectTerms3() {
-        Term term;
-        Var<?> X = new Var<>("X");
-        Var<?> Y = new Var<>("Y");
         //
-        term = new Struct(Struct.FUNCTOR_CLAUSE, new Struct("a", new Struct("p", X, Y)), new  Struct("p", X, Y));
+        term = Struct.valueOf("a", new Struct("b"), "c");
         logger.info("Flat terms: {}", TermApi.collectTerms(term));
-    }
-
-    @Test
-    public void collectTerms4() {
-        Term term;
-        Var<?> X = new Var<>("X");
-        Var<?> Y = new Var<>("Y");
-        final Term clause = new Struct(Struct.FUNCTOR_CLAUSE, new Struct("a", new  Struct("p", X, Y)), new  Struct("p", X, Y));
+        //
+        term = new Struct(Struct.FUNCTOR_CLAUSE, new Struct("a", Struct.valueOf("p", "X", "Y")), Struct.valueOf("p", "X", "Y"));
+        logger.info("Flat terms: {}", TermApi.collectTerms(term));
+        //
+        final Term clause = new Struct(Struct.FUNCTOR_CLAUSE, new Struct("a", Struct.valueOf("p", "X", "Y")), Struct.valueOf("p", "X", "Y"));
         logger.info("Flat terms of original {}", TermApi.collectTerms(clause));
         final Object t2 = TermApi.normalize(clause);
         logger.info("Found {} bindings", ((Struct) t2).getIndex());
