@@ -17,10 +17,10 @@
  */
 package org.logic2j.predsolver.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.logic2j.predsolver.visitor.TermVisitor;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Term class is the root abstract class for all Prolog data types.
@@ -32,7 +32,6 @@ import java.io.Serializable;
  * @see Var
  */
 public abstract class Term implements Serializable {
-    static final Logger logger = LoggerFactory.getLogger(Term.class);
     private static final long serialVersionUID = 1L;
 
     /**
@@ -52,6 +51,12 @@ public abstract class Term implements Serializable {
      */
     public static final int ANON_INDEX = -2;
 
+    // ---------------------------------------------------------------------------
+    // TermVisitor
+    // ---------------------------------------------------------------------------
+
+    public abstract <T> T accept(TermVisitor<T> theVisitor);
+
 
     // ---------------------------------------------------------------------------
     // Accessors
@@ -62,6 +67,26 @@ public abstract class Term implements Serializable {
     }
 
 
+
+    // ---------------------------------------------------------------------------
+    // Graph traversal methods, template methods with "protected" scope, user code should use TermApi methods instead.
+    // Some traversal are implemented by the Visitor design pattern and the #accept() method
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Find the first {@link Term} that is either same, or structurally equal to this.
+     *
+     * @param findWithin
+     * @return The {@link Term} found or null when none found.
+     */
+    protected Object findStructurallyEqualWithin(Collection<Object> findWithin) {
+        for (final Object term : findWithin) {
+            if (term != this && TermApi.structurallyEquals(term, this)) {
+                return term;
+            }
+        }
+        return null;
+    }
 
 
 }
