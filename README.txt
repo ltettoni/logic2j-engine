@@ -17,3 +17,5 @@ TermApi:
 - removed normalization signature with LibraryContent
 - valueOf: removed second argument FactoryMode (using always non ATOM)
 - removed selectTerm()
+
+
