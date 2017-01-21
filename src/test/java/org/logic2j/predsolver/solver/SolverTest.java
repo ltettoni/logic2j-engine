@@ -4,10 +4,11 @@ import org.junit.Test;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.solver.listener.CountingSolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.logic2j.predsolver.predicates.Predicates.and;
@@ -103,50 +104,20 @@ public class SolverTest {
 
 
 
-  //  @Test
-  //  public void corePrimitivesThatYieldNoSolution() {
-  //    final String[] NO_SOLUTION_GOALS = new String[] { //
-  //        "fail", //
-  //        "fail, fail", //
-  //        "fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail, fail", //
-  //        "true, fail", //
-  //        "fail, true", //
-  //        "true, true, fail", //
-  //        "true, fail, !", //
-  //    };
-  //    countNoSolution(NO_SOLUTION_GOALS);
-  //  }
-  //
-  //
-  //  /**
-  //   * This is a special feature of logic2j: AND with any arity
-  //   */
-  //  @Test
-  //  public void nonBinaryAnd() {
-  //    loadTheoryFromTestResourcesDir("test-functional.pro");
-  //    final String[] SINGLE_SOLUTION_GOALS = new String[] { //
-  //        "','(true)", //
-  //        "','(true, true)", //
-  //        "','(true, !, true)", //
-  //    };
-  //    countOneSolution(SINGLE_SOLUTION_GOALS);
-  //  }
-  //
-  //
-  //  @Test
-  //  public void or() {
-  //    loadTheoryFromTestResourcesDir("test-functional.pro");
-  //    countNSolutions(2, "';'(true, true)");
-  //    countNSolutions(2, "true; true");
-  //    //
-  //    countNSolutions(3, "true; true; true");
-  //    //
-  //    GoalHolder solutions;
-  //    solutions = this.prolog.solve("X=a; X=b; X=c");
-  //    assertEquals("[a, b, c]", solutions.var("X").list().toString());
-  //  }
-  //
-  //
+    @Test
+    public void orTest() {
+      countNSolutions(2, or(ttrue, ttrue));
+      //
+      countNSolutions(3, or(ttrue, ttrue, ttrue));
+      //
+      Var<Integer> Q = new Var<>("Q");
+      countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
+//      GoalHolder solutions;
+//      solutions = this.prolog.solve("X=a; X=b; X=c");
+//      assertEquals("[a, b, c]", solutions.var("X").list().toString());
+    }
+
+
   //  /**
   //   * This is a special feature of logic2j: OR with any arity
   //   */
@@ -224,34 +195,38 @@ public class SolverTest {
       final Object goal = eq(Q, "d");
       final long nbSolutions = solve(goal).getCounter();
       assertEquals(1, nbSolutions);
-//      final ExtractingSolutionListener listener = solve(goal);
-//      assertEquals(1, listener.getCounter());
-//      assertEquals("[Q]", listener.getVariables().toString());
-//      assertEquals("[d = d]", marshall(listener.getValues(".")));
-//      assertEquals("[d]", marshall(listener.getValues("Q")));
+      final ExtractingSolutionListener listener = solve(goal);
+      assertEquals(1, listener.getCounter());
+      assertEquals("[Q]", listener.getVariables().toString());
+      assertEquals("['='(d, d)]", marshall(listener.getValues(".")));
+      assertEquals("[d]", marshall(listener.getValues("Q")));
     }
 
-  //  @Test
-  //  public void unifyVarToAnonymous() {
-  //    final Object goal = unmarshall("Q=_");
-  //    final ExtractingSolutionListener listener = solve(goal);
-  //    assertEquals(1, listener.getCounter());
-  //    assertEquals("[Q]", listener.getVariables().toString());
-  //    assertEquals("[_ = _]", marshall(listener.getValues(".")));
-  //    assertEquals("[_]", marshall(listener.getValues("Q")));
-  //  }
-  //
-  //
-  //  @Test
-  //  public void unifyVarToVar() {
-  //    final Object goal = unmarshall("Q=Z");
-  //    final ExtractingSolutionListener listener = solve(goal);
-  //    assertEquals(1, listener.getCounter());
-  //    assertEquals("[., Q, Z]", listener.getVarNames().toString());
-  //    assertEquals("[Q = Q]", marshall(listener.getValues(".")));
-  //    assertEquals("[Q]", marshall(listener.getValues("Q")));
-  //    assertEquals("[Q]", marshall(listener.getValues("Z")));
-  //  }
+
+    @Test
+    public void unifyVarToAnonymous() {
+      Var<String> Q = new Var<>("Q");
+      final Object goal = eq(Q, anonymous);
+      final ExtractingSolutionListener listener = solve(goal);
+      assertEquals(1, listener.getCounter());
+      assertEquals("[Q]", listener.getVariables().toString());
+      assertEquals("['='(_, _)]", marshall(listener.getValues(".")));
+      assertEquals("[_]", marshall(listener.getValues("Q")));
+    }
+
+
+    @Test
+    public void unifyVarToVar() {
+      Var<String> Q = new Var<>("Q");
+      Var<String> Z = new Var<>("Z");
+      final Object goal = eq(Q, Z);
+      final ExtractingSolutionListener listener = solve(goal);
+      assertEquals(1, listener.getCounter());
+      assertEquals("[., Q, Z]", listener.getVarNames().toString());
+      assertEquals("['='(Q, Q)]", marshall(listener.getValues(".")));
+      assertEquals("[Q]", marshall(listener.getValues("Q")));
+      assertEquals("[Q]", marshall(listener.getValues("Z")));
+    }
 
 
   // --------------------------------------------------------------------------
@@ -260,17 +235,49 @@ public class SolverTest {
 
   private LocalSolutionListener solve(Object goal) {
     final Object normalized = TermApi.normalize(goal);
-    final LocalSolutionListener theSolutionListener = new LocalSolutionListener();
+    final LocalSolutionListener theSolutionListener = new LocalSolutionListener(normalized);
     new Solver().solveGoal(normalized, theSolutionListener);
     return theSolutionListener;
   }
 
+  protected String marshall(Iterable<Object> terms) {
+    ArrayList<String> marshalled = new ArrayList<String>();
+    for (Object term : terms) {
+      marshalled.add(term.toString());
+    }
+    return marshalled.toString();
+  }
 
-  private class LocalSolutionListener extends CountingSolutionListener {
+
+  private class LocalSolutionListener extends ExtractingSolutionListener {
+
+    public LocalSolutionListener(Object goal) {
+      super(goal);
+    }
 
     @Override
     public Integer onSolution(UnifyContext currentVars) {
       return super.onSolution(currentVars);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Low-lever solution counting assertions just using a COuntingSolutionListener
+  // ---------------------------------------------------------------------------
+
+  protected void countOneSolution(Object... theGoals) {
+    countNSolutions(1, theGoals);
+  }
+
+
+  protected void countNoSolution(Object... theGoals) {
+    countNSolutions(0, theGoals);
+  }
+
+  protected void countNSolutions(int nbr, Object... theGoals) {
+    for (Object term : theGoals) {
+      final LocalSolutionListener listener = solve(term);
+      assertEquals("Solving goalText \"" + term + '"', nbr, listener.getCounter());
     }
   }
 
