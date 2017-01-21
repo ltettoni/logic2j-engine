@@ -13,7 +13,7 @@ public class Fail extends Predicate {
   }
 
   @Override
-  public Integer invokePredicate(UnifyContext currentVars, SolutionListener theListener) {
+  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     // Provide no solution
     return Continuation.CONTINUE;
   }

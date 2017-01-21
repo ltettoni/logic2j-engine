@@ -351,7 +351,7 @@ public final class TermApi {
      * @return An instance of a subclass of {@link Term}.
      * @throws InvalidTermException If theObject cannot be converted to a Term
      */
-    public static Object valueOf(Object theObject) throws InvalidTermException {
+    public static Object valueOf(Object theObject) {
         if (theObject == null) {
             throw new InvalidTermException("Cannot create Term from a null argument");
         }

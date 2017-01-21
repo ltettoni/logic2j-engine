@@ -247,7 +247,7 @@ public class Solver {
             // ---------------------------------------------------------------------------
             // Primitive implemented in Java
             // ---------------------------------------------------------------------------
-            final Integer primitiveContinuation = ((Predicate)goalStruct).invokePredicate(currentVars, theSolutionListener);
+            final Integer primitiveContinuation = ((Predicate)goalStruct).invokePredicate(theSolutionListener, currentVars);
 
             // The result will be the continuation code or CUT level
             result = primitiveContinuation;

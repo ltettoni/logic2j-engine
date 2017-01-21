@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
+import org.logic2j.predsolver.predicates.Digit;
+import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import static org.logic2j.predsolver.predicates.Predicates.ttrue;
 
 public class SolverTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverTest.class);
+  private Solver solver = new Solver();
 
   // ---------------------------------------------------------------------------
   // Simplest primitives and undefined goal
@@ -150,13 +153,12 @@ public class SolverTest {
   //    solutions = this.prolog.solve("or3(X)");
   //    assertEquals("[a, b, c]", solutions.var("X").list().toString());
   //  }
-  //
-  //  @Test
-  //  public void not() {
-  //    // Surprisingly enough, the operator \+ means "not provable".
-  //    uniqueSolution("not(fail)", "\\+(fail)");
-  //    nSolutions(0, "not(true)", "\\+(true)");
-  //  }
+
+    @Test
+    public void not() {
+//      countOneSolution(new Not(solver, fail));
+      countNoSolution(new Not(solver, ttrue));
+    }
 
 
 
@@ -229,6 +231,30 @@ public class SolverTest {
     }
 
 
+  @Test
+  public void digitVar() {
+    Var<Integer> Q = new Var<>("Q");
+    final Object goal = new Digit(Q);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(10, listener.getCounter());
+  }
+
+
+  @Test
+  public void digit0() {
+    final Object goal = new Digit(0);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.getCounter());
+  }
+
+  @Test
+  public void digit9() {
+    final Object goal = new Digit(9);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.getCounter());
+  }
+
+
   // --------------------------------------------------------------------------
   // Support methods
   // --------------------------------------------------------------------------
@@ -236,9 +262,10 @@ public class SolverTest {
   private LocalSolutionListener solve(Object goal) {
     final Object normalized = TermApi.normalize(goal);
     final LocalSolutionListener theSolutionListener = new LocalSolutionListener(normalized);
-    new Solver().solveGoal(normalized, theSolutionListener);
+    solver.solveGoal(normalized, theSolutionListener);
     return theSolutionListener;
   }
+
 
   protected String marshall(Iterable<Object> terms) {
     ArrayList<String> marshalled = new ArrayList<String>();

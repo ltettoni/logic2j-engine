@@ -1,6 +1,5 @@
 package org.logic2j.predsolver.predicates.impl;
 
-import org.logic2j.predsolver.exception.InvalidTermException;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
@@ -11,7 +10,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
  */
 public abstract class Predicate extends Struct {
 
-  public Predicate(String theFunctor, Object... argList) throws InvalidTermException {
+  public Predicate(String theFunctor, Object... argList) {
     super(theFunctor, argList);
   }
 
@@ -61,11 +60,11 @@ public abstract class Predicate extends Struct {
 
   /**
    * Invoked by the {@link org.logic2j.predsolver.solver.Solver}.
-   * @param currentVars
    * @param theListener
+   * @param currentVars
    * @return The continuation, one of {@link org.logic2j.predsolver.solver.Continuation} values.
    */
-  public Integer invokePredicate(UnifyContext currentVars, SolutionListener theListener) {
+  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     throw new UnsupportedOperationException("The base Struct.invoke() method does not define any logic: class Struct must be "
         + "derived. Instance was: \"" +
         this + '"');

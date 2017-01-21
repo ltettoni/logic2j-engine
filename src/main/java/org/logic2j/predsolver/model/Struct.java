@@ -141,7 +141,7 @@ public class Struct extends Term {
         }
     }
 
-    public Struct(String theFunctor, Object... argList) throws InvalidTermException {
+    public Struct(String theFunctor, Object... argList) {
         this(theFunctor, argList.length);
         int i = 0;
         for (final Object element : argList) {
@@ -216,7 +216,7 @@ public class Struct extends Term {
      * @note This method is a static factory, not a constructor, to emphasize that arguments
      *       are not of the type needed by this class, but need transformation.
      */
-    public static Struct valueOf(String theFunctor, Object... argList) throws InvalidTermException {
+    public static Struct valueOf(String theFunctor, Object... argList) {
         final Struct newInstance = new Struct(theFunctor, argList.length);
         int i = 0;
         for (final Object element : argList) {

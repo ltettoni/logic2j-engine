@@ -21,3 +21,12 @@ TermApi:
 - removed selectTerm()
 
 
+Improvements DONE:
+- NotListener -> FirstSolutionListener
+- order of args in invokePredicate() (always Listener, UnifyContext)
+
+
+TODO
+- Listener should become consumers
+
+

@@ -12,7 +12,7 @@ public class True extends Predicate {
   }
 
   @Override
-  public Integer invokePredicate(UnifyContext currentVars, SolutionListener theListener) {
+  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     return notifySolution(theListener, currentVars);
   }
 }

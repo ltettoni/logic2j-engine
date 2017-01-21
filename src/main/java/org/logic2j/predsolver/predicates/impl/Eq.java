@@ -12,7 +12,7 @@ public class Eq extends Predicate {
   }
 
   @Override
-  public Integer invokePredicate(UnifyContext currentVars, SolutionListener theListener) {
+  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     final Object[] args = getArgs();
     return unifyAndNotify(theListener, currentVars, args[0], args[1]);
   }
