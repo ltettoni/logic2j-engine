@@ -23,8 +23,7 @@ import org.logic2j.predsolver.solver.listener.multi.MultiResult;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * The lowest-level API through which the inference engine provides solutions. For easier programming, consider using
- * {@link Prolog#solve(CharSequence)} and the {@link SolutionHolder} API.
+ * The lowest-level API through which the inference engine provides solutions.
  * The return values of the two methods are defined in interface Continuation.
  * Never return a positive value this is used internally to manage the CUT predicate.
  */

@@ -20,7 +20,6 @@ package org.logic2j.predsolver.model;
 
 import org.logic2j.predsolver.exception.InvalidTermException;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
-import org.logic2j.predsolver.unify.UnifyContext;
 import org.logic2j.predsolver.visitor.TermVisitor;
 
 import java.util.Arrays;
@@ -32,8 +31,25 @@ import java.util.List;
  * This class is now final, one we'll have to carefully think if this could be user-extended.
  * Note: This class MUST be immutable.
  */
-public final class Struct extends Term {
+public class Struct extends Term {
     private static final long serialVersionUID = 1L;
+
+
+    public static enum PrimitiveType {
+        /**
+         * Only a data structure, nothing executable.
+         */
+        DATA,
+        /**
+         * A predicate implemented as a Java method, will produce solution(s) through a {@link SolutionListener} interface.
+         */
+        PREDICATE,
+        /**
+         * A functor yields a result, such as +(2,3).
+         */
+        FUNCTOR
+    }
+
 
     // ---------------------------------------------------------------------------
     // Names of functors
@@ -307,6 +323,14 @@ public final class Struct extends Term {
     // --------------------------------------------------------------------------
 
     /**
+     * By default a {@link Struct} is not executable, it is only data.
+     * @return PrimitiveType#DATA
+     */
+    public PrimitiveType getPrimitiveType() {
+        return PrimitiveType.DATA;
+    }
+
+    /**
      * @return A cloned array of all arguments (cloned to avoid any possibility to mutate)
      */
     public Object[] getArgs() {
@@ -502,14 +526,6 @@ public final class Struct extends Term {
             sb.append(PAR_CLOSE);
         }
         return sb.toString();
-    }
-
-    // ---------------------------------------------------------------------------
-    // The logic of this predicate
-    // ---------------------------------------------------------------------------
-
-    public Object invoke(UnifyContext currentVars, SolutionListener theListener) {
-        throw new UnsupportedOperationException("Root Struct does not define any logic, this class must be derived: " + this);
     }
 
 }

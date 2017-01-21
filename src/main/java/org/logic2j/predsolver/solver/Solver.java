@@ -23,6 +23,7 @@ import org.logic2j.predsolver.exception.SolverException;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
+import org.logic2j.predsolver.predicates.Predicate;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.solver.listener.SolutionListenerBase;
 import org.logic2j.predsolver.solver.listener.multi.ListMultiResult;
@@ -242,17 +243,14 @@ public class Solver {
                 // Stopping there for this iteration
                 result = Integer.valueOf(cutLevel);
             }
-        } else {
+        } else if (goalStruct.getPrimitiveType() == Struct.PrimitiveType.PREDICATE){
             // ---------------------------------------------------------------------------
             // Primitive implemented in Java
             // ---------------------------------------------------------------------------
+            final Integer primitiveContinuation = ((Predicate)goalStruct).invokePredicate(currentVars, theSolutionListener);
 
-            final Object resultOfPrimitive = goalStruct.invoke(currentVars, theSolutionListener);
-            // Extract necessary objects from our current state
-
-                    // The result will be the continuation code or CUT level
-                    final Integer primitiveContinuation = (Integer) resultOfPrimitive;
-                    result = primitiveContinuation;
+            // The result will be the continuation code or CUT level
+            result = primitiveContinuation;
 
         }
         if (isDebug) {

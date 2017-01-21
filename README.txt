@@ -9,6 +9,8 @@ Var:
 Struct:
 - remove all handling of prolog lists and conversion of lists to java lists
 - removed PrimitiveInfo
+- no longer final
+- Adding PrimitiveType, and adding the DATA value
 
 TermApi:
 - remove handling of prolog lists
