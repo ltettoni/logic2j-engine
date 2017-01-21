@@ -19,6 +19,8 @@ package org.logic2j.predsolver.model;
 
 
 import org.logic2j.predsolver.exception.InvalidTermException;
+import org.logic2j.predsolver.solver.listener.SolutionListener;
+import org.logic2j.predsolver.unify.UnifyContext;
 import org.logic2j.predsolver.visitor.TermVisitor;
 
 import java.util.Arrays;
@@ -500,6 +502,14 @@ public final class Struct extends Term {
             sb.append(PAR_CLOSE);
         }
         return sb.toString();
+    }
+
+    // ---------------------------------------------------------------------------
+    // The logic of this predicate
+    // ---------------------------------------------------------------------------
+
+    public Object invoke(UnifyContext currentVars, SolutionListener theListener) {
+        throw new UnsupportedOperationException("Root Struct does not define any logic, this class must be derived: " + this);
     }
 
 }

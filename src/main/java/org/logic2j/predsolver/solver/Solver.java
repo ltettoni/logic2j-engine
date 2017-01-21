@@ -242,12 +242,12 @@ public class Solver {
                 // Stopping there for this iteration
                 result = Integer.valueOf(cutLevel);
             }
-        } else if (prim != null) {
+        } else {
             // ---------------------------------------------------------------------------
             // Primitive implemented in Java
             // ---------------------------------------------------------------------------
 
-            final Object resultOfPrimitive = prim.invoke(goalStruct, currentVars, theSolutionListener);
+            final Object resultOfPrimitive = goalStruct.invoke(currentVars, theSolutionListener);
             // Extract necessary objects from our current state
 
                     // The result will be the continuation code or CUT level
