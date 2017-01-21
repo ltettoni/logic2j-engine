@@ -39,7 +39,7 @@ public class Solver {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
     private static final boolean isDebug = logger.isDebugEnabled();
-    static final boolean FAST_OR = false; // (see note re. processing of OR in CoreLibrary.pro)
+    static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
     private static final boolean PROFILING = true;
 
 

@@ -55,37 +55,43 @@ public class Struct extends Term {
     // Names of functors
     // ---------------------------------------------------------------------------
 
-    public static final String LIST_SEPARATOR = ",".intern(); // In notations pred(a, b, c)
+    // TODO Move these constants to a common place?
+    // TODO Replace all calls to intern() by some factory to initialize our constants. Useless to do it here in Java all constant strings are already internalized?
+    /**
+     * This is the logical "AND" operator, usable with /2 or /* arity.
+     */
+    public static final String FUNCTOR_COMMA = ",".intern();
 
-    public static final char PAR_CLOSE = ')';
+    /**
+     * This is the logical "OR" operator, usable with /2 or /* arity.
+     */
+    public static final String FUNCTOR_SEMICOLON = ";".intern();
 
-    public static final char PAR_OPEN = '(';
+    public static final String FUNCTOR_TRUE = "true";  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
+
+    public static final String FUNCTOR_FALSE = "false".intern(); // TODO do we need "false" or is this "fail"?
+
+    public static final String FUNCTOR_CUT = "!";  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
 
     public static final String FUNCTOR_CALL = "call".intern();
 
     public static final String FUNCTOR_CLAUSE = ":-".intern();
 
-    // TODO Move these constants to a common place?
-    // TODO Replace all calls to intern() by some factory to initialize our constants. Useless to do it here in Java all constant strings are already internalized?
-    public static final String FUNCTOR_COMMA = ",".intern();
-
-    public static final String FUNCTOR_CUT = "!";  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
-
-    public static final Struct ATOM_CUT = new Struct(FUNCTOR_CUT);
 
     // ---------------------------------------------------------------------------
     // Some key atoms as singletons
     // ---------------------------------------------------------------------------
-
-    public static final String FUNCTOR_SEMICOLON = ";".intern();
-
-    public static final String FUNCTOR_TRUE = "true";  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
-
     public static final Struct ATOM_TRUE = new Struct(FUNCTOR_TRUE);
 
-    public static final String FUNCTOR_FALSE = "false".intern(); // TODO do we need "false" or is this "fail"?
-
     public static final Struct ATOM_FALSE = new Struct(FUNCTOR_FALSE);
+
+    public static final Struct ATOM_CUT = new Struct(FUNCTOR_CUT);
+
+    public static final String LIST_SEPARATOR = ",".intern(); // In notations pred(a, b, c)
+
+    public static final char PAR_CLOSE = ')';
+
+    public static final char PAR_OPEN = '(';
 
     /**
      * Indicate the arity of a variable arguments predicate, such as write/N.
@@ -103,7 +109,7 @@ public class Struct extends Term {
 
     public static final char QUOTE = '\'';
 
-    public static final Object[] EMPTY_ARGS_ARRAY = new Object[0];
+    private static final Object[] EMPTY_ARGS_ARRAY = new Object[0];
 
 
     /**

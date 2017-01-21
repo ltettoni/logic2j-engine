@@ -3,14 +3,17 @@ package org.logic2j.predsolver.solver;
 import org.junit.Test;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.TermApi;
-import org.logic2j.predsolver.predicates.Fail;
-import org.logic2j.predsolver.predicates.True;
+import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.solver.listener.CountingSolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
+import static org.logic2j.predsolver.predicates.Predicates.and;
+import static org.logic2j.predsolver.predicates.Predicates.fail;
+import static org.logic2j.predsolver.predicates.Predicates.or;
+import static org.logic2j.predsolver.predicates.Predicates.ttrue;
 
 public class SolverTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverTest.class);
@@ -21,14 +24,14 @@ public class SolverTest {
 
   @Test
   public void primitiveFail() {
-    final Object goal = new Fail();
+    final Object goal = fail;
     final long nbSolutions = solve(goal).getCounter();
     assertEquals(0, nbSolutions);
   }
 
   @Test
   public void primitiveTrue() {
-    final Object goal = new True();
+    final Object goal = ttrue;
     final long nbSolutions = solve(goal).getCounter();
     assertEquals(1, nbSolutions);
   }
@@ -42,28 +45,52 @@ public class SolverTest {
   }
 
   @Test
-  public void dataOnlyStruct() {
-    final Object goal = new Struct("atom", "p1", "p2");
+  public void dataOnlyStructWithParam() {
+    final Object goal = new Struct("atom", "p1");
+    final long nbSolutions = solve(goal).getCounter();
+    assertEquals(0, nbSolutions);
+  }
+
+  @Test
+  public void dataOnlyStructWithParams() {
+    final Object goal = new Struct("atom", "p1", new Struct("p2", "p21", "p22"));
+    final long nbSolutions = solve(goal).getCounter();
+    assertEquals(0, nbSolutions);
+  }
+
+  @Test
+  public void dataOnlyStructWithVar() {
+    final Var<Object> X = new Var<>("X");
+    final Object goal = new Struct("atom", X);
+    final long nbSolutions = solve(goal).getCounter();
+    assertEquals(0, nbSolutions);
+  }
+
+  @Test
+  public void dataOnlyStructWithVars() {
+    final Var<Object> X = new Var<>("X");
+    final Var<Object> Y = new Var<>("Y");
+    final Object goal = new Struct("atom", X, Y);
     final long nbSolutions = solve(goal).getCounter();
     assertEquals(0, nbSolutions);
   }
 
 
-//  @Test
-//  public void primitiveTrueAndTrue() {
-//    final Object goal = unmarshall("true,true");
-//    final long nbSolutions = solve(goal).getCounter();
-//    assertEquals(1, nbSolutions);
-//  }
-//
-//
-//  @Test
-//  public void primitiveTrueOrTrue() {
-//    final Object goal = unmarshall("true;true");
-//    final long nbSolutions = solve(goal).getCounter();
-//    assertEquals(2, nbSolutions);
-//  }
-//
+  @Test
+  public void primitiveTrueAndTrue() {
+    final Object goal = and(ttrue, ttrue);
+    final long nbSolutions = solve(goal).getCounter();
+    assertEquals(1, nbSolutions);
+  }
+
+
+  @Test
+  public void primitiveTrueOrTrue() {
+    final Object goal = or(ttrue, ttrue);
+    final long nbSolutions = solve(goal).getCounter();
+    assertEquals(2, nbSolutions);
+  }
+
 //  @Test
 //  public void corePrimitivesThatYieldUniqueSolution() {
 //    final String[] SINGLE_SOLUTION_GOALS = new String[] { //
