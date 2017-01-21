@@ -1,4 +1,4 @@
-package org.logic2j.predsolver.predicates;
+package org.logic2j.predsolver.predicates.internal;
 
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;

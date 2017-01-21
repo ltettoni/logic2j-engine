@@ -1,4 +1,4 @@
-package org.logic2j.predsolver.predicates;
+package org.logic2j.predsolver.predicates.impl;
 
 import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.listener.SolutionListener;

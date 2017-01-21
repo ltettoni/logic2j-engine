@@ -23,7 +23,7 @@ import org.logic2j.predsolver.exception.SolverException;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.Predicate;
+import org.logic2j.predsolver.predicates.impl.Predicate;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.solver.listener.SolutionListenerBase;
 import org.logic2j.predsolver.solver.listener.multi.ListMultiResult;
