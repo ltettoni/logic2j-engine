@@ -5,6 +5,7 @@ import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.Digit;
+import org.logic2j.predsolver.predicates.Even;
 import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ import static org.logic2j.predsolver.predicates.Predicates.cut;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.predicates.Predicates.fail;
 import static org.logic2j.predsolver.predicates.Predicates.or;
-import static org.logic2j.predsolver.predicates.Predicates.ttrue;
+import static org.logic2j.predsolver.predicates.Predicates.*;
 
 public class SolverTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverTest.class);
@@ -155,8 +156,8 @@ public class SolverTest {
   //  }
 
     @Test
-    public void not() {
-//      countOneSolution(new Not(solver, fail));
+    public void notTest() {
+      countOneSolution(new Not(solver, fail));
       countNoSolution(new Not(solver, ttrue));
     }
 
@@ -252,6 +253,14 @@ public class SolverTest {
     final Object goal = new Digit(9);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.getCounter());
+  }
+
+  @Test
+  public void digitNotEven() {
+    Var<Integer> Q = new Var<>("Q");
+    final Object goal = and(new Digit(Q), not(solver, new Even(Q)));
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(5, listener.getCounter());
   }
 
 

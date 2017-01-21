@@ -4,10 +4,12 @@ import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.impl.Eq;
 import org.logic2j.predsolver.predicates.impl.Fail;
+import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.predicates.impl.True;
 import org.logic2j.predsolver.predicates.internal.And;
 import org.logic2j.predsolver.predicates.internal.Cut;
 import org.logic2j.predsolver.predicates.internal.Or;
+import org.logic2j.predsolver.solver.Solver;
 
 /**
  * Factory methods for common predicates.
@@ -25,6 +27,10 @@ public final class Predicates {
 
   public static Or or(Term... disjunctions) {
     return new Or(disjunctions);
+  }
+
+  public static Not not(Solver solver, Term term) {
+    return new Not(solver, term);
   }
 
   public static Eq eq(Object t1, Object t2) {
