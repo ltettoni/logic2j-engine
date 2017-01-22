@@ -42,12 +42,11 @@ public interface SolutionListener {
 
     /**
      * Allow specifying multiple solutions in one call to the listener.
-     * @param multi
+     * @param allSolutions
      * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
      *         {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
      */
-    default Integer onSolutions(Iterator<UnifyContext> multi) {
-        final Iterator<UnifyContext> allSolutions = multi;
+    default Integer onSolutions(Iterator<UnifyContext> allSolutions) {
         while (allSolutions.hasNext()) {
             final UnifyContext next = allSolutions.next();
             final Integer continuation = this.onSolution(next);
@@ -58,4 +57,7 @@ public interface SolutionListener {
         return Continuation.CONTINUE;
     }
 
+    default Integer onSolutions(Iterable<UnifyContext> allSolutions) {
+        return onSolutions(allSolutions.iterator());
+    }
 }
