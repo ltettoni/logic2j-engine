@@ -23,14 +23,14 @@ import org.logic2j.predsolver.exception.SolverException;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.impl.Predicate;
+import org.logic2j.predsolver.predicates.impl.FOPredicate;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
-import org.logic2j.predsolver.solver.listener.SolutionListenerBase;
 import org.logic2j.predsolver.solver.listener.multi.ListMultiResult;
-import org.logic2j.predsolver.solver.listener.multi.MultiResult;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.logic2j.predsolver.unify.UnifyStateByLookup;
 import org.logic2j.predsolver.util.ProfilingInfo;
+
+import java.util.Iterator;
 
 /**
  * Solve goals - that's the core of the engine.
@@ -158,7 +158,7 @@ public class Solver {
             final Object lhs = goalStructArgs[0];
             for (int i = 0; i < arity - 1; i++) {
                 final int index = i;
-                andingListeners[index] = new SolutionListenerBase() {
+                andingListeners[index] = new SolutionListener() {
 
                     @Override
                     public Integer onSolution(UnifyContext currentVars) {
@@ -172,17 +172,17 @@ public class Solver {
                     }
 
                     @Override
-                    public Integer onSolutions(final MultiResult multiLHS) {
+                    public Integer onSolutions(final Iterator<UnifyContext> multiLHS) {
                         final int nextIndex = index + 1;
                         final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-                        final SolutionListener subListener = new SolutionListenerBase() {
+                        final SolutionListener subListener = new SolutionListener() {
                             @Override
                             public Integer onSolution(UnifyContext currentVars) {
                                 throw new UnsupportedOperationException("Should not be here");
                             }
 
                             @Override
-                            public Integer onSolutions(MultiResult multiRHS) {
+                            public Integer onSolutions(Iterator<UnifyContext> multiRHS) {
                                 logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
                                 final ListMultiResult combined = new ListMultiResult(currentVars, multiLHS, multiRHS);
                                 return andingListeners[nextIndex].onSolutions(combined);
@@ -247,7 +247,7 @@ public class Solver {
             // ---------------------------------------------------------------------------
             // Primitive implemented in Java
             // ---------------------------------------------------------------------------
-            final Integer primitiveContinuation = ((Predicate)goalStruct).invokePredicate(theSolutionListener, currentVars);
+            final Integer primitiveContinuation = ((FOPredicate)goalStruct).invokePredicate(theSolutionListener, currentVars);
 
             // The result will be the continuation code or CUT level
             result = primitiveContinuation;

@@ -8,9 +8,9 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Does not provide any solution.
  */
-public abstract class Predicate extends Struct {
+public abstract class FOPredicate extends Struct {
 
-  public Predicate(String theFunctor, Object... argList) {
+  public FOPredicate(String theFunctor, Object... argList) {
     super(theFunctor, argList);
   }
 

@@ -21,16 +21,17 @@ import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * A {@link SolutionListener} that implements the logical not.
+ * A {@link SolutionListener} that only checks existence of the first solution, and then aborts execution of subsequent ones.
  * Watch out, upon the first solution found, we abort inference, hence won't find any other solutions.
  */
-public class FirstSolutionListener extends SolutionListenerBase {
-    boolean atLeastOneSolution = false;
+public class ExistsSolutionListener implements SolutionListener {
+    private boolean atLeastOneSolution = false;
 
     @Override
     public Integer onSolution(UnifyContext currentVars) {
         // Do NOT relay the solution further, just remember there was one
         this.atLeastOneSolution = true;
+        // Fixme Should rather say the enumeration was cancelled on purpose (optimized like in AND statements)
         return Continuation.USER_ABORT; // No need to seek for further solutions. Watch out this means the goal will stop evaluating on first success.
     }
 

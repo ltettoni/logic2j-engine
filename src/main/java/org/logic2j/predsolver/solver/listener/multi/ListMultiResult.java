@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ListMultiResult implements MultiResult {
+public class ListMultiResult implements Iterator<UnifyContext> {
 
     final Var<?> var;
 
@@ -42,7 +42,7 @@ public class ListMultiResult implements MultiResult {
     }
 
 
-    public ListMultiResult(UnifyContext currentVars, MultiResult multiLHS, MultiResult multiRHS) {
+    public ListMultiResult(UnifyContext currentVars, Iterator<UnifyContext> multiLHS, Iterator<UnifyContext> multiRHS) {
         if (! (multiLHS instanceof ListMultiResult)) {
             throw new UnsupportedOperationException("Left argument must be instanceof ListMultiResult");
         }

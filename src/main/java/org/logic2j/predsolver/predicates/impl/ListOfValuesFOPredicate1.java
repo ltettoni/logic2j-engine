@@ -9,16 +9,16 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Generate list of values in order.
  */
-public abstract class ListOfValuesPredicate1<T> extends Predicate {
+public abstract class ListOfValuesFOPredicate1<T> extends FOPredicate {
 
   private final T[] possibleValues;
 
-  public ListOfValuesPredicate1(String functorName, T term, T... possibleValues) {
+  public ListOfValuesFOPredicate1(String functorName, T term, T... possibleValues) {
     super(functorName, term);
     this.possibleValues = possibleValues;
   }
 
-  public ListOfValuesPredicate1(String functorName, Var<T> term, T... possibleValues) {
+  public ListOfValuesFOPredicate1(String functorName, Var<T> term, T... possibleValues) {
     super(functorName, term);
     this.possibleValues = possibleValues;
   }

@@ -3,14 +3,14 @@ package org.logic2j.predsolver.predicates.impl;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.Solver;
-import org.logic2j.predsolver.solver.listener.FirstSolutionListener;
+import org.logic2j.predsolver.solver.listener.ExistsSolutionListener;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
  * Unification operator "=".
  */
-public class Not extends Predicate {
+public class Not extends FOPredicate {
   private Solver solver;
 
   public Not(Solver solver, Term theGoal) {
@@ -21,7 +21,7 @@ public class Not extends Predicate {
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
 
-    final FirstSolutionListener goalListener = new FirstSolutionListener();
+    final ExistsSolutionListener goalListener = new ExistsSolutionListener();
 
     this.solver.solveGoal(getArg(0), currentVars, goalListener);
     final Integer continuation;

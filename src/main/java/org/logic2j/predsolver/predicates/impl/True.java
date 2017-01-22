@@ -6,7 +6,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Does not provide any solution.
  */
-public class True extends Predicate {
+public class True extends FOPredicate {
   public True() {
     super("true");
   }

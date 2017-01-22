@@ -7,7 +7,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Does not provide any solution.
  */
-public class Fail extends Predicate {
+public class Fail extends FOPredicate {
   public Fail() {
     super("fail");
   }

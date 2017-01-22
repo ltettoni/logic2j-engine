@@ -19,8 +19,9 @@ package org.logic2j.predsolver.solver.listener;
 
 
 import org.logic2j.predsolver.solver.Continuation;
-import org.logic2j.predsolver.solver.listener.multi.MultiResult;
 import org.logic2j.predsolver.unify.UnifyContext;
+
+import java.util.Iterator;
 
 /**
  * The lowest-level API through which the inference engine provides solutions.
@@ -28,6 +29,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
  * Never return a positive value this is used internally to manage the CUT predicate.
  */
 public interface SolutionListener {
+
 
     /**
      * The inference engine notifies the caller code that a solution was proven; the real content to the solution must be retrieved from the
@@ -39,10 +41,21 @@ public interface SolutionListener {
     Integer onSolution(UnifyContext currentVars);
 
     /**
-     * Experimental: multiple solutions passing between predicates.
+     * Allow specifying multiple solutions in one call to the listener.
      * @param multi
      * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
      *         {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
      */
-    Integer onSolutions(MultiResult multi);
+    default Integer onSolutions(Iterator<UnifyContext> multi) {
+        final Iterator<UnifyContext> allSolutions = multi;
+        while (allSolutions.hasNext()) {
+            final UnifyContext next = allSolutions.next();
+            final Integer continuation = this.onSolution(next);
+            if (continuation != Continuation.CONTINUE) {
+                return continuation;
+            }
+        }
+        return Continuation.CONTINUE;
+    }
+
 }

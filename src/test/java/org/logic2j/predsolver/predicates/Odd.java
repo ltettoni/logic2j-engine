@@ -2,12 +2,12 @@ package org.logic2j.predsolver.predicates;
 
 
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.impl.ListOfValuesPredicate1;
+import org.logic2j.predsolver.predicates.impl.ListOfValuesFOPredicate1;
 
 /**
  * Generate digits
  */
-public class Odd extends ListOfValuesPredicate1<Integer> {
+public class Odd extends ListOfValuesFOPredicate1<Integer> {
 
   public Odd(Integer term) {
     super("odd", term, 1, 3, 5, 7, 9);

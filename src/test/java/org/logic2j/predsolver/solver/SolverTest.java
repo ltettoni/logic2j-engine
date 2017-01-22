@@ -6,6 +6,7 @@ import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Even;
+import org.logic2j.predsolver.predicates.EvenCheck;
 import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
@@ -19,8 +20,9 @@ import static org.logic2j.predsolver.predicates.Predicates.anonymous;
 import static org.logic2j.predsolver.predicates.Predicates.cut;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.predicates.Predicates.fail;
+import static org.logic2j.predsolver.predicates.Predicates.not;
 import static org.logic2j.predsolver.predicates.Predicates.or;
-import static org.logic2j.predsolver.predicates.Predicates.*;
+import static org.logic2j.predsolver.predicates.Predicates.ttrue;
 
 public class SolverTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverTest.class);
@@ -262,6 +264,22 @@ public class SolverTest {
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.getCounter());
   }
+
+
+  @Test
+  public void even8() {
+    final Object goal = new Even(8);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.getCounter());
+  }
+
+  @Test
+  public void even12() {
+    final Object goal = new EvenCheck(12);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.getCounter());
+  }
+
 
 
   // --------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Unification operator "=".
  */
-public class Eq extends Predicate {
+public class Eq extends FOPredicate {
   public Eq(Object t1, Object t2) {
     super("=", t1, t2);
   }

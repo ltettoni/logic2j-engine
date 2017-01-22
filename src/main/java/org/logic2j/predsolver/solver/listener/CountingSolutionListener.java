@@ -27,7 +27,7 @@ import org.logic2j.predsolver.unify.UnifyContext;
  * infinite generation). Derive from this class to ease the programming of
  * {@link SolutionListener}s in application code, and DO NOT FORGET to call super.onSolution() so that it will count!
  */
-public class CountingSolutionListener extends SolutionListenerBase {
+public class CountingSolutionListener implements SolutionListener {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CountingSolutionListener.class);
     private static final boolean DEBUG_ENABLED = logger.isDebugEnabled();
 
