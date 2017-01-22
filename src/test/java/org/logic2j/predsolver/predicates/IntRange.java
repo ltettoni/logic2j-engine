@@ -4,7 +4,7 @@ package org.logic2j.predsolver.predicates;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.impl.FOPredicate;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
-import org.logic2j.predsolver.solver.listener.multi.UnifyContextIterator;
+import org.logic2j.predsolver.solver.listener.UnifyContextIterator;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -25,7 +25,7 @@ import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.impl.FOPredicate;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
-import org.logic2j.predsolver.solver.listener.multi.UnifyContextIterator;
+import org.logic2j.predsolver.solver.listener.UnifyContextIterator;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.logic2j.predsolver.unify.UnifyStateByLookup;
 import org.logic2j.predsolver.util.ProfilingInfo;
