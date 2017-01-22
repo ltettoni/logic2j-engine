@@ -19,7 +19,7 @@ import java.util.TreeSet;
 /**
  * Used in test cases to extract number of solutions and solutions to a goal.
  */
-public class ExtractingSolutionListener extends CountingSolutionListener {
+class ExtractingSolutionListener extends CountingSolutionListener {
     private static final Logger logger = LoggerFactory.getLogger(ExtractingSolutionListener.class);
 
     private final Object goal;
