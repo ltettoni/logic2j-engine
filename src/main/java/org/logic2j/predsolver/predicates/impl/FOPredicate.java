@@ -7,6 +7,8 @@ import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 
+import java.util.Iterator;
+
 /**
  * Does not provide any solution.
  */
@@ -51,6 +53,26 @@ public abstract class FOPredicate extends Struct {
 
     final boolean couldUnifySomething = afterUnification != null;
     return notifySolutionIf(couldUnifySomething, theListener, afterUnification);
+  }
+
+  /**
+   * Unify terms t1 and constant values from iter, and if they could be unified, call theListener with the solution of the newly
+   * unified variables; return the result from notifying. If not, return CONTINUE.
+   * @param theListener
+   * @param currentVars
+   * @param t1
+   * @param iter
+   * @return
+   */
+  protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Iterator iter) {
+    Integer continuation;
+    while (iter.hasNext()) {
+      continuation = unifyAndNotify(theListener, currentVars, t1, iter.next());
+      if (continuation != Continuation.CONTINUE) {
+        return continuation;
+      }
+    }
+    return Continuation.CONTINUE;
   }
 
   /**

@@ -31,7 +31,7 @@ import java.util.Comparator;
  * Note: This class MUST be immutable.
  * Switch logging for this class to DEBUG level in order to have the details of variables, such as the variable index.
  */
-public final class Var<T> extends Term implements Comparable<Var<T>> {
+public class Var<T> extends Term implements Comparable<Var<T>> {
   private static final Logger logger = LoggerFactory.getLogger(Var.class);
 
   private static final long serialVersionUID = 1L;
