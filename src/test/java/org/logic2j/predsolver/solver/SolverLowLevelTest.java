@@ -25,8 +25,8 @@ import static org.logic2j.predsolver.predicates.Predicates.not;
 import static org.logic2j.predsolver.predicates.Predicates.or;
 import static org.logic2j.predsolver.predicates.Predicates.ttrue;
 
-public class SolverTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverTest.class);
+public class SolverLowLevelTest {
+  private static final Logger logger = LoggerFactory.getLogger(SolverLowLevelTest.class);
   private Solver solver = new Solver();
 
   // ---------------------------------------------------------------------------
@@ -117,7 +117,7 @@ public class SolverTest {
       //
       countNSolutions(3, or(ttrue, ttrue, ttrue));
       //
-      Var<Integer> Q = new Var<>("Q");
+      final Var<Integer> Q = new Var<>("Q");
       countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
 //      GoalHolder solutions;
 //      solutions = this.prolog.solve("X=a; X=b; X=c");
@@ -197,7 +197,7 @@ public class SolverTest {
 
     @Test
     public void unifyVarToLiteral() {
-      Var<String> Q = new Var<>("Q");
+      final Var<String> Q = new Var<>("Q");
       final Object goal = eq(Q, "d");
       final long nbSolutions = solve(goal).count();
       assertEquals(1, nbSolutions);
@@ -211,7 +211,7 @@ public class SolverTest {
 
     @Test
     public void unifyVarToAnonymous() {
-      Var<String> Q = new Var<>("Q");
+      final Var<String> Q = new Var<>("Q");
       final Object goal = eq(Q, anonymous);
       final ExtractingSolutionListener listener = solve(goal);
       assertEquals(1, listener.count());
@@ -223,8 +223,8 @@ public class SolverTest {
 
     @Test
     public void unifyVarToVar() {
-      Var<String> Q = new Var<>("Q");
-      Var<String> Z = new Var<>("Z");
+      final Var<String> Q = new Var<>("Q");
+      final Var<String> Z = new Var<>("Z");
       final Object goal = eq(Q, Z);
       final ExtractingSolutionListener listener = solve(goal);
       assertEquals(1, listener.count());
@@ -237,7 +237,7 @@ public class SolverTest {
 
   @Test
   public void digitVar() {
-    Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = new Var<>("Q");
     final Object goal = new Digit(Q);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(10, listener.count());
@@ -260,7 +260,7 @@ public class SolverTest {
 
   @Test
   public void digitNotEven() {
-    Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = new Var<>("Q");
     final Object goal = and(new Digit(Q), not(solver, new Even(Q)));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());
@@ -298,7 +298,7 @@ public class SolverTest {
 
   @Test
   public void intRangeCheckGenerate() {
-    Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = new Var<>("Q");
     final Object goal = new IntRange(10, Q, 15);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());
