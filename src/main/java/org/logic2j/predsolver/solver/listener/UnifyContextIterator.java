@@ -21,20 +21,20 @@ import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 public class UnifyContextIterator implements Iterator<UnifyContext> {
 
     private final Var<?> var;
 
-    private final List<?> values;
+    private final Collection<?> values;
 
     private final UnifyContext currentVars;
 
     private final Iterator<?> iter;
 
-    public UnifyContextIterator(UnifyContext currentVars, Var<?> theVar, List<?> values) {
+    public UnifyContextIterator(UnifyContext currentVars, Var<?> theVar, Collection<?> values) {
         this.var = theVar;
         this.values = values;
         this.currentVars = currentVars;
