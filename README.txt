@@ -26,10 +26,9 @@ Improvements DONE:
 - order of args in invokePredicate() (always Listener, UnifyContext)
 - Removed SolutionListenerBase, using default method on interface
 - Removed MutliResult, using directly Iterator<UnifyContext>
+- Removed PrimitiveType, using instanceof
 
 TODO
 - Listener should become consumers
 - Continuation should become and enum, and two types of ABORT: user ABORT or cancellation of enumeration, and boolean checkers
 - Fix LGPL header message, update copyright date
-
-

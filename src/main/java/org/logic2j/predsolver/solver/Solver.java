@@ -243,7 +243,7 @@ public class Solver {
                 // Stopping there for this iteration
                 result = Integer.valueOf(cutLevel);
             }
-        } else if (goalStruct.getPrimitiveType() == Struct.PrimitiveType.PREDICATE){
+        } else if (goalStruct instanceof FOPredicate){
             // ---------------------------------------------------------------------------
             // Primitive implemented in Java
             // ---------------------------------------------------------------------------

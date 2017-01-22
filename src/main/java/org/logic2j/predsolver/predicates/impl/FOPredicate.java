@@ -15,16 +15,6 @@ public abstract class FOPredicate extends Struct {
   }
 
   /**
-   * All predicates need to implement the invocation function
-   *
-   * @return PrimitiveType#PREDICATE
-   */
-  @Override
-  public PrimitiveType getPrimitiveType() {
-    return PrimitiveType.PREDICATE;
-  }
-
-  /**
    * Notify theSolutionListener that a solution has been found.
    *
    * @param theSolutionListener

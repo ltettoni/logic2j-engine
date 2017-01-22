@@ -19,7 +19,6 @@ package org.logic2j.predsolver.model;
 
 
 import org.logic2j.predsolver.exception.InvalidTermException;
-import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.visitor.TermVisitor;
 
 import java.util.Arrays;
@@ -33,23 +32,6 @@ import java.util.List;
  */
 public class Struct extends Term {
     private static final long serialVersionUID = 1L;
-
-
-    public static enum PrimitiveType {
-        /**
-         * Only a data structure, nothing executable.
-         */
-        DATA,
-        /**
-         * A predicate implemented as a Java method, will produce solution(s) through a {@link SolutionListener} interface.
-         */
-        PREDICATE,
-        /**
-         * A functor yields a result, such as +(2,3).
-         */
-        FUNCTOR
-    }
-
 
     // ---------------------------------------------------------------------------
     // Names of functors
@@ -327,14 +309,6 @@ public class Struct extends Term {
     // --------------------------------------------------------------------------
     // Accessors
     // --------------------------------------------------------------------------
-
-    /**
-     * By default a {@link Struct} is not executable, it is only data.
-     * @return PrimitiveType#DATA
-     */
-    public PrimitiveType getPrimitiveType() {
-        return PrimitiveType.DATA;
-    }
 
     /**
      * @return A cloned array of all arguments (cloned to avoid any possibility to mutate)
