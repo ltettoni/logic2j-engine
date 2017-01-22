@@ -4,7 +4,8 @@ import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;
 
 /**
- * Does not provide any solution.
+ * Logical OR.
+ * The implementation is hard-coded in the Solver, hence we do not provided it here.
  */
 public class Or extends Struct {
   public Or(Term... disjunctions) {

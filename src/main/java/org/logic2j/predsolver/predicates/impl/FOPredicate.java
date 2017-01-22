@@ -16,14 +16,15 @@ public abstract class FOPredicate extends Struct {
     super(theFunctor, argList);
   }
 
+
   /**
-   * Notify theSolutionListener that a solution has been found.
+   * Notify listener that a solution has been found.
    *
-   * @param theSolutionListener
-   * @return The {@link Continuation} as returned by theSolutionListener's {@link SolutionListener#onSolution(UnifyContext)}
+   * @param listener
+   * @return The {@link Continuation} as returned by listener's {@link SolutionListener#onSolution(UnifyContext)}
    */
-  protected Integer notifySolution(SolutionListener theSolutionListener, UnifyContext currentVars) {
-    final Integer continuation = theSolutionListener.onSolution(currentVars);
+  protected Integer notifySolution(SolutionListener listener, UnifyContext currentVars) {
+    final Integer continuation = listener.onSolution(currentVars);
     return continuation;
   }
 
@@ -46,13 +47,10 @@ public abstract class FOPredicate extends Struct {
    * @return
    */
   protected Integer unifyAndNotify(SolutionListener theListener, UnifyContext currentVars, Object t1, Object t2) {
-    final UnifyContext after = currentVars.unify(t1, t2);
-    if (after == null) {
-      // Not unified: do not notify a solution and inform to continue solving
-      return Continuation.CONTINUE;
-    }
-    // Unified
-    return notifySolution(theListener, after);
+    final UnifyContext afterUnification = currentVars.unify(t1, t2);
+
+    final boolean couldUnifySomething = afterUnification != null;
+    return notifySolutionIf(couldUnifySomething, theListener, afterUnification);
   }
 
   /**
