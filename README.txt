@@ -35,4 +35,11 @@ TODO
 
 CANNOT DO / REQUIRES STUDY
 - Continuation should become and enum, and two types of ABORT: user ABORT or cancellation of enumeration, and boolean checkers.
-  However the cutLevel used to abort execution currently uses an integer.
+  However the cutLevel is used to abort execution currently uses an integer.
+  In the solver we have code like:
+                      public Continuation onSolution(UnifyContext currentVars) {
+                          ...
+                          final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
+                          return continuationFromSubGoal;
+                      }
+   Clearly onSolution needs to return more than just 2 possible values.
