@@ -36,14 +36,14 @@ public class SolverTest {
   @Test
   public void primitiveFail() {
     final Object goal = fail;
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
   @Test
   public void primitiveTrue() {
     final Object goal = ttrue;
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -51,21 +51,21 @@ public class SolverTest {
   @Test
   public void dataOnlyAtom() {
     final Object goal = new Struct("atom");
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
   @Test
   public void dataOnlyStructWithParam() {
     final Object goal = new Struct("atom", "p1");
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
   @Test
   public void dataOnlyStructWithParams() {
     final Object goal = new Struct("atom", "p1", new Struct("p2", "p21", "p22"));
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
@@ -73,7 +73,7 @@ public class SolverTest {
   public void dataOnlyStructWithVar() {
     final Var<Object> X = new Var<>("X");
     final Object goal = new Struct("atom", X);
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
@@ -82,7 +82,7 @@ public class SolverTest {
     final Var<Object> X = new Var<>("X");
     final Var<Object> Y = new Var<>("Y");
     final Object goal = new Struct("atom", X, Y);
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
@@ -90,7 +90,7 @@ public class SolverTest {
   @Test
   public void primitiveTrueAndTrue() {
     final Object goal = and(ttrue, ttrue);
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -98,14 +98,14 @@ public class SolverTest {
   @Test
   public void primitiveTrueOrTrue() {
     final Object goal = or(ttrue, ttrue);
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(2, nbSolutions);
   }
 
   @Test
   public void primitiveCut() {
     final Object goal = cut;
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -174,7 +174,7 @@ public class SolverTest {
   @Test
   public void unifyLiteralsNoSolution() {
     final Object goal = eq("a", "b");
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
 
@@ -182,7 +182,7 @@ public class SolverTest {
   @Test
   public void unifyLiteralsOneSolution() {
     final Object goal = eq("c", "c");
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -190,7 +190,7 @@ public class SolverTest {
   @Test
   public void unifyAnonymousToAnonymous() {
     final Object goal = eq(anonymous, anonymous);
-    final long nbSolutions = solve(goal).getCounter();
+    final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -199,10 +199,10 @@ public class SolverTest {
     public void unifyVarToLiteral() {
       Var<String> Q = new Var<>("Q");
       final Object goal = eq(Q, "d");
-      final long nbSolutions = solve(goal).getCounter();
+      final long nbSolutions = solve(goal).count();
       assertEquals(1, nbSolutions);
       final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.getCounter());
+      assertEquals(1, listener.count());
       assertEquals("[Q]", listener.getVariables().toString());
       assertEquals("['='(d, d)]", marshall(listener.getValues(".")));
       assertEquals("[d]", marshall(listener.getValues("Q")));
@@ -214,7 +214,7 @@ public class SolverTest {
       Var<String> Q = new Var<>("Q");
       final Object goal = eq(Q, anonymous);
       final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.getCounter());
+      assertEquals(1, listener.count());
       assertEquals("[Q]", listener.getVariables().toString());
       assertEquals("['='(_, _)]", marshall(listener.getValues(".")));
       assertEquals("[_]", marshall(listener.getValues("Q")));
@@ -227,7 +227,7 @@ public class SolverTest {
       Var<String> Z = new Var<>("Z");
       final Object goal = eq(Q, Z);
       final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.getCounter());
+      assertEquals(1, listener.count());
       assertEquals("[., Q, Z]", listener.getVarNames().toString());
       assertEquals("['='(Q, Q)]", marshall(listener.getValues(".")));
       assertEquals("[Q]", marshall(listener.getValues("Q")));
@@ -240,7 +240,7 @@ public class SolverTest {
     Var<Integer> Q = new Var<>("Q");
     final Object goal = new Digit(Q);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(10, listener.getCounter());
+    assertEquals(10, listener.count());
   }
 
 
@@ -248,14 +248,14 @@ public class SolverTest {
   public void digit0() {
     final Object goal = new Digit(0);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.getCounter());
+    assertEquals(1, listener.count());
   }
 
   @Test
   public void digit9() {
     final Object goal = new Digit(9);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.getCounter());
+    assertEquals(1, listener.count());
   }
 
   @Test
@@ -263,7 +263,7 @@ public class SolverTest {
     Var<Integer> Q = new Var<>("Q");
     final Object goal = and(new Digit(Q), not(solver, new Even(Q)));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(5, listener.getCounter());
+    assertEquals(5, listener.count());
   }
 
 
@@ -271,14 +271,14 @@ public class SolverTest {
   public void even8() {
     final Object goal = new Even(8);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.getCounter());
+    assertEquals(1, listener.count());
   }
 
   @Test
   public void even12() {
     final Object goal = new EvenCheck(12);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.getCounter());
+    assertEquals(1, listener.count());
   }
 
 
@@ -286,14 +286,14 @@ public class SolverTest {
   public void intRangeCheckInvalid() {
     final Object goal = new IntRange(10, 5, 15);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(0, listener.getCounter());
+    assertEquals(0, listener.count());
   }
 
   @Test
   public void intRangeCheckValid() {
     final Object goal = new IntRange(10, 12, 15);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.getCounter());
+    assertEquals(1, listener.count());
   }
 
   @Test
@@ -301,7 +301,7 @@ public class SolverTest {
     Var<Integer> Q = new Var<>("Q");
     final Object goal = new IntRange(10, Q, 15);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(5, listener.getCounter());
+    assertEquals(5, listener.count());
   }
 
 
@@ -354,7 +354,7 @@ public class SolverTest {
   protected void countNSolutions(int nbr, Object... theGoals) {
     for (Object term : theGoals) {
       final LocalSolutionListener listener = solve(term);
-      assertEquals("Solving goalText \"" + term + '"', nbr, listener.getCounter());
+      assertEquals("Solving goalText \"" + term + '"', nbr, listener.count());
     }
   }
 

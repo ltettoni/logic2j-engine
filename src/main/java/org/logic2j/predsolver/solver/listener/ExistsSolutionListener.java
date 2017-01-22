@@ -21,8 +21,9 @@ import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * A {@link SolutionListener} that only checks existence of the first solution, and then aborts execution of subsequent ones.
- * Watch out, upon the first solution found, we abort inference, hence won't find any other solutions.
+ * The simplest {@link SolutionListener} that only checks existence of the first solution, and then aborts execution of subsequent ones.
+ * Watch out, due to aborting execution after the first solution, there may be less execution that you might expect. The side-effect
+ * is similar to evaluating a function in the middle of logical ANDs: previous results may not necessitate further executions.
  */
 public class ExistsSolutionListener implements SolutionListener {
     private boolean atLeastOneSolution = false;
@@ -31,11 +32,12 @@ public class ExistsSolutionListener implements SolutionListener {
     public Integer onSolution(UnifyContext currentVars) {
         // Do NOT relay the solution further, just remember there was one
         this.atLeastOneSolution = true;
+        // No need to seek for further solutions. Watch out this means the goal will stop evaluating on first success.
         // Fixme Should rather say the enumeration was cancelled on purpose (optimized like in AND statements)
-        return Continuation.USER_ABORT; // No need to seek for further solutions. Watch out this means the goal will stop evaluating on first success.
+        return Continuation.USER_ABORT;
     }
 
-    public boolean hasSolution() {
+    public boolean exists() {
         return atLeastOneSolution;
     }
 }

@@ -25,7 +25,7 @@ public class Not extends FOPredicate {
 
     this.solver.solveGoal(getArg(0), goalListener, currentVars);
     final Integer continuation;
-    if (goalListener.hasSolution()) {
+    if (goalListener.exists()) {
       // The goal provided at least one solution (and we stopped there, see doc of FirstSolutionListener)
       // Do NOT propagate a solution to our own listener, and continue normal evaluation.
       continuation = Continuation.CONTINUE;
