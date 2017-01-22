@@ -54,4 +54,8 @@ public class CountingSolutionListener implements SolutionListener {
         return this.count;
     }
 
+    public boolean exists() {
+        return this.count > 0;
+    }
+
 }
