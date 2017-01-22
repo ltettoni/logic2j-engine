@@ -30,5 +30,9 @@ Improvements DONE:
 
 TODO
 - Listener should become consumers
-- Continuation should become and enum, and two types of ABORT: user ABORT or cancellation of enumeration, and boolean checkers
 - Fix LGPL header message, update copyright date
+
+
+CANNOT DO / REQUIRES STUDY
+- Continuation should become and enum, and two types of ABORT: user ABORT or cancellation of enumeration, and boolean checkers.
+  However the cutLevel used to abort execution currently uses an integer.

@@ -24,17 +24,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ListMultiResult implements Iterator<UnifyContext> {
+public class UnifyContextIterator implements Iterator<UnifyContext> {
 
-    final Var<?> var;
+    private final Var<?> var;
 
-    final List<Integer> values;
+    private final List<?> values;
 
-    final UnifyContext currentVars;
+    private final UnifyContext currentVars;
 
-    final Iterator<Integer> iter;
+    private final Iterator<?> iter;
 
-    public ListMultiResult(UnifyContext currentVars, Var<?> theVar, List<Integer> values) {
+    public UnifyContextIterator(UnifyContext currentVars, Var<?> theVar, List<?> values) {
         this.var = theVar;
         this.values = values;
         this.currentVars = currentVars;
@@ -42,20 +42,20 @@ public class ListMultiResult implements Iterator<UnifyContext> {
     }
 
 
-    public ListMultiResult(UnifyContext currentVars, Iterator<UnifyContext> multiLHS, Iterator<UnifyContext> multiRHS) {
-        if (! (multiLHS instanceof ListMultiResult)) {
+    public UnifyContextIterator(UnifyContext currentVars, Iterator<UnifyContext> multiLHS, Iterator<UnifyContext> multiRHS) {
+        if (! (multiLHS instanceof UnifyContextIterator)) {
             throw new UnsupportedOperationException("Left argument must be instanceof ListMultiResult");
         }
-        if (! (multiRHS instanceof ListMultiResult)) {
+        if (! (multiRHS instanceof UnifyContextIterator)) {
             throw new UnsupportedOperationException("Right argument must be instanceof ListMultiResult");
         }
-        final ListMultiResult left = (ListMultiResult)multiLHS;
-        final ListMultiResult right = (ListMultiResult)multiRHS;
+        final UnifyContextIterator left = (UnifyContextIterator)multiLHS;
+        final UnifyContextIterator right = (UnifyContextIterator)multiRHS;
         if (left.var != right.var) {
             throw new UnsupportedOperationException("Must have same var to combine");
         }
         this.var = left.var;
-        this.values = new ArrayList<Integer>(left.values);
+        this.values = new ArrayList<>(left.values);
         this.values.retainAll(right.values);
         this.currentVars = currentVars;
         this.iter = this.values.iterator();
@@ -69,7 +69,7 @@ public class ListMultiResult implements Iterator<UnifyContext> {
 
     @Override
     public UnifyContext next() {
-        final Integer next = iter.next();
+        final Object next = iter.next();
         final UnifyContext after = currentVars.unify(var, next);
         return after;
     }

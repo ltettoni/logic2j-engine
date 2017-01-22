@@ -7,6 +7,7 @@ import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Even;
 import org.logic2j.predsolver.predicates.EvenCheck;
+import org.logic2j.predsolver.predicates.IntRange;
 import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
@@ -280,6 +281,28 @@ public class SolverTest {
     assertEquals(1, listener.getCounter());
   }
 
+
+  @Test
+  public void intRangeCheckInvalid() {
+    final Object goal = new IntRange(10, 5, 15);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(0, listener.getCounter());
+  }
+
+  @Test
+  public void intRangeCheckValid() {
+    final Object goal = new IntRange(10, 12, 15);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.getCounter());
+  }
+
+  @Test
+  public void intRangeCheckGenerate() {
+    Var<Integer> Q = new Var<>("Q");
+    final Object goal = new IntRange(10, Q, 15);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(5, listener.getCounter());
+  }
 
 
   // --------------------------------------------------------------------------

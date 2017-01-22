@@ -1,6 +1,8 @@
 package org.logic2j.predsolver.predicates.impl;
 
+import org.logic2j.predsolver.exception.InvalidTermException;
 import org.logic2j.predsolver.model.Struct;
+import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
@@ -25,6 +27,15 @@ public abstract class FOPredicate extends Struct {
     return continuation;
   }
 
+
+  protected Integer notifySolutionIf(boolean condition, SolutionListener theListener, UnifyContext currentVars) {
+    if (condition) {
+      return notifySolution(theListener, currentVars);
+    } else {
+      return Continuation.CONTINUE;
+    }
+  }
+
   /**
    * Unify terms t1 and t2, and if they could be unified, call theListener with the solution of the newly
    * unified variables; return the result from notifying. If not, return CONTINUE.
@@ -44,6 +55,22 @@ public abstract class FOPredicate extends Struct {
     return notifySolution(theListener, after);
   }
 
+  /**
+   * Make sure term is not a free {@link Var}.
+   *
+   * @param term
+   * @param nameOfPrimitive Non functional - only to report the name of the primitive in case an Exception is thrown
+   * @param indexOfArg zero-based index of argument causing error
+   * @throws InvalidTermException
+   */
+  protected void ensureBindingIsNotAFreeVar(Object term, String nameOfPrimitive, int indexOfArg) {
+    if (term instanceof Var) {
+      // TODO Should be a kind of InvalidGoalException instead?
+      final int positionOfArgument = indexOfArg + 1;
+      throw new InvalidTermException("Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // The logic of this predicate
   // ---------------------------------------------------------------------------
@@ -54,10 +81,9 @@ public abstract class FOPredicate extends Struct {
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.predsolver.solver.Continuation} values.
    */
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    throw new UnsupportedOperationException("The base Struct.invoke() method does not define any logic: class Struct must be "
-        + "derived. Instance was: \"" +
-        this + '"');
-  }
+  public abstract Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars);
+//    throw new UnsupportedOperationException("The base Struct.invoke() method does not define any logic: class Struct must be "
+//        + "derived. Instance was: \"" +
+//        this + '"');
 
 }
