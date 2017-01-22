@@ -39,7 +39,7 @@ public class Solver {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
     private static final boolean isDebug = logger.isDebugEnabled();
-    static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
+    private static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
     private static final boolean PROFILING = true;
 
 
@@ -55,7 +55,7 @@ public class Solver {
             initialContext.topVarIndex += ((Struct) goal).getIndex();
         }
         try {
-            return solveGoal(goal, initialContext, theSolutionListener);
+            return solveGoal(goal, theSolutionListener, initialContext);
         } catch (SolverException e) {
             // "Functional" exception thrown during solving will just be forwarded
             throw e;
@@ -63,13 +63,17 @@ public class Solver {
             // Anything not a PrologException will be encapsulated
             throw new SolverException("Solver failed with " + e, e);
         }
+    }
 
+    private UnifyContext initialContext() {
+        final UnifyContext initialContext = new UnifyStateByLookup().emptyContext();
+        return initialContext;
     }
 
     /**
      * Just calls the recursive internal method.
      */
-    public Integer solveGoal(Object goal, UnifyContext currentVars, final SolutionListener theSolutionListener) {
+    public Integer solveGoal(Object goal, final SolutionListener theSolutionListener, UnifyContext currentVars) {
         // Check if we will have to deal with DataFacts in this session of solving.
         // This slightly improves performance - we can bypass calling the method that deals with that
         if (goal instanceof Struct) {
@@ -77,25 +81,21 @@ public class Solver {
                 throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
             }
         }
-        final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, theSolutionListener, 10);
+        final Integer cutIntercepted = solveGoalRecursive(goal, theSolutionListener, currentVars, 10);
         return cutIntercepted;
-    }
-
-    public UnifyContext initialContext() {
-        final UnifyContext initialContext = new UnifyStateByLookup().emptyContext();
-        return initialContext;
     }
 
     /**
      * That's the complex method - the heart of the Solver.
      *
      * @param goalTerm
-     * @param currentVars
      * @param theSolutionListener
+     * @param currentVars
      * @param cutLevel
      * @return
      */
-    Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final SolutionListener theSolutionListener, final int cutLevel) {
+    private Integer solveGoalRecursive(final Object goalTerm, final SolutionListener theSolutionListener, final UnifyContext currentVars,
+        final int cutLevel) {
         final long inferenceCounter = ProfilingInfo.nbInferences;
         if (isDebug) {
             logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
@@ -167,7 +167,7 @@ public class Solver {
                         if (isDebug) {
                             logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
                         }
-                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars, andingListeners[nextIndex], cutLevel);
+                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
                         return continuationFromSubGoal;
                     }
 
@@ -189,7 +189,7 @@ public class Solver {
                             }
 
                         };
-                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars, subListener, cutLevel);
+                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars, cutLevel);
                         return continuationFromSubGoal;
                     }
 
@@ -203,7 +203,7 @@ public class Solver {
             if (isDebug) {
                 logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
             }
-            result = solveGoalRecursive(lhs, currentVars, andingListeners[0], cutLevel);
+            result = solveGoalRecursive(lhs, andingListeners[0], currentVars, cutLevel);
         } else if (FAST_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR
@@ -215,7 +215,7 @@ public class Solver {
                 if (isDebug) {
                     logger.debug("Handling OR, element={} of {}", i, goalStruct);
                 }
-                result = solveGoalRecursive(goalStruct.getArg(i), currentVars, theSolutionListener, cutLevel);
+                result = solveGoalRecursive(goalStruct.getArg(i), theSolutionListener, currentVars, cutLevel);
                 if (result != Continuation.CONTINUE) {
                     break;
                 }
@@ -227,7 +227,7 @@ public class Solver {
             }
             final Object callTerm = goalStruct.getArg(0);  // Often a Var
             final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
-            result = solveGoalRecursive(realCallTerm, currentVars, theSolutionListener, cutLevel);
+            result = solveGoalRecursive(realCallTerm, theSolutionListener, currentVars, cutLevel);
 
         } else if (Struct.FUNCTOR_CUT == functor) {
             // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
@@ -257,13 +257,6 @@ public class Solver {
             logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
         }
         return result;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
     }
 
 }

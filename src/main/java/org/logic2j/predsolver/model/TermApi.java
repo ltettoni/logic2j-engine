@@ -277,7 +277,7 @@ public final class TermApi {
 //                // throw new IllegalArgumentException("Predicate's functor " + struct.getName() + " is a primitive, but not a functor");
 //                return null;
 //            }
-//            final Object result = primInfo.invoke(struct, currentVars, /* no listener */null);
+//            final Object result = primInfo.invoke(struct, /* no listener */null, currentVars);
 //            return result;
 //        }
 //        return theTerm;

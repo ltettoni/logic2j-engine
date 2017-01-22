@@ -23,7 +23,7 @@ public class Not extends FOPredicate {
 
     final ExistsSolutionListener goalListener = new ExistsSolutionListener();
 
-    this.solver.solveGoal(getArg(0), currentVars, goalListener);
+    this.solver.solveGoal(getArg(0), goalListener, currentVars);
     final Integer continuation;
     if (goalListener.hasSolution()) {
       // The goal provided at least one solution (and we stopped there, see doc of FirstSolutionListener)
