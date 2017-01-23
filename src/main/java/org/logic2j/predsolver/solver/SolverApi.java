@@ -5,7 +5,6 @@ import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.impl.Supply;
-import org.logic2j.predsolver.predicates.internal.And;
 import org.logic2j.predsolver.solver.holder.GoalHolder;
 
 import java.util.Arrays;
@@ -35,8 +34,8 @@ public class SolverApi extends Solver {
         goalList.add(0, new Supply(bv.iterator(), bv));
       }
     }
-    final And and = and(goalList.toArray(new Term[goalList.size()]));
-    final Object normalized = TermApi.normalize(and);
+    final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));
+    final Object normalized = TermApi.normalize(effective);
     return new GoalHolder(this, normalized);
   }
 }

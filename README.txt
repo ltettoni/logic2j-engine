@@ -1,3 +1,13 @@
+Comparision to logic2j prolog engine:
+-------------------------------------
+
+There is no notion of a "theory": file(s) containing facts and rules in plain text, using Prolog syntax.
+The absence of "theories" implies there is no "database" features: no storage, no indexes, no lookup.
+There is no inference predicate ":-" used by the solver. The solver cannot infer on rules, it can only solve expressions.
+There is no "library": set of predicates (eg. for IO, math, list processing, etc.) implemented either in Prolog or Java.
+There is no marshalling / unmarshalling of data structures from and to Prolog syntax represented as text.
+
+
 Changes from logic2j:
 
 Term:
