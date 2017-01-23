@@ -1,6 +1,6 @@
 package org.logic2j.predsolver.solver;
 
-import org.logic2j.predsolver.model.BoundVar;
+import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
@@ -19,23 +19,18 @@ import static org.logic2j.predsolver.predicates.Predicates.and;
 public class SolverApi extends Solver {
   public GoalHolder solve(Term... goals) {
     final List<Term> goalList = Arrays.stream(goals).collect(Collectors.toList());
-//    final Object andedGoals;
-//    if (goals.length==1) {
-//      andedGoals = goals[0];
-//    } else {
-//      andedGoals = and(goals);
-//    }
 
     final Var<?>[] vars = TermApi.distinctVars(and(goalList.toArray(new Term[goalList.size()])));
-    final BoundVar[] boundVars = Arrays.stream(vars).filter(BoundVar.class::isInstance).map(BoundVar.class::cast).toArray(BoundVar[]::new);
+    final BindingVar[] bindingVars = Arrays.stream(vars).filter(BindingVar.class::isInstance).map(BindingVar.class::cast).toArray(BindingVar[]::new);
 
-    for (BoundVar bv : boundVars) {
+    for (BindingVar bv : bindingVars) {
       if (bv.iterator() != null) {
         goalList.add(0, new Supply(bv.iterator(), bv));
       }
     }
     final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));
     final Object normalized = TermApi.normalize(effective);
-    return new GoalHolder(this, normalized);
+    final BindingVar[] freeBindingVars = Arrays.stream(bindingVars).filter(bv -> !bv.isBound()).toArray(BindingVar[]::new);
+    return new GoalHolder(this, normalized, freeBindingVars);
   }
 }

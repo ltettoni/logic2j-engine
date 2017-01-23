@@ -21,6 +21,7 @@ import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.solver.Solver;
 import org.logic2j.predsolver.solver.listener.CountingSolutionListener;
 import org.logic2j.predsolver.solver.listener.ExistsSolutionListener;
+import org.logic2j.predsolver.unify.UnifyContext;
 
 import java.util.Map;
 
@@ -35,10 +36,12 @@ public class GoalHolder {
 
     private final Solver solver;
     private final Object goal;
+    private final BindingVar[] bindingVars;
 
-    public GoalHolder(Solver solver, Object theGoal) {
+    public GoalHolder(Solver solver, Object theGoal, BindingVar[] bindingVars) {
         this.solver = solver;
         this.goal = theGoal;
+        this.bindingVars = bindingVars;
     }
 
     public boolean exists() {
@@ -51,6 +54,21 @@ public class GoalHolder {
         final CountingSolutionListener listener = new CountingSolutionListener();
         solver.solveGoal(goal, listener);
         return listener.count();
+    }
+
+    public BindingVar[] boundVariables() {
+        final CountingSolutionListener listener = new CountingSolutionListener() {
+            @Override
+            public Integer onSolution(UnifyContext currentVars) {
+                for (BindingVar bv : bindingVars) {
+                    final Object reify = currentVars.reify(bv);
+                    bv.addResult(reify);
+                }
+                return super.onSolution(currentVars);
+            }
+        };
+        solver.solveGoal(goal, listener);
+        return bindingVars;
     }
 
     /**
