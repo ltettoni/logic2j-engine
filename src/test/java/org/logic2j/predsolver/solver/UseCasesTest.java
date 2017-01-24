@@ -7,6 +7,7 @@ import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Even;
 import org.logic2j.predsolver.predicates.Odd;
 import org.logic2j.predsolver.predicates.impl.FOFilter;
+import org.logic2j.predsolver.predicates.impl.FOMap;
 import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +52,17 @@ public class UseCasesTest {
   }
 
   @Test
-  public void usingPlainJavaPredicates() {
+  public void usingPlainJavaPredicate() {
     final Var<Integer> Q = intVar("Q");
     final List<Object> list = solver.solve(new Digit(Q), new Odd(Q), new FOFilter<>(Q, i -> i != 5)).var("Q").list();
+    logger.info("Result: {}", list);
+  }
+
+  @Test
+  public void usingPlainJavaFunction() {
+    final Var<Integer> Q = intVar("Q");
+    final Var<Integer> R = intVar("R");
+    final List<Object> list = solver.solve(new Digit(Q), new FOMap<>(Q, x -> x*x, R)).var("R").list();
     logger.info("Result: {}", list);
   }
 
