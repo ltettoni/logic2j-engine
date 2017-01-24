@@ -39,10 +39,29 @@ Improvements DONE:
 - Removed PrimitiveType, using instanceof
 
 TODO
-- Listener should become consumers
 - Fix LGPL header message, update copyright date
 - Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
     --> Listener has a strong async flavour.
+- Solution retrieval API
+  - exists
+  - count
+  - count distinct
+  - single (or null)
+  - unique (non null)
+  - limited (with policy)
+  - row handler
+  - iterator
+  - var has any value (exists not null)
+  - var count (non null)
+  - var count distinct
+  - var stream
+    - list
+    - array
+    - set
+    - (any filtering or transformation of)
+  - list of array
+  - list of tuple
+  - list of map
 
 
 CANNOT DO / REQUIRES STUDY
