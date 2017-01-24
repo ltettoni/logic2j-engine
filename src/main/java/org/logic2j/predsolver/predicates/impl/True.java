@@ -4,7 +4,7 @@ import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * Does not provide any solution.
+ * Always succeeds, provides one solution but does not bind any variables.
  */
 public class True extends FOPredicate {
   public True() {

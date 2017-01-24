@@ -1,11 +1,11 @@
 package org.logic2j.predsolver.predicates;
 
-import org.logic2j.predsolver.predicates.impl.TestingFOPredicate1;
+import org.logic2j.predsolver.predicates.impl.FOPredicateJavaPredicate;
 
 /**
- * Does not provide any solution.
+ * Check an Integer is even.
  */
-public class EvenCheck extends TestingFOPredicate1<Number> {
+public class EvenCheck extends FOPredicateJavaPredicate<Number> {
   public EvenCheck(Number t1) {
     super("evenCheck", t1, nbr -> nbr.longValue() % 2 == 0);
   }

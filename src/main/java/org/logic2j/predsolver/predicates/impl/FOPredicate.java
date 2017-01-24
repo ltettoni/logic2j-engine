@@ -10,13 +10,39 @@ import org.logic2j.predsolver.unify.UnifyContext;
 import java.util.Iterator;
 
 /**
- * Does not provide any solution.
+ * First-Order logic Predicate, not to be confused with java.function.Predicates.
+ * First-order logic is about binding variables to all solutions, not just checking one value.
+ *
+ * All subclasses are required to implement {@link #invokePredicate(SolutionListener, UnifyContext)}.
+ *
+ * Support methods are provided to check the {@link Var}iables received from the {@link UnifyContext},
+ * and unify variables to values, or check if unification of terms is possible, and then
+ * send solutions to the {@link SolutionListener}.
  */
 public abstract class FOPredicate extends Struct {
 
+  /**
+   * A fuctional predicate is a plain data structure like a {@link Struct}, with some logic
+   * attached through the {@link #invokePredicate(SolutionListener, UnifyContext)} abstract method.
+   * @param theFunctor
+   * @param argList
+   */
   public FOPredicate(String theFunctor, Object... argList) {
     super(theFunctor, argList);
   }
+
+
+  // ---------------------------------------------------------------------------
+  // The logic of this predicate
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Invoked by the {@link org.logic2j.predsolver.solver.Solver}.
+   * @param theListener
+   * @param currentVars
+   * @return The continuation, one of {@link org.logic2j.predsolver.solver.Continuation} values.
+   */
+  public abstract Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars);
 
 
   /**
@@ -90,20 +116,5 @@ public abstract class FOPredicate extends Struct {
       throw new InvalidTermException("Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // The logic of this predicate
-  // ---------------------------------------------------------------------------
-
-  /**
-   * Invoked by the {@link org.logic2j.predsolver.solver.Solver}.
-   * @param theListener
-   * @param currentVars
-   * @return The continuation, one of {@link org.logic2j.predsolver.solver.Continuation} values.
-   */
-  public abstract Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars);
-//    throw new UnsupportedOperationException("The base Struct.invoke() method does not define any logic: class Struct must be "
-//        + "derived. Instance was: \"" +
-//        this + '"');
 
 }

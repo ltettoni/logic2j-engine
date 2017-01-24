@@ -5,7 +5,7 @@ import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * Does not provide any solution.
+ * Always fail - no solution.
  */
 public class Fail extends FOPredicate {
   public Fail() {
