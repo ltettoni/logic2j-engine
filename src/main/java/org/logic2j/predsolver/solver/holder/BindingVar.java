@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A {@link Var} with bound values to a Java objects.
@@ -23,6 +25,17 @@ public class BindingVar<T> extends Var<T> {
     super(theType, theName);
     this.coll = coll;
   }
+
+  public static BindingVar<Integer> intBVar(CharSequence theName, Collection<Integer> coll) {
+    return new BindingVar<>(Integer.class, theName, coll);
+  }
+  public static BindingVar<Integer> intBVar(CharSequence theName, Stream<Integer> stream) {
+    return new BindingVar<>(Integer.class, theName, stream.collect(Collectors.toList()));
+  }
+  public static BindingVar<Integer> intBVar(CharSequence theName) {
+    return new BindingVar<>(Integer.class, theName);
+  }
+
 
   public boolean isBound() {
     return coll!=null;
