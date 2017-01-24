@@ -29,40 +29,40 @@ import java.util.List;
  * the number of solutions generated, and possibly handle underflow or overflow.
  */
 public class SingleVarSolutionListener<T> extends RangeSolutionListener<T> {
-    private final SolutionExtractor<T> extractor;
+  private final SolutionExtractor<T> extractor;
 
+  // Implementation note: there is an opportunity to improve the extraction of distinct Sets.
+  // TODO In this implementation, "results" is a List and we do the set operation later on after all results
+  // have been extracted. This is quite inefficient.
+  private final List<T> results;
+
+  /**
+   * Create a {@link SolutionListener} that will enumerate
+   * solutions up to theMaxCount before aborting by "user request". We will usually
+   * supply 1 or 2, see derived classes.
+   */
+  public SingleVarSolutionListener(SolutionExtractor<T> extractor) {
+    this.extractor = extractor;
+    this.results = new ArrayList<T>();
+  }
+
+
+  @Override
+  public Integer onSolution(UnifyContext currentVars) {
+    final T solution = extractor.extractSolution(currentVars);
     // Implementation note: there is an opportunity to improve the extraction of distinct Sets.
     // TODO In this implementation, "results" is a List and we do the set operation later on after all results
     // have been extracted. This is quite inefficient.
-    private final List<T> results;
+    results.add(solution);
+    return super.onSolution(currentVars);
+  }
 
-    /**
-     * Create a {@link SolutionListener} that will enumerate
-     * solutions up to theMaxCount before aborting by "user request". We will usually
-     * supply 1 or 2, see derived classes.
-     */
-    public SingleVarSolutionListener(SolutionExtractor<T> extractor) {
-        this.extractor = extractor;
-        this.results = new ArrayList<T>();
-    }
+  // ---------------------------------------------------------------------------
+  // Accessors
+  // ---------------------------------------------------------------------------
 
 
-    @Override
-    public Integer onSolution(UnifyContext currentVars) {
-        final T solution = extractor.extractSolution(currentVars);
-        // Implementation note: there is an opportunity to improve the extraction of distinct Sets.
-        // TODO In this implementation, "results" is a List and we do the set operation later on after all results
-        // have been extracted. This is quite inefficient.
-        results.add(solution);
-        return super.onSolution(currentVars);
-    }
-
-    // ---------------------------------------------------------------------------
-    // Accessors
-    // ---------------------------------------------------------------------------
-
-
-    public List<T> getResults() {
-        return results;
-    }
+  public List<T> getResults() {
+    return results;
+  }
 }

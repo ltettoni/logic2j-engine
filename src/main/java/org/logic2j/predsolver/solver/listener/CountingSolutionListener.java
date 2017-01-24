@@ -28,34 +28,34 @@ import org.logic2j.predsolver.unify.UnifyContext;
  * {@link SolutionListener}s in application code, and DO NOT FORGET to call super.onSolution() in order to count!
  */
 public class CountingSolutionListener implements SolutionListener {
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CountingSolutionListener.class);
-    private static final boolean DEBUG_ENABLED = logger.isDebugEnabled();
+  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CountingSolutionListener.class);
+  private static final boolean DEBUG_ENABLED = logger.isDebugEnabled();
 
-    /**
-     * Number of solutions (so far).
-     */
-    private long count = 0;
+  /**
+   * Number of solutions (so far).
+   */
+  private long count = 0;
 
 
-    @Override
-    public Integer onSolution(UnifyContext currentVars) {
-        this.count++;
-        if (DEBUG_ENABLED) {
-            logger.debug(" onSolution(#{})", this.count);
-        }
-        return Continuation.CONTINUE;
+  @Override
+  public Integer onSolution(UnifyContext currentVars) {
+    this.count++;
+    if (DEBUG_ENABLED) {
+      logger.debug(" onSolution(#{})", this.count);
     }
+    return Continuation.CONTINUE;
+  }
 
-    // ---------------------------------------------------------------------------
-    // Accessors
-    // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // Accessors
+  // ---------------------------------------------------------------------------
 
-    public long count() {
-        return this.count;
-    }
+  public long count() {
+    return this.count;
+  }
 
-    public boolean exists() {
-        return this.count > 0;
-    }
+  public boolean exists() {
+    return this.count > 0;
+  }
 
 }

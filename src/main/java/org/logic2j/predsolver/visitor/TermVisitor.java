@@ -30,8 +30,8 @@ import org.logic2j.predsolver.model.Var;
  */
 public interface TermVisitor<T> {
 
-    T visit(Var<?> theVar);
+  T visit(Var<?> theVar);
 
-    T visit(Struct theStruct);
+  T visit(Struct theStruct);
 
 }

@@ -102,9 +102,9 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
     this.type = theType;
   }
 
-//  public Var(CharSequence theName) {
-//    this(/* FIXME */ null, theName);
-//  }
+  //  public Var(CharSequence theName) {
+  //    this(/* FIXME */ null, theName);
+  //  }
 
   // ---------------------------------------------------------------------------
   // Static factories
@@ -170,15 +170,15 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
 
 
   // ---------------------------------------------------------------------------
-    // TermVisitor
-    // ---------------------------------------------------------------------------
+  // TermVisitor
+  // ---------------------------------------------------------------------------
 
-    @Override
-    public <T> T accept(TermVisitor<T> theVisitor) {
-        return theVisitor.visit(this);
-    }
+  @Override
+  public <T> T accept(TermVisitor<T> theVisitor) {
+    return theVisitor.visit(this);
+  }
 
-    // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // Template methods defined in abstract class Term
   // ---------------------------------------------------------------------------
 

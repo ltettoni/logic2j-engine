@@ -34,100 +34,102 @@ import java.util.Map;
  */
 public class GoalHolder {
 
-    private final Solver solver;
-    private final Object goal;
-    private final BindingVar[] bindingVars;
+  private final Solver solver;
+  private final Object goal;
+  private final BindingVar[] bindingVars;
 
-    public GoalHolder(Solver solver, Object theGoal, BindingVar[] bindingVars) {
-        this.solver = solver;
-        this.goal = theGoal;
-        this.bindingVars = bindingVars;
-    }
+  public GoalHolder(Solver solver, Object theGoal, BindingVar[] bindingVars) {
+    this.solver = solver;
+    this.goal = theGoal;
+    this.bindingVars = bindingVars;
+  }
 
-    public boolean exists() {
-        final ExistsSolutionListener listener = new ExistsSolutionListener();
-        solver.solveGoal(goal, listener);
-        return listener.exists();
-    }
+  public boolean exists() {
+    final ExistsSolutionListener listener = new ExistsSolutionListener();
+    solver.solveGoal(goal, listener);
+    return listener.exists();
+  }
 
-    public long count() {
-        final CountingSolutionListener listener = new CountingSolutionListener();
-        solver.solveGoal(goal, listener);
-        return listener.count();
-    }
+  public long count() {
+    final CountingSolutionListener listener = new CountingSolutionListener();
+    solver.solveGoal(goal, listener);
+    return listener.count();
+  }
 
-    public BindingVar[] boundVariables() {
-        final CountingSolutionListener listener = new CountingSolutionListener() {
-            @Override
-            public Integer onSolution(UnifyContext currentVars) {
-                for (BindingVar bv : bindingVars) {
-                    final Object reify = currentVars.reify(bv);
-                    bv.addResult(reify);
-                }
-                return super.onSolution(currentVars);
-            }
-        };
-        solver.solveGoal(goal, listener);
-        return bindingVars;
-    }
+  public BindingVar[] boundVariables() {
+    final CountingSolutionListener listener = new CountingSolutionListener() {
+      @Override
+      public Integer onSolution(UnifyContext currentVars) {
+        for (BindingVar bv : bindingVars) {
+          final Object reify = currentVars.reify(bv);
+          bv.addResult(reify);
+        }
+        return super.onSolution(currentVars);
+      }
+    };
+    solver.solveGoal(goal, listener);
+    return bindingVars;
+  }
 
-    /**
-     * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
-     */
-    public SolutionHolder<Object> solution() {
-        return new SolutionHolder<Object>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class);
-    }
+  /**
+   * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
+   */
+  public SolutionHolder<Object> solution() {
+    return new SolutionHolder<Object>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class);
+  }
 
-     /**
-     * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
-     * @param varName The name of the variable to solve for.
-     * @param desiredTypeOfResult
-     * @param <T>
-     * @return A SolutionHolder for only the specified variable.
-     */
-    public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
-        final SolutionHolder<T> solutionHolder = new SolutionHolder<T>(this, varName, desiredTypeOfResult);
-        return solutionHolder;
-    }
+  /**
+   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
+   *
+   * @param varName             The name of the variable to solve for.
+   * @param desiredTypeOfResult
+   * @param <T>
+   * @return A SolutionHolder for only the specified variable.
+   */
+  public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
+    final SolutionHolder<T> solutionHolder = new SolutionHolder<T>(this, varName, desiredTypeOfResult);
+    return solutionHolder;
+  }
 
-    /**
-     * Seek solutions for onle one variable of the goal, of any type.
-     * @param varName The name of the variable to solve for.
-     * @return A SolutionHolder for only the specified variable.
-     */
-    public SolutionHolder<Object> var(String varName) {
-        return var(varName, Object.class);
-    }
+  /**
+   * Seek solutions for onle one variable of the goal, of any type.
+   *
+   * @param varName The name of the variable to solve for.
+   * @return A SolutionHolder for only the specified variable.
+   */
+  public SolutionHolder<Object> var(String varName) {
+    return var(varName, Object.class);
+  }
 
-    public SolutionHolder<Map<Var<?>, Object>> vars() {
-        return SolutionHolder.extractingMaps(this);
-    }
+  public SolutionHolder<Map<Var<?>, Object>> vars() {
+    return SolutionHolder.extractingMaps(this);
+  }
 
-    // --------------------------------------------------------------------------
-    // Accessors
-    // --------------------------------------------------------------------------
-
-
-    public Solver getSolver() {
-        return solver;
-    }
-
-    public Object getGoal() {
-        return goal;
-    }
+  // --------------------------------------------------------------------------
+  // Accessors
+  // --------------------------------------------------------------------------
 
 
-    // ---------------------------------------------------------------------------
-    // Syntactic sugars
-    // ---------------------------------------------------------------------------
+  public Solver getSolver() {
+    return solver;
+  }
+
+  public Object getGoal() {
+    return goal;
+  }
 
 
-    public Object intValue(String varName) {
-        return var(varName, Integer.class).unique();
-    }
+  // ---------------------------------------------------------------------------
+  // Syntactic sugars
+  // ---------------------------------------------------------------------------
 
-    public String toString(String varName) {
-        return var(varName).unique().toString();
-    }
+
+  public Object intValue(String varName) {
+    return var(varName, Integer.class).unique();
+  }
+
+  public String toString(String varName) {
+    return var(varName).unique().toString();
+  }
 
 }

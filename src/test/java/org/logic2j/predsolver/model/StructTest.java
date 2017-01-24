@@ -11,51 +11,47 @@ import static org.junit.Assert.assertTrue;
 public class StructTest {
 
 
-    // ---------------------------------------------------------------------------
-    // Struct
-    // ---------------------------------------------------------------------------
+  @Test
+  public void struct0() {
+    Struct a1 = new Struct("f");
+    assertEquals(0, a1.getArity());
+    assertSame("f", a1.getName());
+    Struct a2 = new Struct("f");
+    assertNotSame(a1, a2);
+    assertEquals(a1, a2);
+  }
 
-    @Test
-    public void struct0() {
-        Struct a1 = new Struct("f");
-        assertEquals(0, a1.getArity());
-        assertSame("f", a1.getName());
-        Struct a2 = new Struct("f");
-        assertNotSame(a1, a2);
-        assertEquals(a1, a2);
-    }
-
-    @Test
-    public void atomAsString() {
-        Object a1 = Struct.atom("f");
-        assertTrue(a1 instanceof String);
-        assertSame("f", a1);
-        Object a2 = Struct.atom("f");
-        assertSame(a1, a2);
-    }
+  @Test
+  public void atomAsString() {
+    Object a1 = Struct.atom("f");
+    assertTrue(a1 instanceof String);
+    assertSame("f", a1);
+    Object a2 = Struct.atom("f");
+    assertSame(a1, a2);
+  }
 
 
-    @Test
-    public void atomAsStruct() {
-        Object a1 = Struct.atom("true");
-        assertTrue(a1 instanceof Struct);
-        assertSame("true", ((Struct) a1).getName());
-        Object a2 = Struct.atom("true");
-        assertNotSame(a1, a2);
-    }
+  @Test
+  public void atomAsStruct() {
+    Object a1 = Struct.atom("true");
+    assertTrue(a1 instanceof Struct);
+    assertSame("true", ((Struct) a1).getName());
+    Object a2 = Struct.atom("true");
+    assertNotSame(a1, a2);
+  }
 
-    @Test
-    public void struct2() {
-        Struct a1 = new Struct("f", "a", "b");
-        assertEquals(2, a1.getArity());
-        assertSame("f", a1.getName());
-        assertSame("a", a1.getArg(0));
-        assertSame("b", a1.getArg(1));
-        Struct a2 = new Struct("f", "a", "b");
-        assertNotSame(a1, a2);
-        assertEquals(a1, a2);
-        assertNotEquals(a1, new Struct("f", "b", "a"));
-    }
+  @Test
+  public void struct2() {
+    Struct a1 = new Struct("f", "a", "b");
+    assertEquals(2, a1.getArity());
+    assertSame("f", a1.getName());
+    assertSame("a", a1.getArg(0));
+    assertSame("b", a1.getArg(1));
+    Struct a2 = new Struct("f", "a", "b");
+    assertNotSame(a1, a2);
+    assertEquals(a1, a2);
+    assertNotEquals(a1, new Struct("f", "b", "a"));
+  }
 
 
 }

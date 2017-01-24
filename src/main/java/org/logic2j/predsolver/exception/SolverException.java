@@ -21,14 +21,14 @@ package org.logic2j.predsolver.exception;
  * Root class for all logic2j Prolog Exceptions - all a {@link RuntimeException}s.
  */
 public class SolverException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public SolverException(CharSequence theMessage) {
-        super(theMessage.toString());
-    }
+  public SolverException(CharSequence theMessage) {
+    super(theMessage.toString());
+  }
 
-    public SolverException(CharSequence theMessage, Throwable theRootCause) {
-        super(theMessage.toString(), theRootCause);
-    }
+  public SolverException(CharSequence theMessage, Throwable theRootCause) {
+    super(theMessage.toString(), theRootCause);
+  }
 
 }

@@ -31,26 +31,26 @@ import java.util.Map;
  */
 public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
 
-    private final Var<?>[] vars;
+  private final Var<?>[] vars;
 
-    public MapExtractor(Object goal) {
-        final Var<?>[] distinctVars = TermApi.distinctVars(goal);
-        // Actually we don't need to clone:  this.vars = Arrays.copyOf(distinctVars, distinctVars.length);
-        this.vars = distinctVars;
+  public MapExtractor(Object goal) {
+    final Var<?>[] distinctVars = TermApi.distinctVars(goal);
+    // Actually we don't need to clone:  this.vars = Arrays.copyOf(distinctVars, distinctVars.length);
+    this.vars = distinctVars;
+  }
+
+
+  /**
+   * @param currentVars
+   * @return Actually a HashMap, meaning there is no particular order in the Var keys.
+   */
+  @Override
+  public Map<Var, Object> extractSolution(UnifyContext currentVars) {
+    final Map<Var, Object> result = new HashMap<Var, Object>();
+    for (Var<?> var : vars) {
+      final Object value = currentVars.reify(var);
+      result.put(var, value);
     }
-
-
-    /**
-     * @param currentVars
-     * @return Actually a HashMap, meaning there is no particular order in the Var keys.
-     */
-    @Override
-    public Map<Var, Object> extractSolution(UnifyContext currentVars) {
-        final Map<Var, Object> result = new HashMap<Var, Object>();
-        for (Var<?> var : vars) {
-            final Object value = currentVars.reify(var);
-            result.put(var, value);
-        }
-        return result;
-    }
+    return result;
+  }
 }

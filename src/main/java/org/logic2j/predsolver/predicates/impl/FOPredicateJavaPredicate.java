@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 /**
  * Bridge between first-order predicates and plain Java predicates for checking single values.
- *
+ * <p>
  * Only check reified values against a {@link java.util.function.Predicate},
  * not able to bind a free {@link Var}.
  */
@@ -31,7 +31,7 @@ public abstract class FOPredicateJavaPredicate<T> extends FOPredicate {
   @Override
   public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     final Object reified = currentVars.reify(getArg(0));
-    if (reified!=null && !(reified instanceof Var)) {
+    if (reified != null && !(reified instanceof Var)) {
       if (this.javaPredicate.test((T) reified)) {
         notifySolution(theListener, currentVars);
       }

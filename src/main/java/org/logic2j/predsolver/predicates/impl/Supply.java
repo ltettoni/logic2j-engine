@@ -31,14 +31,14 @@ public class Supply<T> extends FOPredicate {
     if (reified instanceof Var) {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
-      if(iterator!=null) {
-        return unifyAndNotifyMany(theListener, currentVars, (Var)reified, iterator);
+      if (iterator != null) {
+        return unifyAndNotifyMany(theListener, currentVars, (Var) reified, iterator);
       }
       return Continuation.CONTINUE;
     } else {
       // Variable is bound to a value
 
-      if (iterator!=null) {
+      if (iterator != null) {
         final Set<Object> set = new HashSet<>();
         while (iterator.hasNext()) {
           set.add(iterator.next());

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class IntRange extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(IntRange.class);
-  
+
   public IntRange(Object min, final Object middle, Object max) {
     super("intRange", min, middle, max);
   }

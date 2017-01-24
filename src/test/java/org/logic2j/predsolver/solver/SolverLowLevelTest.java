@@ -114,18 +114,18 @@ public class SolverLowLevelTest {
 
 
 
-    @Test
-    public void orTest() {
-      countNSolutions(2, or(ttrue, ttrue));
-      //
-      countNSolutions(3, or(ttrue, ttrue, ttrue));
-      //
-      final Var<Integer> Q = intVar("Q");
-      countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
-//      GoalHolder solutions;
-//      solutions = this.prolog.solve("X=a; X=b; X=c");
-//      assertEquals("[a, b, c]", solutions.var("X").list().toString());
-    }
+  @Test
+  public void orTest() {
+    countNSolutions(2, or(ttrue, ttrue));
+    //
+    countNSolutions(3, or(ttrue, ttrue, ttrue));
+    //
+    final Var<Integer> Q = intVar("Q");
+    countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
+    //      GoalHolder solutions;
+    //      solutions = this.prolog.solve("X=a; X=b; X=c");
+    //      assertEquals("[a, b, c]", solutions.var("X").list().toString());
+  }
 
 
   //  /**
@@ -161,11 +161,11 @@ public class SolverLowLevelTest {
   //    assertEquals("[a, b, c]", solutions.var("X").list().toString());
   //  }
 
-    @Test
-    public void notTest() {
-      countOneSolution(new Not(solver, fail));
-      countNoSolution(new Not(solver, ttrue));
-    }
+  @Test
+  public void notTest() {
+    countOneSolution(new Not(solver, fail));
+    countNoSolution(new Not(solver, ttrue));
+  }
 
 
 
@@ -198,44 +198,44 @@ public class SolverLowLevelTest {
   }
 
 
-    @Test
-    public void unifyVarToLiteral() {
-      final Var<String> Q = strVar("Q");
-      final Object goal = eq(Q, "d");
-      final long nbSolutions = solve(goal).count();
-      assertEquals(1, nbSolutions);
-      final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.count());
-      assertEquals("[Q]", listener.getVariables().toString());
-      assertEquals("['='(d, d)]", marshall(listener.getValues(".")));
-      assertEquals("[d]", marshall(listener.getValues("Q")));
-    }
+  @Test
+  public void unifyVarToLiteral() {
+    final Var<String> Q = strVar("Q");
+    final Object goal = eq(Q, "d");
+    final long nbSolutions = solve(goal).count();
+    assertEquals(1, nbSolutions);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.count());
+    assertEquals("[Q]", listener.getVariables().toString());
+    assertEquals("['='(d, d)]", marshall(listener.getValues(".")));
+    assertEquals("[d]", marshall(listener.getValues("Q")));
+  }
 
 
-    @Test
-    public void unifyVarToAnonymous() {
-      final Var<String> Q = strVar("Q");
-      final Object goal = eq(Q, anonymous);
-      final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.count());
-      assertEquals("[Q]", listener.getVariables().toString());
-      assertEquals("['='(_, _)]", marshall(listener.getValues(".")));
-      assertEquals("[_]", marshall(listener.getValues("Q")));
-    }
+  @Test
+  public void unifyVarToAnonymous() {
+    final Var<String> Q = strVar("Q");
+    final Object goal = eq(Q, anonymous);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.count());
+    assertEquals("[Q]", listener.getVariables().toString());
+    assertEquals("['='(_, _)]", marshall(listener.getValues(".")));
+    assertEquals("[_]", marshall(listener.getValues("Q")));
+  }
 
 
-    @Test
-    public void unifyVarToVar() {
-      final Var<String> Q = strVar("Q");
-      final Var<String> Z = strVar("Z");
-      final Object goal = eq(Q, Z);
-      final ExtractingSolutionListener listener = solve(goal);
-      assertEquals(1, listener.count());
-      assertEquals("[., Q, Z]", listener.getVarNames().toString());
-      assertEquals("['='(Q, Q)]", marshall(listener.getValues(".")));
-      assertEquals("[Q]", marshall(listener.getValues("Q")));
-      assertEquals("[Q]", marshall(listener.getValues("Z")));
-    }
+  @Test
+  public void unifyVarToVar() {
+    final Var<String> Q = strVar("Q");
+    final Var<String> Z = strVar("Z");
+    final Object goal = eq(Q, Z);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.count());
+    assertEquals("[., Q, Z]", listener.getVarNames().toString());
+    assertEquals("['='(Q, Q)]", marshall(listener.getValues(".")));
+    assertEquals("[Q]", marshall(listener.getValues("Q")));
+    assertEquals("[Q]", marshall(listener.getValues("Z")));
+  }
 
 
   @Test

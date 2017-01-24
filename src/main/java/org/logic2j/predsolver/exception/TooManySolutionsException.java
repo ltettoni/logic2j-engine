@@ -20,14 +20,14 @@ package org.logic2j.predsolver.exception;
 
 /**
  * Thrown by the Solution API when too many solutions could be found.
- * 
+ *
  * @author tettoni
  */
 public class TooManySolutionsException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public TooManySolutionsException(CharSequence theMessage) {
-        super(theMessage.toString());
-    }
+  public TooManySolutionsException(CharSequence theMessage) {
+    super(theMessage.toString());
+  }
 
 }

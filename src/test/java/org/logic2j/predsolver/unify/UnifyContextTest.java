@@ -60,7 +60,7 @@ public class UnifyContextTest {
     f_ab = TermApi.normalize(Struct.valueOf("f", "a", "b"));
     f_aZ = TermApi.normalize(Struct.valueOf("f", "a", Z));
     f_XY = TermApi.normalize(Struct.valueOf("f", X, Y));
-    f_XX =  TermApi.normalize(Struct.valueOf("f", X2, X2));
+    f_XX = TermApi.normalize(Struct.valueOf("f", X2, X2));
     f_aZZ = TermApi.normalize(Struct.valueOf("f", "a", X3, X3));
     f_XXa = TermApi.normalize(Struct.valueOf("f", X4, X4, "a"));
     f_XXb = TermApi.normalize(Struct.valueOf("f", X5, X5, "b"));
@@ -80,7 +80,7 @@ public class UnifyContextTest {
     //
     assertSame(v, m.reify(v));
     //logger.info("Reify under original monad: {}", reified(m, v));
-//    logger.info("Term reified with returned UnifyContext: {}", reified(m2, v));
+    //    logger.info("Term reified with returned UnifyContext: {}", reified(m2, v));
     return m2;
   }
 
@@ -92,13 +92,12 @@ public class UnifyContextTest {
     if (m2 != null) {
       logger.info("Unified");
       logger.info("Monad after: {}", m2);
-//      logger.info("Terms after: {}  =  {}", reified(m2, t1), reified(m2, t2));
+      //      logger.info("Terms after: {}  =  {}", reified(m2, t1), reified(m2, t2));
     } else {
       logger.info("Not unified");
     }
     return m2;
   }
-
 
 
 

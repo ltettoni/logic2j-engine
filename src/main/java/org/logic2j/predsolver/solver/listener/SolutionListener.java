@@ -31,33 +31,34 @@ import java.util.Iterator;
 public interface SolutionListener {
 
 
-    /**
-     * The inference engine notifies the caller code that a solution was proven; the real content to the solution must be retrieved from the
-     * goal's variables.
-     * 
-     * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
-     *         {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
-     */
-    Integer onSolution(UnifyContext currentVars);
+  /**
+   * The inference engine notifies the caller code that a solution was proven; the real content to the solution must be retrieved from the
+   * goal's variables.
+   *
+   * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
+   * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
+   */
+  Integer onSolution(UnifyContext currentVars);
 
-    /**
-     * Allow specifying multiple solutions in one call to the listener.
-     * @param allSolutions
-     * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
-     *         {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
-     */
-    default Integer onSolutions(Iterator<UnifyContext> allSolutions) {
-        while (allSolutions.hasNext()) {
-            final UnifyContext next = allSolutions.next();
-            final Integer continuation = this.onSolution(next);
-            if (continuation != Continuation.CONTINUE) {
-                return continuation;
-            }
-        }
-        return Continuation.CONTINUE;
+  /**
+   * Allow specifying multiple solutions in one call to the listener.
+   *
+   * @param allSolutions
+   * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
+   * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
+   */
+  default Integer onSolutions(Iterator<UnifyContext> allSolutions) {
+    while (allSolutions.hasNext()) {
+      final UnifyContext next = allSolutions.next();
+      final Integer continuation = this.onSolution(next);
+      if (continuation != Continuation.CONTINUE) {
+        return continuation;
+      }
     }
+    return Continuation.CONTINUE;
+  }
 
-    default Integer onSolutions(Iterable<UnifyContext> allSolutions) {
-        return onSolutions(allSolutions.iterator());
-    }
+  default Integer onSolutions(Iterable<UnifyContext> allSolutions) {
+    return onSolutions(allSolutions.iterator());
+  }
 }

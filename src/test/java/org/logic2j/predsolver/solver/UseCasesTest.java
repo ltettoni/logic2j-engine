@@ -46,7 +46,7 @@ public class UseCasesTest {
     final BindingVar[] boundVars = solver.solve(goal, new Odd(R)).boundVariables();
     logger.info("Result: {}", Q);
     logger.info("Result: {}", R);
-//    final List<Object> list = (List<Object>) nbr;
+    //    final List<Object> list = (List<Object>) nbr;
     // assertThat(list.toString(), is("[2, 4, 6, 8]"));
   }
 

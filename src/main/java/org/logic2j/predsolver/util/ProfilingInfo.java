@@ -25,77 +25,77 @@ import java.util.HashMap;
  * to collect usage / profiling information
  */
 public class ProfilingInfo {
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ProfilingInfo.class);
-    public static long counter1;
-    public static int max1;
-    public static long nbInferences;
-    public static long nbBindings;
-    public static int threadLocal;
-    public static int nbFollowVar;
+  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ProfilingInfo.class);
+  public static long counter1;
+  public static int max1;
+  public static long nbInferences;
+  public static long nbBindings;
+  public static int threadLocal;
+  public static int nbFollowVar;
 
-    public static long timer1;
+  public static long timer1;
 
-    public static final HashMap<Object, Integer> events = new HashMap<Object, Integer>();
+  public static final HashMap<Object, Integer> events = new HashMap<Object, Integer>();
 
-    static {
-        resetAll();
+  static {
+    resetAll();
+  }
+
+
+
+  public static void reportAll(String label) {
+    final long now = System.currentTimeMillis();
+    logger.info("Profile report for: {}", label);
+    if (counter1 > 0) {
+      logger.info("  counter1     = {}", counter1);
     }
-
-
-
-    public static void reportAll(String label) {
-        final long now = System.currentTimeMillis();
-        logger.info("Profile report for: {}", label);
-        if (counter1 > 0) {
-            logger.info("  counter1     = {}", counter1);
-        }
-        if (max1 > 0) {
-            logger.info("  max1         = {}", max1);
-        }
-        if (nbInferences > 0) {
-            logger.info("  nbInferences = {}", nbInferences);
-        }
-        if (nbFollowVar > 0) {
-            logger.info("  nbFollowVar  = {}", nbFollowVar);
-        }
-        if (nbBindings > 0) {
-            logger.info("  nbBindings   = {}", nbBindings);
-        }
-        if (threadLocal > 0) {
-            logger.info("  threadLocal  = {}", threadLocal);
-        }
-        if (timer1 >= 0) {
-            logger.info("  timer1       = {}", now - timer1);
-        }
-        if (!events.isEmpty()) {
-            logger.info("  events       = {}", events);
-        }
-        resetAll();
+    if (max1 > 0) {
+      logger.info("  max1         = {}", max1);
     }
-
-    private static void resetAll() {
-        counter1 = 0;
-        max1 = 0;
-        nbBindings = 0;
-        nbInferences = 0;
-        threadLocal = 0;
-        nbFollowVar = 0;
-        timer1 = -1;
+    if (nbInferences > 0) {
+      logger.info("  nbInferences = {}", nbInferences);
     }
-
-    public static long setTimer1() {
-        timer1 = System.currentTimeMillis();
-        return timer1;
+    if (nbFollowVar > 0) {
+      logger.info("  nbFollowVar  = {}", nbFollowVar);
     }
-
-    public static int countEvent(Object theEventKey) {
-        final Integer val = events.get(theEventKey);
-        if (val == null) {
-            events.put(theEventKey, 1);
-            return 1;
-        }
-        events.put(theEventKey, val + 1);
-        return val + 1;
+    if (nbBindings > 0) {
+      logger.info("  nbBindings   = {}", nbBindings);
     }
+    if (threadLocal > 0) {
+      logger.info("  threadLocal  = {}", threadLocal);
+    }
+    if (timer1 >= 0) {
+      logger.info("  timer1       = {}", now - timer1);
+    }
+    if (!events.isEmpty()) {
+      logger.info("  events       = {}", events);
+    }
+    resetAll();
+  }
+
+  private static void resetAll() {
+    counter1 = 0;
+    max1 = 0;
+    nbBindings = 0;
+    nbInferences = 0;
+    threadLocal = 0;
+    nbFollowVar = 0;
+    timer1 = -1;
+  }
+
+  public static long setTimer1() {
+    timer1 = System.currentTimeMillis();
+    return timer1;
+  }
+
+  public static int countEvent(Object theEventKey) {
+    final Integer val = events.get(theEventKey);
+    if (val == null) {
+      events.put(theEventKey, 1);
+      return 1;
+    }
+    events.put(theEventKey, val + 1);
+    return val + 1;
+  }
 
 }

@@ -36,81 +36,81 @@ import java.util.Iterator;
  * Solve goals - that's the core of the engine.
  */
 public class Solver {
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
+  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
-    private static final boolean isDebug = logger.isDebugEnabled();
-    private static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
-    private static final boolean PROFILING = true;
+  private static final boolean isDebug = logger.isDebugEnabled();
+  private static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
+  private static final boolean PROFILING = true;
 
 
 
-    public Integer solveGoal(Object goal, SolutionListener theSolutionListener) {
-        if (goal instanceof Var<?>) {
-            throw new InvalidTermException("Cannot solve the goal \""+ goal + "\", the variable is not bound to a value");
-        }
-        final UnifyContext initialContext = initialContext();
-        if (goal instanceof Struct) {
-            // We will need to clone Clauses during resolution, hence the base index
-            // for any new var must be higher than any of the currently used vars.
-            initialContext.topVarIndex += ((Struct) goal).getIndex();
-        }
-        try {
-            return solveGoal(goal, theSolutionListener, initialContext);
-        } catch (SolverException e) {
-            // "Functional" exception thrown during solving will just be forwarded
-            throw e;
-        } catch (RuntimeException e) {
-            // Anything not a PrologException will be encapsulated
-            throw new SolverException("Solver failed with " + e, e);
-        }
+  public Integer solveGoal(Object goal, SolutionListener theSolutionListener) {
+    if (goal instanceof Var<?>) {
+      throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
-
-    private UnifyContext initialContext() {
-        final UnifyContext initialContext = new UnifyStateByLookup().emptyContext();
-        return initialContext;
+    final UnifyContext initialContext = initialContext();
+    if (goal instanceof Struct) {
+      // We will need to clone Clauses during resolution, hence the base index
+      // for any new var must be higher than any of the currently used vars.
+      initialContext.topVarIndex += ((Struct) goal).getIndex();
     }
-
-    /**
-     * Just calls the recursive internal method.
-     */
-    public Integer solveGoal(Object goal, final SolutionListener theSolutionListener, UnifyContext currentVars) {
-        // Check if we will have to deal with DataFacts in this session of solving.
-        // This slightly improves performance - we can bypass calling the method that deals with that
-        if (goal instanceof Struct) {
-            if (((Struct) goal).getIndex() == Term.NO_INDEX) {
-                throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
-            }
-        }
-        final Integer cutIntercepted = solveGoalRecursive(goal, theSolutionListener, currentVars, 10);
-        return cutIntercepted;
+    try {
+      return solveGoal(goal, theSolutionListener, initialContext);
+    } catch (SolverException e) {
+      // "Functional" exception thrown during solving will just be forwarded
+      throw e;
+    } catch (RuntimeException e) {
+      // Anything not a PrologException will be encapsulated
+      throw new SolverException("Solver failed with " + e, e);
     }
+  }
 
-    /**
-     * That's the complex method - the heart of the Solver.
-     *
-     * @param goalTerm
-     * @param theSolutionListener
-     * @param currentVars
-     * @param cutLevel
-     * @return
-     */
-    private Integer solveGoalRecursive(final Object goalTerm, final SolutionListener theSolutionListener, final UnifyContext currentVars,
-        final int cutLevel) {
-        final long inferenceCounter = ProfilingInfo.nbInferences;
-        if (isDebug) {
-            logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
-            logger.debug("     cutLevel={}", cutLevel);
-        }
-        if (PROFILING) {
-            ProfilingInfo.nbInferences++;
-        }
-        Integer result = Continuation.CONTINUE;
+  private UnifyContext initialContext() {
+    final UnifyContext initialContext = new UnifyStateByLookup().emptyContext();
+    return initialContext;
+  }
 
-        // At the moment we don't properly manage atoms as goals...
-        final Struct goalStruct;
-        if (goalTerm instanceof String) {
-            // Yet we are not capable of handing String everywhere below - so use a Struct atom still
-            goalStruct = new Struct((String) goalTerm);
+  /**
+   * Just calls the recursive internal method.
+   */
+  public Integer solveGoal(Object goal, final SolutionListener theSolutionListener, UnifyContext currentVars) {
+    // Check if we will have to deal with DataFacts in this session of solving.
+    // This slightly improves performance - we can bypass calling the method that deals with that
+    if (goal instanceof Struct) {
+      if (((Struct) goal).getIndex() == Term.NO_INDEX) {
+        throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
+      }
+    }
+    final Integer cutIntercepted = solveGoalRecursive(goal, theSolutionListener, currentVars, 10);
+    return cutIntercepted;
+  }
+
+  /**
+   * That's the complex method - the heart of the Solver.
+   *
+   * @param goalTerm
+   * @param theSolutionListener
+   * @param currentVars
+   * @param cutLevel
+   * @return
+   */
+  private Integer solveGoalRecursive(final Object goalTerm, final SolutionListener theSolutionListener, final UnifyContext currentVars,
+      final int cutLevel) {
+    final long inferenceCounter = ProfilingInfo.nbInferences;
+    if (isDebug) {
+      logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
+      logger.debug("     cutLevel={}", cutLevel);
+    }
+    if (PROFILING) {
+      ProfilingInfo.nbInferences++;
+    }
+    Integer result = Continuation.CONTINUE;
+
+    // At the moment we don't properly manage atoms as goals...
+    final Struct goalStruct;
+    if (goalTerm instanceof String) {
+      // Yet we are not capable of handing String everywhere below - so use a Struct atom still
+      goalStruct = new Struct((String) goalTerm);
         /* Prototype code - does actually not work but could
         } else if (goalTerm instanceof Var<?>) {
             // Crazy we, we allow a single Var to be considered as a goal - just assuming it is bound to a Struct
@@ -123,140 +123,140 @@ public class Solver {
             }
             goalStruct = (Struct) goalReified;
         */
-        } else {
-            assert goalTerm instanceof Struct : "Calling solveGoalRecursive with a goal that is not a Struct but: \"" + goalTerm + "\" of " +
-                goalTerm.getClass();
-            goalStruct = (Struct) goalTerm;
-        }
+    } else {
+      assert goalTerm instanceof Struct :
+          "Calling solveGoalRecursive with a goal that is not a Struct but: \"" + goalTerm + "\" of " + goalTerm.getClass();
+      goalStruct = (Struct) goalTerm;
+    }
 
-        // Extract all features of the goal to solve
-        final String functor = goalStruct.getName();
-        final int arity = goalStruct.getArity();
+    // Extract all features of the goal to solve
+    final String functor = goalStruct.getName();
+    final int arity = goalStruct.getArity();
 
-        // First we will check the goal against core predicates such as
-        // AND (","), OR (";"), CUT ("!") and CALL
-        // Then we will check if the goal is a Primitive implemented in a Java library
-        // Finally we will handle classic goals matched against Prolog theories
+    // First we will check the goal against core predicates such as
+    // AND (","), OR (";"), CUT ("!") and CALL
+    // Then we will check if the goal is a Primitive implemented in a Java library
+    // Finally we will handle classic goals matched against Prolog theories
 
-        if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-            // Logical AND. Typically the arity=2 since "," is a binary predicate. But in logic2j we allow more, the same code supports both.
+    if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+      // Logical AND. Typically the arity=2 since "," is a binary predicate. But in logic2j we allow more, the same code supports both.
 
-            // Algorithm: for the sequential AND of N goals G1,G2,G3,...,GN, we defined N-1 listeners, and solve G1 against
-            // the first listener: all solutions to G1, will be escalated to that listener that handles G2,G3,...,GN
-            // Then that listener will solve G2 against the listener for (G3,...,GN). Finally GN will solve against the
-            // "normal" listener received as argument (hence propagating the ANDed solution to our caller).
+      // Algorithm: for the sequential AND of N goals G1,G2,G3,...,GN, we defined N-1 listeners, and solve G1 against
+      // the first listener: all solutions to G1, will be escalated to that listener that handles G2,G3,...,GN
+      // Then that listener will solve G2 against the listener for (G3,...,GN). Finally GN will solve against the
+      // "normal" listener received as argument (hence propagating the ANDed solution to our caller).
 
-            // Note that instantiating all these listeners could be costly - if we found a way to have a cache (eg. storing them
-            // at parse-time in Clauses) it could improve performance.
+      // Note that instantiating all these listeners could be costly - if we found a way to have a cache (eg. storing them
+      // at parse-time in Clauses) it could improve performance.
 
-            final SolutionListener[] andingListeners = new SolutionListener[arity];
-            // The last listener is the one that called us (typically the one of the application, if this is the outermost "AND")
-            andingListeners[arity - 1] = theSolutionListener;
-            // Allocates N-1 andingListeners, usually this means one.
-            // On solution, each will trigger solving of the next term
-            final Object[] goalStructArgs = goalStruct.getArgs();
-            final Object lhs = goalStructArgs[0];
-            for (int i = 0; i < arity - 1; i++) {
-                final int index = i;
-                andingListeners[index] = new SolutionListener() {
+      final SolutionListener[] andingListeners = new SolutionListener[arity];
+      // The last listener is the one that called us (typically the one of the application, if this is the outermost "AND")
+      andingListeners[arity - 1] = theSolutionListener;
+      // Allocates N-1 andingListeners, usually this means one.
+      // On solution, each will trigger solving of the next term
+      final Object[] goalStructArgs = goalStruct.getArgs();
+      final Object lhs = goalStructArgs[0];
+      for (int i = 0; i < arity - 1; i++) {
+        final int index = i;
+        andingListeners[index] = new SolutionListener() {
 
-                    @Override
-                    public Integer onSolution(UnifyContext currentVars) {
-                        final int nextIndex = index + 1;
-                        final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-                        if (isDebug) {
-                            logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
-                        }
-                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
-                        return continuationFromSubGoal;
-                    }
-
-                    @Override
-                    public Integer onSolutions(final Iterator<UnifyContext> multiLHS) {
-                        final int nextIndex = index + 1;
-                        final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-                        final SolutionListener subListener = new SolutionListener() {
-                            @Override
-                            public Integer onSolution(UnifyContext currentVars) {
-                                throw new UnsupportedOperationException("Should not be here");
-                            }
-
-                            @Override
-                            public Integer onSolutions(Iterator<UnifyContext> multiRHS) {
-                                logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
-                                final UnifyContextIterator combined = new UnifyContextIterator(currentVars, multiLHS, multiRHS);
-                                return andingListeners[nextIndex].onSolutions(combined);
-                            }
-
-                        };
-                        final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars, cutLevel);
-                        return continuationFromSubGoal;
-                    }
-
-                    @Override
-                    public String toString() {
-                        return "AND sub-listener to " + lhs;
-                    }
-                };
-            }
-            // Solve the first goal, redirecting all solutions to the first listener defined above
+          @Override
+          public Integer onSolution(UnifyContext currentVars) {
+            final int nextIndex = index + 1;
+            final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
             if (isDebug) {
-                logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
+              logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
             }
-            result = solveGoalRecursive(lhs, andingListeners[0], currentVars, cutLevel);
-        } else if (FAST_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
+            return continuationFromSubGoal;
+          }
+
+          @Override
+          public Integer onSolutions(final Iterator<UnifyContext> multiLHS) {
+            final int nextIndex = index + 1;
+            final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
+            final SolutionListener subListener = new SolutionListener() {
+              @Override
+              public Integer onSolution(UnifyContext currentVars) {
+                throw new UnsupportedOperationException("Should not be here");
+              }
+
+              @Override
+              public Integer onSolutions(Iterator<UnifyContext> multiRHS) {
+                logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
+                final UnifyContextIterator combined = new UnifyContextIterator(currentVars, multiLHS, multiRHS);
+                return andingListeners[nextIndex].onSolutions(combined);
+              }
+
+            };
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars, cutLevel);
+            return continuationFromSubGoal;
+          }
+
+          @Override
+          public String toString() {
+            return "AND sub-listener to " + lhs;
+          }
+        };
+      }
+      // Solve the first goal, redirecting all solutions to the first listener defined above
+      if (isDebug) {
+        logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
+      }
+      result = solveGoalRecursive(lhs, andingListeners[0], currentVars, cutLevel);
+    } else if (FAST_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR
             * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
             */
-            for (int i = 0; i < arity; i++) {
-                // Solve all the elements of the "OR", in sequence.
-                // For a binary OR, this means solving the left-hand-side and then the right-hand-side
-                if (isDebug) {
-                    logger.debug("Handling OR, element={} of {}", i, goalStruct);
-                }
-                result = solveGoalRecursive(goalStruct.getArg(i), theSolutionListener, currentVars, cutLevel);
-                if (result != Continuation.CONTINUE) {
-                    break;
-                }
-            }
-        } else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-            // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
-            if (arity != 1) {
-                throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
-            }
-            final Object callTerm = goalStruct.getArg(0);  // Often a Var
-            final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
-            result = solveGoalRecursive(realCallTerm, theSolutionListener, currentVars, cutLevel);
-
-        } else if (Struct.FUNCTOR_CUT == functor) {
-            // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
-            // Doing it inline might improve performance a little although I did not measure much difference.
-            // Functionally, this code may be removed
-
-            // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-            final Integer continuationFromCaller = theSolutionListener.onSolution(currentVars);// Signalling one valid solution, but ignoring return value
-
-            if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller.intValue() > 0) {
-                result = continuationFromCaller;
-            } else {
-                // Stopping there for this iteration
-                result = Integer.valueOf(cutLevel);
-            }
-        } else if (goalStruct instanceof FOPredicate){
-            // ---------------------------------------------------------------------------
-            // Primitive implemented in Java
-            // ---------------------------------------------------------------------------
-            final Integer primitiveContinuation = ((FOPredicate)goalStruct).invokePredicate(theSolutionListener, currentVars);
-
-            // The result will be the continuation code or CUT level
-            result = primitiveContinuation;
-
-        }
+      for (int i = 0; i < arity; i++) {
+        // Solve all the elements of the "OR", in sequence.
+        // For a binary OR, this means solving the left-hand-side and then the right-hand-side
         if (isDebug) {
-            logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
+          logger.debug("Handling OR, element={} of {}", i, goalStruct);
         }
-        return result;
+        result = solveGoalRecursive(goalStruct.getArg(i), theSolutionListener, currentVars, cutLevel);
+        if (result != Continuation.CONTINUE) {
+          break;
+        }
+      }
+    } else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+      // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
+      if (arity != 1) {
+        throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
+      }
+      final Object callTerm = goalStruct.getArg(0);  // Often a Var
+      final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
+      result = solveGoalRecursive(realCallTerm, theSolutionListener, currentVars, cutLevel);
+
+    } else if (Struct.FUNCTOR_CUT == functor) {
+      // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
+      // Doing it inline might improve performance a little although I did not measure much difference.
+      // Functionally, this code may be removed
+
+      // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
+      final Integer continuationFromCaller = theSolutionListener.onSolution(currentVars);// Signalling one valid solution, but ignoring return value
+
+      if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller.intValue() > 0) {
+        result = continuationFromCaller;
+      } else {
+        // Stopping there for this iteration
+        result = Integer.valueOf(cutLevel);
+      }
+    } else if (goalStruct instanceof FOPredicate) {
+      // ---------------------------------------------------------------------------
+      // Primitive implemented in Java
+      // ---------------------------------------------------------------------------
+      final Integer primitiveContinuation = ((FOPredicate) goalStruct).invokePredicate(theSolutionListener, currentVars);
+
+      // The result will be the continuation code or CUT level
+      result = primitiveContinuation;
+
     }
+    if (isDebug) {
+      logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
+    }
+    return result;
+  }
 
 }

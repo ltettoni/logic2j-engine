@@ -28,176 +28,178 @@ import org.slf4j.LoggerFactory;
  * or to modify variables (and return a new UnifyContext).
  */
 public class UnifyContext {
-    private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
-//    static final Logger audit = LoggerFactory.getLogger("audit");
+  private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
+  //    static final Logger audit = LoggerFactory.getLogger("audit");
 
-    final int currentTransaction;
+  final int currentTransaction;
 
-    // TODO Make private - only Clause and Solver are using it yet
-    public int topVarIndex;  // "top" value is one above the current max
+  // TODO Make private - only Clause and Solver are using it yet
+  public int topVarIndex;  // "top" value is one above the current max
 
-    private final UnifyStateByLookup impl;
+  private final UnifyStateByLookup impl;
 
-    UnifyContext(UnifyStateByLookup implem) {
-        this(implem, 0, 0);
+  UnifyContext(UnifyStateByLookup implem) {
+    this(implem, 0, 0);
+  }
+
+  UnifyContext(UnifyStateByLookup implem, int currentTransaction, int topVarIndex) {
+    this.impl = implem;
+    this.currentTransaction = currentTransaction;
+    this.topVarIndex = topVarIndex;
+    //        audit.info("New at t={}", currentTransaction);
+    //        audit.info("    this={}", this);
+  }
+
+
+  /**
+   * Instantiate a new Var and assign a unique index
+   *
+   * @param theName
+   * @return A new Var uniquely indexed
+   */
+  public Var<?> createVar(String theName) {
+    final Var<?> var = new Var<Object>(Object.class, theName);
+    var.index = topVarIndex++;
+    return var;
+  }
+
+  /**
+   * Bind var to ref (var will be altered in the returned UnifyContext); ref is untouched.
+   * <p>
+   * (private except that used from test case)
+   *
+   * @param var
+   * @param ref
+   * @return
+   */
+  UnifyContext bind(Var<?> var, Object ref) {
+    if (var == ref) {
+      logger.debug("Not mapping {} onto itself", var);
+      return this;
     }
+    //        audit.info("Bind   {} -> {} at t=" + this.currentTransaction, var, ref);
+    return impl.bind(this, var, ref);
+  }
 
-    UnifyContext(UnifyStateByLookup implem, int currentTransaction, int topVarIndex) {
-        this.impl = implem;
-        this.currentTransaction = currentTransaction;
-        this.topVarIndex = topVarIndex;
-//        audit.info("New at t={}", currentTransaction);
-//        audit.info("    this={}", this);
+
+  /**
+   * In principle one must use the recursive form reify()
+   *
+   * @param theVar
+   * @return The dereferenced content of theVar, or theVar if it was free
+   */
+  private Object finalValue(Var<?> theVar) {
+    final Object dereference = this.impl.dereference(theVar, this.currentTransaction);
+    return dereference;
+  }
+
+  /**
+   * Resolve variables to their values.
+   *
+   * @param term
+   * @return The dereferenced content of term, or theVar if it was free, or null if term is null
+   */
+  public Object reify(Object term) {
+    if (term instanceof Var) {
+      term = finalValue((Var) term);
+      // The var might end up on a Struct, that needs recursive reification
     }
-
-
-    /**
-     * Instantiate a new Var and assign a unique index
-     * @param theName
-     * @return A new Var uniquely indexed
-     */
-    public Var<?> createVar(String theName) {
-        final Var<?> var = new Var<Object>(Object.class, theName);
-        var.index = topVarIndex++;
-        return var;
-    }
-
-    /**
-     * Bind var to ref (var will be altered in the returned UnifyContext); ref is untouched.
-     *
-     * (private except that used from test case)
-     * @param var
-     * @param ref
-     * @return
-     */
-    UnifyContext bind(Var<?> var, Object ref) {
-        if (var == ref) {
-            logger.debug("Not mapping {} onto itself", var);
-            return this;
-        }
-//        audit.info("Bind   {} -> {} at t=" + this.currentTransaction, var, ref);
-        return impl.bind(this, var, ref);
-    }
-
-
-    /**
-     * In principle one must use the recursive form reify()
-     *
-     * @param theVar
-     * @return The dereferenced content of theVar, or theVar if it was free
-     */
-    private Object finalValue(Var<?> theVar) {
-        final Object dereference = this.impl.dereference(theVar, this.currentTransaction);
-        return dereference;
-    }
-
-    /**
-     * Resolve variables to their values.
-     *
-     * @param term
-     * @return The dereferenced content of term, or theVar if it was free, or null if term is null
-     */
-    public Object reify(Object term) {
-        if (term instanceof Var) {
-            term = finalValue((Var) term);
-            // The var might end up on a Struct, that needs recursive reification
-        }
-        if (term instanceof Struct) {
-//            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
-            final Struct s = (Struct) term;
-            if (s.getIndex() == 0) {
-                // Structure is an atom or a constant term - no need to further transform
-                return term;
-            }
-            final Object[] args = s.getArgs();
-            final int arity = args.length;
-            final Object[] reifiedArgs = new Object[arity];
-            for (int i = 0; i < arity; i++) {
-                reifiedArgs[i] = reify(args[i]);
-            }
-            final Struct res = new Struct(s, reifiedArgs);
-            if (s.getIndex()>0) {
-                // The original structure had variables, maybe the cloned one will still have (if those were free)
-                // We need to reassign indexes. It's costly, unfortunately.
-                TermApi.assignIndexes(res, 0);
-            }
-//            audit.info("               yields {}", res);
-            return res;
-        }
+    if (term instanceof Struct) {
+      //            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
+      final Struct s = (Struct) term;
+      if (s.getIndex() == 0) {
+        // Structure is an atom or a constant term - no need to further transform
         return term;
+      }
+      final Object[] args = s.getArgs();
+      final int arity = args.length;
+      final Object[] reifiedArgs = new Object[arity];
+      for (int i = 0; i < arity; i++) {
+        reifiedArgs[i] = reify(args[i]);
+      }
+      final Struct res = new Struct(s, reifiedArgs);
+      if (s.getIndex() > 0) {
+        // The original structure had variables, maybe the cloned one will still have (if those were free)
+        // We need to reassign indexes. It's costly, unfortunately.
+        TermApi.assignIndexes(res, 0);
+      }
+      //            audit.info("               yields {}", res);
+      return res;
     }
+    return term;
+  }
 
 
-    public UnifyContext unify(Object term1, Object term2) {
-//        audit.info("Unify  {}  ~  {}", term1, term2);
-        if (term1 == term2) {
-            return this;
-        }
-        if (term2 instanceof Var) {
-            // Switch arguments - we prefer having term1 being the var.
-            // Notice that formally, we should check  && !(term1 instanceof Var)
-            // to avoid possible useless switching when unifying Var <-> Var.
-            // However, the extra instanceof total costs 3% more than a useless switch.
-            final Object term1held = term1;
-            term1 = term2;
-            term2 = term1held;
-        }
-        if (term1 instanceof Var) {
-            // term1 is a Var: we need to check if it is bound or not
-            Var<?> var1 = (Var) term1;
-            final Object final1 = finalValue(var1);
-            if (! (final1 instanceof Var)) {
-                // term1 is bound - unify
-                return unify(final1, term2);
-            }
-            // Ended up with final1 being a free Var, so term1 was a free var
-            var1 = (Var) final1;
-            // free Var var1 need to be bound
-            if (term2 instanceof Var) {
-                // Binding two vars
-                final Var<?> var2 = (Var) term2;
-                // Link one to two (should we link to the final or the initial value???)
-                // Now do the binding of two vars
-                return bind(var1, var2);
-            } else {
-                // Do the binding of one var to a literal
-                return bind(var1, term2);
-            }
-        } else if (term1 instanceof Struct) {
-            // Case of Struct <-> Var: already taken care of by switching, see above
-            if (!(term2 instanceof Struct)) {
-                // Not unified - we can only unify 2 Struct
-                return null;
-            }
-            final Struct s1 = (Struct) term1;
-            final Struct s2 = (Struct) term2;
-            // The two Struct must have compatible signatures (functor and arity)
-            //noinspection StringEquality
-            if (s1.getPredicateSignature() != s2.getPredicateSignature()) {
-                return null;
-            }
-            // Now we will unify all arguments, stopping at the first that do not match
-            final Object[] s1Args = s1.getArgs();
-            final Object[] s2Args = s2.getArgs();
-            final int arity = s1Args.length;
-            UnifyContext runningMonad = this;
-            for (int i = 0; i < arity; i++) {
-                runningMonad = runningMonad.unify(s1Args[i], s2Args[i]);
-                if (runningMonad == null) {
-                    // Struct sub-element not unified - fail the whole unification
-                    return null;
-                }
-            }
-            // All matched, return the latest monad
-            return runningMonad;
-        } else {
-            return term1.equals(term2) ? this : null;
-        }
+  public UnifyContext unify(Object term1, Object term2) {
+    //        audit.info("Unify  {}  ~  {}", term1, term2);
+    if (term1 == term2) {
+      return this;
     }
+    if (term2 instanceof Var) {
+      // Switch arguments - we prefer having term1 being the var.
+      // Notice that formally, we should check  && !(term1 instanceof Var)
+      // to avoid possible useless switching when unifying Var <-> Var.
+      // However, the extra instanceof total costs 3% more than a useless switch.
+      final Object term1held = term1;
+      term1 = term2;
+      term2 = term1held;
+    }
+    if (term1 instanceof Var) {
+      // term1 is a Var: we need to check if it is bound or not
+      Var<?> var1 = (Var) term1;
+      final Object final1 = finalValue(var1);
+      if (!(final1 instanceof Var)) {
+        // term1 is bound - unify
+        return unify(final1, term2);
+      }
+      // Ended up with final1 being a free Var, so term1 was a free var
+      var1 = (Var) final1;
+      // free Var var1 need to be bound
+      if (term2 instanceof Var) {
+        // Binding two vars
+        final Var<?> var2 = (Var) term2;
+        // Link one to two (should we link to the final or the initial value???)
+        // Now do the binding of two vars
+        return bind(var1, var2);
+      } else {
+        // Do the binding of one var to a literal
+        return bind(var1, term2);
+      }
+    } else if (term1 instanceof Struct) {
+      // Case of Struct <-> Var: already taken care of by switching, see above
+      if (!(term2 instanceof Struct)) {
+        // Not unified - we can only unify 2 Struct
+        return null;
+      }
+      final Struct s1 = (Struct) term1;
+      final Struct s2 = (Struct) term2;
+      // The two Struct must have compatible signatures (functor and arity)
+      //noinspection StringEquality
+      if (s1.getPredicateSignature() != s2.getPredicateSignature()) {
+        return null;
+      }
+      // Now we will unify all arguments, stopping at the first that do not match
+      final Object[] s1Args = s1.getArgs();
+      final Object[] s2Args = s2.getArgs();
+      final int arity = s1Args.length;
+      UnifyContext runningMonad = this;
+      for (int i = 0; i < arity; i++) {
+        runningMonad = runningMonad.unify(s1Args[i], s2Args[i]);
+        if (runningMonad == null) {
+          // Struct sub-element not unified - fail the whole unification
+          return null;
+        }
+      }
+      // All matched, return the latest monad
+      return runningMonad;
+    } else {
+      return term1.equals(term2) ? this : null;
+    }
+  }
 
-    @Override
-    public String toString() {
-        return "vars#" + this.currentTransaction + impl.toString();
-    }
+  @Override
+  public String toString() {
+    return "vars#" + this.currentTransaction + impl.toString();
+  }
 
 }

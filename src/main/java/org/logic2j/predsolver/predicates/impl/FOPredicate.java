@@ -12,9 +12,9 @@ import java.util.Iterator;
 /**
  * First-Order logic Predicate, not to be confused with java.function.Predicates.
  * First-order logic is about binding variables to all solutions, not just checking one value.
- *
+ * <p>
  * All subclasses are required to implement {@link #invokePredicate(SolutionListener, UnifyContext)}.
- *
+ * <p>
  * Support methods are provided to check the {@link Var}iables received from the {@link UnifyContext},
  * and unify variables to values, or check if unification of terms is possible, and then
  * send solutions to the {@link SolutionListener}.
@@ -24,6 +24,7 @@ public abstract class FOPredicate extends Struct {
   /**
    * A fuctional predicate is a plain data structure like a {@link Struct}, with some logic
    * attached through the {@link #invokePredicate(SolutionListener, UnifyContext)} abstract method.
+   *
    * @param theFunctor
    * @param argList
    */
@@ -38,6 +39,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * Invoked by the {@link org.logic2j.predsolver.solver.Solver}.
+   *
    * @param theListener
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.predsolver.solver.Continuation} values.
@@ -68,6 +70,7 @@ public abstract class FOPredicate extends Struct {
   /**
    * Unify terms t1 and t2, and if they could be unified, call theListener with the solution of the newly
    * unified variables; return the result from notifying. If not, return CONTINUE.
+   *
    * @param theListener
    * @param currentVars
    * @param t1
@@ -84,6 +87,7 @@ public abstract class FOPredicate extends Struct {
   /**
    * Unify terms t1 and constant values from iter, and if they could be unified, call theListener with the solution of the newly
    * unified variables; return the result from notifying. If not, return CONTINUE.
+   *
    * @param theListener
    * @param currentVars
    * @param t1
@@ -106,14 +110,15 @@ public abstract class FOPredicate extends Struct {
    *
    * @param term
    * @param nameOfPrimitive Non functional - only to report the name of the primitive in case an Exception is thrown
-   * @param indexOfArg zero-based index of argument causing error
+   * @param indexOfArg      zero-based index of argument causing error
    * @throws InvalidTermException
    */
   protected void ensureBindingIsNotAFreeVar(Object term, String nameOfPrimitive, int indexOfArg) {
     if (term instanceof Var) {
       // TODO Should be a kind of InvalidGoalException instead?
       final int positionOfArgument = indexOfArg + 1;
-      throw new InvalidTermException("Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
+      throw new InvalidTermException(
+          "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }
   }
 

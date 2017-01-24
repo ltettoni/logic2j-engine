@@ -29,20 +29,23 @@ public class BindingVar<T> extends Var<T> {
   public static BindingVar<Integer> intBVar(CharSequence theName, Collection<Integer> coll) {
     return new BindingVar<>(Integer.class, theName, coll);
   }
+
   public static BindingVar<Integer> intBVar(CharSequence theName, Stream<Integer> stream) {
     return new BindingVar<>(Integer.class, theName, stream.collect(Collectors.toList()));
   }
+
   public static BindingVar<Integer> intBVar(CharSequence theName) {
     return new BindingVar<>(Integer.class, theName);
   }
 
 
   public boolean isBound() {
-    return coll!=null;
+    return coll != null;
   }
 
   /**
    * Supply values
+   *
    * @return The values or null when none.
    */
   public Iterator<T> iterator() {
@@ -54,7 +57,7 @@ public class BindingVar<T> extends Var<T> {
   }
 
   void addResult(T result) {
-    if (coll==null) {
+    if (coll == null) {
       coll = new ArrayList<T>();
     }
     coll.add(result);
@@ -72,7 +75,7 @@ public class BindingVar<T> extends Var<T> {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder(super.toString());
-    if (coll==null) {
+    if (coll == null) {
       sb.append("(empty)");
     } else {
       sb.append("#" + coll.size());

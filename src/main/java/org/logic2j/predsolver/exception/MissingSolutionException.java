@@ -20,14 +20,14 @@ package org.logic2j.predsolver.exception;
 
 /**
  * Thrown by the Solution API when no solution could be found and one is required by the calling context.
- * 
+ *
  * @author tettoni
  */
 public class MissingSolutionException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public MissingSolutionException(CharSequence theMessage) {
-        super(theMessage.toString());
-    }
+  public MissingSolutionException(CharSequence theMessage) {
+    super(theMessage.toString());
+  }
 
 }

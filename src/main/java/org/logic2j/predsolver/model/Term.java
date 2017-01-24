@@ -37,61 +37,61 @@ import java.util.Collection;
  * @see Var
  */
 public abstract class Term implements Serializable {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * A value of index=={@value} (NO_INDEX) means it was not initialized.
-     */
-    public static final int NO_INDEX = -1;
+  /**
+   * A value of index=={@value} (NO_INDEX) means it was not initialized.
+   */
+  public static final int NO_INDEX = -1;
 
-    /**
-     * For {@link Var}s: defines the unique index to the variable.
-     * For a {@link Struct}: defines the number of distinct variables within all nested substructures.
-     * The default value is NO_INDEX.
-     * TODO A field must not be public !!!
-     */
-    public int index = NO_INDEX;
+  /**
+   * For {@link Var}s: defines the unique index to the variable.
+   * For a {@link Struct}: defines the number of distinct variables within all nested substructures.
+   * The default value is NO_INDEX.
+   * TODO A field must not be public !!!
+   */
+  public int index = NO_INDEX;
 
-    /**
-     * A value of index=={@value} (ANON_INDEX) means this is the anonymous variable.
-     */
-    public static final int ANON_INDEX = -2;
+  /**
+   * A value of index=={@value} (ANON_INDEX) means this is the anonymous variable.
+   */
+  public static final int ANON_INDEX = -2;
 
 
-    // ---------------------------------------------------------------------------
-    // Accessors
-    // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // Accessors
+  // ---------------------------------------------------------------------------
 
-    public int getIndex() {
-        return this.index;
+  public int getIndex() {
+    return this.index;
+  }
+
+  // ---------------------------------------------------------------------------
+  // TermVisitor
+  // ---------------------------------------------------------------------------
+
+  public abstract <T> T accept(TermVisitor<T> theVisitor);
+
+
+  // ---------------------------------------------------------------------------
+  // Graph traversal methods, template methods with "protected" scope, user code should use TermApi methods instead.
+  // Some traversal are implemented by the Visitor design pattern and the #accept() method
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Find the first {@link Term} that is either same, or structurally equal to this.
+   *
+   * @param findWithin
+   * @return The {@link Term} found or null when none found.
+   */
+  protected Object findStructurallyEqualWithin(Collection<Object> findWithin) {
+    for (final Object term : findWithin) {
+      if (term != this && TermApi.structurallyEquals(term, this)) {
+        return term;
+      }
     }
-
-    // ---------------------------------------------------------------------------
-    // TermVisitor
-    // ---------------------------------------------------------------------------
-
-    public abstract <T> T accept(TermVisitor<T> theVisitor);
-
-
-    // ---------------------------------------------------------------------------
-    // Graph traversal methods, template methods with "protected" scope, user code should use TermApi methods instead.
-    // Some traversal are implemented by the Visitor design pattern and the #accept() method
-    // ---------------------------------------------------------------------------
-
-    /**
-     * Find the first {@link Term} that is either same, or structurally equal to this.
-     *
-     * @param findWithin
-     * @return The {@link Term} found or null when none found.
-     */
-    protected Object findStructurallyEqualWithin(Collection<Object> findWithin) {
-        for (final Object term : findWithin) {
-            if (term != this && TermApi.structurallyEquals(term, this)) {
-                return term;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 
 
 }

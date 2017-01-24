@@ -25,21 +25,21 @@ import org.logic2j.predsolver.unify.UnifyContext;
  * Codes that the application or library returns to specify the behaviour that the inference engine should take after
  * a solution was found, via
  * {@link SolutionListener#onSolution(UnifyContext)}.
- *
+ * <p>
  * NOTE: Only those two possible values should be returned, see documentation of SolutionListener.
  *
  * @author tettoni
  */
 public interface Continuation {
-    /**
-     * Value that {@link SolutionListener#onSolution(UnifyContext)}
-     * must return for the inference engine to continue solving (search for alternate solutions).
-     */
-    public static Integer CONTINUE  = Integer.valueOf(0);
-    /**
-     * Value that {@link SolutionListener#onSolution(UnifyContext)}
-     * must return for the inference engine to stop solving (ie. means caller requests abort).
-     */
-    public static Integer USER_ABORT = Integer.valueOf(-1);
+  /**
+   * Value that {@link SolutionListener#onSolution(UnifyContext)}
+   * must return for the inference engine to continue solving (search for alternate solutions).
+   */
+  public static Integer CONTINUE = Integer.valueOf(0);
+  /**
+   * Value that {@link SolutionListener#onSolution(UnifyContext)}
+   * must return for the inference engine to stop solving (ie. means caller requests abort).
+   */
+  public static Integer USER_ABORT = Integer.valueOf(-1);
 
 }

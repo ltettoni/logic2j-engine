@@ -28,6 +28,6 @@ import org.logic2j.predsolver.unify.UnifyContext;
  */
 public interface SolutionExtractor<T> {
 
-    T extractSolution(UnifyContext currentVars);
+  T extractSolution(UnifyContext currentVars);
 
 }

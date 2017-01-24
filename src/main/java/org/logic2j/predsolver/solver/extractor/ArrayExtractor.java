@@ -29,30 +29,31 @@ import org.logic2j.predsolver.unify.UnifyContext;
  */
 public class ArrayExtractor implements SolutionExtractor<Object[]> {
 
-    private final Var<?>[] vars;
-    private final int highestIndex;
+  private final Var<?>[] vars;
+  private final int highestIndex;
 
-    public ArrayExtractor(Object goal) {
-        int high = 0;
-        this.vars = TermApi.distinctVars(goal);
-        for (Var<?> var: this.vars) {
-            high = Math.max(high, var.getIndex());
-        };
-        this.highestIndex = high;
+  public ArrayExtractor(Object goal) {
+    int high = 0;
+    this.vars = TermApi.distinctVars(goal);
+    for (Var<?> var : this.vars) {
+      high = Math.max(high, var.getIndex());
     }
+    ;
+    this.highestIndex = high;
+  }
 
 
-    /**
-     * @param currentVars
-     * @return Actually a HashMap, meaning there is no particular order in the Var keys.
-     */
-    @Override
-    public Object[] extractSolution(UnifyContext currentVars) {
-        final Object[] result = new Object[this.highestIndex+1];
-        for (Var<?> var : this.vars) {
-            final Object value = currentVars.reify(var);
-            result[var.getIndex()] = value;
-        }
-        return result;
+  /**
+   * @param currentVars
+   * @return Actually a HashMap, meaning there is no particular order in the Var keys.
+   */
+  @Override
+  public Object[] extractSolution(UnifyContext currentVars) {
+    final Object[] result = new Object[this.highestIndex + 1];
+    for (Var<?> var : this.vars) {
+      final Object value = currentVars.reify(var);
+      result[var.getIndex()] = value;
     }
+    return result;
+  }
 }

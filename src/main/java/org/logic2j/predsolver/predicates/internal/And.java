@@ -9,7 +9,7 @@ import org.logic2j.predsolver.model.Term;
  */
 public class And extends Struct {
   public And(Term... conjunctions) {
-    super(FUNCTOR_COMMA, (Object[])conjunctions);
+    super(FUNCTOR_COMMA, (Object[]) conjunctions);
   }
 
 }

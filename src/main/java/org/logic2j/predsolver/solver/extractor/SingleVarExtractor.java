@@ -31,48 +31,48 @@ import org.slf4j.LoggerFactory;
  * values of a single Var or of a single "goal" Term, and possibly convert them to a desired class.
  */
 public class SingleVarExtractor<T> implements SolutionExtractor<T> {
-    private static final Logger logger = LoggerFactory.getLogger(SingleVarExtractor.class);
+  private static final Logger logger = LoggerFactory.getLogger(SingleVarExtractor.class);
 
-    private final Object goal;
+  private final Object goal;
 
-    /**
-     * The variable whose value is to extract.
-     */
-    private final Var<?> var;
+  /**
+   * The variable whose value is to extract.
+   */
+  private final Var<?> var;
 
-    /**
-     * The target class, or Object if no conversion is asked.
-     */
-    private Class<? extends T> targetClass;
+  /**
+   * The target class, or Object if no conversion is asked.
+   */
+  private Class<? extends T> targetClass;
 
-    /**
-     * Create a {@link SolutionListener} that will enumerate
-     * solutions up to theMaxCount before aborting by "user request". We will usually
-     * supply 1 or 2, see derived classes.
-     */
-    public SingleVarExtractor(Object goal, String varName, Class<? extends T> desiredTypeOfResult) {
-        this.goal = goal;
-        final Var<?> found = TermApi.findVar(goal, varName);
-        if (found == null) {
-            throw new MissingSolutionException("No var named \"" + varName + "\" in term \"" + goal + '"');
-        }
-        this.var = found;
-        this.targetClass = desiredTypeOfResult;
+  /**
+   * Create a {@link SolutionListener} that will enumerate
+   * solutions up to theMaxCount before aborting by "user request". We will usually
+   * supply 1 or 2, see derived classes.
+   */
+  public SingleVarExtractor(Object goal, String varName, Class<? extends T> desiredTypeOfResult) {
+    this.goal = goal;
+    final Var<?> found = TermApi.findVar(goal, varName);
+    if (found == null) {
+      throw new MissingSolutionException("No var named \"" + varName + "\" in term \"" + goal + '"');
     }
+    this.var = found;
+    this.targetClass = desiredTypeOfResult;
+  }
 
-    @Override
-    public T extractSolution(UnifyContext currentVars) {
-        Object reifiedValue;
-        if (var == Var.WHOLE_SOLUTION_VAR) {
-            reifiedValue = currentVars.reify(goal);
-            // No need to convert values it will be Struct
-        } else {
-            reifiedValue = currentVars.reify(var);
-            if (logger.isDebugEnabled() && reifiedValue instanceof Term && !targetClass.isAssignableFrom(reifiedValue.getClass())) {
-                logger.debug("Will convert solution from {} to {}", reifiedValue.getClass(), this.targetClass);
-            }
-        }
-        return (T) reifiedValue;
+  @Override
+  public T extractSolution(UnifyContext currentVars) {
+    Object reifiedValue;
+    if (var == Var.WHOLE_SOLUTION_VAR) {
+      reifiedValue = currentVars.reify(goal);
+      // No need to convert values it will be Struct
+    } else {
+      reifiedValue = currentVars.reify(var);
+      if (logger.isDebugEnabled() && reifiedValue instanceof Term && !targetClass.isAssignableFrom(reifiedValue.getClass())) {
+        logger.debug("Will convert solution from {} to {}", reifiedValue.getClass(), this.targetClass);
+      }
     }
+    return (T) reifiedValue;
+  }
 
 }

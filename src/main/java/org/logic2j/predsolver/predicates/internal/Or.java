@@ -9,7 +9,7 @@ import org.logic2j.predsolver.model.Term;
  */
 public class Or extends Struct {
   public Or(Term... disjunctions) {
-    super(FUNCTOR_SEMICOLON, (Object[])disjunctions);
+    super(FUNCTOR_SEMICOLON, (Object[]) disjunctions);
   }
 
 }
