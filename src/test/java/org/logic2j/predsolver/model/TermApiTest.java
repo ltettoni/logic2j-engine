@@ -97,30 +97,30 @@ public class TermApiTest {
 
 
     @Test(expected=InvalidTermException.class)
-    public void functorFromSignatureFails() throws Exception {
+    public void functorFromSignatureFails() {
         TermApi.functorFromSignature("toto4");
     }
 
 
     @Test
-    public void functorFromSignature1() throws Exception {
+    public void functorFromSignature1() {
         assertEquals("toto", TermApi.functorFromSignature("toto/4"));
     }
 
 
 
     @Test(expected=InvalidTermException.class)
-    public void arityFromSignatureFails() throws Exception {
+    public void arityFromSignatureFails() {
         TermApi.arityFromSignature("toto4");
     }
 
     @Test
-    public void arityFromSignature1() throws Exception {
+    public void arityFromSignature1() {
         assertEquals(4, TermApi.arityFromSignature("toto/4"));
     }
 
     @Test
-    public void quoteIfNeeded() throws Exception {
+    public void quoteIfNeeded() {
         assertNull(TermApi.quoteIfNeeded(null));
         assertEquals("''", TermApi.quoteIfNeeded("").toString());
         assertEquals("' '", TermApi.quoteIfNeeded(" ").toString());

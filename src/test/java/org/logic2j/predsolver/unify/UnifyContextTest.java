@@ -103,67 +103,67 @@ public class UnifyContextTest {
 
 
   @Test
-  public void bindVarToLiteral() throws Exception {
+  public void bindVarToLiteral() {
     bind(X, "literal");
   }
 
   @Test
-  public void bindVarToVar() throws Exception {
+  public void bindVarToVar() {
     UnifyContext m2 = bind(X, Y);
     assertSame(Y, m2.reify(X));
   }
 
   @Test
-  public void varToAtom() throws Exception {
+  public void varToAtom() {
     unify(X, a);
   }
 
   @Test
-  public void varToAnon() throws Exception {
+  public void varToAnon() {
     unify(X, _anon);
   }
 
   @Test
-  public void atomToVar() throws Exception {
+  public void atomToVar() {
     unify(a, X);
   }
 
 
   @Test
-  public void atomToSameAtom() throws Exception {
+  public void atomToSameAtom() {
     assertNotNull(unify(a, a2));
   }
 
 
   @Test
-  public void atomToDifferentAtom() throws Exception {
+  public void atomToDifferentAtom() {
     assertNull(unify(a, b));
   }
 
   @Test
-  public void varToStruct() throws Exception {
+  public void varToStruct() {
     assertNotNull(unify(f_ab, X));
   }
 
 
   @Test
-  public void structToStruct() throws Exception {
+  public void structToStruct() {
     assertNotNull(unify(f_ab, f_XY));
   }
 
 
   @Test
-  public void structToStruct2() throws Exception {
+  public void structToStruct2() {
     assertNotNull(unify(f_aZ, f_XX));
   }
 
   @Test
-  public void structToStruct3() throws Exception {
+  public void structToStruct3() {
     assertNotNull(unify(f_aZZ, f_XXa));
   }
 
   @Test
-  public void structToStruct4() throws Exception {
+  public void structToStruct4() {
     assertNull(unify(f_aZZ, f_XXb));
   }
 

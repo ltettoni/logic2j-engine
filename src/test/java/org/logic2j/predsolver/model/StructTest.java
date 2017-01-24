@@ -16,7 +16,7 @@ public class StructTest {
     // ---------------------------------------------------------------------------
 
     @Test
-    public void struct0() throws Exception {
+    public void struct0() {
         Struct a1 = new Struct("f");
         assertEquals(0, a1.getArity());
         assertSame("f", a1.getName());
@@ -26,7 +26,7 @@ public class StructTest {
     }
 
     @Test
-    public void atomAsString() throws Exception {
+    public void atomAsString() {
         Object a1 = Struct.atom("f");
         assertTrue(a1 instanceof String);
         assertSame("f", a1);
@@ -36,7 +36,7 @@ public class StructTest {
 
 
     @Test
-    public void atomAsStruct() throws Exception {
+    public void atomAsStruct() {
         Object a1 = Struct.atom("true");
         assertTrue(a1 instanceof Struct);
         assertSame("true", ((Struct) a1).getName());
@@ -45,7 +45,7 @@ public class StructTest {
     }
 
     @Test
-    public void struct2() throws Exception {
+    public void struct2() {
         Struct a1 = new Struct("f", "a", "b");
         assertEquals(2, a1.getArity());
         assertSame("f", a1.getName());

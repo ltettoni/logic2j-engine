@@ -51,14 +51,14 @@ public class UseCasesTest {
   }
 
   @Test
-  public void usingPlainJavaPredicates() throws Exception {
+  public void usingPlainJavaPredicates() {
     final Var<Integer> Q = intVar("Q");
     final List<Object> list = solver.solve(new Digit(Q), new Odd(Q), new FOFilter<>(Q, i -> i != 5)).var("Q").list();
     logger.info("Result: {}", list);
   }
 
   @Test
-  public void useCaseForRetrievalApi() throws Exception {
+  public void useCaseForRetrievalApi() {
 
 
   }
