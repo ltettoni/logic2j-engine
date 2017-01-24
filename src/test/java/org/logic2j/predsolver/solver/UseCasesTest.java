@@ -24,30 +24,19 @@ public class UseCasesTest {
     final MyDTO dto = new MyDTO();
     dto.setValues(IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     //
-    final BindingVar<Integer> Q = new BindingVar<Integer>("Q", dto.getValues());
+    final BindingVar<Integer> Q = new BindingVar<>(Integer.class, "Q", dto.getValues());
     final Term goal = new Even(Q);
     final List<Object> list = solver.solve(goal).var("Q").list();
     assertThat(list.toString(), is("[2, 4, 6, 8]"));
   }
 
-//  @Test
-//  public void checkValues() {
-//    final MyDTO dto = new MyDTO();
-//    dto.setValues(IntStream.range(1, 10).boxed().collect(Collectors.toList()));
-//    //
-//    final Var<Integer> Q = new Var<>("Q");
-//    final Term goal1 = new Digit(Q);
-//    final Term goal2 = new CollectionBinder<Integer, List<Integer>>(dto::getValues, Q, dto::setValues);
-//    final List<Object> list = solver.solve(goal1, goal2).var("Q").list();
-//    assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9]"));
-//  }
 
   @Test
   public void writeVariableIntoJava() {
     final MyDTO dto = new MyDTO();
     //
-    final BindingVar<Integer> Q = new BindingVar<Integer>("Q");
-    final BindingVar<Integer> R = new BindingVar<Integer>("R");
+    final BindingVar<Integer> Q = new BindingVar<>(Integer.class, "Q");
+    final BindingVar<Integer> R = new BindingVar<>(Integer.class, "R");
     final Term goal = new Even(Q);
     final BindingVar[] boundVars = solver.solve(goal, new Odd(R)).boundVariables();
     logger.info("Result: {}", Q);

@@ -41,6 +41,8 @@ Improvements DONE:
 TODO
 - Listener should become consumers
 - Fix LGPL header message, update copyright date
+- Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
+    --> Listener has a strong async flavour.
 
 
 CANNOT DO / REQUIRES STUDY

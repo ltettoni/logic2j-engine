@@ -8,35 +8,36 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.logic2j.predsolver.model.Var.anyVar;
 
 public class VarTest {
 
     @Test
     public void constructorValid() throws Exception {
-        final Var<?> v1 = new Var<Object>("X");
+        final Var<?> v1 = anyVar("X");
         assertSame("X", v1.getName());
         assertEquals(Term.NO_INDEX, v1.getIndex());
     }
 
     @Test(expected = InvalidTermException.class)
     public void constructorNull() throws Exception {
-        new Var<Object>((String) null);
+        anyVar((String) null);
     }
 
     @Test(expected = InvalidTermException.class)
     public void constructorEmpty() throws Exception {
-        new Var<Object>("");
+        anyVar("");
     }
 
     @Test(expected = InvalidTermException.class)
     public void constructorCannotInstantiateAnonymous() throws Exception {
-        new Var<Object>("_");
+        anyVar("_");
     }
 
 
     @Test
     public void constructorWithCharSequence() throws Exception {
-        final Var<?> v1 = new Var<Object>(new StringBuilder("X"));
+        final Var<?> v1 = anyVar(new StringBuilder("X"));
         assertSame("X", v1.getName());
         assertEquals(Term.NO_INDEX, v1.getIndex());
     }
@@ -44,15 +45,15 @@ public class VarTest {
 
     @Test
     public void idempotence() throws Exception {
-        final Var<?> v1 = new Var<Object>("X");
+        final Var<?> v1 = anyVar("X");
         assertEquals(v1, v1);
     }
 
 
     @Test
     public void equality() throws Exception {
-        final Var<?> v1 = new Var<Object>("X");
-        final Var<?> v2 = new Var<Object>("X");
+        final Var<?> v1 = anyVar("X");
+        final Var<?> v2 = anyVar("X");
         assertNotSame(v1, v2);
         assertEquals(v1, v2);
         assertEquals(v2, v1);
@@ -61,7 +62,7 @@ public class VarTest {
 
     @Test
     public void lowerCaseIsValid() throws Exception {
-        final Var<?> v1 = new Var<Object>("lowercase");
+        final Var<?> v1 = anyVar("lowercase");
         assertSame("lowercase", v1.getName());
         assertEquals(Term.NO_INDEX, v1.getIndex());
     }
@@ -79,7 +80,7 @@ public class VarTest {
 
     @Test
     public void isAnonymousFalse() throws Exception {
-        assertFalse(new Var<Object>("X").isAnonymous());
+        assertFalse(anyVar("X").isAnonymous());
     }
 
 

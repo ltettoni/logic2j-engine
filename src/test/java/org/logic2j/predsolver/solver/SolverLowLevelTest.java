@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.logic2j.predsolver.model.Var.anyVar;
+import static org.logic2j.predsolver.model.Var.intVar;
+import static org.logic2j.predsolver.model.Var.strVar;
 import static org.logic2j.predsolver.predicates.Predicates.and;
 import static org.logic2j.predsolver.predicates.Predicates.anonymous;
 import static org.logic2j.predsolver.predicates.Predicates.cut;
@@ -71,7 +74,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void dataOnlyStructWithVar() {
-    final Var<Object> X = new Var<>("X");
+    final Var<Object> X = anyVar("X");
     final Object goal = new Struct("atom", X);
     final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
@@ -79,8 +82,8 @@ public class SolverLowLevelTest {
 
   @Test
   public void dataOnlyStructWithVars() {
-    final Var<Object> X = new Var<>("X");
-    final Var<Object> Y = new Var<>("Y");
+    final Var<Object> X = anyVar("X");
+    final Var<Object> Y = anyVar("Y");
     final Object goal = new Struct("atom", X, Y);
     final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
@@ -117,7 +120,7 @@ public class SolverLowLevelTest {
       //
       countNSolutions(3, or(ttrue, ttrue, ttrue));
       //
-      final Var<Integer> Q = new Var<>("Q");
+      final Var<Integer> Q = intVar("Q");
       countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
 //      GoalHolder solutions;
 //      solutions = this.prolog.solve("X=a; X=b; X=c");
@@ -197,7 +200,7 @@ public class SolverLowLevelTest {
 
     @Test
     public void unifyVarToLiteral() {
-      final Var<String> Q = new Var<>("Q");
+      final Var<String> Q = strVar("Q");
       final Object goal = eq(Q, "d");
       final long nbSolutions = solve(goal).count();
       assertEquals(1, nbSolutions);
@@ -211,7 +214,7 @@ public class SolverLowLevelTest {
 
     @Test
     public void unifyVarToAnonymous() {
-      final Var<String> Q = new Var<>("Q");
+      final Var<String> Q = strVar("Q");
       final Object goal = eq(Q, anonymous);
       final ExtractingSolutionListener listener = solve(goal);
       assertEquals(1, listener.count());
@@ -223,8 +226,8 @@ public class SolverLowLevelTest {
 
     @Test
     public void unifyVarToVar() {
-      final Var<String> Q = new Var<>("Q");
-      final Var<String> Z = new Var<>("Z");
+      final Var<String> Q = strVar("Q");
+      final Var<String> Z = strVar("Z");
       final Object goal = eq(Q, Z);
       final ExtractingSolutionListener listener = solve(goal);
       assertEquals(1, listener.count());
@@ -237,7 +240,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void digitVar() {
-    final Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = intVar("Q");
     final Object goal = new Digit(Q);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(10, listener.count());
@@ -260,7 +263,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void digitNotEven() {
-    final Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = intVar("Q");
     final Object goal = and(new Digit(Q), not(solver, new Even(Q)));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());
@@ -298,7 +301,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void intRangeCheckGenerate() {
-    final Var<Integer> Q = new Var<>("Q");
+    final Var<Integer> Q = intVar("Q");
     final Object goal = new IntRange(10, Q, 15);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());

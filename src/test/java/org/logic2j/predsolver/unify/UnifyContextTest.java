@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.logic2j.predsolver.model.Var.anyVar;
 
 /**
  * Created by tettoni on 2017-01-20.
@@ -44,17 +45,17 @@ public class UnifyContextTest {
     a2 = Struct.valueOf("a");
     _anon = Struct.valueOf("_");
 
-    X = new Var("X");
+    X = anyVar("X");
     X.index = 1;
-    Y = new Var("Y");
+    Y = anyVar("Y");
     Y.index = 2;
-    Z = new Var("Z");
+    Z = anyVar("Z");
     Z.index = 3;
 
-    Var<?> X2 = new Var("X2");
-    Var<?> X3 = new Var("X3");
-    Var<?> X4 = new Var("X4");
-    Var<?> X5 = new Var("X5");
+    Var<?> X2 = anyVar("X2");
+    Var<?> X3 = anyVar("X3");
+    Var<?> X4 = anyVar("X4");
+    Var<?> X5 = anyVar("X5");
 
     f_ab = TermApi.normalize(Struct.valueOf("f", "a", "b"));
     f_aZ = TermApi.normalize(Struct.valueOf("f", "a", Z));

@@ -343,7 +343,7 @@ public final class TermApi {
                     result = new Struct("");
                 } else if (Character.isUpperCase(chars.charAt(0)) || chars.startsWith(Var.ANONYMOUS_VAR_NAME)) {
                     // Use Prolog's convention re variables starting with uppercase or underscore
-                    result = new Var<Object>(chars);
+                    result = new Var<Object>(Object.class, chars);
                 } else {
                     // Otherwise it's an atom
                     // result = new Struct(chars);

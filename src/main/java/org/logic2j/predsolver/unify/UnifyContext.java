@@ -57,7 +57,7 @@ public class UnifyContext {
      * @return A new Var uniquely indexed
      */
     public Var<?> createVar(String theName) {
-        final Var<?> var = new Var<Object>(theName);
+        final Var<?> var = new Var<Object>(Object.class, theName);
         var.index = topVarIndex++;
         return var;
     }

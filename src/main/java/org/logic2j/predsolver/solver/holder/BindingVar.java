@@ -13,14 +13,14 @@ import java.util.Set;
  */
 public class BindingVar<T> extends Var<T> {
 
-  private Collection<T> coll;
+  private Collection<T> coll = null;
 
-  public BindingVar(CharSequence theName) {
-    this(theName, null);
+  public BindingVar(Class<T> theType, CharSequence theName) {
+    this(theType, theName, null);
   }
 
-  public BindingVar(CharSequence theName, Collection<T> coll) {
-    super(theName);
+  public BindingVar(Class<T> theType, CharSequence theName, Collection<T> coll) {
+    super(theType, theName);
     this.coll = coll;
   }
 

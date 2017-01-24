@@ -52,20 +52,18 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
   /**
    * Singleton "special" var that holds the value of a whole goal.
    */
-  public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<Object>(WHOLE_SOLUTION_VAR_NAME);
+  public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<Object>(Object.class, WHOLE_SOLUTION_VAR_NAME);
 
-  public static final Comparator<Var<?>> COMPARATOR_BY_NAME = new Comparator<Var<?>>() {
-    @Override
-    public int compare(Var<?> left, Var<?> right) {
-      return left.getName().compareTo(right.getName());
-    }
-  };
+  public static final Comparator<Var<?>> COMPARATOR_BY_NAME = (left, right) -> left.getName().compareTo(right.getName());
 
+  /**
+   * Hold the type at runtime - due to erasures.
+   */
   private final Class<T> type;
 
   /**
    * The immutable name of the variable, usually starting with uppercase when this Var was instantiated by the default parser, but when instantiated
-   * by {@link #Var(CharSequence)} it can actually be anything (although it may not be the smartest idea).<br/>
+   * by {@link #Var(Class, CharSequence)} it can actually be anything (although it may not be the smartest idea).<br/>
    * A value of Var.ANONYMOUS_VAR_NAME means it's the anonymous variable<br/>
    * Note: all variables' names are internalized, i.e. it is legal to compare their names with ==.
    */
@@ -104,24 +102,28 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
     this.type = theType;
   }
 
-  public Var(CharSequence theName) {
-    this(/* FIXME */ null, theName);
-  }
+//  public Var(CharSequence theName) {
+//    this(/* FIXME */ null, theName);
+//  }
 
   // ---------------------------------------------------------------------------
   // Static factories
   // ---------------------------------------------------------------------------
 
-  public static Var<String> strVar(String theName) {
-    return new Var<String>(String.class, theName);
+  public static Var<Object> anyVar(CharSequence varName) {
+    return new Var<>(Object.class, varName);
   }
 
-  public static Var<Integer> intVar(String theName) {
-    return new Var<Integer>(Integer.class, theName);
+  public static Var<String> strVar(CharSequence varName) {
+    return new Var<>(String.class, varName);
   }
 
-  public static Var<Long> longVar(String theName) {
-    return new Var<Long>(Long.class, theName);
+  public static Var<Integer> intVar(CharSequence varName) {
+    return new Var<>(Integer.class, varName);
+  }
+
+  public static Var<Long> longVar(CharSequence varName) {
+    return new Var<>(Long.class, varName);
   }
 
   /**
