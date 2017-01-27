@@ -34,10 +34,23 @@ public class BindingVar<T> extends Var<T> {
 
   private Collection<T> coll = null;
 
+  /**
+   * A "free" {@link BindingVar} used only to retrieve results.
+   *
+   * @param theType
+   * @param theName
+   */
   public BindingVar(Class<T> theType, CharSequence theName) {
     this(theType, theName, null);
   }
 
+  /**
+   * A "bound" {@link BindingVar} used to inject values.
+   *
+   * @param theType
+   * @param theName
+   * @param coll
+   */
   public BindingVar(Class<T> theType, CharSequence theName, Collection<T> coll) {
     super(theType, theName);
     this.coll = coll;
@@ -55,6 +68,10 @@ public class BindingVar<T> extends Var<T> {
     return new BindingVar<>(Integer.class, theName);
   }
 
+
+  public boolean isFree() {
+    return coll == null;
+  }
 
   public boolean isBound() {
     return coll != null;

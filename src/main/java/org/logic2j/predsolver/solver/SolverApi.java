@@ -47,7 +47,7 @@ public class SolverApi extends Solver {
     }
     final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));
     final Object normalized = TermApi.normalize(effective);
-    final BindingVar[] freeBindingVars = Arrays.stream(bindingVars).filter(bv -> !bv.isBound()).toArray(BindingVar[]::new);
+    final BindingVar[] freeBindingVars = Arrays.stream(bindingVars).filter(bv -> bv.isFree()).toArray(BindingVar[]::new);
     return new GoalHolder(this, normalized, freeBindingVars);
   }
 }
