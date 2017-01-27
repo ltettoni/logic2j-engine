@@ -19,12 +19,8 @@ package org.logic2j.predsolver.solver;
 
 import org.junit.Test;
 import org.logic2j.predsolver.model.Term;
-import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Even;
 import org.logic2j.predsolver.predicates.Odd;
-import org.logic2j.predsolver.predicates.impl.FOFilter;
-import org.logic2j.predsolver.predicates.impl.FOMap;
 import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +31,13 @@ import java.util.stream.IntStream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.logic2j.predsolver.model.Var.intVar;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.solver.holder.BindingVar.intBVar;
 
 public class SolverWithBindingVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
   private SolverApi solver = new SolverApi();
+
 
   @Test
   public void supplyFromBoundVar() {
@@ -69,29 +65,6 @@ public class SolverWithBindingVarTest {
     logger.info("Result: {}", R);
     assertThat(Q.toList().toString(), is("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]"));
     assertThat(R.toList().toString(), is("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]"));
-    //    final List<Object> list = (List<Object>) nbr;
-    // assertThat(list.toString(), is("[2, 4, 6, 8]"));
-  }
-
-  @Test
-  public void usingPlainJavaPredicate() {
-    final Var<Integer> Q = intVar("Q");
-    final List<Object> list = solver.solve(new Digit(Q), new Odd(Q), new FOFilter<>(Q, i -> i != 5)).var("Q").list();
-    logger.info("Result: {}", list);
-  }
-
-  @Test
-  public void usingPlainJavaFunction() {
-    final Var<Integer> Q = intVar("Q");
-    final Var<Integer> R = intVar("R");
-    final List<Object> list = solver.solve(new Digit(Q), new FOMap<>(Q, x -> x*x, R)).var("R").list();
-    logger.info("Result: {}", list);
-  }
-
-  @Test
-  public void useCaseForRetrievalApi() {
-
-
   }
 
   // --------------------------------------------------------------------------

@@ -19,6 +19,8 @@ package org.logic2j.predsolver.predicates;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.impl.Eq;
+import org.logic2j.predsolver.predicates.impl.FOFilter;
+import org.logic2j.predsolver.predicates.impl.FOMap;
 import org.logic2j.predsolver.predicates.impl.Fail;
 import org.logic2j.predsolver.predicates.impl.Not;
 import org.logic2j.predsolver.predicates.impl.True;
@@ -26,6 +28,9 @@ import org.logic2j.predsolver.predicates.internal.And;
 import org.logic2j.predsolver.predicates.internal.Cut;
 import org.logic2j.predsolver.predicates.internal.Or;
 import org.logic2j.predsolver.solver.Solver;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Factory methods for common predicates.
@@ -52,5 +57,14 @@ public final class Predicates {
   public static Eq eq(Object t1, Object t2) {
     return new Eq(t1, t2);
   }
+
+  public static <T> FOFilter filter(Var<T> var, Predicate<T> pred) {
+    return new FOFilter<>(var, pred);
+  }
+
+  public static <T,R> FOMap map(Var<T> v1, Function<T, R> javaFunction, Var<R> v2) {
+    return new FOMap<>(v1, javaFunction, v2);
+  }
+
 
 }
