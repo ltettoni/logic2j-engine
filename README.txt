@@ -42,12 +42,14 @@ TODO
 - Fix LGPL header message, update copyright date
 - Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
     --> Listener has a strong async flavour.
-- Solution retrieval API
+- Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
+  - sync or asnyc ???
+  - all in memory or cursor style ???  (JooQ's Cursor: Iterable<R>, AutoCloseable)
   - exists
   - count
   - count distinct
-  - single (or null)
-  - unique (non null)
+  - single (or null)  (in JooQ: fetchAny)
+  - unique (non null) (in JooQ: fetchOne)
   - limited (with policy)
   - row handler
   - iterator
