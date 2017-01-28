@@ -33,14 +33,38 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.solver.holder.BindingVar.intBVar;
+import static org.logic2j.predsolver.solver.holder.BindingVar.strBVar;
 
 public class SolverWithBindingVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
   private SolverApi solver = new SolverApi();
 
-
   @Test
   public void supplyFromBoundVar() {
+    final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
+    final Term goal = eq(Q, Q);
+    final List<Object> list = solver.solve(goal).var("Q").list();
+    assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
+  }
+
+  @Test
+  public void supplyFrom2BoundVarS() {
+    final BindingVar<String> S = strBVar("S", "A", "B");
+    final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
+    final List<Object> list = solver.solve(eq(S, S), eq(Q, Q)).var("S").list();
+    assertThat(list.toString(), is("[A, A, A, B, B, B]"));
+  }
+
+  @Test
+  public void supplyFrom2BoundVarQ() {
+    final BindingVar<String> S = strBVar("S", "A", "B");
+    final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
+    final List<Object> list = solver.solve(eq(S, S), eq(Q, Q)).var("Q").list();
+    assertThat(list.toString(), is("[1, 2, 3, 1, 2, 3]"));
+  }
+
+  @Test
+  public void supplyFrom2BoundVarInverse() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
     final List<Object> list = solver.solve(goal).var("Q").list();
@@ -61,10 +85,10 @@ public class SolverWithBindingVarTest {
     final BindingVar<Integer> Q = intBVar("Q");
     final BindingVar<Integer> R = intBVar("R");
     final BindingVar[] boundVars = solver.solve(new Even(Q), new Odd(R)).boundVariables();
-    logger.info("Result: {}", Q);
-    logger.info("Result: {}", R);
-    assertThat(Q.toList().toString(), is("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]"));
-    assertThat(R.toList().toString(), is("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]"));
+    logger.info("Result: {}", Q.getResults());
+    logger.info("Result: {}", R.getResults());
+    assertThat(Q.getResults().toString(), is("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]"));
+    assertThat(R.getResults().toString(), is("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]"));
   }
 
   // --------------------------------------------------------------------------

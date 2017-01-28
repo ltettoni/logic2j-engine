@@ -60,7 +60,7 @@ public class Solver {
       throw e;
     } catch (RuntimeException e) {
       // Anything not a PrologException will be encapsulated
-      throw new SolverException("Solver failed with " + e, e);
+      throw new SolverException("Solver failed with: " + e, e);
     }
   }
 

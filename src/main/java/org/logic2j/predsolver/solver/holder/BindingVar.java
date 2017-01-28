@@ -17,12 +17,15 @@
 
 package org.logic2j.predsolver.solver.holder;
 
+import org.logic2j.predsolver.exception.SolverException;
 import org.logic2j.predsolver.model.Var;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +35,8 @@ import java.util.stream.Stream;
  */
 public class BindingVar<T> extends Var<T> {
 
-  private Collection<T> coll = null;
+  private Iterable<T> input = null;
+  private List<T> result;
 
   /**
    * A "free" {@link BindingVar} used only to retrieve results.
@@ -41,7 +45,7 @@ public class BindingVar<T> extends Var<T> {
    * @param theName
    */
   public BindingVar(Class<T> theType, CharSequence theName) {
-    this(theType, theName, null);
+    this(theType, theName, (Iterable)null);
   }
 
   /**
@@ -49,32 +53,67 @@ public class BindingVar<T> extends Var<T> {
    *
    * @param theType
    * @param theName
-   * @param coll
+   * @param input
    */
-  public BindingVar(Class<T> theType, CharSequence theName, Collection<T> coll) {
+  public BindingVar(Class<T> theType, CharSequence theName, Iterable<T> input) {
     super(theType, theName);
-    this.coll = coll;
+    this.input = input;
+  }
+  /**
+   * A "bound" {@link BindingVar} used to inject values.
+   *
+   * @param theType
+   * @param theName
+   * @param input
+   */
+  public BindingVar(Class<T> theType, CharSequence theName, T... input) {
+    super(theType, theName);
+    this.input = Arrays.asList(input);
   }
 
-  public static BindingVar<Integer> intBVar(CharSequence theName, Collection<Integer> coll) {
-    return new BindingVar<>(Integer.class, theName, coll);
+  public static BindingVar<Integer> intBVar(CharSequence theName, Iterable<Integer> iterable) {
+    return new BindingVar<>(Integer.class, theName, iterable);
+  }
+
+  public static BindingVar<Integer> intBVar(CharSequence theName, Integer... values) {
+    return new BindingVar<Integer>(Integer.class, theName, values);
   }
 
   public static BindingVar<Integer> intBVar(CharSequence theName, Stream<Integer> stream) {
     return new BindingVar<>(Integer.class, theName, stream.collect(Collectors.toList()));
   }
 
+  public static BindingVar<String> strBVar(CharSequence theName) {
+    return new BindingVar<>(String.class, theName);
+  }
+
+
+  public static BindingVar<String> strBVar(CharSequence theName, Iterable<String> iterable) {
+    return new BindingVar<>(String.class, theName, iterable);
+  }
+
+  public static BindingVar<String> strBVar(CharSequence theName, String... values) {
+    return new BindingVar<>(String.class, theName, values);
+  }
+
+  public static BindingVar<String> strBVar(CharSequence theName, Stream<String> stream) {
+    return new BindingVar<>(String.class, theName, stream.collect(Collectors.toList()));
+  }
+
   public static BindingVar<Integer> intBVar(CharSequence theName) {
     return new BindingVar<>(Integer.class, theName);
   }
 
-
   public boolean isFree() {
-    return coll == null;
+    return input == null;
   }
 
   public boolean isBound() {
-    return coll != null;
+    return input != null;
+  }
+
+  public Iterable<T> iterable() {
+    return input;
   }
 
   /**
@@ -83,38 +122,52 @@ public class BindingVar<T> extends Var<T> {
    * @return The values or null when none.
    */
   public Iterator<T> iterator() {
-    return coll == null ? null : coll.iterator();
+    return input == null ? null : input.iterator();
   }
 
-  void setResults(Collection<T> results) {
-    coll = results;
-  }
-
-  void addResult(T result) {
-    if (coll == null) {
-      coll = new ArrayList<T>();
+  public List<T> toList() {
+    if (this.input instanceof Collection) {
+      return (List<T>) this.input;
     }
-    coll.add(result);
-  }
-
-
-  public Collection<T> toList() {
-    return new ArrayList<T>(coll);
+    final ArrayList<T> list = new ArrayList<T>();
+    this.input.forEach(list::add);
+    return list;
   }
 
   public Set<T> toSet() {
-    return new HashSet<T>(coll);
+    if (this.input instanceof Set) {
+      return (Set<T>) this.input;
+    }
+    final HashSet<T> set = new HashSet<T>();
+    this.input.forEach(set::add);
+    return set;
+  }
+
+  public void addResult(Object value) {
+    if (result == null) {
+      result = new ArrayList<T>();
+    }
+    if (! (result instanceof Collection)){
+      throw new SolverException("BindingVar needs a Collection in order to collect solver results");
+    }
+    ((Collection) result).add(value);
+  }
+
+  public List<T> getResults() {
+    return this.result;
   }
 
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder(super.toString());
-    if (coll == null) {
+    if (input == null) {
       sb.append("(empty)");
     } else {
-      sb.append("#" + coll.size());
-      sb.append(coll);
+      final Collection<T> copy = toList();
+      sb.append("#" + copy.size());
+      sb.append(copy);
     }
     return sb.toString();
   }
+
 }
