@@ -25,7 +25,7 @@ import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Even;
 import org.logic2j.predsolver.predicates.EvenCheck;
 import org.logic2j.predsolver.predicates.IntRange;
-import org.logic2j.predsolver.predicates.impl.Not;
+import org.logic2j.predsolver.predicates.impl.firstorder.Not;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ import static org.logic2j.predsolver.model.Var.anyVar;
 import static org.logic2j.predsolver.model.Var.intVar;
 import static org.logic2j.predsolver.model.Var.strVar;
 import static org.logic2j.predsolver.predicates.Predicates.and;
-import static org.logic2j.predsolver.predicates.Predicates.anonymous;
+import static org.logic2j.predsolver.predicates.Predicates._;
 import static org.logic2j.predsolver.predicates.Predicates.cut;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.predicates.Predicates.fail;
@@ -209,7 +209,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq(anonymous, anonymous);
+    final Object goal = eq(_(), _());
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -232,7 +232,7 @@ public class SolverLowLevelTest {
   @Test
   public void unifyVarToAnonymous() {
     final Var<String> Q = strVar("Q");
-    final Object goal = eq(Q, anonymous);
+    final Object goal = eq(Q, _());
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
     assertEquals("[Q]", listener.getVariables().toString());

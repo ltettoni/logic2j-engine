@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.logic2j.predsolver.model.Var.anyVar;
+import static org.logic2j.predsolver.predicates.Predicates._;
 
 /**
  * Low-level tests of the {@link TermApi} facade.
@@ -84,7 +85,7 @@ public class TermApiTest {
     assertEquals(0, nbVars);
     nbVars = TermApi.assignIndexes(anyVar("X"), 0);
     assertEquals(1, nbVars);
-    nbVars = TermApi.assignIndexes(Var.ANONYMOUS_VAR, 0);
+    nbVars = TermApi.assignIndexes(_(), 0);
     assertEquals(0, nbVars);
     //
     nbVars = TermApi.assignIndexes(Long.valueOf(2), 0);

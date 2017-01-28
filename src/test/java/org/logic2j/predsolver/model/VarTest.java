@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.logic2j.predsolver.model.Var.anyVar;
+import static org.logic2j.predsolver.predicates.Predicates._;
 
 public class VarTest {
 
@@ -87,12 +88,12 @@ public class VarTest {
 
   @Test(expected = InvalidTermException.class)
   public void cannotCloneAnonymous() {
-    Var.copy(Var.ANONYMOUS_VAR);
+    Var.copy(_());
   }
 
   @Test
   public void isAnonymousTrue() {
-    assertTrue(Var.ANONYMOUS_VAR.isAnonymous());
+    assertTrue(_().isAnonymous());
   }
 
   @Test

@@ -22,10 +22,10 @@ import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Odd;
 import org.logic2j.predsolver.predicates.impl.io.logging.Debug;
+import org.logic2j.predsolver.predicates.impl.io.logging.Error;
 import org.logic2j.predsolver.predicates.impl.io.logging.Info;
 import org.logic2j.predsolver.predicates.impl.io.logging.Log;
 import org.logic2j.predsolver.predicates.impl.io.logging.Warn;
-import org.logic2j.predsolver.predicates.impl.io.logging.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +34,13 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.predsolver.model.Var.intVar;
+import static org.logic2j.predsolver.predicates.Predicates._;
+import static org.logic2j.predsolver.predicates.Predicates.and;
+import static org.logic2j.predsolver.predicates.Predicates.exists;
+import static org.logic2j.predsolver.predicates.Predicates.fail;
 import static org.logic2j.predsolver.predicates.Predicates.filter;
 import static org.logic2j.predsolver.predicates.Predicates.map;
+import static org.logic2j.predsolver.predicates.Predicates.not;
 
 public class PredicatesTest {
   private static final Logger logger = LoggerFactory.getLogger(PredicatesTest.class);
@@ -90,6 +95,28 @@ public class PredicatesTest {
   @Test
   public void error() {
     final long nbr = solver.solve(new Error("intentional error message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
+  // --------------------------------------------------------------------------
+  // First-order logic
+  // --------------------------------------------------------------------------
+
+  @Test
+  public void testExists() {
+    final long nbr = solver.solve(exists(solver, and(new Digit(_()), new Info("sol")))).count();
+    assertThat(nbr, is(1L));
+  }
+
+  @Test
+  public void testNot1() {
+    final long nbr = solver.solve(not(solver, and(new Digit(_()), new Info("sol")))).count();
+    assertThat(nbr, is(0L));
+  }
+
+  @Test
+  public void testNot2() {
+    final long nbr = solver.solve(not(solver, fail)).count();
     assertThat(nbr, is(1L));
   }
 

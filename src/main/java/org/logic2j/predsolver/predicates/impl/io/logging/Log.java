@@ -40,7 +40,7 @@ public class Log extends FOUniqueSolutionPredicate {
    * @param argList
    */
   public Log(String level, Object... argList) {
-    super("log", level, argList);
+    super("log", argList);
     switch (level.toLowerCase()) {
       case "trace":
         method = logger::trace;

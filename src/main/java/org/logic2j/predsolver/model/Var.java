@@ -47,7 +47,8 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
   /**
    * Singleton anonymous variable. You can safely compare them with ==.
    */
-  public static final Var<Void> ANONYMOUS_VAR = new Var<Void>();
+  @SuppressWarnings("rawtypes")
+  private static final Var ANONYMOUS_VAR = new Var<>();
 
   /**
    * Singleton "special" var that holds the value of a whole goal.
@@ -55,6 +56,15 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
   public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<Object>(Object.class, WHOLE_SOLUTION_VAR_NAME);
 
   public static final Comparator<Var<?>> COMPARATOR_BY_NAME = (left, right) -> left.getName().compareTo(right.getName());
+
+  /**
+   * The anonymous variable (following Prolog's standard name "_")
+   * @param <T>
+   * @return The non-typed anonymous variable - does not bind any value.
+   */
+  public static <T> Var<T> anonymous() {
+    return (Var<T>) Var.ANONYMOUS_VAR;
+  }
 
   /**
    * Hold the type at runtime - due to erasures.
@@ -89,14 +99,14 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
    */
   public Var(Class<T> theType, CharSequence theName) {
     if (theName == Var.ANONYMOUS_VAR_NAME) {
-      throw new InvalidTermException("Must not instantiate the anonymous variable (which is a singleton)!");
+      throw new InvalidTermException("Must not instantiate an anonymous variable (which is a singleton)!");
     }
     if (theName == null) {
       throw new InvalidTermException("Name of a variable cannot be null");
     }
     final String str = theName.toString();
-    if (str.isEmpty()) {
-      throw new InvalidTermException("Name of a variable may not be the empty String");
+    if (str.trim().isEmpty()) {
+      throw new InvalidTermException("Name of a variable may not be the empty or whitespace String");
     }
     this.name = str.intern();
     this.type = theType;
@@ -283,4 +293,5 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
   public int compareTo(Var<T> that) {
     return this.getName().compareTo(that.getName());
   }
+
 }
