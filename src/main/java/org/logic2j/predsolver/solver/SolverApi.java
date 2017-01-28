@@ -20,7 +20,7 @@ package org.logic2j.predsolver.solver;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.impl.SupplyN;
+import org.logic2j.predsolver.predicates.impl.Supply;
 import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.logic2j.predsolver.solver.holder.GoalHolder;
 
@@ -48,7 +48,7 @@ public class SolverApi extends Solver {
 //    }
 
     if (boundBindingVars.length>0) {
-      goalList.add(0, new SupplyN(boundBindingVars));
+      goalList.add(0, new Supply(boundBindingVars));
     }
 
     final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));

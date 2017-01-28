@@ -17,55 +17,84 @@
 
 package org.logic2j.predsolver.predicates.impl;
 
+import org.logic2j.predsolver.exception.SolverException;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.solver.Continuation;
+import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Emit Java values into (free) variables.
+ * Supply input data from {@link BindingVar}s into their corresponding variables.
+ * The cross-product is generated.
+ * For example if {@link BindingVar} S initially defines values "A", "B", and {@link BindingVar} Q
+ * initially defines values 1,2,3, then starting a resolution with Supply(S, Q) will emit bindings for
+ * variables (S, Q) as (A, 1), (A, 2), (A, 3), (B, 1), (B, 2), (B, 3).
+ * On the contrary, invoking Supply(Q, S) will reverse the cross-product.
  */
-public class Supply<T> extends FOPredicate {
+public class Supply extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Supply.class);
 
-  private final Iterator<T> iterator;
+  private final BindingVar<?>[] bindingVars;
+  private List<?>[] data;
 
-  public Supply(Iterator<T> javaValues, Var<T> var) {
-    super("supply", var);
-    this.iterator = javaValues;
+  public Supply(BindingVar<?>... vars) {
+    super("supplyN", vars);
+    this.bindingVars = vars;
+    this.data = null;
+    // Do nothing in constructor, lazy initialization will occur later
+  }
+
+  private void ensureInit() {
+    if (this.data == null) {
+      synchronized (this) {
+        if (this.data == null) {
+          final BindingVar[] boundVars = Arrays.stream(bindingVars).filter(bv -> bv.isBound()).toArray(BindingVar[]::new);
+          final int nbVars = boundVars.length;
+          this.data = new List<?>[nbVars];
+          // Load data (only once) into memory
+          for (int i = 0; i < nbVars; i++) {
+            final BindingVar var = boundVars[i];
+            this.data[i] = var.toList();
+          }
+        }
+      }
+    }
   }
 
 
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    final Object var = getArg(0);
-    final Object reified = currentVars.reify(var);
-    if (reified instanceof Var) {
-      // Still a free var, we will attempt to read values from the getter and provide bindings
+    ensureInit();
+    notifyFromVar(0, theListener, currentVars);
+    return Continuation.CONTINUE;
+  }
 
-      if (iterator != null) {
-        return unifyAndNotifyMany(theListener, currentVars, (Var) reified, iterator);
-      }
-      return Continuation.CONTINUE;
-    } else {
-      // Variable is bound to a value
-
-      if (iterator != null) {
-        final Set<Object> set = new HashSet<>();
-        while (iterator.hasNext()) {
-          set.add(iterator.next());
-        }
-        return notifySolutionIf(set.contains(reified), theListener, currentVars);
-      } else {
-        logger.warn("Cannot store instant value {}", reified);
-        return Continuation.CONTINUE;
-      }
+  private UnifyContext notifyFromVar(int ivar, SolutionListener theListener, UnifyContext currentVars) {
+    if (ivar >= this.bindingVars.length) {
+      final Integer cont = theListener.onSolution(currentVars);
+//      if (cont != Continuation.CONTINUE) {
+//        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
+//      }
+      return currentVars;
     }
+    final Var var = this.bindingVars[ivar];
+    final List<?> data = this.data[ivar];
+    final int nbValues = data.size();
+    for (int j = 0; j < nbValues; j++) {
+      final Object value = data.get(j);
+      final UnifyContext afterUnification = currentVars.unify(var, value);
+      final boolean couldUnifySomething = afterUnification != null;
+      if (!couldUnifySomething) {
+        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
+      }
+
+      notifyFromVar(ivar + 1, theListener, afterUnification);
+    } return currentVars;
   }
 }
