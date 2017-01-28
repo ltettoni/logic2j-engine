@@ -15,21 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.predsolver.predicates.impl;
-
-import org.logic2j.predsolver.unify.UnifyContext;
+package org.logic2j.predsolver.predicates.impl.io.logging;
 
 /**
- * Always succeeds, provides one solution but does not bind any variables.
+ * Logging at debug level.
  */
-public class True extends FOUniqueSolutionPredicate {
-  public True() {
-    super("true");
-  }
+public class Debug extends Log {
 
-  @Override
-  public void sideEffect(UnifyContext currentVars) {
-    // Nothing !
+  /**
+   * Log the arguments at debug level.
+   * @param argList
+   */
+  public Debug(Object... argList) {
+    super("debug", argList);
   }
-
 }

@@ -15,17 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.predsolver.predicates.impl;
-
-import org.logic2j.predsolver.model.Var;
-
-import java.util.function.Predicate;
+package org.logic2j.predsolver.predicates.impl.io.logging;
 
 /**
- * Test a {@link Var} using a Java predicate, only provides a solution of the variable is bound.
+ * Logging at error level.
  */
-public class FOFilter<T> extends FOPredicateJavaPredicate {
-  public FOFilter(Var<T> term, Predicate<T> javaPredicate) {
-    super("_javaLambdaPredicate", term, javaPredicate);
+public class Error extends Log {
+
+  /**
+   * Log the arguments at error level.
+   * @param argList
+   */
+  public Error(Object... argList) {
+    super("error", argList);
   }
 }

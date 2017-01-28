@@ -15,21 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.predsolver.predicates.impl;
+package org.logic2j.predsolver.predicates.impl.java;
 
-import org.logic2j.predsolver.unify.UnifyContext;
+import org.logic2j.predsolver.model.Var;
+import org.logic2j.predsolver.predicates.impl.FOPredicateJavaPredicate;
+
+import java.util.function.Predicate;
 
 /**
- * Always succeeds, provides one solution but does not bind any variables.
+ * Test a {@link Var} using a Java predicate, only provides a solution of the variable is bound.
  */
-public class True extends FOUniqueSolutionPredicate {
-  public True() {
-    super("true");
+public class FOFilter<T> extends FOPredicateJavaPredicate {
+  public FOFilter(Var<T> term, Predicate<T> javaPredicate) {
+    super("_javaLambdaPredicate", term, javaPredicate);
   }
-
-  @Override
-  public void sideEffect(UnifyContext currentVars) {
-    // Nothing !
-  }
-
 }

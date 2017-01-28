@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.predsolver.predicates.impl;
+package org.logic2j.predsolver.predicates.impl.java;
 
 
 import org.logic2j.predsolver.model.Var;
+import org.logic2j.predsolver.predicates.impl.FOPredicate;
 import org.logic2j.predsolver.solver.Continuation;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;

@@ -15,35 +15,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.predsolver.predicates.impl;
+package org.logic2j.predsolver.predicates.impl.io.logging;
 
-import org.logic2j.predsolver.solver.listener.SolutionListener;
+import org.logic2j.predsolver.predicates.impl.FOUniqueSolutionPredicate;
 import org.logic2j.predsolver.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Logging
+ * Logging.
  */
-public class Log extends FOPredicate {
+public class Log extends FOUniqueSolutionPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Log.class);
+  private final Consumer<String> method;
 
   /**
-   * Log the arguments
+   * Log the arguments at the level specified.
    *
+   * @param level
    * @param argList
    */
-  public Log(Object... argList) {
-    super("log", argList);
+  public Log(String level, Object... argList) {
+    super("log", level, argList);
+    switch (level.toLowerCase()) {
+      case "trace":
+        method = logger::trace;
+        break;
+      case "debug":
+        method = logger::debug;
+        break;
+      default:
+        logger.error(this + " predicate sets level to " + level + " which is unknown - using info instead");
+      case "info":
+        method = logger::info;
+        break;
+      case "warn":
+        method = logger::warn;
+        break;
+      case "error":
+        method = logger::error;
+        break;
+    }
   }
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public void sideEffect(UnifyContext currentVars) {
     final String str = Arrays.stream(getArgs()).map(currentVars::reify).map(String::valueOf).collect(Collectors.joining(" "));
-    logger.info(str);
-    return notifySolution(theListener, currentVars);
+    method.accept(str);
   }
+
 }

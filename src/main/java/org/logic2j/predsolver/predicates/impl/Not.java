@@ -24,7 +24,8 @@ import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
 
 /**
- * Unification operator "=".
+ * Logical negation, succeeds if the specified goal does not provide a single solution; fails if
+ * the specified goal provides at least one solution (and none other is sought).
  */
 public class Not extends FOPredicate {
   public static final String FUNCTOR = "\\+";

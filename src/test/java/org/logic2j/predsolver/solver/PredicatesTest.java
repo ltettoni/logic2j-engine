@@ -21,6 +21,11 @@ import org.junit.Test;
 import org.logic2j.predsolver.model.Var;
 import org.logic2j.predsolver.predicates.Digit;
 import org.logic2j.predsolver.predicates.Odd;
+import org.logic2j.predsolver.predicates.impl.io.logging.Debug;
+import org.logic2j.predsolver.predicates.impl.io.logging.Info;
+import org.logic2j.predsolver.predicates.impl.io.logging.Log;
+import org.logic2j.predsolver.predicates.impl.io.logging.Warn;
+import org.logic2j.predsolver.predicates.impl.io.logging.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +58,41 @@ public class PredicatesTest {
     logger.info("Result: {}", list);
     assertThat(list.toString(), is("[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"));
   }
+
+  // --------------------------------------------------------------------------
+  // Logging predicates
+  // --------------------------------------------------------------------------
+
+  @Test
+  public void trace() {
+    final long nbr = solver.solve(new Log("trace", "intentional trace message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
+  @Test
+  public void debug() {
+    final long nbr = solver.solve(new Debug("intentional debug message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
+  @Test
+  public void info() {
+    final long nbr = solver.solve(new Info("intentional info message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
+  @Test
+  public void warn() {
+    final long nbr = solver.solve(new Warn("intentional warning message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
+  @Test
+  public void error() {
+    final long nbr = solver.solve(new Error("intentional error message - from test case")).count();
+    assertThat(nbr, is(1L));
+  }
+
 
   // --------------------------------------------------------------------------
   // Support methods

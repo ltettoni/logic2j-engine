@@ -20,7 +20,7 @@ package org.logic2j.predsolver.solver;
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.model.TermApi;
 import org.logic2j.predsolver.model.Var;
-import org.logic2j.predsolver.predicates.impl.Supply;
+import org.logic2j.predsolver.predicates.impl.java.Supply;
 import org.logic2j.predsolver.solver.holder.BindingVar;
 import org.logic2j.predsolver.solver.holder.GoalHolder;
 
