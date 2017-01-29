@@ -42,8 +42,8 @@ public final class Predicates {
   public static final Fail fail = new Fail();
   public static final Cut cut = new Cut();
 
-  public static <T> Var<T> _() {
-    return Var.anonymous();
+  public static <T> Var<T> anon() {
+    return Var.anon();
   }
 
   public static And and(Term... conjunctions) {
@@ -75,11 +75,11 @@ public final class Predicates {
   }
 
   public static Exists exists(Solver solver, Term term) {
-    return new Exists(solver, term);
+    return new Exists(term);
   }
 
   public static Not not(Solver solver, Term term) {
-    return new Not(solver, term);
+    return new Not(term);
   }
 
   public static Eq eq(Object t1, Object t2) {

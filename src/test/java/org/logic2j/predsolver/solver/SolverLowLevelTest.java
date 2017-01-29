@@ -37,7 +37,7 @@ import static org.logic2j.predsolver.model.Var.anyVar;
 import static org.logic2j.predsolver.model.Var.intVar;
 import static org.logic2j.predsolver.model.Var.strVar;
 import static org.logic2j.predsolver.predicates.Predicates.and;
-import static org.logic2j.predsolver.predicates.Predicates._;
+import static org.logic2j.predsolver.predicates.Predicates.anon;
 import static org.logic2j.predsolver.predicates.Predicates.cut;
 import static org.logic2j.predsolver.predicates.Predicates.eq;
 import static org.logic2j.predsolver.predicates.Predicates.fail;
@@ -180,8 +180,8 @@ public class SolverLowLevelTest {
 
   @Test
   public void notTest() {
-    countOneSolution(new Not(solver, fail));
-    countNoSolution(new Not(solver, ttrue));
+    countOneSolution(new Not(fail));
+    countNoSolution(new Not(ttrue));
   }
 
 
@@ -209,7 +209,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq(_(), _());
+    final Object goal = eq(anon(), anon());
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -232,7 +232,7 @@ public class SolverLowLevelTest {
   @Test
   public void unifyVarToAnonymous() {
     final Var<String> Q = strVar("Q");
-    final Object goal = eq(Q, _());
+    final Object goal = eq(Q, anon());
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
     assertEquals("[Q]", listener.getVariables().toString());

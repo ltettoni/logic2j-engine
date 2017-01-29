@@ -62,7 +62,7 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
    * @param <T>
    * @return The non-typed anonymous variable - does not bind any value.
    */
-  public static <T> Var<T> anonymous() {
+  public static <T> Var<T> anon() {
     return (Var<T>) Var.ANONYMOUS_VAR;
   }
 

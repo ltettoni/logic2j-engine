@@ -32,21 +32,42 @@ import org.logic2j.predsolver.util.ProfilingInfo;
 import java.util.Iterator;
 
 /**
- * Solve goals - that's the core of the engine.
+ * Solve goals - that's the core of the engine, the resolution algorithm is in this class.
+ * There are 4 predicates managed directly in this class:
+ *  "," (AND)
+ *  ";" (OR)
+ *  "call(X)"
+ *  "!" (CUT)
+ *  ( and in the future, ":-" (RULE) )
+ *  All other predicates are delegated in implementations
+ *  of {@link FOPredicate#invokePredicate(SolutionListener, UnifyContext)}.
  */
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
   private static final boolean isDebug = logger.isDebugEnabled();
-  private static final boolean FAST_OR = true; // (see note re. processing of OR in CoreLibrary.pro)
+  /**
+   * Do we solve the ";" (OR) predicate internally here, or in the predicate.
+   * (see note re. processing of OR in CoreLibrary.pro)
+   */
+  private static final boolean INTERNAL_OR = true;
+  /**
+   * Do we acquire profiling information (number of inferences, etc)
+   */
   private static final boolean PROFILING = true;
 
 
-
+  /**
+   * This is the entry point.
+   * @param goal
+   * @param theSolutionListener
+   * @return
+   */
   public Integer solveGoal(Object goal, SolutionListener theSolutionListener) {
     if (goal instanceof Var<?>) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
+    SolverContextHolder.register(this);
     final UnifyContext initialContext = initialContext();
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
@@ -70,7 +91,9 @@ public class Solver {
   }
 
   /**
-   * Just calls the recursive internal method.
+   * Just calls the recursive internal method, this is an alternate entry point when a {@link UnifyContext}
+   * is already instantiated; this is needed in custom predicates implementing first-order logic like
+   * not(), exists(), etc.
    */
   public Integer solveGoal(Object goal, final SolutionListener theSolutionListener, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
@@ -203,7 +226,7 @@ public class Solver {
         logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
       }
       result = solveGoalRecursive(lhs, andingListeners[0], currentVars, cutLevel);
-    } else if (FAST_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+    } else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR
             * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro

@@ -19,7 +19,7 @@ package org.logic2j.predsolver.predicates.impl.firstorder;
 
 import org.logic2j.predsolver.model.Term;
 import org.logic2j.predsolver.predicates.impl.FOPredicate;
-import org.logic2j.predsolver.solver.Solver;
+import org.logic2j.predsolver.solver.SolverContextHolder;
 import org.logic2j.predsolver.solver.listener.ExistsSolutionListener;
 import org.logic2j.predsolver.solver.listener.SolutionListener;
 import org.logic2j.predsolver.unify.UnifyContext;
@@ -27,14 +27,13 @@ import org.logic2j.predsolver.unify.UnifyContext;
 /**
  * Logical negation, succeeds if the specified goal does not provide a single solution; fails if
  * the specified goal provides at least one solution (and none other is sought).
+ * This actually means "Not exists".
  */
 public class Not extends FOPredicate {
   public static final String FUNCTOR = "\\+";
-  private Solver solver;
 
-  public Not(Solver solver, Term theGoal) {
+  public Not(Term theGoal) {
     super(FUNCTOR, theGoal);
-    this.solver = solver;
   }
 
   @Override
@@ -42,7 +41,7 @@ public class Not extends FOPredicate {
 
     // Solve against a minimal SolutionListener just interested on the first solution
     final ExistsSolutionListener seekOnlyTheFirstSolution = new ExistsSolutionListener();
-    this.solver.solveGoal(getArg(0), seekOnlyTheFirstSolution, currentVars);
+    SolverContextHolder.getSolver().solveGoal(getArg(0), seekOnlyTheFirstSolution, currentVars);
 
     final boolean doesNotExist = !seekOnlyTheFirstSolution.exists();
     return notifySolutionIf(doesNotExist, theListener, currentVars);

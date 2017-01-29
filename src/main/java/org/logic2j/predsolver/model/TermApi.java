@@ -335,7 +335,7 @@ public final class TermApi {
       final String chars = theObject.toString();
 
       if (Var.ANONYMOUS_VAR_NAME.equals(chars)) {
-        result = Var.anonymous();
+        result = Var.anon();
       } else if (chars.isEmpty()) {
         // Dubious for real programming, but some data sources may contain empty fields, and this is the only way to represent
         // them

@@ -34,7 +34,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.predsolver.model.Var.intVar;
-import static org.logic2j.predsolver.predicates.Predicates._;
+import static org.logic2j.predsolver.predicates.Predicates.anon;
 import static org.logic2j.predsolver.predicates.Predicates.and;
 import static org.logic2j.predsolver.predicates.Predicates.exists;
 import static org.logic2j.predsolver.predicates.Predicates.fail;
@@ -104,13 +104,13 @@ public class PredicatesTest {
 
   @Test
   public void testExists() {
-    final long nbr = solver.solve(exists(solver, and(new Digit(_()), new Info("sol")))).count();
+    final long nbr = solver.solve(exists(solver, and(new Digit(anon()), new Info("sol")))).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void testNot1() {
-    final long nbr = solver.solve(not(solver, and(new Digit(_()), new Info("sol")))).count();
+    final long nbr = solver.solve(not(solver, and(new Digit(anon()), new Info("sol")))).count();
     assertThat(nbr, is(0L));
   }
 
