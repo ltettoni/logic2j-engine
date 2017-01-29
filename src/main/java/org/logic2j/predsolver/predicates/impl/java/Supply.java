@@ -45,7 +45,7 @@ public class Supply extends FOPredicate {
   private List<?>[] data;
 
   public Supply(BindingVar<?>... vars) {
-    super("supplyN", vars);
+    super("supplyN", (Object[])vars);
     this.bindingVars = vars;
     this.data = null;
     // Do nothing in constructor, lazy initialization will occur later
