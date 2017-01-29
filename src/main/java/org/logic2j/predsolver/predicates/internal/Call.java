@@ -20,12 +20,13 @@ package org.logic2j.predsolver.predicates.internal;
 import org.logic2j.predsolver.model.Struct;
 import org.logic2j.predsolver.model.Term;
 
+import static org.logic2j.predsolver.predicates.Predicates.conjunction;
+
 /**
- * Logical AND.
- * The implementation is hard-coded in the Solver, hence we do not provided it here.
+ * Invoke the solver on a sub-goal or conjunction (AND) of sub-goals.
  */
-public class And extends Struct {
-  public And(Term... conjunctions) {
-    super(FUNCTOR_COMMA, (Object[]) conjunctions);
+public class Call extends Struct {
+  public Call(Term... goals) {
+    super(FUNCTOR_CALL, conjunction(goals));
   }
 }
