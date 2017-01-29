@@ -174,7 +174,7 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
   /**
    * Tests if this variable is anonymous.
    */
-  public boolean isAnonymous() {
+  public boolean isAnon() {
     return this == ANONYMOUS_VAR || this.name == ANONYMOUS_VAR_NAME; // Names are {@link String#intern()}alized so OK to check by reference
   }
 
@@ -240,7 +240,7 @@ public class Var<T> extends Term implements Comparable<Var<T>> {
       // Already assigned, avoid changing the index! Do nothing
       return theIndexOfNextNonIndexedVar; // return the argument, since we did not assign anything new
     }
-    if (isAnonymous()) {
+    if (isAnon()) {
       // Anonymous variable is not a var, don't count it, but assign an
       // index that is different from NO_INDEX but that won't be ever used
       this.index = ANON_INDEX;

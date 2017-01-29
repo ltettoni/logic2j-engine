@@ -93,12 +93,12 @@ public class VarTest {
 
   @Test
   public void isAnonymousTrue() {
-    assertTrue(anon().isAnonymous());
+    assertTrue(anon().isAnon());
   }
 
   @Test
   public void isAnonymousFalse() {
-    assertFalse(anyVar("X").isAnonymous());
+    assertFalse(anyVar("X").isAnon());
   }
 
 

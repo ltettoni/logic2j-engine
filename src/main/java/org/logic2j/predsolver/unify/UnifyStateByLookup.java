@@ -125,7 +125,7 @@ public class UnifyStateByLookup {
 
 
   Object dereference(Var<?> theVar, int transactionNumber) {
-    if (theVar.isAnonymous()) {
+    if (theVar.isAnon()) {
       return theVar;
     }
     Var<?> runningVar = theVar;
