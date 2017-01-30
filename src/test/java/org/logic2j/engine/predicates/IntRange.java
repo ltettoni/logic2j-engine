@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generate digits
+ * IntRange(min, middle, max) is true when min <= middle < max.
  */
 public class IntRange extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(IntRange.class);
