@@ -37,9 +37,10 @@ Improvements DONE:
 - Removed SolutionListenerBase, using default method on interface
 - Removed MutliResult, using directly Iterator<UnifyContext>
 - Removed PrimitiveType, using instanceof
+- Fix LGPL header message, update copyright date
 
 TODO
-- Fix LGPL header message, update copyright date
+- Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N...
 - Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
     --> Listener has a strong async flavour.
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
