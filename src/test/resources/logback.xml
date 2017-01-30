@@ -7,9 +7,6 @@
       <!--
       <pattern>%-26thread\t%05relative\t%-5level %msg%n</pattern>
       -->
-      <!-- Count effective distinct threads with:
-       cut -f 1 | grep ForkJoin | sort -u | wc -l
-       -->
     </encoder>
   </appender>
 
