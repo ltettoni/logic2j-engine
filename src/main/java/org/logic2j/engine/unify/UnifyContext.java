@@ -128,7 +128,12 @@ public class UnifyContext {
     return term;
   }
 
-
+  /**
+   * Unify two terms. Most optimal invocation is Var against non-Var.
+   * @param term1
+   * @param term2
+   * @return
+   */
   public UnifyContext unify(Object term1, Object term2) {
     //        audit.info("Unify  {}  ~  {}", term1, term2);
     if (term1 == term2) {
