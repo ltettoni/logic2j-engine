@@ -26,6 +26,7 @@ import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.io.logging.Info;
 import org.logic2j.engine.predicates.impl.io.logging.Log;
 import org.logic2j.engine.predicates.impl.io.logging.Warn;
+import org.logic2j.engine.predicates.impl.math.Succ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +34,10 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.predicates.Predicates.anon;
 import static org.logic2j.engine.predicates.Predicates.and;
+import static org.logic2j.engine.predicates.Predicates.anon;
 import static org.logic2j.engine.predicates.Predicates.exists;
 import static org.logic2j.engine.predicates.Predicates.fail;
 import static org.logic2j.engine.predicates.Predicates.filter;
@@ -70,31 +72,31 @@ public class PredicatesTest {
 
   @Test
   public void trace() {
-    final long nbr = solver.solve(new Log("trace", "intentional trace message - from test case")).count();
+    final long nbr = solver.solve(new Log("trace", "voluntary trace message - from test case")).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void debug() {
-    final long nbr = solver.solve(new Debug("intentional debug message - from test case")).count();
+    final long nbr = solver.solve(new Debug("voluntary debug message - from test case")).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void info() {
-    final long nbr = solver.solve(new Info("intentional info message - from test case")).count();
+    final long nbr = solver.solve(new Info("voluntary info message - from test case")).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void warn() {
-    final long nbr = solver.solve(new Warn("intentional warning message - from test case")).count();
+    final long nbr = solver.solve(new Warn("voluntary warning message - from test case")).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void error() {
-    final long nbr = solver.solve(new Error("intentional error message - from test case")).count();
+    final long nbr = solver.solve(new Error("voluntary error message - from test case")).count();
     assertThat(nbr, is(1L));
   }
 
@@ -119,6 +121,56 @@ public class PredicatesTest {
     final long nbr = solver.solve(not(solver, fail)).count();
     assertThat(nbr, is(1L));
   }
+
+  // --------------------------------------------------------------------------
+  // With bindings
+  // --------------------------------------------------------------------------
+
+  @Test
+  public void succIntCheckOk() {
+    assertThat(solver.solve(new Succ(5, 6)).count(), is(1L));
+  }
+
+  @Test
+  public void succIntCheckNOk() {
+    assertThat(solver.solve(new Succ(5, 7)).count(), is(0L));
+  }
+
+  @Test
+  public void succDoubleCheckOk() {
+    assertThat(solver.solve(new Succ(5.0, 6.0)).count(), is(1L));
+  }
+
+  @Test
+  public void succDoubleCheckNOk() {
+    assertThat(solver.solve(new Succ(5.0, 6.1)).count(), is(0L));
+  }
+
+
+  @Test
+  public void succIntForward() {
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ(5, Q)).var("Q").list().toString(), is("[6]"));
+  }
+
+  @Test
+  public void succDoubleForward() {
+    final Var<Double> Q = doubleVar("Q");
+    assertThat(solver.solve(new Succ(5.1, Q)).var("Q").list().toString(), is("[6.1]"));
+  }
+
+  @Test
+  public void succIntReverse() {
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ(Q, 5)).var("Q").list().toString(), is("[4]"));
+  }
+
+  @Test
+  public void succDoubleReverse() {
+    final Var<Double> Q = doubleVar("Q");
+    assertThat(solver.solve(new Succ(Q, 5.1)).var("Q").list().toString(), is("[4.1]"));
+  }
+
 
 
   // --------------------------------------------------------------------------
