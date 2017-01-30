@@ -131,6 +131,9 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   public static Var<Integer> intVar(CharSequence varName) {
     return new Var<>(Integer.class, varName);
   }
+  public static Var<Double> doubleVar(CharSequence varName) {
+    return new Var<>(Double.class, varName);
+  }
 
   public static Var<Long> longVar(CharSequence varName) {
     return new Var<>(Long.class, varName);
