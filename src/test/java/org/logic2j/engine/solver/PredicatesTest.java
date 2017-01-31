@@ -123,8 +123,13 @@ public class PredicatesTest {
   }
 
   // --------------------------------------------------------------------------
-  // With bindings
+  // Test the "Succ" predicate that can resolve forward or reverse.
   // --------------------------------------------------------------------------
+
+  @Test
+  public void succTwoVars() {
+    assertThat(solver.solve(new Succ(intVar("X"), intVar("Y"))).count(), is(0L));
+  }
 
   @Test
   public void succIntCheckOk() {
@@ -149,26 +154,22 @@ public class PredicatesTest {
 
   @Test
   public void succIntForward() {
-    final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ(5, Q)).var("Q").list().toString(), is("[6]"));
+    assertThat(solver.solve(new Succ(5, intVar("Q"))).var("Q").list().toString(), is("[6]"));
   }
 
   @Test
   public void succDoubleForward() {
-    final Var<Double> Q = doubleVar("Q");
-    assertThat(solver.solve(new Succ(5.1, Q)).var("Q").list().toString(), is("[6.1]"));
+    assertThat(solver.solve(new Succ(5.1, doubleVar("Q"))).var("Q").list().toString(), is("[6.1]"));
   }
 
   @Test
   public void succIntReverse() {
-    final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ(Q, 5)).var("Q").list().toString(), is("[4]"));
+    assertThat(solver.solve(new Succ(intVar("Q"), 5)).var("Q").list().toString(), is("[4]"));
   }
 
   @Test
   public void succDoubleReverse() {
-    final Var<Double> Q = doubleVar("Q");
-    assertThat(solver.solve(new Succ(Q, 5.1)).var("Q").list().toString(), is("[4.1]"));
+    assertThat(solver.solve(new Succ(doubleVar("Q"), 5.1)).var("Q").list().toString(), is("[4.1]"));
   }
 
 
