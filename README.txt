@@ -23,10 +23,9 @@ Struct:
 - Adding PrimitiveType, and adding the DATA value
 
 TermApi:
-- remove handling of prolog lists
+- removed handling of prolog lists
 - removed evaluate()
-- removed
-- removed normalization signature with LibraryContent
+- removed normalization signature using LibraryContent
 - valueOf: removed second argument FactoryMode (using always non ATOM)
 - removed selectTerm()
 
@@ -40,9 +39,9 @@ Improvements DONE:
 - Fix LGPL header message, update copyright date
 
 TODO
-- Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N...
-- Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
-    --> Listener has a strong async flavour.
+- See if SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
+- Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
+- Reintroduce TermApi.selectTerm() ???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
   - sync or asnyc ???
   - all in memory or cursor style ???  (JooQ's Cursor: Iterable<R>, AutoCloseable)
@@ -65,6 +64,8 @@ TODO
   - list of array
   - list of tuple
   - list of map
+- Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
+    --> Listener has a strong async flavour.
 
 
 CANNOT DO / REQUIRES STUDY
