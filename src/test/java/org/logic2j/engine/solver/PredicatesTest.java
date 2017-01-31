@@ -18,6 +18,7 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
+import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.Odd;
@@ -34,6 +35,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.logic2j.engine.model.SimpleBinding.arr;
+import static org.logic2j.engine.model.SimpleBinding.cst;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
@@ -61,7 +64,7 @@ public class PredicatesTest {
   public void usingPlainJavaFunction() {
     final Var<Integer> Q = intVar("Q");
     final Var<Integer> R = intVar("R");
-    final List<Object> list = solver.solve(new Digit(Q), map(Q, x -> x*x, R)).var("R").list();
+    final List<Object> list = solver.solve(new Digit(Q), map(Q, x -> x * x, R)).var("R").list();
     logger.info("Result: {}", list);
     assertThat(list.toString(), is("[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"));
   }
@@ -123,7 +126,7 @@ public class PredicatesTest {
   }
 
   // --------------------------------------------------------------------------
-  // Test the "Succ" predicate that can resolve forward or reverse.
+  // Test the "Succ" predicate that can resolve forward or reverse, using either Var or single constant
   // --------------------------------------------------------------------------
 
   @Test
@@ -151,7 +154,6 @@ public class PredicatesTest {
     assertThat(solver.solve(new Succ(5.0, 6.1)).count(), is(0L));
   }
 
-
   @Test
   public void succIntForward() {
     assertThat(solver.solve(new Succ(5, intVar("Q"))).var("Q").list().toString(), is("[6]"));
@@ -172,10 +174,39 @@ public class PredicatesTest {
     assertThat(solver.solve(new Succ(doubleVar("Q"), 5.1)).var("Q").list().toString(), is("[4.1]"));
   }
 
+  // --------------------------------------------------------------------------
+  // Test the "Succ" predicate that can resolve forward or reverse, using either Var or a SimpleBinding
+  // --------------------------------------------------------------------------
 
 
-  // --------------------------------------------------------------------------
-  // Support methods
-  // --------------------------------------------------------------------------
+  @Test
+  public void succIntsCheckOkFully() {
+    assertThat(solver.solve(new Succ(arr(5, 6, 7), arr(6, 7, 8))).count(), is(3L));
+  }
+
+  @Test
+  public void succIntsCheckOk() {
+    assertThat(solver.solve(new Succ(arr(5, 6, 7), arr(1, 7, 10, 8))).count(), is(2L));
+  }
+
+  @Test
+  public void succInts0Forward() {
+    assertThat(solver.solve(new Succ(new SimpleBinding(Integer.class), intVar("Q"))).var("Q").list().toString(), is("[]"));
+  }
+
+  @Test
+  public void succInts1Forward() {
+    assertThat(solver.solve(new Succ(cst(5), intVar("Q"))).var("Q").list().toString(), is("[6]"));
+  }
+
+  @Test
+  public void succInts2Forward() {
+    assertThat(solver.solve(new Succ(arr(5, 6, 7), intVar("Q"))).var("Q").list().toString(), is("[6, 7, 8]"));
+  }
+
+  @Test
+  public void succInts2Reverse() {
+    assertThat(solver.solve(new Succ(intVar("Q"), arr(5, 6, 7))).var("Q").list().toString(), is("[4, 5, 6]"));
+  }
 
 }
