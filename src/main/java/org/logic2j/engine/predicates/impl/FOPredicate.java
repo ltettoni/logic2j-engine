@@ -18,6 +18,7 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Continuation;
@@ -37,9 +38,10 @@ import java.util.Iterator;
  * send solutions to the {@link SolutionListener}.
  */
 public abstract class FOPredicate extends Struct {
+  protected static final Object[] EMPTY_ARRAY = new Object[0];
 
   /**
-   * A fuctional predicate is a plain data structure like a {@link Struct}, with some logic
+   * A functional predicate is a plain data structure like a {@link Struct}, with some executable logic
    * attached through the {@link #invokePredicate(SolutionListener, UnifyContext)} abstract method.
    *
    * @param theFunctor
@@ -63,6 +65,10 @@ public abstract class FOPredicate extends Struct {
    */
   public abstract Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars);
 
+
+  // --------------------------------------------------------------------------
+  // Bind variables and send solutions forward
+  // --------------------------------------------------------------------------
 
   /**
    * Notify listener that a solution has been found.
@@ -133,6 +139,10 @@ public abstract class FOPredicate extends Struct {
     return Continuation.CONTINUE;
   }
 
+  // --------------------------------------------------------------------------
+  // Support methods to
+  // --------------------------------------------------------------------------
+
   /**
    * Make sure term is not a free {@link Var}.
    *
@@ -150,4 +160,26 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
+  protected Object[] constants(Object reified) {
+    if (reified == null || isFreeVar(reified)) {
+      return EMPTY_ARRAY;
+    }
+    if (reified instanceof SimpleBinding<?>) {
+      return ((SimpleBinding<?>) reified).values();
+    }
+    // Other object: will be a scalar
+    return new Object[] {reified};
+  }
+
+  /**
+   * @param reified Result of {@link UnifyContext#reify(Object)}
+   * @return true if reified is not a {@link Var}, including true when reified is null
+   */
+  protected boolean isConstant(Object reified) {
+    return !(reified instanceof Var);
+  }
+
+  protected boolean isFreeVar(Object reified) {
+    return reified instanceof Var;
+  }
 }

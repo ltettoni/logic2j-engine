@@ -27,6 +27,7 @@ import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.io.logging.Info;
 import org.logic2j.engine.predicates.impl.io.logging.Log;
 import org.logic2j.engine.predicates.impl.io.logging.Warn;
+import org.logic2j.engine.predicates.impl.math.Abs;
 import org.logic2j.engine.predicates.impl.math.Succ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,7 +179,6 @@ public class PredicatesTest {
   // Test the "Succ" predicate that can resolve forward or reverse, using either Var or a SimpleBinding
   // --------------------------------------------------------------------------
 
-
   @Test
   public void succIntsCheckOkFully() {
     assertThat(solver.solve(new Succ(arr(5, 6, 7), arr(6, 7, 8))).count(), is(3L));
@@ -207,6 +207,20 @@ public class PredicatesTest {
   @Test
   public void succInts2Reverse() {
     assertThat(solver.solve(new Succ(intVar("Q"), arr(5, 6, 7))).var("Q").list().toString(), is("[4, 5, 6]"));
+  }
+
+  // --------------------------------------------------------------------------
+  // Test the "Abs" where every image has 2 preimages (except zero)
+  // --------------------------------------------------------------------------
+
+  @Test
+  public void absInts3Forward() {
+    assertThat(solver.solve(new Abs(arr(-5, 0, 6), intVar("Q"))).var("Q").list().toString(), is("[5, 0, 6]"));
+  }
+
+  @Test
+  public void absInts3Reverse() {
+    assertThat(solver.solve(new Abs(intVar("Q"), arr(-5, 0, 6))).var("Q").list().toString(), is("[0, -6, 6]"));
   }
 
 }
