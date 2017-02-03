@@ -17,13 +17,20 @@
 
 package org.logic2j.engine.predicates;
 
-import org.logic2j.engine.predicates.impl.FOPredicateJavaPredicate;
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBinding;
+import org.logic2j.engine.predicates.impl.math.Pred1;
 
 /**
- * Check an Integer is even.
+ * Check a {@link Number} is even using a Java {@link java.util.function.Predicate}.
  */
-public class EvenCheck extends FOPredicateJavaPredicate<Number> {
-  public EvenCheck(Number t1) {
-    super("evenCheck", t1, nbr -> nbr.longValue() % 2 == 0);
+public class EvenCheck extends Pred1<Number> {
+  public EvenCheck(Binding<Number> v0) {
+    super("evenCheck", v0);
+    this.setTest(val -> val.doubleValue() % 2 == 0);
+  }
+
+  public EvenCheck(Number v0) {
+    this(SimpleBinding.cst(v0));
   }
 }

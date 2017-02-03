@@ -95,5 +95,4 @@ public final class Predicates {
     return new FOMap<>(v1, javaFunction, v2);
   }
 
-
 }

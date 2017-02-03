@@ -21,7 +21,8 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
- * A {@link FOPredicate} that always produces a single solution, irrelevant of what it does,
+ * A {@link FOPredicate} that calls a side-effect method and
+ * always produces a single solution (irrelevant of what it does),
  * this is typically used for I/O such as logging, etc.
  * This predicate always proceeds with the solving, there is no way to interrupt the continuation.
  * Just implement the {@link #sideEffect(UnifyContext)} method.

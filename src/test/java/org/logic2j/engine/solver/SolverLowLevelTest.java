@@ -295,10 +295,18 @@ public class SolverLowLevelTest {
   }
 
   @Test
-  public void even12() {
+  public void EvenCheck_12() {
     final Object goal = new EvenCheck(12);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
+  }
+
+
+  @Test
+  public void EvenCheck_13() {
+    final Object goal = new EvenCheck(13);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(0, listener.count());
   }
 
 
