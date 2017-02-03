@@ -31,7 +31,7 @@ import java.util.function.Function;
  * 2-arguments predicates with a functional relation between the two argument(s),
  * could be a bijection functions, or any mapping actually.
  */
-public abstract class Pred2<T, R> extends FOPredicate {
+public class Pred2<T, R> extends FOPredicate {
 
   private Function<T, R> image = v -> {
     throw new UnsupportedOperationException("Function \"image()\" of predicate " + Pred2.this + " is not " + "implemented");
@@ -60,8 +60,8 @@ public abstract class Pred2<T, R> extends FOPredicate {
 
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        for (T c0 : constants(n0)) {
-          for (R c1 : constants(n1)) {
+        for (T c0 : this.<T>constants(n0)) {
+          for (R c1 : this.<R>constants(n1)) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
@@ -74,7 +74,7 @@ public abstract class Pred2<T, R> extends FOPredicate {
         return Continuation.CONTINUE;
       } else {
         // n1 is free, just unify in forward direction
-        final Object[] images = Arrays.stream(constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Object[] images = Arrays.stream(this.<T>constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
         return unifyAndNotifyMany(theListener, currentVars, n1, images);
       }
     }
@@ -82,7 +82,7 @@ public abstract class Pred2<T, R> extends FOPredicate {
     if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
-        final Object[] preimages = Arrays.stream(constants(n1)).map(this.preimages).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Object[] preimages = Arrays.stream(this.<R>constants(n1)).map(this.preimages).flatMap(Arrays::stream).toArray(Object[]::new);
         return unifyAndNotifyMany(theListener, currentVars, n0, preimages);
       } else {
         // Two free variables - no solution

@@ -29,12 +29,11 @@ import java.util.function.Predicate;
 /**
  * 1-arguments predicates with a testing function.
  */
-public abstract class Pred1<T> extends FOPredicate {
+public class Pred1<T> extends FOPredicate {
 
   private Predicate<T> test = v -> {
     throw new UnsupportedOperationException("Predicate \"test()\" of predicate " + Pred1.this + " is not implemented");
   };
-
 
   /**
    * An unary predicate with a testing function.
@@ -46,13 +45,12 @@ public abstract class Pred1<T> extends FOPredicate {
   }
 
 
-
   @Override
   public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    final Binding<T> n0 = (Binding<T>) currentVars.reify(getArg(0));
+    final Object n0 = currentVars.reify(getArg(0));
 
     if (isConstant(n0)) {
-      for (T c0 : constants(n0)) {
+      for (T c0 : this.<T>constants(n0)) {
         final boolean found = this.test.test(c0);
         final int cont = notifySolutionIf(found, theListener, currentVars);
         if (cont != Continuation.CONTINUE) {

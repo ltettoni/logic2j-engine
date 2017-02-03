@@ -18,7 +18,6 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
@@ -161,7 +160,7 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
-  protected static <Q> Q[] constants(Binding<Q> reified) {
+  protected static <Q> Q[] constants(Object reified) {
     if (reified == null || isFreeVar(reified)) {
       return (Q[]) EMPTY_ARRAY;
     }
