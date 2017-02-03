@@ -17,17 +17,37 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBinding;
+import org.logic2j.engine.model.Var;
+
 /**
  * Successor value.
  */
-public class Succ extends Pred2 {
+public class Succ<T extends Number> extends Pred2<T, T> {
 
-  public Succ(Object n0, Object n1) {
+  public Succ(Binding<T> n0, Binding<T> n1) {
     super("succ", n0, n1);
+    setImage(t -> (T)nextNumber(t));
+    setPreimage(t -> (T)previousNumber(t));
   }
 
 
-  protected Object image(Object value) {
+  public Succ(T n0, T n1) {
+    this(SimpleBinding.<T>cst(n0), SimpleBinding.<T>cst(n1));
+  }
+
+  public Succ(T n0, Var<T> v1) {
+    this(SimpleBinding.<T>cst(n0), v1);
+  }
+
+  public Succ(Var<T> v0,  T n1) {
+    this(v0, SimpleBinding.<T>cst(n1));
+  }
+
+
+
+  protected static Number nextNumber(Number value) {
     if (value == null) {
       return null;
     }
@@ -43,10 +63,10 @@ public class Succ extends Pred2 {
     if (value instanceof Float) {
       return ((Float) value) + 1.0f;
     }
-    throw new IllegalArgumentException("Forward method for " + this + " cannot handle argument " + value + " of " + value.getClass());
+    throw new IllegalArgumentException("Forward method for " + Succ.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
   }
 
-  protected Object preimage(Object value) {
+  protected static Number previousNumber(Number value) {
     if (value == null) {
       return null;
     }
@@ -62,7 +82,7 @@ public class Succ extends Pred2 {
     if (value instanceof Float) {
       return ((Float) value) - 1.0f;
     }
-    throw new IllegalArgumentException("Reverse method for " + this + " cannot handle argument " + value + " of " + value.getClass());
+    throw new IllegalArgumentException("Reverse method for " + Succ.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
   }
 
 

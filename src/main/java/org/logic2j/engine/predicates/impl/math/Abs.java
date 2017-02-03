@@ -17,15 +17,18 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
+import org.logic2j.engine.model.Binding;
+
 /**
  * Absolute value. Interesting because this is not a bijection.
  */
-public class Abs extends Pred2 {
+public class Abs<T extends Number> extends Pred2<T, T> {
 
-  public Abs(Object n0, Object n1) {
-    super("abs", n0, n1);
+  public Abs(Binding<T> n0, Binding<T> n1) {
+    super("succ", n0, n1);
+    setImage(t -> (T)forward(t));
+    setPreimages(t -> (T[])reverse(t));
   }
-
 
 
   /**
@@ -34,7 +37,7 @@ public class Abs extends Pred2 {
    * @param value
    * @return single value
    */
-  protected Object image(Object value) {
+  protected static Number forward(Number value) {
     if (value == null) {
       return null;
     }
@@ -50,14 +53,9 @@ public class Abs extends Pred2 {
     if (value instanceof Float) {
       return Math.abs((Float) value);
     }
-    throw new IllegalArgumentException("Forward method for " + this + " cannot handle argument " + value + " of " + value.getClass());
+    throw new IllegalArgumentException("Forward method for " + Abs.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
   }
 
-  @Override
-  protected Object preimage(Object value) {
-    // Not called
-    return null;
-  }
 
   /**
    * Two-value preimage
@@ -65,7 +63,7 @@ public class Abs extends Pred2 {
    * @param value
    * @return Zero, one, or two preimages.
    */
-  protected Object[] preimages(Object value) {
+  protected static Number[] reverse(Number value) {
     if (value == null) {
       return null;
     }
@@ -101,7 +99,7 @@ public class Abs extends Pred2 {
       }
       return v == 0 ? new Float[] {v} : new Float[] {-v, v};
     }
-    throw new IllegalArgumentException("Reverse method for " + this + " cannot handle argument " + value + " of " + value.getClass());
+    throw new IllegalArgumentException("Reverse method for " + Abs.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
   }
 
 

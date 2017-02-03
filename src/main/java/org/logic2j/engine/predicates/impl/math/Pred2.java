@@ -18,77 +18,91 @@
 package org.logic2j.engine.predicates.impl.math;
 
 import org.logic2j.engine.exception.SolverException;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 /**
  * 2-arguments predicates with a functional relation between the two argument(s),
  * could be a bijection functions, or any mapping actually.
  */
-public abstract class Pred2 extends FOPredicate {
+public abstract class Pred2<T, R> extends FOPredicate {
+
+  private Function<T, R> image = v -> {throw new UnsupportedOperationException("Function \"image()\" of predicate " + Pred2.this + " is not "
+      + "implemented");};
+  private Function<T, R[]> images = v -> (R[])new Object[] {image.apply(v)};
+  private Function<R, T> preimage = v -> {throw new UnsupportedOperationException("Function \"preimage()\" of predicate " + Pred2.this + " is not "
+      + "implemented");};
+  private Function<R, T[]> preimages =  v -> (T[])new Object[] {preimage.apply(v)};;
+
+
   /**
    * A binary predicate with two functions defining the forward and reverse mappings.
    *
    * @param theFunctor
-   * @param argList
    */
-  public Pred2(String theFunctor, Object... argList) {
-    super(theFunctor, argList);
+  public Pred2(String theFunctor, Binding<T> arg0, Binding<R> arg1) {
+    super(theFunctor, arg0, arg1);
   }
 
-  /**
-   * The forward mapping function. If not a function, override rather {@link #images(Object)}
-   * This method is never called directly, only through {@link #images(Object)}.
-   * @param value
-   * @return
-   */
-  protected abstract Object image(Object value);
-
-  /**
-   * By default our functions are real functions, ie. produce only one image.
-   * Override this if this is not the case.
-   * @param value
-   * @return Array of images, in this base implementation only one.
-   */
-  protected Object[] images(Object value) {
-    return new Object[] {image(value)};
-  }
-
-  /**
-   * The reverse mapping function. If not a bijection, override rather {@link #preimages(Object)}
-   * This method is never called directly, only through {@link #preimages(Object)}.
-   * @param value
-   * @return
-   */
-  protected abstract Object preimage(Object value);
-
-  /**
-   * By default our functions are real bijections, ie. produce only one preimage.
-   * Override this if this is not the case.
-   * @param value
-   * @return Array of images, in this base implementation only one.
-   */
-  protected Object[] preimages(Object value) {
-    return new Object[] {preimage(value)};
-  }
+//  /**
+//   * The forward mapping function. If not a function, override rather {@link #images(Object)}
+//   * This method is never called directly, only through {@link #images(Object)}.
+//   *
+//   * @param value
+//   * @return
+//   */
+//  protected abstract Object image(Object value);
+//
+//  /**
+//   * By default our functions are real functions, ie. produce only one image.
+//   * Override this if this is not the case.
+//   *
+//   * @param value
+//   * @return Array of images, in this base implementation only one.
+//   */
+//  protected Object[] images(Object value) {
+//    return new Object[] {image(value)};
+//  }
+//
+//  /**
+//   * The reverse mapping function. If not a bijection, override rather {@link #preimages(Object)}
+//   * This method is never called directly, only through {@link #preimages(Object)}.
+//   *
+//   * @param value
+//   * @return
+//   */
+//  protected abstract Object preimage(Object value);
+//
+//  /**
+//   * By default our functions are real bijections, ie. produce only one preimage.
+//   * Override this if this is not the case.
+//   *
+//   * @param value
+//   * @return Array of images, in this base implementation only one.
+//   */
+//  protected Object[] preimages(Object value) {
+//    return new Object[] {preimage(value)};
+//  }
 
 
 
   @Override
   public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    final Object n0 = currentVars.reify(getArg(0));
-    final Object n1 = currentVars.reify(getArg(1));
+    final Binding<T> n0 = (Binding<T>) currentVars.reify(getArg(0));
+    final Binding<R> n1 = (Binding<R>) currentVars.reify(getArg(1));
 
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        for (Object c0 : constants(n0)) {
-          for (Object c1 : constants(n1)) {
+        for (T c0 : constants(n0)) {
+          for (R c1 : constants(n1)) {
             // Both bound values - check
-            final Object[] images = images(c0);
+            final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
             final int cont = notifySolutionIf(found, theListener, currentVars);
             if (cont != Continuation.CONTINUE) {
@@ -99,7 +113,7 @@ public abstract class Pred2 extends FOPredicate {
         return Continuation.CONTINUE;
       } else {
         // n1 is free, just unify in forward direction
-        final Object[] images = Arrays.stream(constants(n0)).map(this::images).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Object[] images = Arrays.stream(constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
         return unifyAndNotifyMany(theListener, currentVars, n1, images);
       }
     }
@@ -107,7 +121,7 @@ public abstract class Pred2 extends FOPredicate {
     if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
-        final Object[] preimages = Arrays.stream(constants(n1)).map(this::preimages).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Object[] preimages = Arrays.stream(constants(n1)).map(this.preimages).flatMap(Arrays::stream).toArray(Object[]::new);
         return unifyAndNotifyMany(theListener, currentVars, n0, preimages);
       } else {
         // Two free variables - no solution
@@ -117,4 +131,64 @@ public abstract class Pred2 extends FOPredicate {
     throw new SolverException("Should never be here");
   }
 
+  // --------------------------------------------------------------------------
+  // Fluent setters
+  // --------------------------------------------------------------------------
+
+
+  public Pred2<T, R> withImage(Function<T, R> image) {
+    this.image = image;
+    return this;
+  }
+
+  public Pred2<T, R> withImages(Function<T, R[]> images) {
+    this.images = images;
+    return this;
+  }
+
+  public Pred2<T, R> withPreimage(Function<R, T> preimage) {
+    this.preimage = preimage;
+    return this;
+  }
+
+  public Pred2<T, R> withPreimages(Function<R, T[]> preimages) {
+    this.preimages = preimages;
+    return this;
+  }
+
+  // --------------------------------------------------------------------------
+  // Accessors
+  // --------------------------------------------------------------------------
+
+  public Function<T, R> getImage() {
+    return image;
+  }
+
+  public void setImage(Function<T, R> image) {
+    this.image = image;
+  }
+
+  public Function<T, R[]> getImages() {
+    return images;
+  }
+
+  public void setImages(Function<T, R[]> images) {
+    this.images = images;
+  }
+
+  public Function<R, T> getPreimage() {
+    return preimage;
+  }
+
+  public void setPreimage(Function<R, T> preimage) {
+    this.preimage = preimage;
+  }
+
+  public Function<R, T[]> getPreimages() {
+    return preimages;
+  }
+
+  public void setPreimages(Function<R, T[]> preimages) {
+    this.preimages = preimages;
+  }
 }

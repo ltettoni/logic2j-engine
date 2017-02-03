@@ -18,6 +18,7 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
@@ -160,26 +161,26 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
-  protected Object[] constants(Object reified) {
+  protected static <Q> Q[] constants(Binding<Q> reified) {
     if (reified == null || isFreeVar(reified)) {
-      return EMPTY_ARRAY;
+      return (Q[]) EMPTY_ARRAY;
     }
     if (reified instanceof SimpleBinding<?>) {
-      return ((SimpleBinding<?>) reified).values();
+      return ((SimpleBinding<Q>) reified).values();
     }
     // Other object: will be a scalar
-    return new Object[] {reified};
+    return (Q[]) new Object[] {reified};
   }
 
   /**
    * @param reified Result of {@link UnifyContext#reify(Object)}
    * @return true if reified is not a {@link Var}, including true when reified is null
    */
-  protected boolean isConstant(Object reified) {
+  protected static boolean isConstant(Object reified) {
     return !(reified instanceof Var);
   }
 
-  protected boolean isFreeVar(Object reified) {
+  protected static boolean isFreeVar(Object reified) {
     return reified instanceof Var;
   }
 }
