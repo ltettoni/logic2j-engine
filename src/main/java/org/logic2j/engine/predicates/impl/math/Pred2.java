@@ -55,8 +55,8 @@ public class Pred2<T, R> extends FOPredicate {
 
   @Override
   public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    final Binding<T> n0 = (Binding<T>) currentVars.reify(getArg(0));
-    final Binding<R> n1 = (Binding<R>) currentVars.reify(getArg(1));
+    final Object n0 = currentVars.reify(getArg(0));
+    final Object n1 = currentVars.reify(getArg(1));
 
     if (isConstant(n0)) {
       if (isConstant(n1)) {
