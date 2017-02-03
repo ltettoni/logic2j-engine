@@ -20,10 +20,15 @@ package org.logic2j.engine.model;
 import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.predicates.Predicates.anon;
@@ -40,6 +45,16 @@ public class VarTest {
   @Test(expected = InvalidTermException.class)
   public void constructorNull() {
     anyVar((String) null);
+  }
+
+  @Test(expected = InvalidTermException.class)
+  public void constructorSameAsAnonymous1() {
+    anyVar("_");
+  }
+
+  @Test(expected = InvalidTermException.class)
+  public void constructorSameAsAnonymous() {
+    anyVar(new StringBuilder().append('_').toString());
   }
 
   @Test(expected = InvalidTermException.class)
@@ -60,6 +75,16 @@ public class VarTest {
     assertEquals(Term.NO_INDEX, v1.getIndex());
   }
 
+  @Test
+  public void automaticName() throws Exception {
+    final Var<String> stringVar = new Var<>(String.class);
+    final String name1 = stringVar.getName();
+    assertThat(name1, not(isEmptyString()));
+    assertThat(name1, startsWith("_"));
+    final Var<String> stringVar2 = new Var<>(String.class);
+    final String name2 = stringVar2.getName();
+    assertThat(name2, not(is(name1)));
+  }
 
   @Test
   public void idempotence() {

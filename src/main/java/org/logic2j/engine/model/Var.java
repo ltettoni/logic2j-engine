@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class represents a variable term. Variables are identified by a name (which must starts with an upper case letter) or the anonymous
@@ -49,6 +50,8 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    */
   @SuppressWarnings("rawtypes")
   private static final Var ANONYMOUS_VAR = new Var<>();
+
+  private static final AtomicLong sequence = new AtomicLong(1L);
 
   /**
    * Singleton "special" var that holds the value of a whole goal.
@@ -80,7 +83,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   private final String name;
 
   /**
-   * Create the anonymous variable singleton.
+   * Create the anonymous variable singleton, it has no type and no name.
    */
   private Var() {
     this.name = ANONYMOUS_VAR_NAME;
@@ -98,9 +101,6 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    * @note Internally the {@link #name} is {@link String#intern()}alized so it's OK to compare by reference.
    */
   public Var(Class<T> theType, CharSequence theName) {
-    if (theName == Var.ANONYMOUS_VAR_NAME) {
-      throw new InvalidTermException("Must not instantiate an anonymous variable (which is a singleton)!");
-    }
     if (theName == null) {
       throw new InvalidTermException("Name of a variable cannot be null");
     }
@@ -109,12 +109,25 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
       throw new InvalidTermException("Name of a variable may not be the empty or whitespace String");
     }
     this.name = str.intern();
+    if (this.name == Var.ANONYMOUS_VAR_NAME) {
+      throw new InvalidTermException("Must not instantiate an anonymous variable (which is a singleton)!");
+    }
     this.type = theType;
   }
 
-  //  public Var(CharSequence theName) {
-  //    this(/* FIXME */ null, theName);
-  //  }
+  /**
+   * Auto-named variable. The name will be "_n" with N a unique sequence number per this JVM.
+   * @param theType
+   * @return
+   */
+  public Var(Class<T> theType) {
+    this(theType, nextAutomaticName());
+  }
+
+  private static CharSequence nextAutomaticName() {
+    return "_" + sequence.incrementAndGet();
+  }
+
 
   // ---------------------------------------------------------------------------
   // Static factories
