@@ -32,6 +32,9 @@ public class Succ<T extends Number> extends Pred2<T, T> {
     setPreimage(t -> (T)previousNumber(t));
   }
 
+  // --------------------------------------------------------------------------
+  // Convenience (syntactic sugar) constructors
+  // --------------------------------------------------------------------------
 
   public Succ(T n0, T n1) {
     this(SimpleBinding.<T>cst(n0), SimpleBinding.<T>cst(n1));
