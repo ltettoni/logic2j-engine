@@ -24,8 +24,8 @@ import org.logic2j.engine.predicates.impl.Fail;
 import org.logic2j.engine.predicates.impl.True;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.impl.firstorder.Not;
-import org.logic2j.engine.predicates.impl.java.FOMap;
 import org.logic2j.engine.predicates.impl.math.Pred1;
+import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Cut;
 import org.logic2j.engine.predicates.internal.Or;
@@ -91,8 +91,8 @@ public final class Predicates {
     return new Pred1<T>("_lambdaFilter", var).withTest(pred);
   }
 
-  public static <T, R> FOMap map(Var<T> v1, Function<T, R> javaFunction, Var<R> v2) {
-    return new FOMap<>(v1, javaFunction, v2);
+  public static <T, R> Pred2 map(Var<T> v1, Function<T, R> javaFunction, Var<R> v2) {
+    return new Pred2<T, R>("_lambdaMap", v1, v2).withImage(javaFunction);
   }
 
 }
