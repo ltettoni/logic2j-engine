@@ -132,47 +132,47 @@ public class PredicatesTest {
 
   @Test
   public void succTwoVars() {
-    assertThat(solver.solve(new Succ(intVar("X"), intVar("Y"))).count(), is(0L));
+    assertThat(solver.solve(new Succ<>(intVar("X"), intVar("Y"))).count(), is(0L));
   }
 
   @Test
   public void succIntCheckOk() {
-    assertThat(solver.solve(new Succ(5, 6)).count(), is(1L));
+    assertThat(solver.solve(new Succ<>(5, 6)).count(), is(1L));
   }
 
   @Test
   public void succIntCheckNOk() {
-    assertThat(solver.solve(new Succ(5, 7)).count(), is(0L));
+    assertThat(solver.solve(new Succ<>(5, 7)).count(), is(0L));
   }
 
   @Test
   public void succDoubleCheckOk() {
-    assertThat(solver.solve(new Succ(5.0, 6.0)).count(), is(1L));
+    assertThat(solver.solve(new Succ<>(5.0, 6.0)).count(), is(1L));
   }
 
   @Test
   public void succDoubleCheckNOk() {
-    assertThat(solver.solve(new Succ(5.0, 6.1)).count(), is(0L));
+    assertThat(solver.solve(new Succ<>(5.0, 6.1)).count(), is(0L));
   }
 
   @Test
   public void succIntForward() {
-    assertThat(solver.solve(new Succ(5, intVar("Q"))).var("Q").list().toString(), is("[6]"));
+    assertThat(solver.solve(new Succ<>(5, intVar("Q"))).var("Q").list().toString(), is("[6]"));
   }
 
   @Test
   public void succDoubleForward() {
-    assertThat(solver.solve(new Succ(5.1, doubleVar("Q"))).var("Q").list().toString(), is("[6.1]"));
+    assertThat(solver.solve(new Succ<>(5.1, doubleVar("Q"))).var("Q").list().toString(), is("[6.1]"));
   }
 
   @Test
   public void succIntReverse() {
-    assertThat(solver.solve(new Succ(intVar("Q"), 5)).var("Q").list().toString(), is("[4]"));
+    assertThat(solver.solve(new Succ<>(intVar("Q"), 5)).var("Q").list().toString(), is("[4]"));
   }
 
   @Test
   public void succDoubleReverse() {
-    assertThat(solver.solve(new Succ(doubleVar("Q"), 5.1)).var("Q").list().toString(), is("[4.1]"));
+    assertThat(solver.solve(new Succ<>(doubleVar("Q"), 5.1)).var("Q").list().toString(), is("[4.1]"));
   }
 
   // --------------------------------------------------------------------------
@@ -181,33 +181,34 @@ public class PredicatesTest {
 
   @Test
   public void succIntsCheckOkFully() {
-    assertThat(solver.solve(new Succ(arr(5, 6, 7), arr(6, 7, 8))).count(), is(3L));
+    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), arr(6, 7, 8))).count(), is(3L));
   }
 
   @Test
   public void succIntsCheckOk() {
-    assertThat(solver.solve(new Succ(arr(5, 6, 7), arr(1, 7, 10, 8))).count(), is(2L));
+    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), arr(1, 7, 10, 8))).count(), is(2L));
   }
 
   @Test
   public void succInts0Forward() {
-    assertThat(solver.solve(new Succ(new SimpleBinding(Integer.class), intVar("Q"))).var("Q").list().toString(), is("[]"));
+    assertThat(solver.solve(new Succ<>(new SimpleBinding<>(Integer.class), intVar("Q"))).var("Q").list().toString(), is("[]"));
   }
 
   @Test
   public void succInts1Forward() {
-    assertThat(solver.solve(new Succ(cst(5), intVar("Q"))).var("Q").list().toString(), is("[6]"));
+    assertThat(solver.solve(new Succ<>(cst(5), intVar("Q"))).var("Q").list().toString(), is("[6]"));
   }
 
   @Test
   public void succInts2Forward() {
-    assertThat(solver.solve(new Succ(arr(5, 6, 7), intVar("Q"))).var("Q").list().toString(), is("[6, 7, 8]"));
+    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), intVar("Q"))).var("Q").list().toString(), is("[6, 7, 8]"));
   }
 
   @Test
   public void succInts2Reverse() {
-    assertThat(solver.solve(new Succ(intVar("Q"), arr(5, 6, 7))).var("Q").list().toString(), is("[4, 5, 6]"));
+    assertThat(solver.solve(new Succ<>(intVar("Q"), arr(5, 6, 7))).var("Q").list().toString(), is("[4, 5, 6]"));
   }
+
 
   // --------------------------------------------------------------------------
   // Test the "Abs" where every image has 2 preimages (except zero)
@@ -215,12 +216,12 @@ public class PredicatesTest {
 
   @Test
   public void absInts3Forward() {
-    assertThat(solver.solve(new Abs(arr(-5, 0, 6), intVar("Q"))).var("Q").list().toString(), is("[5, 0, 6]"));
+    assertThat(solver.solve(new Abs<>(arr(-5, 0, 6), intVar("Q"))).var("Q").list().toString(), is("[5, 0, 6]"));
   }
 
   @Test
   public void absInts3Reverse() {
-    assertThat(solver.solve(new Abs(intVar("Q"), arr(-5, 0, 6))).var("Q").list().toString(), is("[0, -6, 6]"));
+    assertThat(solver.solve(new Abs<>(intVar("Q"), arr(-5, 0, 6))).var("Q").list().toString(), is("[0, -6, 6]"));
   }
 
 }

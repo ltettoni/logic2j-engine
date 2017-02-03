@@ -33,12 +33,15 @@ import java.util.function.Function;
  */
 public abstract class Pred2<T, R> extends FOPredicate {
 
-  private Function<T, R> image = v -> {throw new UnsupportedOperationException("Function \"image()\" of predicate " + Pred2.this + " is not "
-      + "implemented");};
-  private Function<T, R[]> images = v -> (R[])new Object[] {image.apply(v)};
-  private Function<R, T> preimage = v -> {throw new UnsupportedOperationException("Function \"preimage()\" of predicate " + Pred2.this + " is not "
-      + "implemented");};
-  private Function<R, T[]> preimages =  v -> (T[])new Object[] {preimage.apply(v)};;
+  private Function<T, R> image = v -> {
+    throw new UnsupportedOperationException("Function \"image()\" of predicate " + Pred2.this + " is not " + "implemented");
+  };
+  private Function<T, R[]> images = v -> (R[]) new Object[] {image.apply(v)};
+  private Function<R, T> preimage = v -> {
+    throw new UnsupportedOperationException("Function \"preimage()\" of predicate " + Pred2.this + " is not " + "implemented");
+  };
+  private Function<R, T[]> preimages = v -> (T[]) new Object[] {preimage.apply(v)};
+  ;
 
 
   /**
@@ -50,45 +53,45 @@ public abstract class Pred2<T, R> extends FOPredicate {
     super(theFunctor, arg0, arg1);
   }
 
-//  /**
-//   * The forward mapping function. If not a function, override rather {@link #images(Object)}
-//   * This method is never called directly, only through {@link #images(Object)}.
-//   *
-//   * @param value
-//   * @return
-//   */
-//  protected abstract Object image(Object value);
-//
-//  /**
-//   * By default our functions are real functions, ie. produce only one image.
-//   * Override this if this is not the case.
-//   *
-//   * @param value
-//   * @return Array of images, in this base implementation only one.
-//   */
-//  protected Object[] images(Object value) {
-//    return new Object[] {image(value)};
-//  }
-//
-//  /**
-//   * The reverse mapping function. If not a bijection, override rather {@link #preimages(Object)}
-//   * This method is never called directly, only through {@link #preimages(Object)}.
-//   *
-//   * @param value
-//   * @return
-//   */
-//  protected abstract Object preimage(Object value);
-//
-//  /**
-//   * By default our functions are real bijections, ie. produce only one preimage.
-//   * Override this if this is not the case.
-//   *
-//   * @param value
-//   * @return Array of images, in this base implementation only one.
-//   */
-//  protected Object[] preimages(Object value) {
-//    return new Object[] {preimage(value)};
-//  }
+  //  /**
+  //   * The forward mapping function. If not a function, override rather {@link #images(Object)}
+  //   * This method is never called directly, only through {@link #images(Object)}.
+  //   *
+  //   * @param value
+  //   * @return
+  //   */
+  //  protected abstract Object image(Object value);
+  //
+  //  /**
+  //   * By default our functions are real functions, ie. produce only one image.
+  //   * Override this if this is not the case.
+  //   *
+  //   * @param value
+  //   * @return Array of images, in this base implementation only one.
+  //   */
+  //  protected Object[] images(Object value) {
+  //    return new Object[] {image(value)};
+  //  }
+  //
+  //  /**
+  //   * The reverse mapping function. If not a bijection, override rather {@link #preimages(Object)}
+  //   * This method is never called directly, only through {@link #preimages(Object)}.
+  //   *
+  //   * @param value
+  //   * @return
+  //   */
+  //  protected abstract Object preimage(Object value);
+  //
+  //  /**
+  //   * By default our functions are real bijections, ie. produce only one preimage.
+  //   * Override this if this is not the case.
+  //   *
+  //   * @param value
+  //   * @return Array of images, in this base implementation only one.
+  //   */
+  //  protected Object[] preimages(Object value) {
+  //    return new Object[] {preimage(value)};
+  //  }
 
 
 
