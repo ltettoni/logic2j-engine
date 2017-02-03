@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class Log extends FOUniqueSolutionPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Log.class);
-  private final Consumer<String> method;
+  private final Consumer<String> loggingMethod;
 
   /**
    * Log the arguments at the level specified.
@@ -43,21 +43,21 @@ public class Log extends FOUniqueSolutionPredicate {
     super("log", argList);
     switch (level.toLowerCase()) {
       case "trace":
-        method = logger::trace;
+        loggingMethod = logger::trace;
         break;
       case "debug":
-        method = logger::debug;
+        loggingMethod = logger::debug;
         break;
       default:
         logger.error(this + " predicate sets level to " + level + " which is unknown - using info instead");
       case "info":
-        method = logger::info;
+        loggingMethod = logger::info;
         break;
       case "warn":
-        method = logger::warn;
+        loggingMethod = logger::warn;
         break;
       case "error":
-        method = logger::error;
+        loggingMethod = logger::error;
         break;
     }
   }
@@ -65,7 +65,7 @@ public class Log extends FOUniqueSolutionPredicate {
   @Override
   public void sideEffect(UnifyContext currentVars) {
     final String str = Arrays.stream(getArgs()).map(currentVars::reify).map(String::valueOf).collect(Collectors.joining(" "));
-    method.accept(str);
+    loggingMethod.accept(str);
   }
 
 }
