@@ -15,13 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.model;
+package org.logic2j.engine.predicates.impl.math;
 
-/**
- * A term that may one datum or several data of a certain type.
- */
-public interface Binding<T> {
-
-  Class<T> getType();
-
+public interface NumericFunction {
+  Integer[] apply(Integer arg);
+  Long[] apply(Long arg);
+  Float[] apply(Float arg);
+  Double[] apply(Double arg);
 }
