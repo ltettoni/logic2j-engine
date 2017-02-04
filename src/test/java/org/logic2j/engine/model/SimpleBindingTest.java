@@ -50,14 +50,14 @@ public class SimpleBindingTest {
 
   @Test
   public void setStream1() {
-    final SimpleBinding<Long> binding = bind(LongStream.range(1, 10).boxed());
-    assertThat(binding.size(), is(9L));
+    final SimpleBinding<Long> binding = bind(LongStream.range(1, 1000).boxed());
+    assertThat(binding.size(), is(999L));
     // Can get several times as an array
-    assertThat(binding.toArray().length, is(9));
-    assertThat(binding.toArray().length, is(9));
+    assertThat(binding.toArray().length, is(999));
+    assertThat(binding.toArray().length, is(999));
     // But can get also several times as Stream
-    assertThat(binding.toStream().count(), is(9L));
-    assertThat(binding.toStream().count(), is(9L));
+    assertThat(binding.toStream().count(), is(999L));
+    assertThat(binding.toStream().count(), is(999L));
   }
 
   @Test
@@ -66,12 +66,10 @@ public class SimpleBindingTest {
     assertThat(binding.size(), is(999L));
   }
 
-
   @Test
   public void infiniteStream1() {
     final SimpleBinding<Integer> binding = bind(new Random().ints().limit(20000).boxed());
     assertThat(binding.size(), is(20000L));
   }
-
 
 }

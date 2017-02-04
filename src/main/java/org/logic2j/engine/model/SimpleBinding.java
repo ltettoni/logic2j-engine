@@ -30,14 +30,16 @@ import java.util.stream.Stream;
 
 /**
  * Provides data to predicates: one or several values of a given type. Can provide values from running {@link Iterator}s or {@link Stream}s.
+ * Only one method: {@link #empty(Class)} allows empty content. Other methods require at least one element to determine the data type.
+ * TODO: one should infer the data type by scanning all elements, not only checking on the first.
  *
  * @param <T>
  */
 public class SimpleBinding<T> implements Binding<T> {
   private final Class<T> type;
   private long size = -1; // <0 means unknown or not enumerable
-  private final T[] values;
-  private Set<T> cachedSet = null;
+  private final T[] values; // Data stored there
+  private Set<T> cachedSet = null; // Data optionally stored there (if contains operations are requested)
 
   /**
    * Use static factories instead.
@@ -82,7 +84,7 @@ public class SimpleBinding<T> implements Binding<T> {
       throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
     }
     final Class<?> elementClass = asObjects[0].getClass();
-    final T[] data = Arrays.stream(asObjects).toArray(n -> (T[])Array.newInstance(elementClass, n));
+    final T[] data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
     return bind(data);
   }
 
@@ -124,7 +126,11 @@ public class SimpleBinding<T> implements Binding<T> {
       return false;
     }
     if (this.cachedSet == null) {
-      this.cachedSet = Arrays.stream(this.values).collect(Collectors.toSet());
+      synchronized (this.cachedSet) {
+        if (this.cachedSet == null) {
+          this.cachedSet = Arrays.stream(this.values).collect(Collectors.toSet());
+        }
+      }
     }
     return this.cachedSet.contains(value);
   }
