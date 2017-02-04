@@ -48,14 +48,13 @@ public abstract class Pred1Generator<T> extends FOPredicate {
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     final Object reified = currentVars.reify(getArg(0));
-    Integer continuation = CONTINUE;
     if (isFreeVar(reified)) {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
       if (allowedValues != null) {
         return unifyAndNotifyMany(theListener, currentVars, reified, (Object[]) allowedValues.toArray());
       }
-      return continuation;
+      return CONTINUE;
     }
 
     if (isConstant(reified)) {
@@ -63,15 +62,15 @@ public abstract class Pred1Generator<T> extends FOPredicate {
 
       for (final T val : this.<T>constants(reified)) {
         final boolean contains = allowedValues.contains(val);
-        continuation = notifySolutionIf(contains, theListener, currentVars);
+        final Integer continuation = notifySolutionIf(contains, theListener, currentVars);
         if (continuation != CONTINUE) {
           return continuation;
         }
       }
-      return continuation;
+      return CONTINUE;
     } else {
       logger.warn("Cannot store instant value {}", reified);
-      return continuation;
+      return CONTINUE;
     }
   }
 }

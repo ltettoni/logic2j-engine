@@ -27,6 +27,8 @@ import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Iterator;
 
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
 /**
  * First-Order logic Predicate, not to be confused with java.function.Predicates.
  * First-order logic is about binding variables to all solutions, not just checking one value.
@@ -86,7 +88,7 @@ public abstract class FOPredicate extends Struct {
     if (condition) {
       return notifySolution(theListener, currentVars);
     } else {
-      return Continuation.CONTINUE;
+      return CONTINUE;
     }
   }
 
@@ -118,25 +120,23 @@ public abstract class FOPredicate extends Struct {
    * @return
    */
   protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Iterator iter) {
-    Integer continuation;
     while (iter.hasNext()) {
-      continuation = unifyAndNotify(theListener, currentVars, t1, iter.next());
-      if (continuation != Continuation.CONTINUE) {
+      final Integer continuation = unifyAndNotify(theListener, currentVars, t1, iter.next());
+      if (continuation != CONTINUE) {
         return continuation;
       }
     }
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Object[] values) {
-    Integer continuation;
     for (final Object value: values) {
-      continuation = unifyAndNotify(theListener, currentVars, t1, value);
-      if (continuation != Continuation.CONTINUE) {
+      final Integer continuation = unifyAndNotify(theListener, currentVars, t1, value);
+      if (continuation != CONTINUE) {
         return continuation;
       }
     }
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   // --------------------------------------------------------------------------

@@ -17,9 +17,10 @@
 
 package org.logic2j.engine.predicates.impl;
 
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * Always fail - no solution.
@@ -32,6 +33,6 @@ public class Fail extends FOPredicate {
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     // Provide no solution
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 }

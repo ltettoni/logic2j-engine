@@ -23,6 +23,8 @@ import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Iterator;
 
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
 /**
  * The lowest-level API through which the inference engine provides solutions.
  * The return values of the two methods are defined in interface Continuation.
@@ -51,11 +53,11 @@ public interface SolutionListener {
     while (allSolutions.hasNext()) {
       final UnifyContext next = allSolutions.next();
       final Integer continuation = this.onSolution(next);
-      if (continuation != Continuation.CONTINUE) {
+      if (continuation != CONTINUE) {
         return continuation;
       }
     }
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   default Integer onSolutions(Iterable<UnifyContext> allSolutions) {

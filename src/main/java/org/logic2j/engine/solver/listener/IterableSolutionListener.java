@@ -19,9 +19,10 @@ package org.logic2j.engine.solver.listener;
 
 
 import org.logic2j.engine.exception.SolverException;
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.extractor.SolutionExtractor;
 import org.logic2j.engine.unify.UnifyContext;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * A {@link SolutionListener} that allows the caller of the inference engine to enumerates solutions to his goal, like all Prolog APIs do.
@@ -56,7 +57,7 @@ public class IterableSolutionListener<T> implements SolutionListener {
     // Provide the solution to the client, this wakes him up
     this.engineToClientInterface.hereIsTheData(solution);
     // Continue for more solutions
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   // ---------------------------------------------------------------------------

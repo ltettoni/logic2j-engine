@@ -20,12 +20,13 @@ package org.logic2j.engine.predicates.impl.math;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
 import java.util.function.Function;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * 2-arguments predicates with a functional relation between the two argument(s),
@@ -66,12 +67,12 @@ public class Pred2<T, R> extends FOPredicate {
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
             final Integer continuation = notifySolutionIf(found, theListener, currentVars);
-            if (continuation != Continuation.CONTINUE) {
+            if (continuation != CONTINUE) {
               return continuation;
             }
           }
         }
-        return Continuation.CONTINUE;
+        return CONTINUE;
       } else {
         // n1 is free, just unify in forward direction
         final Object[] images = Arrays.stream(this.<T>constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
@@ -86,7 +87,7 @@ public class Pred2<T, R> extends FOPredicate {
         return unifyAndNotifyMany(theListener, currentVars, n0, preimages);
       } else {
         // Two free variables - no solution
-        return Continuation.CONTINUE;
+        return CONTINUE;
       }
     }
 

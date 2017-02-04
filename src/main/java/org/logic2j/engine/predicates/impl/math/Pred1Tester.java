@@ -20,11 +20,12 @@ package org.logic2j.engine.predicates.impl.math;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.function.Predicate;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * 1-arguments first-order predicates with a java testing (predicate) function.
@@ -55,16 +56,16 @@ public class Pred1Tester<T> extends FOPredicate {
       for (final T c0 : this.<T>constants(n0)) {
         final boolean found = this.test.test(c0);
         final Integer continuation = notifySolutionIf(found, theListener, currentVars);
-        if (continuation != Continuation.CONTINUE) {
+        if (continuation != CONTINUE) {
           return continuation;
         }
       }
-      return Continuation.CONTINUE;
+      return CONTINUE;
     }
 
     if (isFreeVar(n0)) {
       // free variables - no solution
-      return Continuation.CONTINUE;
+      return CONTINUE;
     }
 
     throw new SolverException("Should never be here");

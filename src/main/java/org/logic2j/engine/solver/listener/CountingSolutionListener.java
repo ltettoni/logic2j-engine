@@ -18,8 +18,9 @@
 package org.logic2j.engine.solver.listener;
 
 
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.unify.UnifyContext;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * A base implementation of {@link SolutionListener} that holds a counter of the number of solutions reached.
@@ -43,7 +44,7 @@ public class CountingSolutionListener implements SolutionListener {
     if (DEBUG_ENABLED) {
       logger.debug(" onSolution(#{})", this.count);
     }
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   // ---------------------------------------------------------------------------

@@ -20,7 +20,6 @@ package org.logic2j.engine.predicates.impl.java;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.holder.BindingVar;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -29,6 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * Supply input data from {@link BindingVar}s into their corresponding variables.
@@ -73,7 +74,7 @@ public class Supply extends FOPredicate {
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     ensureInit();
     notifyFromVar(0, theListener, currentVars);
-    return Continuation.CONTINUE;
+    return CONTINUE;
   }
 
   private UnifyContext notifyFromVar(int ivar, SolutionListener theListener, UnifyContext currentVars) {
