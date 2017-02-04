@@ -45,8 +45,7 @@ public class ReadBinding<T> extends FOPredicate {
 
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
-    final Object var = getArg(0);
-    final Object reified = currentVars.reify(var);
+    final Object reified = currentVars.reify(getArg(0));
     if (reified instanceof Var) {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
