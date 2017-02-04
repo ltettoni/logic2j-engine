@@ -126,7 +126,7 @@ public class SimpleBinding<T> implements Binding<T> {
       return false;
     }
     if (this.cachedSet == null) {
-      synchronized (this.cachedSet) {
+      synchronized (this) {
         if (this.cachedSet == null) {
           this.cachedSet = Arrays.stream(this.values).collect(Collectors.toSet());
         }
