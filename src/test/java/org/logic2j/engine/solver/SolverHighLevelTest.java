@@ -21,8 +21,6 @@ import org.junit.Test;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +33,6 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.or;
 
 public class SolverHighLevelTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverHighLevelTest.class);
   private SolverApi solver = new SolverApi();
 
   @Test
@@ -79,7 +76,7 @@ public class SolverHighLevelTest {
   public void var() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
-    final List<Object> list = solver.solve(goal).var("Q").list();
+    final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[0, 2, 4, 6, 8]"));
   }
 

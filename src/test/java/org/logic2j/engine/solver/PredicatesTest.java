@@ -56,7 +56,7 @@ public class PredicatesTest {
   @Test
   public void usingPlainJavaPredicate() {
     final Var<Integer> Q = intVar("Q");
-    final List<Object> list = solver.solve(new Digit(Q), new Odd(Q), filter(Q, i -> i != 5)).var("Q").list();
+    final List<Integer> list = solver.solve(new Digit(Q), new Odd(Q), filter(Q, i -> i != 5)).var(Q).list();
     logger.info("Result: {}", list);
     assertThat(list.toString(), is("[1, 3, 7, 9]"));
   }
@@ -65,7 +65,7 @@ public class PredicatesTest {
   public void usingPlainJavaFunction() {
     final Var<Integer> Q = intVar("Q");
     final Var<Integer> R = intVar("R");
-    final List<Object> list = solver.solve(new Digit(Q), map(Q, x -> x * x, R)).var("R").list();
+    final List<Integer> list = solver.solve(new Digit(Q), map(Q, x -> x * x, R)).var(R).list();
     logger.info("Result: {}", list);
     assertThat(list.toString(), is("[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"));
   }
@@ -157,22 +157,26 @@ public class PredicatesTest {
 
   @Test
   public void succIntForward() {
-    assertThat(solver.solve(new Succ<>(5, intVar("Q"))).var("Q").list().toString(), is("[6]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(5, Q)).var(Q).list().toString(), is("[6]"));
   }
 
   @Test
   public void succDoubleForward() {
-    assertThat(solver.solve(new Succ<>(5.1, doubleVar("Q"))).var("Q").list().toString(), is("[6.1]"));
+    final Var<Double> Q = doubleVar("Q");
+    assertThat(solver.solve(new Succ<>(5.1, Q)).var(Q).list().toString(), is("[6.1]"));
   }
 
   @Test
   public void succIntReverse() {
-    assertThat(solver.solve(new Succ<>(intVar("Q"), 5)).var("Q").list().toString(), is("[4]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(Q, 5)).var(Q).list().toString(), is("[4]"));
   }
 
   @Test
   public void succDoubleReverse() {
-    assertThat(solver.solve(new Succ<>(doubleVar("Q"), 5.1)).var("Q").list().toString(), is("[4.1]"));
+    final Var<Double> Q = doubleVar("Q");
+    assertThat(solver.solve(new Succ<>(Q, 5.1)).var(Q).list().toString(), is("[4.1]"));
   }
 
   // --------------------------------------------------------------------------
@@ -191,22 +195,26 @@ public class PredicatesTest {
 
   @Test
   public void succInts0Forward() {
-    assertThat(solver.solve(new Succ<>(new SimpleBinding<>(Integer.class), intVar("Q"))).var("Q").list().toString(), is("[]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(new SimpleBinding<>(Integer.class), Q)).var(Q).list().toString(), is("[]"));
   }
 
   @Test
   public void succInts1Forward() {
-    assertThat(solver.solve(new Succ<>(cst(5), intVar("Q"))).var("Q").list().toString(), is("[6]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(cst(5), Q)).var(Q).list().toString(), is("[6]"));
   }
 
   @Test
   public void succInts2Forward() {
-    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), intVar("Q"))).var("Q").list().toString(), is("[6, 7, 8]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), Q)).var(Q).list().toString(), is("[6, 7, 8]"));
   }
 
   @Test
   public void succInts2Reverse() {
-    assertThat(solver.solve(new Succ<>(intVar("Q"), arr(5, 6, 7))).var("Q").list().toString(), is("[4, 5, 6]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Succ<>(Q, arr(5, 6, 7))).var(Q).list().toString(), is("[4, 5, 6]"));
   }
 
 
@@ -216,12 +224,14 @@ public class PredicatesTest {
 
   @Test
   public void absInts3Forward() {
-    assertThat(solver.solve(new Abs<>(arr(-5, 0, 6), intVar("Q"))).var("Q").list().toString(), is("[5, 0, 6]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Abs<>(arr(-5, 0, 6), Q)).var(Q).list().toString(), is("[5, 0, 6]"));
   }
 
   @Test
   public void absInts3Reverse() {
-    assertThat(solver.solve(new Abs<>(intVar("Q"), arr(-5, 0, 6))).var("Q").list().toString(), is("[0, -6, 6]"));
+    final Var<Integer> Q = intVar("Q");
+    assertThat(solver.solve(new Abs<>(Q, arr(-5, 0, 6))).var(Q).list().toString(), is("[0, -6, 6]"));
   }
 
 }

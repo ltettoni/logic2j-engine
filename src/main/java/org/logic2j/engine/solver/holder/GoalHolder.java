@@ -92,13 +92,36 @@ public class GoalHolder {
   }
 
   /**
-   * Seek solutions for onle one variable of the goal, of any type.
+   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
+   *
+   * @param var             The variable to solve for.
+   * @param desiredTypeOfResult
+   * @param <T>
+   * @return A SolutionHolder for only the specified variable.
+   */
+  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
+    // FIXME temporary implementation this should be the principal implementation (not the one by name)
+    return var(var.getName(), desiredTypeOfResult);
+  }
+
+  /**
+   * Seek solutions for only one variable of the goal, of any type.
    *
    * @param varName The name of the variable to solve for.
    * @return A SolutionHolder for only the specified variable.
    */
   public SolutionHolder<Object> var(String varName) {
     return var(varName, Object.class);
+  }
+
+  /**
+   * Seek solutions for only one variable of the goal, of any type.
+   *
+   * @param var The name of the variable to solve for.
+   * @return A SolutionHolder for only the specified variable.
+   */
+  public <T> SolutionHolder<T> var(Var<T> var) {
+    return var(var, var.getType());
   }
 
   public SolutionHolder<Map<Var<?>, Object>> vars() {

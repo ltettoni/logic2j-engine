@@ -43,7 +43,7 @@ public class SolverWithBindingVarTest {
   public void supplyFromBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
-    final List<Object> list = solver.solve(goal).var("Q").list();
+    final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
   }
 
@@ -59,7 +59,7 @@ public class SolverWithBindingVarTest {
   public void supplyFrom2BoundVarQ() {
     final BindingVar<String> S = strBVar("S", "A", "B");
     final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
-    final List<Object> list = solver.solve(eq(S, S), eq(Q, Q)).var("Q").list();
+    final List<Integer> list = solver.solve(eq(S, S), eq(Q, Q)).var(Q).list();
     assertThat(list.toString(), is("[1, 2, 3, 1, 2, 3]"));
   }
 
@@ -67,7 +67,7 @@ public class SolverWithBindingVarTest {
   public void supplyFrom2BoundVarInverse() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
-    final List<Object> list = solver.solve(goal).var("Q").list();
+    final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
   }
 
@@ -75,7 +75,7 @@ public class SolverWithBindingVarTest {
   public void supplyAndFilterBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = new Even(Q);
-    final List<Object> list = solver.solve(goal).var("Q").list();
+    final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[2, 4, 6, 8]"));
   }
 
