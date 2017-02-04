@@ -27,8 +27,9 @@ import org.logic2j.engine.unify.UnifyContext;
 import java.util.function.Predicate;
 
 /**
- * 1-arguments predicates with a testing function. Can only test constants or variables, cannot generate
- * into free variables. For that use Pred1Generator.
+ * 1-arguments first-order predicates with a java testing (predicate) function.
+ * Can only test constants or variable with value(s), cannot generate data
+ * into free variables. For that use {@link org.logic2j.engine.predicates.impl.Pred1Generator}.
  */
 public class Pred1Tester<T> extends FOPredicate {
 
@@ -65,6 +66,7 @@ public class Pred1Tester<T> extends FOPredicate {
       // free variables - no solution
       return Continuation.CONTINUE;
     }
+
     throw new SolverException("Should never be here");
   }
 
