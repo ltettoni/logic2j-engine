@@ -21,8 +21,14 @@ package org.logic2j.engine.model;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Provides predicates one or several values of a given type.
+ * @param <T>
+ */
 public class SimpleBinding<T> implements Binding<T> {
   private final Class<T> type;
+
+
   private final T[] values;
 
   public static <T> Binding<T> cst(T value) {

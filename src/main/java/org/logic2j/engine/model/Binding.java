@@ -18,7 +18,8 @@
 package org.logic2j.engine.model;
 
 /**
- * A term that may one datum or several data of a certain type.
+ * A Binding allows to connect variables or values to predicates.
+ * Values may be scalar, collections, or generators.
  */
 public interface Binding<T> {
 
