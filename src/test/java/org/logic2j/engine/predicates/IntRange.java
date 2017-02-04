@@ -26,8 +26,9 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * IntRange(min, middle, max) is true when min <= middle < max.
@@ -53,10 +54,7 @@ public class IntRange extends FOPredicate {
     final int max = ((Number) maxBound).intValue();
 
     if (iterating instanceof Var) {
-      final List<Integer> values = new ArrayList<Integer>();
-      for (int val = min; val < max; val++) {
-        values.add(val);
-      }
+      final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
 
       final UnifyContextIterator unifyContextIterator = new UnifyContextIterator(currentVars, (Var) iterating, values);
       logger.info("{} is going to notify multi solutions: {}", this, values);

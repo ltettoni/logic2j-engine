@@ -130,7 +130,7 @@ public abstract class FOPredicate extends Struct {
 
   protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Object... values) {
     Integer continuation;
-    for (Object value: values) {
+    for (final Object value: values) {
       continuation = unifyAndNotify(theListener, currentVars, t1, value);
       if (continuation != Continuation.CONTINUE) {
         return continuation;

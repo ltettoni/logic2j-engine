@@ -64,8 +64,13 @@ public class Log extends FOUniqueSolutionPredicate {
 
   @Override
   public void sideEffect(UnifyContext currentVars) {
-    final String str = Arrays.stream(getArgs()).map(currentVars::reify).map(String::valueOf).collect(Collectors.joining(" "));
-    loggingMethod.accept(str);
+    if (getArity()>0) {
+      final String str = Arrays.stream(getArgs()).map(currentVars::reify).map(String::valueOf).collect(Collectors.joining(" "));
+      loggingMethod.accept(str);
+    } else {
+      // No argument to log
+      loggingMethod.accept("");
+    }
   }
 
 }

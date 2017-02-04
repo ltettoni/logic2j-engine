@@ -60,7 +60,7 @@ public class GoalHolder {
     final CountingSolutionListener listener = new CountingSolutionListener() {
       @Override
       public Integer onSolution(UnifyContext currentVars) {
-        for (BindingVar bv : bindingVars) {
+        for (final BindingVar bv : bindingVars) {
           final Object reify = currentVars.reify(bv);
           bv.addResult(reify);
         }

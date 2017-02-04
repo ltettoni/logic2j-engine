@@ -49,7 +49,7 @@ class ExtractingSolutionListener extends CountingSolutionListener {
     this.vars = TermApi.distinctVars(this.goal);
     // Here we use an expensive TreeSet but this is only for test cases - it will get the solutions ordered and will help assertions
     this.varNames = new TreeSet<String>();
-    for (Var<?> var : vars) {
+    for (final Var<?> var : vars) {
       this.varNames.add(var.getName());
     }
     this.varNames.add(Var.WHOLE_SOLUTION_VAR_NAME); // This pseudo var means the whole solution
@@ -66,7 +66,7 @@ class ExtractingSolutionListener extends CountingSolutionListener {
 
     final Map<String, Object> solutionVars = new HashMap<String, Object>();
     solutionVars.put(Var.WHOLE_SOLUTION_VAR_NAME, solution); // The global solution
-    for (Var<?> var : vars) {
+    for (final Var<?> var : vars) {
       final Object varValue = currentVars.reify(var);
       solutionVars.put(var.getName(), varValue);
     }
@@ -102,7 +102,7 @@ class ExtractingSolutionListener extends CountingSolutionListener {
       throw new IllegalArgumentException("Variable \"" + varName + "\" not defined in goal \"" + this.goal + '"');
     }
     List<Object> values = new ArrayList<Object>(this.solutions.size());
-    for (Map<String, Object> solution : this.solutions) {
+    for (final Map<String, Object> solution : this.solutions) {
       values.add(solution.get(varName));
     }
     return values;

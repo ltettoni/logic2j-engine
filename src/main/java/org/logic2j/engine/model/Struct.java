@@ -223,9 +223,8 @@ public class Struct extends Term {
    */
   void collectTermsInto(Collection<Object> theCollectedTerms) {
     this.index = NO_INDEX;
-    for (int i = 0; i < this.arity; i++) {
-      final Object child = this.args[i];
-      TermApi.collectTermsInto(child, theCollectedTerms);
+    if (this.arity>0) {
+      Arrays.stream(this.args).forEach(child -> TermApi.collectTermsInto(child, theCollectedTerms));
     }
     theCollectedTerms.add(this);
   }

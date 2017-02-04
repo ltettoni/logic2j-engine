@@ -372,7 +372,7 @@ public class SolverLowLevelTest {
 
   protected String marshall(Iterable<Object> terms) {
     ArrayList<String> marshalled = new ArrayList<String>();
-    for (Object term : terms) {
+    for (final Object term : terms) {
       marshalled.add(term.toString());
     }
     return marshalled.toString();
@@ -405,7 +405,7 @@ public class SolverLowLevelTest {
   }
 
   protected void countNSolutions(int nbr, Object... theGoals) {
-    for (Object term : theGoals) {
+    for (final Object term : theGoals) {
       final LocalSolutionListener listener = solve(term);
       assertEquals("Solving goalText \"" + term + '"', nbr, listener.count());
     }

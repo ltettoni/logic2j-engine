@@ -66,7 +66,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
 //          set.add(iterator.next());
 //        }
 
-        for (Object reif : constants(reified)) {
+        for (final Object reif : constants(reified)) {
           final boolean contains = set.contains(reif);
           continuation = notifySolutionIf(contains, theListener, currentVars);
           if (continuation != CONTINUE) {

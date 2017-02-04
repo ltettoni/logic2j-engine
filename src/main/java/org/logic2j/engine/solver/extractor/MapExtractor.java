@@ -47,7 +47,7 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
   @Override
   public Map<Var, Object> extractSolution(UnifyContext currentVars) {
     final Map<Var, Object> result = new HashMap<Var, Object>();
-    for (Var<?> var : vars) {
+    for (final Var<?> var : vars) {
       final Object value = currentVars.reify(var);
       result.put(var, value);
     }

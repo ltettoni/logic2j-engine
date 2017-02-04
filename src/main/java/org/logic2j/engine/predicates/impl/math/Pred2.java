@@ -60,8 +60,8 @@ public class Pred2<T, R> extends FOPredicate {
 
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        for (T c0 : this.<T>constants(n0)) {
-          for (R c1 : this.<R>constants(n1)) {
+        for (final T c0 : this.<T>constants(n0)) {
+          for (final R c1 : this.<R>constants(n1)) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));

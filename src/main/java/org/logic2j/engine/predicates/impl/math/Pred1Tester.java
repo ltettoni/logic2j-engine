@@ -51,7 +51,7 @@ public class Pred1Tester<T> extends FOPredicate {
     final Object n0 = currentVars.reify(getArg(0));
 
     if (isConstant(n0)) {
-      for (T c0 : this.<T>constants(n0)) {
+      for (final T c0 : this.<T>constants(n0)) {
         final boolean found = this.test.test(c0);
         final Integer continuation = notifySolutionIf(found, theListener, currentVars);
         if (continuation != Continuation.CONTINUE) {

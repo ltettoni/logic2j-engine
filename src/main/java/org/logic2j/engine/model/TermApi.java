@@ -268,7 +268,7 @@ public final class TermApi {
     if (needQuote) {
       final StringBuilder sb = new StringBuilder(theText.length() + 2);
       sb.append(Struct.QUOTE); // Opening quote
-      for (char c : textAsString.toCharArray()) {
+      for (final char c : textAsString.toCharArray()) {
         sb.append(c);
         if (c == Struct.QUOTE) {
           sb.append(c); // Quotes are doubled
@@ -427,7 +427,7 @@ public final class TermApi {
       public Void visit(Struct theStruct) {
         // Recurse through children
         final Object[] args = theStruct.getArgs();
-        for (Object arg : args) {
+        for (final Object arg : args) {
           if (arg instanceof Term) {
             ((Term) arg).accept(this);
           }

@@ -23,6 +23,8 @@ import org.logic2j.engine.model.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 /**
  * A monad-like object that allows dereferencing variables to their effective current values,
  * or to modify variables (and return a new UnifyContext).
@@ -111,12 +113,8 @@ public class UnifyContext {
         // Structure is an atom or a constant term - no need to further transform
         return term;
       }
-      final Object[] args = s.getArgs();
-      final int arity = args.length;
-      final Object[] reifiedArgs = new Object[arity];
-      for (int i = 0; i < arity; i++) {
-        reifiedArgs[i] = reify(args[i]);
-      }
+      // Structure has arguments
+      final Object[] reifiedArgs = Arrays.stream(s.getArgs()).map(this::reify).toArray(Object[]::new);
       final Struct res = new Struct(s, reifiedArgs);
       if (s.getIndex() > 0) {
         // The original structure had variables, maybe the cloned one will still have (if those were free)
