@@ -19,39 +19,54 @@ package org.logic2j.engine.model;
 
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
  * Provides predicates one or several values of a given type.
+ *
  * @param <T>
  */
 public class SimpleBinding<T> implements Binding<T> {
   private final Class<T> type;
-
-
+  private long size = -1; // <0 means unknown or not enumerable
   private final T[] values;
 
-  public static <T> Binding<T> cst(T value) {
-    return new SimpleBinding(value.getClass(), value);
+  /**
+   * Use static factories instead.
+   *
+   * @param type
+   */
+  private SimpleBinding(Class<T> type, T... values) {
+    this.type = type;
+    this.values = values;
+    this.size = this.values.length;
   }
 
-  public static <T> Binding<T> arr(T... values) {
-    if (values.length==0) {
+  public static <T> SimpleBinding<T> empty(Class<T> type) {
+    return new SimpleBinding<T>(type);
+  }
+
+  public static <T> SimpleBinding<T> bind(T... values) {
+    if (values.length == 0) {
       throw new IllegalArgumentException("Empty SimpleBinding array, cannot determine data type of instances.");
     }
     return new SimpleBinding(values[0].getClass(), values);
   }
 
-  public SimpleBinding(Class<T> type, T... values) {
-    this.type = type;
-    this.values = values;
+  public static <T> SimpleBinding<T> bind(Collection<T> coll) {
+    if (coll.size() == 0) {
+      throw new IllegalArgumentException("Empty SimpleBinding collection, cannot determine data type of instances.");
+    }
+    return new SimpleBinding(coll.iterator().next().getClass(), coll.toArray());
   }
 
-  public int size() {
-    return values.length;
+
+  public long size() {
+    return this.size;
   }
 
-  public T[] values() {
+  public T[] getArray() {
     return this.values;
   }
 

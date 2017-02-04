@@ -165,7 +165,7 @@ public abstract class FOPredicate extends Struct {
       return (Q[]) EMPTY_ARRAY;
     }
     if (reified instanceof SimpleBinding<?>) {
-      return ((SimpleBinding<Q>) reified).values();
+      return ((SimpleBinding<Q>) reified).getArray();
     }
     // Other object: will be a scalar
     return (Q[]) new Object[] {reified};

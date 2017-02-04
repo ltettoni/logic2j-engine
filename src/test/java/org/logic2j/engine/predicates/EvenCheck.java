@@ -33,6 +33,6 @@ public class EvenCheck extends Pred1Tester<Number> {
   }
 
   public EvenCheck(Number v0) {
-    this(SimpleBinding.cst(v0));
+    this(SimpleBinding.bind(v0));
   }
 }

@@ -36,8 +36,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.logic2j.engine.model.SimpleBinding.arr;
-import static org.logic2j.engine.model.SimpleBinding.cst;
+import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBinding.empty;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
@@ -185,36 +186,36 @@ public class PredicatesTest {
 
   @Test
   public void succIntsCheckOkFully() {
-    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), arr(6, 7, 8))).count(), is(3L));
+    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(6, 7, 8))).count(), is(3L));
   }
 
   @Test
   public void succIntsCheckOk() {
-    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), arr(1, 7, 10, 8))).count(), is(2L));
+    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(1, 7, 10, 8))).count(), is(2L));
   }
 
   @Test
   public void succInts0Forward() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ<>(new SimpleBinding<>(Integer.class), Q)).var(Q).list().toString(), is("[]"));
+    assertThat(solver.solve(new Succ<>(empty(Integer.class), Q)).var(Q).list().toString(), is("[]"));
   }
 
   @Test
   public void succInts1Forward() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ<>(cst(5), Q)).var(Q).list().toString(), is("[6]"));
+    assertThat(solver.solve(new Succ<>(SimpleBinding.bind(5), Q)).var(Q).list().toString(), is("[6]"));
   }
 
   @Test
   public void succInts2Forward() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ<>(arr(5, 6, 7), Q)).var(Q).list().toString(), is("[6, 7, 8]"));
+    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), Q)).var(Q).list().toString(), is("[6, 7, 8]"));
   }
 
   @Test
   public void succInts2Reverse() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ<>(Q, arr(5, 6, 7))).var(Q).list().toString(), is("[4, 5, 6]"));
+    assertThat(solver.solve(new Succ<>(Q, bind(5, 6, 7))).var(Q).list().toString(), is("[4, 5, 6]"));
   }
 
 
@@ -225,13 +226,13 @@ public class PredicatesTest {
   @Test
   public void absInts3Forward() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Abs<>(arr(-5, 0, 6), Q)).var(Q).list().toString(), is("[5, 0, 6]"));
+    assertThat(solver.solve(new Abs<>(bind(-5, 0, 6), Q)).var(Q).list().toString(), is("[5, 0, 6]"));
   }
 
   @Test
   public void absInts3Reverse() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Abs<>(Q, arr(-5, 0, 6))).var(Q).list().toString(), is("[0, -6, 6]"));
+    assertThat(solver.solve(new Abs<>(Q, bind(-5, 0, 6))).var(Q).list().toString(), is("[0, -6, 6]"));
   }
 
 }

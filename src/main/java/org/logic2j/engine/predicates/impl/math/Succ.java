@@ -37,15 +37,15 @@ public class Succ<T extends Number> extends Pred2<T, T> {
   // --------------------------------------------------------------------------
 
   public Succ(T n0, T n1) {
-    this(SimpleBinding.cst(n0), SimpleBinding.cst(n1));
+    this(SimpleBinding.bind(n0), SimpleBinding.bind(n1));
   }
 
   public Succ(T n0, Var<T> v1) {
-    this(SimpleBinding.cst(n0), v1);
+    this(SimpleBinding.bind(n0), v1);
   }
 
   public Succ(Var<T> v0, T n1) {
-    this(v0, SimpleBinding.cst(n1));
+    this(v0, SimpleBinding.bind(n1));
   }
 
   // --------------------------------------------------------------------------
