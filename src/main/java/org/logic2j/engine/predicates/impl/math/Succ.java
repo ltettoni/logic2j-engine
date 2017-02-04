@@ -37,16 +37,20 @@ public class Succ<T extends Number> extends Pred2<T, T> {
   // --------------------------------------------------------------------------
 
   public Succ(T n0, T n1) {
-    this(SimpleBinding.<T>cst(n0), SimpleBinding.<T>cst(n1));
+    this(SimpleBinding.cst(n0), SimpleBinding.cst(n1));
   }
 
   public Succ(T n0, Var<T> v1) {
-    this(SimpleBinding.<T>cst(n0), v1);
+    this(SimpleBinding.cst(n0), v1);
   }
 
   public Succ(Var<T> v0, T n1) {
-    this(v0, SimpleBinding.<T>cst(n1));
+    this(v0, SimpleBinding.cst(n1));
   }
+
+  // --------------------------------------------------------------------------
+  // Implementation
+  // --------------------------------------------------------------------------
 
   private static NumericFunction nextNumber = new NumericFunction() {
     @Override

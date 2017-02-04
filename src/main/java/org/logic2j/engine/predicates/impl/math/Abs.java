@@ -26,11 +26,13 @@ public class Abs<T extends Number> extends Pred2<T, T> {
 
   public Abs(Binding<T> n0, Binding<T> n1) {
     super("succ", n0, n1);
-    setImage(t -> (T)forward.apply(t));
-    setPreimages(t -> (T[])reverse.apply(t));
+    setImage(t -> (T) forward.apply(t));
+    setPreimages(t -> (T[]) reverse.apply(t));
   }
 
-
+  // --------------------------------------------------------------------------
+  // Implementation
+  // --------------------------------------------------------------------------
 
   private static NumericFunction forward = new NumericFunction() {
     @Override

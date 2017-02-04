@@ -25,8 +25,10 @@ import org.logic2j.engine.predicates.impl.math.Pred1;
  * Check a {@link Number} is even using a Java {@link java.util.function.Predicate}.
  */
 public class EvenCheck extends Pred1<Number> {
+
   public EvenCheck(Binding<Number> v0) {
     super("evenCheck", v0);
+    // Implementation is straightforward
     this.setTest(val -> val.doubleValue() % 2 == 0);
   }
 
