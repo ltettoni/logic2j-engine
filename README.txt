@@ -41,6 +41,7 @@ Improvements DONE:
 TODO
 - See if SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
 - Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
+- Functors
 - Reintroduce TermApi.selectTerm() ???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
   - sync or asnyc ???
