@@ -27,7 +27,8 @@ import org.logic2j.engine.unify.UnifyContext;
 import java.util.function.Predicate;
 
 /**
- * 1-arguments predicates with a testing function.
+ * 1-arguments predicates with a testing function. Can only test constants or variables, cannot generate
+ * into free variables. For that use Pred1Generator.
  */
 public class Pred1Tester<T> extends FOPredicate {
 

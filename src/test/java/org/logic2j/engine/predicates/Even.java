@@ -18,15 +18,18 @@
 package org.logic2j.engine.predicates;
 
 
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.ListOfValuesFOPredicate1;
+import org.logic2j.engine.predicates.impl.Pred1Generator;
+
+import static org.logic2j.engine.model.SimpleBinding.cst;
 
 /**
  * Generate digits
  */
-public class Even extends ListOfValuesFOPredicate1<Integer> {
+public class Even extends Pred1Generator<Integer> {
 
-  public Even(Integer term) {
+  public Even(Binding<Integer> term) {
     super("even", term, 0, 2, 4, 6, 8);
   }
 
@@ -35,4 +38,8 @@ public class Even extends ListOfValuesFOPredicate1<Integer> {
     super("even", term, 0, 2, 4, 6, 8);
   }
 
+
+  public Even(Integer v0) {
+    this(cst(v0));
+  }
 }

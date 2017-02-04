@@ -43,6 +43,7 @@ public class SolverWithBindingVarTest {
   public void supplyFromBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
+    assertThat(solver.solve(goal).count(), is(19L));
     final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
   }

@@ -18,15 +18,16 @@
 package org.logic2j.engine.predicates;
 
 
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.ListOfValuesFOPredicate1;
+import org.logic2j.engine.predicates.impl.Pred1Generator;
 
 /**
  * Generate digits
  */
-public class Odd extends ListOfValuesFOPredicate1<Integer> {
+public class Odd extends Pred1Generator<Integer> {
 
-  public Odd(Integer term) {
+  public Odd(Binding<Integer> term) {
     super("odd", term, 1, 3, 5, 7, 9);
   }
 

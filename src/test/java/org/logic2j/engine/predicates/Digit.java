@@ -18,15 +18,21 @@
 package org.logic2j.engine.predicates;
 
 
-import org.logic2j.engine.predicates.impl.ListOfValuesFOPredicate1;
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.predicates.impl.Pred1Generator;
+
+import static org.logic2j.engine.model.SimpleBinding.cst;
 
 /**
  * Generate digits
  */
-public class Digit extends ListOfValuesFOPredicate1 {
+public class Digit extends Pred1Generator<Integer> {
 
-  public Digit(Object term) {
+  public Digit(Binding<Integer> term) {
     super("digit", term, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   }
 
+  public Digit(Integer v0) {
+    this(cst(v0));
+  }
 }
