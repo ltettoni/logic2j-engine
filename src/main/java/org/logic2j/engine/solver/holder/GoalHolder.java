@@ -128,8 +128,8 @@ public class GoalHolder {
     return var(varName, Integer.class).unique();
   }
 
-  public String toString(String varName) {
-    return var(varName).unique().toString();
-  }
+//  public String toString(String varName) {
+//    return var(varName).unique().toString();
+//  }
 
 }
