@@ -133,21 +133,37 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   // Static factories
   // ---------------------------------------------------------------------------
 
+  public static Var<Object> anyVar() {
+    return new Var<>(Object.class);
+  }
+
   public static Var<Object> anyVar(CharSequence varName) {
     return new Var<>(Object.class, varName);
   }
 
+  public static Var<String> strVar() {
+    return new Var<>(String.class);
+  }
   public static Var<String> strVar(CharSequence varName) {
     return new Var<>(String.class, varName);
   }
 
+  public static Var<Integer> intVar() {
+    return new Var<>(Integer.class);
+  }
   public static Var<Integer> intVar(CharSequence varName) {
     return new Var<>(Integer.class, varName);
+  }
+  public static Var<Double> doubleVar() {
+    return new Var<>(Double.class);
   }
   public static Var<Double> doubleVar(CharSequence varName) {
     return new Var<>(Double.class, varName);
   }
 
+  public static Var<Long> longVar() {
+    return new Var<>(Long.class);
+  }
   public static Var<Long> longVar(CharSequence varName) {
     return new Var<>(Long.class, varName);
   }
