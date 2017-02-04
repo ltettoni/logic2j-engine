@@ -34,11 +34,11 @@ import java.util.function.Function;
 public class Pred2<T, R> extends FOPredicate {
 
   private Function<T, R> image = v -> {
-    throw new UnsupportedOperationException("Function \"image()\" of predicate " + Pred2.this + " is not " + "implemented");
+    throw new UnsupportedOperationException("Function \"image()\" of " + Pred2.this + " was not defined");
   };
   private Function<T, R[]> images = v -> (R[]) new Object[] {image.apply(v)};
   private Function<R, T> preimage = v -> {
-    throw new UnsupportedOperationException("Function \"preimage()\" of predicate " + Pred2.this + " is not " + "implemented");
+    throw new UnsupportedOperationException("Function \"preimage()\" of " + Pred2.this + " was not defined");
   };
   private Function<R, T[]> preimages = v -> (T[]) new Object[] {preimage.apply(v)};
 

@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 public class Pred1<T> extends FOPredicate {
 
   private Predicate<T> test = v -> {
-    throw new UnsupportedOperationException("Predicate \"test()\" of predicate " + Pred1.this + " is not implemented");
+    throw new UnsupportedOperationException("Predicate \"test()\" of " + Pred1.this + " was not defined");
   };
 
   /**
