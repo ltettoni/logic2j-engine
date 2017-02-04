@@ -65,9 +65,9 @@ public class Pred2<T, R> extends FOPredicate {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
-            final int cont = notifySolutionIf(found, theListener, currentVars);
-            if (cont != Continuation.CONTINUE) {
-              return cont;
+            final Integer continuation = notifySolutionIf(found, theListener, currentVars);
+            if (continuation != Continuation.CONTINUE) {
+              return continuation;
             }
           }
         }
