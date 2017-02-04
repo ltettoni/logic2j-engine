@@ -24,7 +24,7 @@ import org.logic2j.engine.predicates.impl.Fail;
 import org.logic2j.engine.predicates.impl.True;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.impl.firstorder.Not;
-import org.logic2j.engine.predicates.impl.math.Pred1;
+import org.logic2j.engine.predicates.impl.math.Pred1Tester;
 import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Cut;
@@ -87,8 +87,8 @@ public final class Predicates {
     return new Eq(t1, t2);
   }
 
-  public static <T> Pred1 filter(Var<T> var, Predicate<T> pred) {
-    return new Pred1<T>("_lambdaFilter", var).withTest(pred);
+  public static <T> Pred1Tester filter(Var<T> var, Predicate<T> pred) {
+    return new Pred1Tester<T>("_lambdaFilter", var).withTest(pred);
   }
 
   public static <T, R> Pred2 map(Var<T> v1, Function<T, R> javaFunction, Var<R> v2) {

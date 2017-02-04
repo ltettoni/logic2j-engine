@@ -29,10 +29,10 @@ import java.util.function.Predicate;
 /**
  * 1-arguments predicates with a testing function.
  */
-public class Pred1<T> extends FOPredicate {
+public class Pred1Tester<T> extends FOPredicate {
 
   private Predicate<T> test = v -> {
-    throw new UnsupportedOperationException("Predicate \"test()\" of " + Pred1.this + " was not defined");
+    throw new UnsupportedOperationException("Predicate \"test()\" of " + Pred1Tester.this + " was not defined");
   };
 
   /**
@@ -40,7 +40,7 @@ public class Pred1<T> extends FOPredicate {
    *
    * @param theFunctor
    */
-  public Pred1(String theFunctor, Binding<T> arg0) {
+  public Pred1Tester(String theFunctor, Binding<T> arg0) {
     super(theFunctor, arg0);
   }
 
@@ -71,7 +71,7 @@ public class Pred1<T> extends FOPredicate {
   // Fluent setters
   // --------------------------------------------------------------------------
 
-  public Pred1<T> withTest(Predicate<T> test) {
+  public Pred1Tester<T> withTest(Predicate<T> test) {
     this.test = test;
     return this;
   }
