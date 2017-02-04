@@ -294,6 +294,10 @@ public class SolverLowLevelTest {
     assertEquals(1, listener.count());
   }
 
+  // --------------------------------------------------------------------------
+  // Pred1
+  // --------------------------------------------------------------------------
+
   @Test
   public void EvenCheck_12() {
     final Object goal = new EvenCheck(12);
@@ -301,13 +305,34 @@ public class SolverLowLevelTest {
     assertEquals(1, listener.count());
   }
 
-
   @Test
   public void EvenCheck_13() {
     final Object goal = new EvenCheck(13);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(0, listener.count());
   }
+
+  @Test
+  public void EvenCheck_2period0() {
+    final Object goal = new EvenCheck(2.0);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(1, listener.count());
+  }
+
+  @Test
+  public void EvenCheck_2period1() {
+    final Object goal = new EvenCheck(2.1);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(0, listener.count());
+  }
+
+  @Test
+  public void EvenCheck_3period0() {
+    final Object goal = new EvenCheck(3.0);
+    final ExtractingSolutionListener listener = solve(goal);
+    assertEquals(0, listener.count());
+  }
+
 
 
   @Test
