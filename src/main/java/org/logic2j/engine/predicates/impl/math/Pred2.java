@@ -89,6 +89,7 @@ public class Pred2<T, R> extends FOPredicate {
         return Continuation.CONTINUE;
       }
     }
+
     throw new SolverException("Should never be here");
   }
 
