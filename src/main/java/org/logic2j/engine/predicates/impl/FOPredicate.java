@@ -152,7 +152,7 @@ public abstract class FOPredicate extends Struct {
    * @throws InvalidTermException
    */
   protected void ensureBindingIsNotAFreeVar(Object term, String nameOfPrimitive, int indexOfArg) {
-    if (term instanceof Var) {
+    if (isFreeVar(term)) {
       // TODO Should be a kind of InvalidGoalException instead?
       final int positionOfArgument = indexOfArg + 1;
       throw new InvalidTermException(

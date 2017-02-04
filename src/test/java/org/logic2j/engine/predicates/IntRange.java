@@ -53,7 +53,7 @@ public class IntRange extends FOPredicate {
     final int min = ((Number) minBound).intValue();
     final int max = ((Number) maxBound).intValue();
 
-    if (iterating instanceof Var) {
+    if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
 
       final UnifyContextIterator unifyContextIterator = new UnifyContextIterator(currentVars, (Var) iterating, values);
