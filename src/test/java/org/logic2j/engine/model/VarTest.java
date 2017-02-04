@@ -76,7 +76,7 @@ public class VarTest {
   }
 
   @Test
-  public void automaticName() throws Exception {
+  public void automaticName() {
     final Var<String> stringVar = new Var<>(String.class);
     final String name1 = stringVar.getName();
     assertThat(name1, not(isEmptyString()));
