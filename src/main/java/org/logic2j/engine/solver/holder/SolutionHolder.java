@@ -18,6 +18,7 @@
 package org.logic2j.engine.solver.holder;
 
 import org.logic2j.engine.exception.SolverException;
+import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.MapExtractor;
 import org.logic2j.engine.solver.extractor.SingleVarExtractor;
@@ -136,7 +137,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return true if solution is not bound to a literal term.
    */
   public boolean isFree() {
-    return unique() instanceof Var<?>;
+    return TermApi.isFreeVar(unique());
   }
 
   // ---------------------------------------------------------------------------

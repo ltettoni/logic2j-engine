@@ -22,7 +22,7 @@ import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
-import org.logic2j.engine.model.Var;
+import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
@@ -65,7 +65,7 @@ public class Solver {
    * @return
    */
   public Integer solveGoal(Object goal, SolutionListener theSolutionListener) {
-    if (goal instanceof Var<?>) {
+    if (TermApi.isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
     SolverContextHolder.register(this);
@@ -135,10 +135,10 @@ public class Solver {
       // Yet we are not capable of handing String everywhere below - so use a Struct atom still
       goalStruct = new Struct((String) goalTerm);
         /* Prototype code - does actually not work but could
-        } else if (goalTerm instanceof Var<?>) {
+        } else if (TermApi.isFreeVar(goalTerm)) {
             // Crazy we, we allow a single Var to be considered as a goal - just assuming it is bound to a Struct
             final Object goalReified = currentVars.reify(goalTerm);
-            if (goalReified instanceof Var<?>) {
+            if (TermApi.isFreeVar(goalReified)) {
                 throw new UnsupportedOperationException("A free variable cannot be used as a goal in a rule: \"" + goalTerm + '"');
             }
             if (! (goalReified instanceof Struct)) {

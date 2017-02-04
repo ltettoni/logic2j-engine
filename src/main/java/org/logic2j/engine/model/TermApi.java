@@ -90,6 +90,14 @@ public final class TermApi {
     return false;
   }
 
+  /**
+   * Check free variable (incl. anonymous)
+   * @param theTerm
+   * @return true if theTerm denotes a free variable, or the anonymous variable.
+   */
+  public static boolean isFreeVar(Object theTerm) {
+    return theTerm instanceof Var<?>;
+  }
 
   /**
    * Recursively collect all terms and add them to the collectedTerms collection, and also initialize their {@link Term#index} to

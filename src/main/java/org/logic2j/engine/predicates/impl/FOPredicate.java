@@ -20,6 +20,7 @@ package org.logic2j.engine.predicates.impl;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Struct;
+import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
@@ -176,10 +177,10 @@ public abstract class FOPredicate extends Struct {
    * @return true if reified is not a {@link Var}, including true when reified is null
    */
   protected static boolean isConstant(Object reified) {
-    return !(reified instanceof Var);
+    return !TermApi.isFreeVar(reified) && reified != Var.anon();
   }
 
   protected static boolean isFreeVar(Object reified) {
-    return reified instanceof Var;
+    return TermApi.isFreeVar(reified);
   }
 }

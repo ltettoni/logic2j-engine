@@ -102,7 +102,7 @@ public class UnifyContext {
    * @return The dereferenced content of term, or theVar if it was free, or null if term is null
    */
   public Object reify(Object term) {
-    if (term instanceof Var) {
+    if (TermApi.isFreeVar(term)) {
       term = finalValue((Var) term);
       // The var might end up on a Struct, that needs recursive reification
     }
@@ -138,7 +138,7 @@ public class UnifyContext {
     if (term1 == term2) {
       return this;
     }
-    if (term2 instanceof Var) {
+    if (TermApi.isFreeVar(term2)) {
       // Switch arguments - we prefer having term1 being the var.
       // Notice that formally, we should check  && !(term1 instanceof Var)
       // to avoid possible useless switching when unifying Var <-> Var.
@@ -147,18 +147,18 @@ public class UnifyContext {
       term1 = term2;
       term2 = term1held;
     }
-    if (term1 instanceof Var) {
+    if (TermApi.isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
       Var<?> var1 = (Var) term1;
       final Object final1 = finalValue(var1);
-      if (!(final1 instanceof Var)) {
+      if (!(TermApi.isFreeVar(final1))) {
         // term1 is bound - unify
         return unify(final1, term2);
       }
       // Ended up with final1 being a free Var, so term1 was a free var
       var1 = (Var) final1;
       // free Var var1 need to be bound
-      if (term2 instanceof Var) {
+      if (TermApi.isFreeVar(term2)) {
         // Binding two vars
         final Var<?> var2 = (Var) term2;
         // Link one to two (should we link to the final or the initial value???)
