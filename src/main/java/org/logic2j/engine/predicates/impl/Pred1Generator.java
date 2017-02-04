@@ -19,65 +19,59 @@ package org.logic2j.engine.predicates.impl;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Var;
+import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
+import static org.logic2j.engine.model.SimpleBinding.bind;
 
 /**
  * Generate list of values in sequence.
  */
 public abstract class Pred1Generator<T> extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Pred1Generator.class);
-  
-  private final T[] possibleValues;
-  private final Set<T> set;
 
-  public Pred1Generator(String functorName, Binding<T> term, T... possibleValues) {
+  private final SimpleBinding<T> allowedValues;
+
+  public Pred1Generator(String functorName, Binding<T> term, SimpleBinding<T> allowedValues) {
     super(functorName, term);
-    this.possibleValues = possibleValues;
-    this.set = Arrays.stream(possibleValues).collect(Collectors.toSet());
+    this.allowedValues = allowedValues;
+  }
+
+  public Pred1Generator(String functorName, Binding<T> term, T... allowedValues) {
+    this(functorName, term, bind(allowedValues));
   }
 
   @Override
   public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
     final Object reified = currentVars.reify(getArg(0));
     Integer continuation = CONTINUE;
-    if (reified instanceof Var) {
+    if (isFreeVar(reified)) {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
-      if (possibleValues != null) {
-        return unifyAndNotifyMany(theListener, currentVars, (Var) reified, possibleValues);
+      if (allowedValues != null) {
+        return unifyAndNotifyMany(theListener, currentVars, reified, (Object[]) allowedValues.toArray());
+      }
+      return continuation;
+    }
+
+    if (isConstant(reified)) {
+      // Variable is bound to a value
+
+      for (final T val : this.<T>constants(reified)) {
+        final boolean contains = allowedValues.contains(val);
+        continuation = notifySolutionIf(contains, theListener, currentVars);
+        if (continuation != CONTINUE) {
+          return continuation;
+        }
       }
       return continuation;
     } else {
-      // Variable is bound to a value
-
-      if (set != null) {
-//        final Set<Object> set = new HashSet<>();
-//        while (iterator.hasNext()) {
-//          set.add(iterator.next());
-//        }
-
-        for (final Object reif : constants(reified)) {
-          final boolean contains = set.contains(reif);
-          continuation = notifySolutionIf(contains, theListener, currentVars);
-          if (continuation != CONTINUE) {
-            return continuation;
-          }
-        }
-        return continuation;
-      } else {
-        logger.warn("Cannot store instant value {}", reified);
-        return continuation;
-      }
+      logger.warn("Cannot store instant value {}", reified);
+      return continuation;
     }
   }
 }
