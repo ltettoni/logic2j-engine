@@ -17,9 +17,35 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
-public interface NumericFunction {
-  Integer[] apply(Integer arg);
-  Long[] apply(Long arg);
-  Float[] apply(Float arg);
-  Double[] apply(Double arg);
+import java.util.function.Function;
+
+/**
+ * A {@link java.util.function.Function} that delegates its apply{@link #apply(Object)}
+ * to dedicated implementations for Integer, Long, Float and Double.
+ */
+public interface NumericFunction extends Function<Number, Number> {
+  Integer onInteger(Integer arg);
+  Long onLong(Long arg);
+  Float onFloat(Float arg);
+  Double onDouble(Double arg);
+
+  default Number apply(Number arg) {
+    if (arg == null) {
+      return null;
+    }
+    if (arg instanceof Integer) {
+      return onInteger((Integer)arg);
+    }
+    if (arg instanceof Long) {
+      return onLong((Long)arg);
+    }
+    if (arg instanceof Double) {
+      return onDouble((Double)arg);
+    }
+    if (arg instanceof Float) {
+      return onFloat((Float)arg);
+    }
+    throw new IllegalArgumentException(
+        "Apply method for " + this.getClass().getSimpleName() + " cannot handle argument " + arg + " of " + arg.getClass());
+  }
 }

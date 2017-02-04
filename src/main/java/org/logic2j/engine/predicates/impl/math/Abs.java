@@ -26,81 +26,72 @@ public class Abs<T extends Number> extends Pred2<T, T> {
 
   public Abs(Binding<T> n0, Binding<T> n1) {
     super("succ", n0, n1);
-    setImage(t -> (T)forward(t));
-    setPreimages(t -> (T[])reverse(t));
+    setImage(t -> (T)forward.apply(t));
+    setPreimages(t -> (T[])reverse.apply(t));
   }
 
 
-  /**
-   * Preimage is easy, abs() is a function.
-   *
-   * @param value
-   * @return single value
-   */
-  protected static Number forward(Number value) {
-    if (value == null) {
-      return null;
+
+  private static NumericFunction forward = new NumericFunction() {
+    @Override
+    public Integer onInteger(Integer arg) {
+      return Math.abs(arg);
     }
-    if (value instanceof Integer) {
-      return Math.abs((Integer) value);
+
+    @Override
+    public Long onLong(Long arg) {
+      return Math.abs(arg);
     }
-    if (value instanceof Long) {
-      return Math.abs((Long) value);
+
+    @Override
+    public Float onFloat(Float arg) {
+      return Math.abs(arg);
     }
-    if (value instanceof Double) {
-      return Math.abs((Double) value);
+
+    @Override
+    public Double onDouble(Double arg) {
+      return Math.abs(arg);
     }
-    if (value instanceof Float) {
-      return Math.abs((Float) value);
-    }
-    throw new IllegalArgumentException("Forward method for " + Abs.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
-  }
+  };
 
 
-  /**
-   * Two-value preimage
-   *
-   * @param value
-   * @return Zero, one, or two preimages.
-   */
-  protected static Number[] reverse(Number value) {
-    if (value == null) {
-      return null;
-    }
-    if (value instanceof Integer) {
-      final Integer arg = (Integer) value;
+  private static NumericRelation reverse = new NumericRelation() {
+    @Override
+    public Integer[] onInteger(Integer arg) {
       final int v = Math.abs(arg);
       if (arg < 0) {
         return new Integer[0];
       }
       return v == 0 ? new Integer[] {v} : new Integer[] {-v, v};
     }
-    if (value instanceof Long) {
-      final Long arg = (Long) value;
+
+    @Override
+    public Long[] onLong(Long arg) {
       final long v = Math.abs(arg);
       if (arg < 0) {
         return new Long[0];
       }
       return v == 0 ? new Long[] {v} : new Long[] {-v, v};
     }
-    if (value instanceof Double) {
-      final Double arg = (Double) value;
-      final double v = Math.abs(arg);
-      if (arg < 0) {
-        return new Double[0];
-      }
-      return v == 0 ? new Double[] {v} : new Double[] {-v, v};
-    }
-    if (value instanceof Float) {
-      final Float arg = (Float) value;
+
+    @Override
+    public Float[] onFloat(Float arg) {
       final float v = Math.abs(arg);
       if (arg < 0) {
         return new Float[0];
       }
       return v == 0 ? new Float[] {v} : new Float[] {-v, v};
     }
-    throw new IllegalArgumentException("Reverse method for " + Abs.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
-  }
+
+    @Override
+    public Double[] onDouble(Double arg) {
+      final double v = Math.abs(arg);
+      if (arg < 0) {
+        return new Double[0];
+      }
+      return v == 0 ? new Double[] {v} : new Double[] {-v, v};
+    }
+  };
 
 
 }

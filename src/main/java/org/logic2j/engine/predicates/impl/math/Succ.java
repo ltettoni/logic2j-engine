@@ -28,8 +28,8 @@ public class Succ<T extends Number> extends Pred2<T, T> {
 
   public Succ(Binding<T> n0, Binding<T> n1) {
     super("succ", n0, n1);
-    setImage(t -> (T)nextNumber(t));
-    setPreimage(t -> (T)previousNumber(t));
+    setImage(t -> (T) nextNumber.apply(t));
+    setPreimage(t -> (T) previousNumber.apply(t));
   }
 
   // --------------------------------------------------------------------------
@@ -44,49 +44,52 @@ public class Succ<T extends Number> extends Pred2<T, T> {
     this(SimpleBinding.<T>cst(n0), v1);
   }
 
-  public Succ(Var<T> v0,  T n1) {
+  public Succ(Var<T> v0, T n1) {
     this(v0, SimpleBinding.<T>cst(n1));
   }
 
+  private static NumericFunction nextNumber = new NumericFunction() {
+    @Override
+    public Integer onInteger(Integer arg) {
+      return arg + 1;
+    }
 
+    @Override
+    public Long onLong(Long arg) {
+      return arg + 1L;
+    }
 
-  protected static Number nextNumber(Number value) {
-    if (value == null) {
-      return null;
+    @Override
+    public Float onFloat(Float arg) {
+      return arg + 1.0f;
     }
-    if (value instanceof Integer) {
-      return ((Integer) value) + 1;
-    }
-    if (value instanceof Long) {
-      return ((Long) value) + 1L;
-    }
-    if (value instanceof Double) {
-      return ((Double) value) + 1.0;
-    }
-    if (value instanceof Float) {
-      return ((Float) value) + 1.0f;
-    }
-    throw new IllegalArgumentException("Forward method for " + Succ.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
-  }
 
-  protected static Number previousNumber(Number value) {
-    if (value == null) {
-      return null;
+    @Override
+    public Double onDouble(Double arg) {
+      return arg + 1.0;
     }
-    if (value instanceof Integer) {
-      return ((Integer) value) - 1;
-    }
-    if (value instanceof Long) {
-      return ((Long) value) - 1L;
-    }
-    if (value instanceof Double) {
-      return ((Double) value) - 1.0;
-    }
-    if (value instanceof Float) {
-      return ((Float) value) - 1.0f;
-    }
-    throw new IllegalArgumentException("Reverse method for " + Succ.class.getSimpleName() + " cannot handle argument " + value + " of " + value.getClass());
-  }
+  };
 
+  private static NumericFunction previousNumber = new NumericFunction() {
+    @Override
+    public Integer onInteger(Integer arg) {
+      return arg - 1;
+    }
+
+    @Override
+    public Long onLong(Long arg) {
+      return arg - 1L;
+    }
+
+    @Override
+    public Float onFloat(Float arg) {
+      return arg - 1.0f;
+    }
+
+    @Override
+    public Double onDouble(Double arg) {
+      return arg - 1.0;
+    }
+  };
 
 }
