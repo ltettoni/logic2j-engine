@@ -37,7 +37,7 @@ public class Not extends FOPredicate {
   }
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
 
     // Solve against a minimal SolutionListener just interested on the first solution
     final ExistsSolutionListener seekOnlyTheFirstSolution = new ExistsSolutionListener();

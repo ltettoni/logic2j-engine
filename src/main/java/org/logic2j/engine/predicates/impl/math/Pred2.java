@@ -55,7 +55,7 @@ public class Pred2<T, R> extends FOPredicate {
 
 
   @Override
-  public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public final Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 

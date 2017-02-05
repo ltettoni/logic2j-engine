@@ -18,6 +18,8 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
+import org.logic2j.engine.exception.SolverException;
+import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.Even;
@@ -31,8 +33,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.engine.model.Var.intVar;
+import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.or;
-import static org.logic2j.engine.predicates.Predicates.ttrue;
 
 public class FirstOrderLogicTest {
   private static final Logger logger = LoggerFactory.getLogger(FirstOrderLogicTest.class);
@@ -47,21 +49,25 @@ public class FirstOrderLogicTest {
   }
 
   @Test
-  public void call() {
-    assertThat(solver.solve(new Call(ttrue)).count(), is(1L));
-  }
-
-  @Test
-  public void call1() {
-    final Var<Integer> X = intVar("X");
-    assertThat(solver.solve(new Call(new Digit(X))).count(), is(10L));
-  }
-
-  @Test
   public void callFixed() {
     final Var<Integer> X = intVar("X");
     final Or or = or(new Digit(X), new Even(X));
-    final List<Object> list = solver.solve(new Call(or)).var("X").list();
+    final List<Integer> list = solver.solve(new Call(or)).var(X).list();
+    assertThat(list.toString(), is("[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8]"));
+  }
+
+  @Test(expected = SolverException.class)
+  public void callOnFreeVar() {
+    final Var<Integer> Z = intVar();
+    solver.solve(new Call(Z)).exists();
+  }
+
+  @Test
+  public void callOnVar() {
+    final Var<Integer> X = intVar("X");
+    final Var<Term> Z = new Var<>(Term.class, "Z");
+    final Or or = or(new Digit(X), new Even(X));
+    final List<Integer> list = solver.solve(eq(Z, or), new Call(Z)).var(X).list();
     assertThat(list.toString(), is("[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8]"));
   }
 }

@@ -42,7 +42,7 @@ public class IntRange extends FOPredicate {
 
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     final Object minBound = currentVars.reify(getArg(0));
     final Object iterating = currentVars.reify(getArg(1));
     final Object maxBound = currentVars.reify(getArg(2));

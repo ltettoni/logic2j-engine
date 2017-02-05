@@ -19,11 +19,14 @@ package org.logic2j.engine.model;
 
 
 import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.solver.listener.SolutionListener;
+import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.visitor.TermVisitor;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Struct class represents either Prolog compound {@link Term}s or atoms (an atom is represented by a 0-arity compound).
@@ -111,6 +114,8 @@ public class Struct extends Term {
    */
   private String signature;
 
+  private BiFunction <SolutionListener, UnifyContext, Integer> predicateLogic = null;
+
   /**
    * Low-level constructor.
    *
@@ -144,6 +149,8 @@ public class Struct extends Term {
     this.name = original.name;
     this.arity = original.arity;
     this.signature = original.signature;
+    this.predicateLogic = original.predicateLogic;
+
     // What about "this.index" ?
     if (this.arity > 0) {
       this.args = new Object[this.arity];
@@ -172,6 +179,7 @@ public class Struct extends Term {
     this.signature = original.signature;
     this.index = original.index;
     this.args = newArguments;
+    this.predicateLogic = original.predicateLogic;
   }
 
   /**
@@ -341,6 +349,14 @@ public class Struct extends Term {
 
   public String getVarargsPredicateSignature() {
     return this.name + VARARG_PREDICATE_TRAILER;
+  }
+
+  public BiFunction<SolutionListener, UnifyContext, Integer> getPredicateLogic() {
+    return predicateLogic;
+  }
+
+  public void setPredicateLogic(BiFunction<SolutionListener, UnifyContext, Integer> predicateLogic) {
+    this.predicateLogic = predicateLogic;
   }
 
   // ---------------------------------------------------------------------------

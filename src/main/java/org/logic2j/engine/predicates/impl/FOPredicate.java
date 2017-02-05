@@ -27,6 +27,7 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Iterator;
+import java.util.function.BiFunction;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -34,7 +35,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * First-Order logic Predicate, not to be confused with java.function.Predicates.
  * First-order logic is about binding variables to all solutions, not just checking one value.
  * <p>
- * All subclasses are required to implement {@link #invokePredicate(SolutionListener, UnifyContext)}.
+ * All subclasses are required to implement {@link #predicateLogic(SolutionListener, UnifyContext)}.
  * <p>
  * Support methods are provided to check the {@link Var}iables received from the {@link UnifyContext},
  * and unify variables to values, or check if unification of terms is possible, and then
@@ -45,13 +46,14 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * A functional predicate is a plain data structure like a {@link Struct}, with some executable logic
-   * attached through the {@link #invokePredicate(SolutionListener, UnifyContext)} abstract method.
+   * attached through the {@link #predicateLogic(SolutionListener, UnifyContext)} abstract method.
    *
    * @param theFunctor
    * @param argList
    */
   public FOPredicate(String theFunctor, Object... argList) {
     super(theFunctor, argList);
+    setPredicateLogic(this::predicateLogic);
   }
 
 
@@ -60,13 +62,13 @@ public abstract class FOPredicate extends Struct {
   // ---------------------------------------------------------------------------
 
   /**
-   * Invoked by the {@link org.logic2j.engine.solver.Solver}.
+   * This method will specify the {@link Struct#setPredicateLogic(BiFunction)}.
    *
    * @param theListener
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.engine.solver.Continuation} values.
    */
-  public abstract Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars);
+  public abstract Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars);
 
 
   // --------------------------------------------------------------------------

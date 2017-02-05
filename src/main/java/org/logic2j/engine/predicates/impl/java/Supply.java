@@ -68,7 +68,7 @@ public class Supply extends FOPredicate {
 
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     ensureInit();
     notifyFromVar(0, theListener, currentVars);
     return CONTINUE;

@@ -41,7 +41,7 @@ public abstract class FOUniqueSolutionPredicate extends FOPredicate {
 
 
   @Override
-  public final Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public final Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     sideEffect(currentVars);
     return notifySolution(theListener, currentVars);
   }

@@ -29,7 +29,7 @@ public class Eq extends FOPredicate {
   }
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     final Object[] args = getArgs();
     return unifyAndNotify(theListener, currentVars, args[0], args[1]);
   }

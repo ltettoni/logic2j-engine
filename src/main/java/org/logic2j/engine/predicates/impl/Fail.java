@@ -31,7 +31,7 @@ public class Fail extends FOPredicate {
   }
 
   @Override
-  public Integer invokePredicate(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
     // Provide no solution
     return CONTINUE;
   }

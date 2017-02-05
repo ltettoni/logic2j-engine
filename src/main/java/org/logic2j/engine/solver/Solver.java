@@ -41,7 +41,7 @@ import java.util.Iterator;
  *  "!" (CUT)
  *  ( and in the future, ":-" (RULE) )
  *  All other predicates are delegated in implementations
- *  of {@link FOPredicate#invokePredicate(SolutionListener, UnifyContext)}.
+ *  of {@link FOPredicate#predicateLogic(SolutionListener, UnifyContext)}.
  */
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
@@ -250,6 +250,9 @@ public class Solver {
       }
       final Object callTerm = goalStruct.getArg(0);  // Often a Var
       final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
+      if (TermApi.isFreeVar(realCallTerm)) {
+        throw new SolverException("Cannot call/* on a free variable");
+      }
       result = solveGoalRecursive(realCallTerm, theSolutionListener, currentVars, cutLevel);
 
     } else if (Struct.FUNCTOR_CUT == functor) {
@@ -266,15 +269,13 @@ public class Solver {
         // Stopping there for this iteration
         result = Integer.valueOf(cutLevel);
       }
-    } else if (goalStruct instanceof FOPredicate) {
+    } else if (goalStruct.getPredicateLogic() != null) {
       // ---------------------------------------------------------------------------
       // Primitive implemented in Java
       // ---------------------------------------------------------------------------
-      final Integer primitiveContinuation = ((FOPredicate) goalStruct).invokePredicate(theSolutionListener, currentVars);
-
+      final Integer primitiveContinuation = goalStruct.getPredicateLogic().apply(theSolutionListener, currentVars);
       // The result will be the continuation code or CUT level
       result = primitiveContinuation;
-
     }
     if (isDebug) {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
