@@ -39,7 +39,7 @@ public class SolverApi extends Solver {
 
     final Var<?>[] vars = TermApi.distinctVars(and(goalList.toArray(new Term[goalList.size()])));
     final BindingVar[] bindingVars = Arrays.stream(vars).filter(BindingVar.class::isInstance).map(BindingVar.class::cast).toArray(BindingVar[]::new);
-    final BindingVar[] boundBindingVars = Arrays.stream(bindingVars).filter(bv -> bv.isBound()).toArray(BindingVar[]::new);
+    final BindingVar[] boundBindingVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
 
     if (boundBindingVars.length>0) {
       goalList.add(0, new Supply(boundBindingVars));
@@ -47,7 +47,7 @@ public class SolverApi extends Solver {
 
     final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));
     final Object normalized = TermApi.normalize(effective);
-    final BindingVar[] freeBindingVars = Arrays.stream(bindingVars).filter(bv -> bv.isFree()).toArray(BindingVar[]::new);
+    final BindingVar[] freeBindingVars = Arrays.stream(bindingVars).filter(BindingVar::isFree).toArray(BindingVar[]::new);
     return new GoalHolder(this, normalized, bindingVars);
   }
 }

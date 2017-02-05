@@ -58,7 +58,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    */
   public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<Object>(Object.class, WHOLE_SOLUTION_VAR_NAME);
 
-  public static final Comparator<Var<?>> COMPARATOR_BY_NAME = (left, right) -> left.getName().compareTo(right.getName());
+  public static final Comparator<Var<?>> COMPARATOR_BY_NAME = Comparator.comparing(Var::getName);
 
   /**
    * The anonymous variable (following Prolog's standard name "_")

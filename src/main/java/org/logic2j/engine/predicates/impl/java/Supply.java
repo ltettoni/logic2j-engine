@@ -23,8 +23,6 @@ import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.holder.BindingVar;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +38,6 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * On the contrary, invoking Supply(Q, S) will reverse the cross-product.
  */
 public class Supply extends FOPredicate {
-  private static final Logger logger = LoggerFactory.getLogger(Supply.class);
 
   private final BindingVar<?>[] bindingVars;
   private List<?>[] data;
@@ -56,7 +53,7 @@ public class Supply extends FOPredicate {
     if (this.data == null) {
       synchronized (this) {
         if (this.data == null) {
-          final BindingVar[] boundVars = Arrays.stream(bindingVars).filter(bv -> bv.isBound()).toArray(BindingVar[]::new);
+          final BindingVar[] boundVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
           final int nbVars = boundVars.length;
           this.data = new List<?>[nbVars];
           // Load data (only once) into memory
