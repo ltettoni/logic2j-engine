@@ -20,6 +20,8 @@ package org.logic2j.engine.unify;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
+import org.logic2j.engine.solver.Solver;
+import org.logic2j.engine.solver.SolverContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,8 @@ public class UnifyContext {
    */
   private int topVarIndex;
 
+  private SolverContext solverContext;
+
   /**
    * Initial facade to all empty vars.
    *
@@ -58,6 +62,7 @@ public class UnifyContext {
    */
   UnifyContext(UnifyStateByLookup stateStorage) {
     this.stateStorage = stateStorage;
+    this.solverContext = null;
     this.currentTransaction = 0;
     this.topVarIndex = 0;
     //        audit.info("New at t={}", currentTransaction);
@@ -71,6 +76,7 @@ public class UnifyContext {
    */
   UnifyContext(UnifyContext previous) {
     this.stateStorage = previous.stateStorage;
+    this.solverContext = previous.solverContext;
     this.topVarIndex = previous.topVarIndex;
     this.currentTransaction = previous.currentTransaction + 1;
   }
@@ -235,6 +241,19 @@ public class UnifyContext {
     } else {
       return term1.equals(term2) ? this : null;
     }
+  }
+
+  // ------------------------------------------------------
+  // Managing the SolverContext
+  // ------------------------------------------------------
+
+  public void setSolverContext(SolverContext solverContext) {
+    this.solverContext = solverContext;
+  }
+
+  public Solver getSolver() {
+    assert this.solverContext != null : "SolverContext should not be null in a workable UnifyContext";
+    return this.solverContext.getSolver();
   }
 
   @Override

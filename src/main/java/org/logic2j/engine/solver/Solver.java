@@ -68,7 +68,6 @@ public class Solver {
     if (TermApi.isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
-    SolverContextHolder.register(this);
     final UnifyContext initialContext = new UnifyStateByLookup().createEmptyContext();
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
@@ -100,7 +99,9 @@ public class Solver {
         throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
       }
     }
-    final Integer cutIntercepted = solveGoalRecursive(goal, theSolutionListener, currentVars, 10);
+    currentVars.setSolverContext(new SolverContext(this, theSolutionListener));
+
+    final Integer cutIntercepted = solveGoalRecursive(goal, theSolutionListener, currentVars, /* FIXME why this value?*/10);
     return cutIntercepted;
   }
 

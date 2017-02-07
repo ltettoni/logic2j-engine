@@ -17,9 +17,22 @@
 
 package org.logic2j.engine.solver;
 
+import org.logic2j.engine.solver.listener.SolutionListener;
+
 /**
  * Current resolution context.
  */
 public class SolverContext {
-  public Solver solver;
+  private final Solver solver;
+  private final SolutionListener solutionListener;
+
+  public SolverContext(Solver solver, SolutionListener theSolutionListener) {
+    this.solver = solver;
+    this.solutionListener = theSolutionListener;
+  }
+
+  public Solver getSolver() {
+    return solver;
+  }
+
 }
