@@ -27,7 +27,10 @@ import java.util.Arrays;
 
 /**
  * A monad-like object that allows dereferencing variables to their effective current values,
- * or to modify variables (and return a new UnifyContext).
+ * or to set values to free variables (and return a new UnifyContext).
+ * This is a lightweight object that is very frequently instantiated.
+ * It contains logic to bind variables, unify structures, and reify variables to their effective current
+ * values. The real data store is the more heavy {@link UnifyStateByLookup} object.
  */
 public class UnifyContext {
   private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
@@ -36,16 +39,26 @@ public class UnifyContext {
   final int currentTransaction;
 
   // TODO Make private - only Clause and Solver are using it yet
-  public int topVarIndex;  // "top" value is one above the current max
+  /**
+   * The highest variable index seen so far. When recurse goals through inference, we need a new set
+   * of free variables for evey goal (think of fact(X) :- fact(X1), ...). This is achieved by
+   * adding an offset to all variable of a goal, hence emulating new free vars.
+   */
+  private int topVarIndex;
 
-  private final UnifyStateByLookup impl;
+  /**
+   * Holds the state of all variables.
+   */
+  private final UnifyStateByLookup stateStorage;
 
-  UnifyContext(UnifyStateByLookup implem) {
-    this(implem, 0, 0);
-  }
-
-  UnifyContext(UnifyStateByLookup implem, int currentTransaction, int topVarIndex) {
-    this.impl = implem;
+  /**
+   * Generate a new facade to the current state of variables.
+   * @param stateStorage
+   * @param currentTransaction
+   * @param topVarIndex
+   */
+  UnifyContext(UnifyStateByLookup stateStorage, int currentTransaction, int topVarIndex) {
+    this.stateStorage = stateStorage;
     this.currentTransaction = currentTransaction;
     this.topVarIndex = topVarIndex;
     //        audit.info("New at t={}", currentTransaction);
@@ -80,7 +93,7 @@ public class UnifyContext {
       return this;
     }
     //        audit.info("Bind   {} -> {} at t=" + this.currentTransaction, var, ref);
-    return impl.bind(this, var, ref);
+    return stateStorage.bind(this, var, ref);
   }
 
 
@@ -91,7 +104,7 @@ public class UnifyContext {
    * @return The dereferenced content of theVar, or theVar if it was free
    */
   private Object finalValue(Var<?> theVar) {
-    final Object dereference = this.impl.dereference(theVar, this.currentTransaction);
+    final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
     return dereference;
   }
 
@@ -202,7 +215,16 @@ public class UnifyContext {
 
   @Override
   public String toString() {
-    return "vars#" + this.currentTransaction + impl.toString();
+    return "vars#" + this.currentTransaction + stateStorage.toString();
   }
 
+  /**
+   * Increment and/or obtain top variable index.
+   * @param incrementOrZero
+   * @return The new top variable index, after adding incrementOrZero to its previous value
+   */
+  public int topVarIndex(int incrementOrZero) {
+    this.topVarIndex += incrementOrZero;
+    return this.topVarIndex;
+  }
 }

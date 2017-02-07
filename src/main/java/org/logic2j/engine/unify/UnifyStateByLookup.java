@@ -26,6 +26,10 @@ import java.util.TreeMap;
 
 /**
  * This is the central implementation to process and provide UnifyContext monads.
+ * This object is instantiated only once per solving. It is the data storage containing the current
+ * values of all variables of a goal.
+ * The monadic view of the current state of variables is visible through the lightweight
+ * facade object {@link UnifyContext}.
  */
 public class UnifyStateByLookup {
   private static final Logger logger = LoggerFactory.getLogger(UnifyStateByLookup.class);
@@ -38,6 +42,9 @@ public class UnifyStateByLookup {
   private int[] logOfWrittenSlots;  // Indexed by transaction number
   private int logWatermark;
 
+  /**
+   * This object is instantiated only once at the beginning of solving a goal.
+   */
   public UnifyStateByLookup() {
     transaction = new int[INITIAL_SIZE];
     Arrays.fill(transaction, -1);
@@ -66,8 +73,8 @@ public class UnifyStateByLookup {
     logOfWrittenSlots = Arrays.copyOf(logOfWrittenSlots, newLength);
   }
 
-  public UnifyContext emptyContext() {
-    return new UnifyContext(this);
+  public UnifyContext createEmptyContext() {
+    return new UnifyContext(this, 0, 0);
   }
 
   /**
@@ -120,9 +127,8 @@ public class UnifyStateByLookup {
     //        if (slot > ProfilingInfo.max1) {
     //            ProfilingInfo.max1 = slot;
     //        }
-    return new UnifyContext(this, transactionNumber + 1, currentVars.topVarIndex);
+    return new UnifyContext(this, transactionNumber + 1, currentVars.topVarIndex(0));
   }
-
 
 
   Object dereference(Var<?> theVar, int transactionNumber) {

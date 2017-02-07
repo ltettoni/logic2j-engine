@@ -73,7 +73,7 @@ public class Solver {
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
       // for any new var must be higher than any of the currently used vars.
-      initialContext.topVarIndex += ((Struct) goal).getIndex();
+      initialContext.topVarIndex(((Struct) goal).getIndex());
     }
     try {
       return solveGoal(goal, theSolutionListener, initialContext);
@@ -87,7 +87,7 @@ public class Solver {
   }
 
   private UnifyContext initialContext() {
-    final UnifyContext initialContext = new UnifyStateByLookup().emptyContext();
+    final UnifyContext initialContext = new UnifyStateByLookup().createEmptyContext();
     return initialContext;
   }
 

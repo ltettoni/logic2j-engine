@@ -82,7 +82,7 @@ public class UnifyContextTest {
     f_XXa = TermApi.normalize(Struct.valueOf("f", X4, X4, "a"));
     f_XXb = TermApi.normalize(Struct.valueOf("f", X5, X5, "b"));
 
-    initialContext = new UnifyStateByLookup().emptyContext();
+    initialContext = new UnifyStateByLookup().createEmptyContext();
 
   }
 
