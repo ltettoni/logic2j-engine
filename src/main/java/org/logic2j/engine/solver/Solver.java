@@ -59,7 +59,7 @@ public class Solver {
 
 
   /**
-   * This is the entry point.
+   * This is the entry point for solving a goal, when all variable have to be initially free.
    * @param goal
    * @param theSolutionListener
    * @return
@@ -69,7 +69,7 @@ public class Solver {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
     SolverContextHolder.register(this);
-    final UnifyContext initialContext = initialContext();
+    final UnifyContext initialContext = new UnifyStateByLookup().createEmptyContext();
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
       // for any new var must be higher than any of the currently used vars.
@@ -86,15 +86,11 @@ public class Solver {
     }
   }
 
-  private UnifyContext initialContext() {
-    final UnifyContext initialContext = new UnifyStateByLookup().createEmptyContext();
-    return initialContext;
-  }
-
   /**
-   * Just calls the recursive internal method, this is an alternate entry point when a {@link UnifyContext}
+   * This is an alternate entry point when a {@link UnifyContext}
    * is already instantiated; this is needed in custom predicates implementing first-order logic like
    * not(), exists(), etc.
+   * You enter here when part of the variables have been bound already.
    */
   public Integer solveGoal(Object goal, final SolutionListener theSolutionListener, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
