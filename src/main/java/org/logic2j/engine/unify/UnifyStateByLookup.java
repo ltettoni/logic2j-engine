@@ -132,7 +132,7 @@ public class UnifyStateByLookup {
     //        if (slot > ProfilingInfo.max1) {
     //            ProfilingInfo.max1 = slot;
     //        }
-    return new UnifyContext(currentVars);
+    return new UnifyContext(currentVars, 1);
   }
 
 

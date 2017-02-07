@@ -187,7 +187,7 @@ public class Solver {
             if (isDebug) {
               logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
             }
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars.withListener(andingListeners[nextIndex]), cutLevel);
             return continuationFromSubGoal;
           }
 
@@ -209,7 +209,7 @@ public class Solver {
               }
 
             };
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars, cutLevel);
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars.withListener(subListener), cutLevel);
             return continuationFromSubGoal;
           }
 
@@ -223,7 +223,7 @@ public class Solver {
       if (isDebug) {
         logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
       }
-      result = solveGoalRecursive(lhs, andingListeners[0], currentVars, cutLevel);
+      result = solveGoalRecursive(lhs, andingListeners[0], currentVars.withListener(andingListeners[0]), cutLevel);
     } else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR

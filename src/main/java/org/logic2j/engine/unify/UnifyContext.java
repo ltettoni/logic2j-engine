@@ -75,11 +75,18 @@ public class UnifyContext {
    *
    * @param previous
    */
-  UnifyContext(UnifyContext previous) {
+  UnifyContext(UnifyContext previous, int newTransaction) {
     this.stateStorage = previous.stateStorage;
     this.solverContext = previous.solverContext;
     this.topVarIndex = previous.topVarIndex;
-    this.currentTransaction = previous.currentTransaction + 1;
+    this.currentTransaction = previous.currentTransaction + newTransaction;
+  }
+
+
+  public UnifyContext withListener(SolutionListener newListener) {
+    final UnifyContext copy = new UnifyContext(this, 0);
+    copy.solverContext = new SolverContext(this.getSolver(), newListener);
+    return copy;
   }
 
   /**
