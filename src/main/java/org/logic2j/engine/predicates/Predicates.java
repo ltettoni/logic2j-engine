@@ -75,11 +75,11 @@ public final class Predicates {
     return new Or(disjunctions);
   }
 
-  public static Exists exists(Solver solver, Term term) {
+  public static Exists exists(Term term) {
     return new Exists(term);
   }
 
-  public static Not not(Solver solver, Term term) {
+  public static Not not(Term term) {
     return new Not(term);
   }
 

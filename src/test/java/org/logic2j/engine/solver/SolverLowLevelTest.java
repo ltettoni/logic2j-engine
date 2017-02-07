@@ -281,7 +281,7 @@ public class SolverLowLevelTest {
   @Test
   public void digitNotEven() {
     final Var<Integer> Q = intVar("Q");
-    final Object goal = and(new Digit(Q), not(solver, new Even(Q)));
+    final Object goal = and(new Digit(Q), not(new Even(Q)));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());
   }

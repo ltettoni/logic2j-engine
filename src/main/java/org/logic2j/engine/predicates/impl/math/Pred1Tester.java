@@ -49,13 +49,13 @@ public class Pred1Tester<T> extends FOPredicate {
 
 
   @Override
-  public final Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
+  public final Integer predicateLogic(UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
 
     if (isConstant(n0)) {
       for (final T c0 : this.<T>constants(n0)) {
         final boolean found = this.test.test(c0);
-        final Integer continuation = notifySolutionIf(found, theListener, currentVars);
+        final Integer continuation = notifySolutionIf(found, currentVars);
         if (continuation != CONTINUE) {
           return continuation;
         }

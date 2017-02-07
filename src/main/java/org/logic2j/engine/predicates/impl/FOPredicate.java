@@ -28,6 +28,7 @@ import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -35,7 +36,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * First-Order logic Predicate, not to be confused with java.function.Predicates.
  * First-order logic is about binding variables to all solutions, not just checking one value.
  * <p>
- * All subclasses are required to implement {@link #predicateLogic(SolutionListener, UnifyContext)}.
+ * All subclasses are required to implement {@link #predicateLogic(UnifyContext)}.
  * <p>
  * Support methods are provided to check the {@link Var}iables received from the {@link UnifyContext},
  * and unify variables to values, or check if unification of terms is possible, and then
@@ -46,7 +47,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * A functional predicate is a plain data structure like a {@link Struct}, with some executable logic
-   * attached through the {@link #predicateLogic(SolutionListener, UnifyContext)} abstract method.
+   * attached through the {@link #predicateLogic(UnifyContext)} abstract method.
    *
    * @param theFunctor
    * @param argList
@@ -62,13 +63,12 @@ public abstract class FOPredicate extends Struct {
   // ---------------------------------------------------------------------------
 
   /**
-   * This method will specify the {@link Struct#setPredicateLogic(BiFunction)}.
+   * This method will specify the {@link Struct#setPredicateLogic(Function)} .
    *
-   * @param theListener
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.engine.solver.Continuation} values.
    */
-  public abstract Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars);
+  public abstract Integer predicateLogic(UnifyContext currentVars);
 
 
   // --------------------------------------------------------------------------
@@ -78,18 +78,17 @@ public abstract class FOPredicate extends Struct {
   /**
    * Notify listener that a solution has been found.
    *
-   * @param listener
    * @return The {@link Continuation} as returned by listener's {@link SolutionListener#onSolution(UnifyContext)}
    */
-  protected Integer notifySolution(SolutionListener listener, UnifyContext currentVars) {
-    final Integer continuation = listener.onSolution(currentVars);
+  protected Integer notifySolution(UnifyContext currentVars) {
+    final Integer continuation = currentVars.getSolutionListener().onSolution(currentVars);
     return continuation;
   }
 
 
-  protected Integer notifySolutionIf(boolean condition, SolutionListener theListener, UnifyContext currentVars) {
+  protected Integer notifySolutionIf(boolean condition, UnifyContext currentVars) {
     if (condition) {
-      return notifySolution(theListener, currentVars);
+      return notifySolution(currentVars);
     } else {
       return CONTINUE;
     }
@@ -99,32 +98,30 @@ public abstract class FOPredicate extends Struct {
    * Unify terms t1 and t2, and if they could be unified, call theListener with the solution of the newly
    * unified variables; return the result from notifying. If not, return CONTINUE.
    *
-   * @param theListener
    * @param currentVars
    * @param t1
    * @param t2
    * @return
    */
-  protected Integer unifyAndNotify(SolutionListener theListener, UnifyContext currentVars, Object t1, Object t2) {
+  protected Integer unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
     final UnifyContext afterUnification = currentVars.unify(t1, t2);
 
     final boolean couldUnifySomething = afterUnification != null;
-    return notifySolutionIf(couldUnifySomething, theListener, afterUnification);
+    return notifySolutionIf(couldUnifySomething, afterUnification);
   }
 
   /**
    * Unify terms t1 and constant values from iter, and if they could be unified, call theListener with the solution of the newly
    * unified variables; return the result from notifying. If not, return CONTINUE.
    *
-   * @param theListener
    * @param currentVars
    * @param t1
    * @param iter
    * @return
    */
-  protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Iterator iter) {
+  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator iter) {
     while (iter.hasNext()) {
-      final Integer continuation = unifyAndNotify(theListener, currentVars, t1, iter.next());
+      final Integer continuation = unifyAndNotify(currentVars, t1, iter.next());
       if (continuation != CONTINUE) {
         return continuation;
       }
@@ -132,9 +129,9 @@ public abstract class FOPredicate extends Struct {
     return CONTINUE;
   }
 
-  protected Integer unifyAndNotifyMany(SolutionListener theListener, UnifyContext currentVars, Object t1, Object[] values) {
+  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
     for (final Object value: values) {
-      final Integer continuation = unifyAndNotify(theListener, currentVars, t1, value);
+      final Integer continuation = unifyAndNotify(currentVars, t1, value);
       if (continuation != CONTINUE) {
         return continuation;
       }

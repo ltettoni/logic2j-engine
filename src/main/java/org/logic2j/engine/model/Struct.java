@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Struct class represents either Prolog compound {@link Term}s or atoms (an atom is represented by a 0-arity compound).
@@ -114,7 +115,7 @@ public class Struct extends Term {
    */
   private String signature;
 
-  private BiFunction <SolutionListener, UnifyContext, Integer> predicateLogic = null;
+  private Function<UnifyContext, Integer> predicateLogic = null;
 
   /**
    * Low-level constructor.
@@ -351,11 +352,11 @@ public class Struct extends Term {
     return this.name + VARARG_PREDICATE_TRAILER;
   }
 
-  public BiFunction<SolutionListener, UnifyContext, Integer> getPredicateLogic() {
+  public Function<UnifyContext, Integer> getPredicateLogic() {
     return predicateLogic;
   }
 
-  public void setPredicateLogic(BiFunction<SolutionListener, UnifyContext, Integer> predicateLogic) {
+  public void setPredicateLogic(Function<UnifyContext, Integer> predicateLogic) {
     this.predicateLogic = predicateLogic;
   }
 

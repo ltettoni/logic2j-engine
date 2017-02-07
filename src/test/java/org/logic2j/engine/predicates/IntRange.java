@@ -42,7 +42,7 @@ public class IntRange extends FOPredicate {
 
 
   @Override
-  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(UnifyContext currentVars) {
     final Object minBound = currentVars.reify(getArg(0));
     final Object iterating = currentVars.reify(getArg(1));
     final Object maxBound = currentVars.reify(getArg(2));
@@ -58,12 +58,12 @@ public class IntRange extends FOPredicate {
 
       final UnifyContextIterator unifyContextIterator = new UnifyContextIterator(currentVars, (Var) iterating, values);
       logger.info("{} is going to notify multi solutions: {}", this, values);
-      return theListener.onSolutions(unifyContextIterator);
+      return currentVars.getSolutionListener().onSolutions(unifyContextIterator);
     } else {
       // Check
       final int iter = ((Number) iterating).intValue();
 
-      return notifySolutionIf(min <= iter && iter < max, theListener, currentVars);
+      return notifySolutionIf(min <= iter && iter < max, currentVars);
 
     }
   }

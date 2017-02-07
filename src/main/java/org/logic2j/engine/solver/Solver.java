@@ -41,7 +41,7 @@ import java.util.Iterator;
  *  "!" (CUT)
  *  ( and in the future, ":-" (RULE) )
  *  All other predicates are delegated in implementations
- *  of {@link FOPredicate#predicateLogic(SolutionListener, UnifyContext)}.
+ *  of {@link FOPredicate#predicateLogic(UnifyContext)}.
  */
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
@@ -75,7 +75,8 @@ public class Solver {
       initialContext.topVarIndex(((Struct) goal).getIndex());
     }
     try {
-      return solveGoal(goal, solutionListener, initialContext);
+      initialContext.setSolverContext(new SolverContext(this, solutionListener));
+      return solveGoal(goal, initialContext);
     } catch (SolverException e) {
       // "Functional" exception thrown during solving will just be forwarded
       throw e;
@@ -91,7 +92,7 @@ public class Solver {
    * not(), exists(), etc.
    * You enter here when part of the variables have been bound already.
    */
-  public Integer solveGoal(Object goal, final SolutionListener solutionListener, UnifyContext currentVars) {
+  public Integer solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
     if (goal instanceof Struct) {
@@ -99,9 +100,8 @@ public class Solver {
         throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
       }
     }
-    currentVars.setSolverContext(new SolverContext(this, solutionListener));
 
-    final Integer cutIntercepted = solveGoalRecursive(goal, solutionListener, currentVars, /* FIXME why this value?*/10);
+    final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
     return cutIntercepted;
   }
 
@@ -109,13 +109,11 @@ public class Solver {
    * That's the complex method - the heart of the Solver.
    *
    * @param goalTerm
-   * @param solutionListener
    * @param currentVars
    * @param cutLevel
    * @return
    */
-  private Integer solveGoalRecursive(final Object goalTerm, final SolutionListener solutionListener, final UnifyContext currentVars,
-      final int cutLevel) {
+  private Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
     if (isDebug) {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
@@ -171,7 +169,7 @@ public class Solver {
 
       final SolutionListener[] andingListeners = new SolutionListener[arity];
       // The last listener is the one that called us (typically the one of the application, if this is the outermost "AND")
-      andingListeners[arity - 1] = solutionListener;
+      andingListeners[arity - 1] = currentVars.getSolutionListener();
       // Allocates N-1 andingListeners, usually this means one.
       // On solution, each will trigger solving of the next term
       final Object[] goalStructArgs = goalStruct.getArgs();
@@ -187,7 +185,7 @@ public class Solver {
             if (isDebug) {
               logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
             }
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars.withListener(andingListeners[nextIndex]), cutLevel);
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
             return continuationFromSubGoal;
           }
 
@@ -209,7 +207,7 @@ public class Solver {
               }
 
             };
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, subListener, currentVars.withListener(subListener), cutLevel);
+            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
             return continuationFromSubGoal;
           }
 
@@ -223,7 +221,7 @@ public class Solver {
       if (isDebug) {
         logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
       }
-      result = solveGoalRecursive(lhs, andingListeners[0], currentVars.withListener(andingListeners[0]), cutLevel);
+      result = solveGoalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
     } else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR
@@ -235,7 +233,7 @@ public class Solver {
         if (isDebug) {
           logger.debug("Handling OR, element={} of {}", i, goalStruct);
         }
-        result = solveGoalRecursive(goalStruct.getArg(i), solutionListener, currentVars, cutLevel);
+        result = solveGoalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
         if (result != Continuation.CONTINUE) {
           break;
         }
@@ -250,7 +248,7 @@ public class Solver {
       if (TermApi.isFreeVar(realCallTerm)) {
         throw new SolverException("Cannot call/* on a free variable");
       }
-      result = solveGoalRecursive(realCallTerm, solutionListener, currentVars, cutLevel);
+      result = solveGoalRecursive(realCallTerm, currentVars, cutLevel);
 
     } else if (Struct.FUNCTOR_CUT == functor) {
       // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
@@ -258,7 +256,7 @@ public class Solver {
       // Functionally, this code may be removed
 
       // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-      final Integer continuationFromCaller = solutionListener.onSolution(currentVars);// Signalling one valid solution, but ignoring return value
+      final Integer continuationFromCaller = currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
 
       if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller.intValue() > 0) {
         result = continuationFromCaller;
@@ -270,7 +268,7 @@ public class Solver {
       // ---------------------------------------------------------------------------
       // Primitive implemented in Java
       // ---------------------------------------------------------------------------
-      final Integer primitiveContinuation = goalStruct.getPredicateLogic().apply(solutionListener, currentVars);
+      final Integer primitiveContinuation = goalStruct.getPredicateLogic().apply(currentVars);
       // The result will be the continuation code or CUT level
       result = primitiveContinuation;
     }

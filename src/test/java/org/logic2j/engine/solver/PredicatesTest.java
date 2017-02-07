@@ -111,19 +111,19 @@ public class PredicatesTest {
 
   @Test
   public void testExists() {
-    final long nbr = solver.solve(exists(solver, and(new Digit(anon()), new Info("sol")))).count();
+    final long nbr = solver.solve(exists(and(new Digit(anon()), new Info("sol")))).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void testNot1() {
-    final long nbr = solver.solve(not(solver, and(new Digit(anon()), new Info("sol")))).count();
+    final long nbr = solver.solve(not(and(new Digit(anon()), new Info("sol")))).count();
     assertThat(nbr, is(0L));
   }
 
   @Test
   public void testNot2() {
-    final long nbr = solver.solve(not(solver, fail)).count();
+    final long nbr = solver.solve(not(fail)).count();
     assertThat(nbr, is(1L));
   }
 

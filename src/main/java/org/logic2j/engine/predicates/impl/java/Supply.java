@@ -68,15 +68,15 @@ public class Supply extends FOPredicate {
 
 
   @Override
-  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(UnifyContext currentVars) {
     ensureInit();
-    notifyFromVar(0, theListener, currentVars);
+    notifyFromVar(0, currentVars);
     return CONTINUE;
   }
 
-  private UnifyContext notifyFromVar(int ivar, SolutionListener theListener, UnifyContext currentVars) {
+  private UnifyContext notifyFromVar(int ivar, UnifyContext currentVars) {
     if (ivar >= this.bindingVars.length) {
-      final Integer cont = theListener.onSolution(currentVars);
+      final Integer cont = currentVars.getSolutionListener().onSolution(currentVars);
 //      if (cont != Continuation.CONTINUE) {
 //        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
 //      }
@@ -93,7 +93,7 @@ public class Supply extends FOPredicate {
         throw new SolverException(this + " is unable to bind " + var + " to value " + value);
       }
 
-      notifyFromVar(ivar + 1, theListener, afterUnification);
+      notifyFromVar(ivar + 1, afterUnification);
     } return currentVars;
   }
 }

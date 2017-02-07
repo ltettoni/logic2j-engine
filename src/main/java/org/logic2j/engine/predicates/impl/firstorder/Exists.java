@@ -19,8 +19,8 @@ package org.logic2j.engine.predicates.impl.firstorder;
 
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.FOPredicate;
+import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
@@ -34,14 +34,15 @@ public class Exists extends FOPredicate {
   }
 
   @Override
-  public Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
+  public Integer predicateLogic(UnifyContext currentVars) {
 
     // Solve against a minimal SolutionListener just interested on the first solution
     final ExistsSolutionListener seekOnlyTheFirstSolution = new ExistsSolutionListener();
-    currentVars.getSolver().solveGoal(getArg(0), seekOnlyTheFirstSolution, currentVars);
+    final Solver solver = currentVars.getSolver();
+    solver.solveGoal(getArg(0), currentVars.withListener(seekOnlyTheFirstSolution));
 
     final boolean exists = seekOnlyTheFirstSolution.exists();
-    return notifySolutionIf(exists, theListener, currentVars);
+    return notifySolutionIf(exists, currentVars);
   }
 
 

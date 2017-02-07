@@ -55,7 +55,7 @@ public class Pred2<T, R> extends FOPredicate {
 
 
   @Override
-  public final Integer predicateLogic(SolutionListener theListener, UnifyContext currentVars) {
+  public final Integer predicateLogic(UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
@@ -66,7 +66,7 @@ public class Pred2<T, R> extends FOPredicate {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
-            final Integer continuation = notifySolutionIf(found, theListener, currentVars);
+            final Integer continuation = notifySolutionIf(found, currentVars);
             if (continuation != CONTINUE) {
               return continuation;
             }
@@ -76,7 +76,7 @@ public class Pred2<T, R> extends FOPredicate {
       } else {
         // n1 is free, just unify in forward direction
         final Object[] images = Arrays.stream(this.<T>constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
-        return unifyAndNotifyMany(theListener, currentVars, n1, images);
+        return unifyAndNotifyMany(currentVars, n1, images);
       }
     }
 
@@ -84,7 +84,7 @@ public class Pred2<T, R> extends FOPredicate {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
         final Object[] preimages = Arrays.stream(this.<R>constants(n1)).map(this.preimages).flatMap(Arrays::stream).toArray(Object[]::new);
-        return unifyAndNotifyMany(theListener, currentVars, n0, preimages);
+        return unifyAndNotifyMany(currentVars, n0, preimages);
       } else {
         // Two free variables - no solution
         return CONTINUE;
