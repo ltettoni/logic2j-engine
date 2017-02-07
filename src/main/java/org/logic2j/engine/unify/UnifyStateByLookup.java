@@ -73,8 +73,11 @@ public class UnifyStateByLookup {
     logOfWrittenSlots = Arrays.copyOf(logOfWrittenSlots, newLength);
   }
 
+  /**
+   * @return An initial facade to all empty vars.
+   */
   public UnifyContext createEmptyContext() {
-    return new UnifyContext(this, 0, 0);
+    return new UnifyContext(this);
   }
 
   /**
@@ -87,7 +90,9 @@ public class UnifyStateByLookup {
    * @return
    */
   public UnifyContext bind(UnifyContext currentVars, Var<?> theVar, Object theRef) {
-    logger.debug(" bind {}->{}", theVar, theRef);
+    if (logger.isDebugEnabled()) {
+      logger.debug(" bind {}->{}", theVar, theRef);
+    }
     final int transactionNumber = currentVars.currentTransaction;
     if (theVar == Var.anon()) {
       // assert theRef != Var.ANONYMOUS_VAR: "must not bind an anonymous var to another anonymous var";
@@ -127,7 +132,7 @@ public class UnifyStateByLookup {
     //        if (slot > ProfilingInfo.max1) {
     //            ProfilingInfo.max1 = slot;
     //        }
-    return new UnifyContext(this, transactionNumber + 1, currentVars.topVarIndex(0));
+    return new UnifyContext(currentVars);
   }
 
 

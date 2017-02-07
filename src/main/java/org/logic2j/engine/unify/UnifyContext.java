@@ -36,9 +36,14 @@ public class UnifyContext {
   private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
   //    static final Logger audit = LoggerFactory.getLogger("audit");
 
+  /**
+   * Holds the state of all variables. Immutable and shared by all various {@link UnifyContext}s
+   * returned during the solving of a goal.
+   */
+  private final UnifyStateByLookup stateStorage;
+
   final int currentTransaction;
 
-  // TODO Make private - only Clause and Solver are using it yet
   /**
    * The highest variable index seen so far. When recurse goals through inference, we need a new set
    * of free variables for evey goal (think of fact(X) :- fact(X1), ...). This is achieved by
@@ -47,22 +52,38 @@ public class UnifyContext {
   private int topVarIndex;
 
   /**
-   * Holds the state of all variables.
-   */
-  private final UnifyStateByLookup stateStorage;
-
-  /**
-   * Generate a new facade to the current state of variables.
+   * Initial facade to all empty vars.
+   *
    * @param stateStorage
-   * @param currentTransaction
-   * @param topVarIndex
    */
-  UnifyContext(UnifyStateByLookup stateStorage, int currentTransaction, int topVarIndex) {
+  UnifyContext(UnifyStateByLookup stateStorage) {
     this.stateStorage = stateStorage;
-    this.currentTransaction = currentTransaction;
-    this.topVarIndex = topVarIndex;
+    this.currentTransaction = 0;
+    this.topVarIndex = 0;
     //        audit.info("New at t={}", currentTransaction);
     //        audit.info("    this={}", this);
+  }
+
+  /**
+   * A new facade to the state of vars after one has been set.
+   *
+   * @param previous
+   */
+  UnifyContext(UnifyContext previous) {
+    this.stateStorage = previous.stateStorage;
+    this.topVarIndex = previous.topVarIndex;
+    this.currentTransaction = previous.currentTransaction + 1;
+  }
+
+  /**
+   * Increment and/or obtain top variable index.
+   *
+   * @param incrementOrZero
+   * @return The new top variable index, after adding incrementOrZero to its previous value
+   */
+  public int topVarIndex(int incrementOrZero) {
+    this.topVarIndex += incrementOrZero;
+    return this.topVarIndex;
   }
 
 
@@ -89,7 +110,9 @@ public class UnifyContext {
    */
   UnifyContext bind(Var<?> var, Object ref) {
     if (var == ref) {
-      logger.debug("Not mapping {} onto itself", var);
+      if (logger.isDebugEnabled()) {
+        logger.debug("Not mapping {} onto itself", var);
+      }
       return this;
     }
     //        audit.info("Bind   {} -> {} at t=" + this.currentTransaction, var, ref);
@@ -142,6 +165,7 @@ public class UnifyContext {
 
   /**
    * Unify two terms. Most optimal invocation is Var against non-Var.
+   *
    * @param term1
    * @param term2
    * @return
@@ -218,13 +242,4 @@ public class UnifyContext {
     return "vars#" + this.currentTransaction + stateStorage.toString();
   }
 
-  /**
-   * Increment and/or obtain top variable index.
-   * @param incrementOrZero
-   * @return The new top variable index, after adding incrementOrZero to its previous value
-   */
-  public int topVarIndex(int incrementOrZero) {
-    this.topVarIndex += incrementOrZero;
-    return this.topVarIndex;
-  }
 }
