@@ -22,6 +22,7 @@ import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.SolverContext;
+import org.logic2j.engine.solver.listener.SolutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,6 +255,11 @@ public class UnifyContext {
   public Solver getSolver() {
     assert this.solverContext != null : "SolverContext should not be null in a workable UnifyContext";
     return this.solverContext.getSolver();
+  }
+
+  public SolutionListener getSolutionListener() {
+    assert this.solverContext != null : "SolverContext should not be null in a workable UnifyContext";
+    return this.solverContext.getSolutionListener();
   }
 
   @Override

@@ -364,9 +364,9 @@ public class SolverLowLevelTest {
 
   private LocalSolutionListener solve(Object goal) {
     final Object normalized = TermApi.normalize(goal);
-    final LocalSolutionListener theSolutionListener = new LocalSolutionListener(normalized);
-    solver.solveGoal(normalized, theSolutionListener);
-    return theSolutionListener;
+    final LocalSolutionListener solutionListener = new LocalSolutionListener(normalized);
+    solver.solveGoal(normalized, solutionListener);
+    return solutionListener;
   }
 
 

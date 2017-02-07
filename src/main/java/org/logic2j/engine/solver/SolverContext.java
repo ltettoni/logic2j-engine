@@ -26,13 +26,16 @@ public class SolverContext {
   private final Solver solver;
   private final SolutionListener solutionListener;
 
-  public SolverContext(Solver solver, SolutionListener theSolutionListener) {
+  public SolverContext(Solver solver, SolutionListener solutionListener) {
     this.solver = solver;
-    this.solutionListener = theSolutionListener;
+    this.solutionListener = solutionListener;
   }
 
   public Solver getSolver() {
     return solver;
   }
 
+  public SolutionListener getSolutionListener() {
+    return solutionListener;
+  }
 }
