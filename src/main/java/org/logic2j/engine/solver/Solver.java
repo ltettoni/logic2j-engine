@@ -59,7 +59,7 @@ public class Solver {
 
 
   /**
-   * This is the entry point for solving a goal, when all variable have to be initially free.
+   * This is the naive, simplest entry point for solving a goal, when all variable have to be initially free.
    * @param goal
    * @param solutionListener
    * @return

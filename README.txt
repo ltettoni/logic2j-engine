@@ -37,10 +37,14 @@ Improvements DONE:
 - Removed MutliResult, using directly Iterator<UnifyContext>
 - Removed PrimitiveType, using instanceof
 - Fix LGPL header message, update copyright date
+- Reintroduce lambda in Struct to calculate predicate logic
+- SolverContext now held in UnifyContext
+- SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
+- Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
+
 
 TODO
-- See if SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
-- Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
+- Can and() and or() be implemented not in the Solver but in their own predicates? at the cost of sharing which methods / state?
 - Functors
 - Reintroduce TermApi.selectTerm() ???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
