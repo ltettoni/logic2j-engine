@@ -25,7 +25,7 @@ import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * Succeeds if the specified goal provides a single solution (and none other is sought); fails if
- * the specified goal does not provide.
+ * the specified goal does not provide a single one.
  */
 public class Exists extends FOPredicate {
 
