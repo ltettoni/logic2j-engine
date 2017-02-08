@@ -50,6 +50,26 @@ public class GoalHolder {
     return listener.exists();
   }
 
+  public boolean none() {
+    return ! exists();
+  }
+
+  /**
+   * @return true if only one solution to goal.
+   */
+  public boolean unique() {
+    // TODO This is not an efficient implementation
+    return count()==1;
+  }
+
+  /**
+   * @return true if there is more than one solution.
+   */
+  public boolean multiple() {
+    // TODO This is not an efficient implementation
+    return count()>1;
+  }
+
   public long count() {
     final CountingSolutionListener listener = new CountingSolutionListener();
     solver.solveGoal(goal, listener);
