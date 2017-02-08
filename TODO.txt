@@ -41,12 +41,13 @@ Improvements DONE:
 - SolverContext now held in UnifyContext
 - SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
 - Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
+- count()
+- Infinite streams in SimpleBindings
 
 
 TODO
-- count() and limit()
+- limit()
 - Predicates binding real data values - reintroduce DataFact ????
-- Infinite streams in SimpleBindings
 - Does the cut (!) work in the context of or(), or only in the context of inference???
 - Can and() and or() be implemented not in the Solver but in their own predicates? at the cost of sharing which methods / state?
 - Functors
