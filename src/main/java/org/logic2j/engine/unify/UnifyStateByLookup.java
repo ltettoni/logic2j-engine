@@ -74,13 +74,6 @@ public class UnifyStateByLookup {
   }
 
   /**
-   * @return An initial facade to all empty vars.
-   */
-  public UnifyContext createEmptyContext() {
-    return new UnifyContext(this);
-  }
-
-  /**
    * Binding theVar to theRef; theVar will further appear "modified" in
    * the resulting UnifyContext; theRef is not altered.
    *

@@ -21,7 +21,6 @@ import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Solver;
-import org.logic2j.engine.solver.SolverContext;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +44,10 @@ public class UnifyContext {
    */
   private final UnifyStateByLookup stateStorage;
 
+  private Solver solver;
+
+  private SolutionListener solutionListener;
+
   final int currentTransaction;
 
   /**
@@ -54,16 +57,17 @@ public class UnifyContext {
    */
   private int topVarIndex;
 
-  private SolverContext solverContext;
-
   /**
    * Initial facade to all empty vars.
    *
    * @param stateStorage
+   * @param solver
+   * @param solutionListener
    */
-  UnifyContext(UnifyStateByLookup stateStorage) {
+  public UnifyContext(UnifyStateByLookup stateStorage, Solver solver, SolutionListener solutionListener) {
     this.stateStorage = stateStorage;
-    this.solverContext = null;
+    this.solver = solver;
+    this.solutionListener = solutionListener;
     this.currentTransaction = 0;
     this.topVarIndex = 0;
     //        audit.info("New at t={}", currentTransaction);
@@ -77,7 +81,8 @@ public class UnifyContext {
    */
   UnifyContext(UnifyContext previous, int newTransaction) {
     this.stateStorage = previous.stateStorage;
-    this.solverContext = previous.solverContext;
+    this.solver = previous.solver;
+    this.solutionListener = previous.solutionListener;
     this.topVarIndex = previous.topVarIndex;
     this.currentTransaction = previous.currentTransaction + newTransaction;
   }
@@ -85,7 +90,7 @@ public class UnifyContext {
 
   public UnifyContext withListener(SolutionListener newListener) {
     final UnifyContext copy = new UnifyContext(this, 0);
-    copy.solverContext = new SolverContext(this.getSolver(), newListener);
+    copy.solutionListener = newListener;
     return copy;
   }
 
@@ -255,18 +260,12 @@ public class UnifyContext {
   // Managing the SolverContext
   // ------------------------------------------------------
 
-  public void setSolverContext(SolverContext solverContext) {
-    this.solverContext = solverContext;
-  }
-
   public Solver getSolver() {
-    assert this.solverContext != null : "SolverContext should not be null in a workable UnifyContext";
-    return this.solverContext.getSolver();
+    return this.solver;
   }
 
   public SolutionListener getSolutionListener() {
-    assert this.solverContext != null : "SolverContext should not be null in a workable UnifyContext";
-    return this.solverContext.getSolutionListener();
+    return this.solutionListener;
   }
 
   @Override

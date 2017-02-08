@@ -68,14 +68,13 @@ public class Solver {
     if (TermApi.isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
-    final UnifyContext initialContext = new UnifyStateByLookup().createEmptyContext();
+    final UnifyContext initialContext = new UnifyContext(new UnifyStateByLookup(), this, solutionListener);
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
       // for any new var must be higher than any of the currently used vars.
       initialContext.topVarIndex(((Struct) goal).getIndex());
     }
     try {
-      initialContext.setSolverContext(new SolverContext(this, solutionListener));
       return solveGoal(goal, initialContext);
     } catch (SolverException e) {
       // "Functional" exception thrown during solving will just be forwarded
