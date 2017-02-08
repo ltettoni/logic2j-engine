@@ -17,11 +17,13 @@
 
 package org.logic2j.engine.predicates;
 
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.Eq;
 import org.logic2j.engine.predicates.impl.Fail;
 import org.logic2j.engine.predicates.impl.True;
+import org.logic2j.engine.predicates.impl.firstorder.Count;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.impl.firstorder.Not;
 import org.logic2j.engine.predicates.impl.math.Pred1Tester;
@@ -33,6 +35,7 @@ import org.logic2j.engine.solver.Solver;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import static org.logic2j.engine.model.SimpleBinding.*;
 
 /**
  * Factory methods for common predicates.
@@ -77,6 +80,18 @@ public final class Predicates {
 
   public static Exists exists(Term term) {
     return new Exists(term);
+  }
+
+  public static Count count(Term term, Binding<Long> number) {
+    return new Count(term, number);
+  }
+
+  public static Count count(Term term, Long number) {
+    return new Count(term, bind(number));
+  }
+
+  public static Count count(Term term, Integer number) {
+    return new Count(term, bind((long)number));
   }
 
   public static Not not(Term term) {
