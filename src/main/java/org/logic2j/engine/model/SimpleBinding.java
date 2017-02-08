@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Provides data to predicates: one or several values of a given type. Can provide values from running {@link Iterator}s or {@link Stream}s.
@@ -39,6 +40,7 @@ public class SimpleBinding<T> implements Binding<T> {
 
   private Stream<T> stream = null;
   private Iterator<T> iterator = null;
+  private boolean consumed = false;
 
   /**
    * Use static factories instead.
@@ -102,16 +104,23 @@ public class SimpleBinding<T> implements Binding<T> {
   // De-streaming or de-iterating values into data if requested so
   // ---------------------------------------------------------------------------
 
-  private void ensureData() {
+  private synchronized void ensureData() {
     if (size >= 0) {
       return;
     }
     Stream<T> effectiveStream = stream;
+
+    checkConsumed();
+
     if (iterator != null) {
       // Collect stream to array (this will consume the stream only once)
       final List<T> collector = new ArrayList<>();
       iterator.forEachRemaining(collector::add);
       effectiveStream = collector.stream();
+      this.iterator = null; // Consumed!
+    }
+    if (this.stream != null) {
+      this.stream = null;
     }
     if (effectiveStream != null) {
       // Collect stream to array (this will consume the stream only once)
@@ -123,6 +132,13 @@ public class SimpleBinding<T> implements Binding<T> {
       this.type = elementClass;
       this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
       this.size = this.data.length;
+    }
+    this.consumed = true;
+  }
+
+  private void checkConsumed() {
+    if (consumed) {
+      throw new IllegalStateException(this + " cannot consume a Stream or Iterator more than once !");
     }
   }
 
@@ -152,6 +168,7 @@ public class SimpleBinding<T> implements Binding<T> {
   // ---------------------------------------------------------------------------
 
   public long size() {
+    // In case we have a Stream or Iterator, we need to consume it all anyway
     ensureData();
     return this.size;
   }
@@ -162,6 +179,17 @@ public class SimpleBinding<T> implements Binding<T> {
   }
 
   public Stream<T> toStream() {
+    if (this.stream!=null) {
+      checkConsumed();
+      this.consumed = true;
+      return stream;
+    }
+    if (this.iterator!=null) {
+      checkConsumed();
+      final Iterable<T> iterable = () -> this.iterator;
+      this.consumed = true;
+      return StreamSupport.stream(iterable.spliterator(), false);
+    }
     return Arrays.stream(this.data);
   }
 
@@ -173,12 +201,17 @@ public class SimpleBinding<T> implements Binding<T> {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(this.type.getSimpleName());
-    sb.append('s');
+    final StringBuilder sb = new StringBuilder();
+    if (this.type!=null) {
+      sb.append(this.type.getSimpleName());
+      sb.append('s');
+    } else {
+      sb.append("NoType");
+    }
     if (this.data != null) {
       sb.append(Arrays.stream(data).map(Object::toString).collect(Collectors.joining(",", "<", ">")));
     } else {
-      sb.append("no-data-yet");
+      sb.append("<no-data-yet>");
     }
     return sb.toString();
   }

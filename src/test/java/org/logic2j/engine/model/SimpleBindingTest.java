@@ -72,4 +72,11 @@ public class SimpleBindingTest {
     assertThat(binding.size(), is(20000L));
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void consumeStream() {
+    final SimpleBinding<Integer> binding = bind(new Random().ints().limit(10).boxed());
+    assertThat(binding.toStream().count(), is(10L));
+    assertThat(binding.toStream().count(), is(10L));
+  }
+
 }
