@@ -160,11 +160,13 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
+  // Should really provide a Stream to handle larger sets
   protected static <Q> Q[] constants(Object reified) {
     if (reified == null || isFreeVar(reified)) {
       return (Q[]) EMPTY_ARRAY;
     }
     if (reified instanceof SimpleBinding<?>) {
+      // FIXME This is not good when we have streams or iterators :-( We load them in memory
       return ((SimpleBinding<Q>) reified).toArray();
     }
     // Other object: will be a scalar
