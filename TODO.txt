@@ -44,6 +44,10 @@ Improvements DONE:
 
 
 TODO
+- count() and limit()
+- Predicates binding real data values - reintroduce DataFact ????
+- Infinite streams in SimpleBindings
+- Does the cut (!) work in the context of or(), or only in the context of inference???
 - Can and() and or() be implemented not in the Solver but in their own predicates? at the cost of sharing which methods / state?
 - Functors
 - Reintroduce TermApi.selectTerm() ???
@@ -70,7 +74,7 @@ TODO
   - list of tuple
   - list of map
 - Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
-    --> Listener has a strong async flavour.
+    --> Listener has a strong async flavour are we are not async at all!
 
 
 CANNOT DO / REQUIRES STUDY
