@@ -17,18 +17,22 @@
 
 package org.logic2j.engine.solver;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.Odd;
+import org.logic2j.engine.predicates.impl.FOPredicate;
+import org.logic2j.engine.predicates.impl.io.logging.Info;
 import org.logic2j.engine.predicates.impl.math.Succ;
 import org.logic2j.engine.solver.holder.BindingVar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,7 +47,7 @@ public class SolverWithSimpleBindingTest {
   private SolverApi solver = new SolverApi();
 
   @Test
-  public void supplyFromBoundVar() {
+  public void supplyAndConsumeStream() {
     final Var<Integer> Q = intBVar("Q");
     final SimpleBinding<Integer> vals = SimpleBinding.bind(IntStream.range(1,5).boxed());
     final Term goal = new Succ<>(vals, Q);
@@ -52,8 +56,16 @@ public class SolverWithSimpleBindingTest {
     assertThat(list.toString(), is("[2, 3, 4, 5]"));
   }
 
-  // --------------------------------------------------------------------------
-  // Support methods
-  // --------------------------------------------------------------------------
+  /**
+   * @see FOPredicate#constants(java.lang.Object)
+   */
+  @Ignore("Currently fails because we load all in memory while solving :-(")
+  @Test
+  public void supplyAndConsumeLargeStream() {
+    final Var<Integer> Q = intBVar("Q");
+    final SimpleBinding<Integer> vals = SimpleBinding.bind(new Random().ints().limit(10000000).boxed());
+    final Term goal = new Succ<>(vals, Q);
+    assertThat(solver.solve(goal).count(), is(10000000L));
+  }
 
 }
