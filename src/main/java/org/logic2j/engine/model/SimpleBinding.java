@@ -19,12 +19,7 @@ package org.logic2j.engine.model;
 
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,38 +31,48 @@ import java.util.stream.Stream;
  * @param <T>
  */
 public class SimpleBinding<T> implements Binding<T> {
-  private final Class<T> type;
+  Class<T> type;
+
   private long size = -1; // <0 means unknown or not enumerable
-  private final T[] values; // Data stored there
+  private T[] data; // Data stored there
   private Set<T> cachedSet = null; // Data optionally stored there (if contains operations are requested)
+
+  private Stream<T> stream = null;
+  private Iterator<T> iterator = null;
 
   /**
    * Use static factories instead.
    *
    * @param type
    */
-  private SimpleBinding(Class<T> type, T... values) {
+  private SimpleBinding(Class<T> type, T[] values, Stream<T> stream, Iterator<T> iterator) {
     this.type = type;
-    this.values = values;
-    this.size = this.values.length;
+    this.data = values;
+    this.stream = stream;
+    this.iterator = iterator;
+    this.size = this.data != null ? this.data.length : -1;
   }
 
+  // ---------------------------------------------------------------------------
+  // Defining values
+  // ---------------------------------------------------------------------------
+
   public static <T> SimpleBinding<T> empty(Class<T> type) {
-    return new SimpleBinding<T>(type);
+    return new SimpleBinding<T>(type, (T[]) new Object[0], null, null);
   }
 
   public static <T> SimpleBinding<T> bind(T... values) {
     if (values.length == 0) {
       throw new IllegalArgumentException("Empty SimpleBinding array, cannot determine data type of instances.");
     }
-    return new SimpleBinding(values[0].getClass(), values);
+    return new SimpleBinding(values[0].getClass(), values, null, null);
   }
 
   public static <T> SimpleBinding<T> bind(Collection<T> coll) {
     if (coll.size() == 0) {
       throw new IllegalArgumentException("Empty SimpleBinding collection, cannot determine data type of instances.");
     }
-    return new SimpleBinding(coll.iterator().next().getClass(), coll.toArray());
+    return new SimpleBinding(coll.iterator().next().getClass(), coll.toArray(), null, null);
   }
 
   /**
@@ -78,14 +83,7 @@ public class SimpleBinding<T> implements Binding<T> {
    * @return
    */
   public static <T> SimpleBinding<T> bind(Stream<T> stream) {
-    // Collect stream to array (this will consume the stream only once)
-    final Object[] asObjects = stream.toArray(Object[]::new);
-    if (asObjects.length == 0) {
-      throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
-    }
-    final Class<?> elementClass = asObjects[0].getClass();
-    final T[] data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
-    return bind(data);
+    return new SimpleBinding(null, null, stream, null);
   }
 
   /**
@@ -96,23 +94,36 @@ public class SimpleBinding<T> implements Binding<T> {
    * @return
    */
   public static <T> SimpleBinding<T> bind(Iterator<T> iterator) {
-    // Collect stream to array (this will consume the stream only once)
-    final List<T> collector = new ArrayList<>();
-    iterator.forEachRemaining(collector::add);
-    return bind(collector);
+    return new SimpleBinding(null, null, null, iterator);
   }
 
 
-  public long size() {
-    return this.size;
-  }
+  // ---------------------------------------------------------------------------
+  // De-streaming or de-iterating values into data if requested so
+  // ---------------------------------------------------------------------------
 
-  public T[] toArray() {
-    return this.values;
-  }
-
-  public Stream<T> toStream() {
-    return Arrays.stream(this.values);
+  private void ensureData() {
+    if (size >= 0) {
+      return;
+    }
+    Stream<T> effectiveStream = stream;
+    if (iterator != null) {
+      // Collect stream to array (this will consume the stream only once)
+      final List<T> collector = new ArrayList<>();
+      iterator.forEachRemaining(collector::add);
+      effectiveStream = collector.stream();
+    }
+    if (effectiveStream != null) {
+      // Collect stream to array (this will consume the stream only once)
+      final Object[] asObjects = effectiveStream.toArray(Object[]::new);
+      if (asObjects.length == 0) {
+        throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+      }
+      final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
+      this.type = elementClass;
+      this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
+      this.size = this.data.length;
+    }
   }
 
   /**
@@ -122,21 +133,41 @@ public class SimpleBinding<T> implements Binding<T> {
    * @return true if value is contained in the data.
    */
   public boolean contains(T value) {
+    ensureData();
     if (this.size <= 0) {
       return false;
     }
     if (this.cachedSet == null) {
       synchronized (this) {
         if (this.cachedSet == null) {
-          this.cachedSet = Arrays.stream(this.values).collect(Collectors.toSet());
+          this.cachedSet = Arrays.stream(this.data).collect(Collectors.toSet());
         }
       }
     }
     return this.cachedSet.contains(value);
   }
 
+  // ---------------------------------------------------------------------------
+  // Consuming values
+  // ---------------------------------------------------------------------------
+
+  public long size() {
+    ensureData();
+    return this.size;
+  }
+
+  public T[] toArray() {
+    ensureData();
+    return this.data;
+  }
+
+  public Stream<T> toStream() {
+    return Arrays.stream(this.data);
+  }
+
   @Override
   public Class<T> getType() {
+    ensureData();
     return type;
   }
 
@@ -144,7 +175,11 @@ public class SimpleBinding<T> implements Binding<T> {
   public String toString() {
     final StringBuilder sb = new StringBuilder(this.type.getSimpleName());
     sb.append('s');
-    sb.append(Arrays.stream(values).map(Object::toString).collect(Collectors.joining(",", "<", ">")));
+    if (this.data != null) {
+      sb.append(Arrays.stream(data).map(Object::toString).collect(Collectors.joining(",", "<", ">")));
+    } else {
+      sb.append("no-data-yet");
+    }
     return sb.toString();
   }
 
