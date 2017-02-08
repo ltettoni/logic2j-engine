@@ -18,10 +18,7 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.model.SimpleBinding;
-import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.TermApi;
-import org.logic2j.engine.model.Var;
+import org.logic2j.engine.model.*;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -134,6 +131,22 @@ public abstract class FOPredicate extends Struct {
       final Integer continuation = unifyAndNotify(currentVars, t1, value);
       if (continuation != CONTINUE) {
         return continuation;
+      }
+    }
+    return CONTINUE;
+  }
+
+  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
+    final Object reified = currentVars.reify(binding);
+    if (isFreeVar(reified)) {
+      return unifyAndNotify(currentVars, constant, reified);
+    }
+    if (isConstant(reified)) {
+      for (Object value : constants(reified)) {
+        final Integer continuation = unifyAndNotify(currentVars, constant, value);
+        if (continuation != CONTINUE) {
+          return continuation;
+        }
       }
     }
     return CONTINUE;
