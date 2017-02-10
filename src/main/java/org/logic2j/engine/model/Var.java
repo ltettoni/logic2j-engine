@@ -61,7 +61,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   public static final Comparator<Var<?>> COMPARATOR_BY_NAME = Comparator.comparing(Var::getName);
 
   /**
-   * The anonymous variable (following Prolog's standard name "_")
+   * The anonymous variable (following Prolog's standard name "_"), with a generic.
    * @param <T>
    * @return The non-typed anonymous variable - does not bind any value.
    */
