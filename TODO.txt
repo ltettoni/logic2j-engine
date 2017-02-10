@@ -46,10 +46,10 @@ Improvements DONE:
 
 
 TODO
-- limit()
+- limit(min, max) and the LimitSolutionListener
 - Predicates binding real data values - reintroduce DataFact ????
 - Does the cut (!) work in the context of or(), or only in the context of inference???
-- Can and() and or() be implemented not in the Solver but in their own predicates? at the cost of sharing which methods / state?
+- Can and() and or() be implemented in their own predicates not in the Solver? at the cost of sharing which methods / state?
 - Functors
 - Reintroduce TermApi.selectTerm() ???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
