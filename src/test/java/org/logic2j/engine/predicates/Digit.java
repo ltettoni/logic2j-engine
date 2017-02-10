@@ -21,8 +21,6 @@ package org.logic2j.engine.predicates;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
-import static org.logic2j.engine.model.SimpleBinding.bind;
-
 /**
  * Generate digits
  */
@@ -32,7 +30,7 @@ public class Digit extends Pred1Generator<Integer> {
     super("digit", term, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   }
 
-  public Digit(Integer v0) {
-    this(bind(v0));
-  }
+//  public Digit(Integer v0) {
+//    this(bind(v0));
+//  }
 }
