@@ -48,6 +48,7 @@ Improvements DONE:
 TODO
 - limit(min, max) and the LimitSolutionListener
 - Predicates binding real data values - reintroduce DataFact ????
+- better define aggregation: exists(goal, result), sum(), max(), min(). Probably count() and limit() are different beasts.
 - Does the cut (!) work in the context of or(), or only in the context of inference???
 - Can and() and or() be implemented in their own predicates not in the Solver? at the cost of sharing which methods / state?
 - Functors
