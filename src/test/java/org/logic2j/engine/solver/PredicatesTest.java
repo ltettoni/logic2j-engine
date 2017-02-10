@@ -37,12 +37,10 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.engine.model.SimpleBinding.bind;
-import static org.logic2j.engine.model.SimpleBinding.bind;
 import static org.logic2j.engine.model.SimpleBinding.empty;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
-import static org.logic2j.engine.predicates.Predicates.anon;
 import static org.logic2j.engine.predicates.Predicates.exists;
 import static org.logic2j.engine.predicates.Predicates.fail;
 import static org.logic2j.engine.predicates.Predicates.filter;
@@ -111,13 +109,13 @@ public class PredicatesTest {
 
   @Test
   public void testExists() {
-    final long nbr = solver.solve(exists(and(new Digit(anon()), new Info("sol")))).count();
+    final long nbr = solver.solve(exists(and(new Digit(null), new Info("sol")))).count();
     assertThat(nbr, is(1L));
   }
 
   @Test
   public void testNot1() {
-    final long nbr = solver.solve(not(and(new Digit(anon()), new Info("sol")))).count();
+    final long nbr = solver.solve(not(and(new Digit(null), new Info("sol")))).count();
     assertThat(nbr, is(0L));
   }
 

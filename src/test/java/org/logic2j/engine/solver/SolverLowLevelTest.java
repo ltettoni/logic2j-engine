@@ -33,11 +33,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.logic2j.engine.model.SimpleBinding.bind;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.strVar;
 import static org.logic2j.engine.predicates.Predicates.and;
-import static org.logic2j.engine.predicates.Predicates.anon;
 import static org.logic2j.engine.predicates.Predicates.cut;
 import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.fail;
@@ -209,7 +209,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq(anon(), anon());
+    final Object goal = eq(null, null);
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -232,7 +232,7 @@ public class SolverLowLevelTest {
   @Test
   public void unifyVarToAnonymous() {
     final Var<String> Q = strVar("Q");
-    final Object goal = eq(Q, anon());
+    final Object goal = eq(Q, null);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
     assertEquals("[Q]", listener.getVariables().toString());
@@ -266,14 +266,14 @@ public class SolverLowLevelTest {
 
   @Test
   public void digit0() {
-    final Object goal = new Digit(0);
+    final Object goal = new Digit(bind(0)); // FIXME remove bind()
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
   }
 
   @Test
   public void digit9() {
-    final Object goal = new Digit(9);
+    final Object goal = new Digit(bind(9)); // FIXME remove bind()
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
   }

@@ -18,15 +18,20 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.model.*;
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBinding;
+import org.logic2j.engine.model.Struct;
+import org.logic2j.engine.model.TermApi;
+import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
@@ -50,8 +55,35 @@ public abstract class FOPredicate extends Struct {
    * @param argList
    */
   public FOPredicate(String theFunctor, Object... argList) {
-    super(theFunctor, argList);
+    super(theFunctor, createBindings(argList));
     setPredicateLogic(this::predicateLogic);
+  }
+
+  private static Object[] createBindings(Object... argList) {
+    return Arrays.stream(argList).map(FOPredicate::createBinding).toArray(Object[]::new);
+  }
+
+  private static Object createBinding(Object arg) {
+    if (arg==null) {
+      return anon();
+    }
+//    // Here we will convert basic types to their SimpleBindings
+//    if (arg instanceof Long) {
+//      return bind((Long)arg);
+//    }
+//    if (arg instanceof Integer) {
+//      return bind((Integer)arg);
+//    }
+//    if (arg instanceof String) {
+//      return bind((String)arg);
+//    }
+//    if (arg instanceof Double) {
+//      return bind((Double)arg);
+//    }
+//    if (arg instanceof Float) {
+//      return bind((Float)arg);
+//    }
+    return arg;
   }
 
 
@@ -191,7 +223,7 @@ public abstract class FOPredicate extends Struct {
    * @return true if reified is not a {@link Var}, including true when reified is null
    */
   protected static boolean isConstant(Object reified) {
-    return !TermApi.isFreeVar(reified) && reified != Var.anon();
+    return !TermApi.isFreeVar(reified) && reified != anon();
   }
 
   protected static boolean isFreeVar(Object reified) {
