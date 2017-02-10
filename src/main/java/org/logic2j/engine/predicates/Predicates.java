@@ -46,9 +46,17 @@ public final class Predicates {
   public static final Fail fail = new Fail();
   public static final Cut cut = new Cut();
 
-  public static <T> Var<T> anon() {
+  public static Var anon() {
     return Var.anon();
   }
+
+//  public static Var<Integer> anonInt() {
+//    return Var.anon();
+//  }
+//
+//  public static Var<String> anonStr() {
+//    return Var.anon();
+//  }
 
   public static And and(Term... conjunctions) {
     return new And(conjunctions);
