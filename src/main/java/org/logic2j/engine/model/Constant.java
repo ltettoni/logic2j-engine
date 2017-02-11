@@ -29,6 +29,11 @@ public interface Constant<T> extends Binding {
    */
   long size();
 
+  /**
+   * @return Effective data length. In case of streams or iterators, will get it!
+   */
+  long actualSize();
+
   T[] toArray();
 
   T toScalar();

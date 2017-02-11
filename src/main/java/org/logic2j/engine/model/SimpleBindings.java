@@ -25,9 +25,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Provides data to predicates: one or several values of a given type.
@@ -37,8 +37,8 @@ import java.util.stream.StreamSupport;
  *
  * @param <T>
  */
-public class SimpleBindings<T> implements Constant<T> {
-  Class<T> type;
+public class SimpleBindings<T> {
+  private Class<T> type;
 
   private long size = -1; // <0 means unknown or not enumerable
   private T[] data; // Data stored there
@@ -65,22 +65,138 @@ public class SimpleBindings<T> implements Constant<T> {
   // Defining values
   // ---------------------------------------------------------------------------
 
-  public static <T> SimpleBindings<T> empty(Class<T> type) {
-    return new SimpleBindings<T>(type, (T[]) new Object[0], null, null);
+  public static <T> Constant<T> empty(Class<T> type) {
+    return new ConstantBase<T>() {
+
+      @Override
+      public long size() {
+        return 0;
+      }
+
+      @Override
+      public T[] toArray() {
+        return (T[]) new Object[0];
+      }
+
+      @Override
+      public T toScalar() {
+        return null;
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        return Stream.empty();
+      }
+
+      @Override
+      public boolean contains(T value) {
+        return false;
+      }
+
+      @Override
+      public Class getType() {
+        return type;
+      }
+    };
+  }
+
+  public static <T> Constant<T> bind(Supplier<T> supplier) {
+    return new ConstantBase<T>() {
+      @Override
+      public long size() {
+        return 1;
+      }
+
+      @Override
+      public T[] toArray() {
+        return (T[]) new Object[] {supplier.get()};
+      }
+
+      @Override
+      public T toScalar() {
+        return supplier.get();
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        return Stream.of(supplier.get());
+      }
+
+      @Override
+      public boolean contains(T value) {
+        return value.equals(supplier.get());
+      }
+
+    };
   }
 
   public static <T> Constant<T> bind(T... values) {
-    if (values.length == 0) {
-      throw new IllegalArgumentException("Empty SimpleBinding array, cannot determine data type of instances.");
-    }
-    return new SimpleBindings(values[0].getClass(), values, null, null);
+    return new ConstantBase<T>() {
+      @Override
+      public long size() {
+        return values.length;
+      }
+
+      @Override
+      public T[] toArray() {
+        return values;
+      }
+
+      @Override
+      public T toScalar() {
+        if (values.length != 1) {
+          throw new IllegalStateException("Trying to get scalar from array of " + values.length + " elements: " + Arrays.asList(values));
+        }
+        return values[0];
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        return Arrays.stream(values);
+      }
+
+      @Override
+      public boolean contains(T value) {
+        for (int i = 0; i < values.length; i++) {
+          if (value.equals(values[i])) {
+            return true;
+          }
+        }
+        return false;
+      }
+    };
   }
 
   public static <T> Constant<T> bind(Collection<T> coll) {
-    if (coll.size() == 0) {
-      throw new IllegalArgumentException("Empty SimpleBinding collection, cannot determine data type of instances.");
-    }
-    return new SimpleBindings(coll.iterator().next().getClass(), coll.toArray(), null, null);
+    return new ConstantBase<T>() {
+      @Override
+      public long size() {
+        return coll.size();
+      }
+
+      @Override
+      public T[] toArray() {
+        return (T[]) coll.toArray();
+      }
+
+      @Override
+      public T toScalar() {
+        if (coll.size() != 1) {
+          throw new IllegalStateException("Trying to get scalar from collection of " + coll.size() + " elements: " + coll);
+        }
+        return coll.iterator().next();
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        return coll.stream();
+      }
+
+      @Override
+      public boolean contains(T value) {
+        return coll.contains(value);
+      }
+    };
   }
 
   /**
@@ -91,7 +207,55 @@ public class SimpleBindings<T> implements Constant<T> {
    * @return
    */
   public static <T> Constant<T> bind(Stream<T> stream) {
-    return new SimpleBindings(null, null, stream, null);
+    return new ConstantBase<T>() {
+      private T[] data = null;
+
+      @Override
+      public long size() {
+        return -1;
+      }
+
+      @Override
+      public long actualSize() {
+        consumeNow();
+        return this.data.length;
+      }
+
+      @Override
+      public T[] toArray() {
+        consumeNow();
+        return data;
+      }
+
+      private void consumeNow() {
+        if (this.data == null) {
+          final Object[] asObjects = stream.toArray(Object[]::new);
+          if (asObjects.length == 0) {
+            throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+          }
+          final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
+          this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
+        }
+      }
+
+      @Override
+      public T toScalar() {
+        consumeNow();
+        return Arrays.stream(this.data).findFirst().orElseThrow(() -> new IllegalArgumentException("Empty stream cannot provide a scalar form it"));
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        consumeNow();
+        return Arrays.stream(this.data);
+      }
+
+      @Override
+      public boolean contains(T value) {
+        consumeNow();
+        return Arrays.stream(this.data).anyMatch(value::equals);
+      }
+    };
   }
 
   /**
@@ -102,127 +266,103 @@ public class SimpleBindings<T> implements Constant<T> {
    * @return
    */
   public static <T> Constant<T> bind(Iterator<T> iterator) {
-    return new SimpleBindings(null, null, null, iterator);
+    final List<T> collector = new ArrayList<>();
+    iterator.forEachRemaining(collector::add);
+    return bind(collector);
   }
+
 
   // ---------------------------------------------------------------------------
   // De-streaming or de-iterating values into data if requested so
   // ---------------------------------------------------------------------------
+//
+//  private synchronized void ensureData() {
+//    if (size >= 0) {
+//      return;
+//    }
+//    Stream<T> effectiveStream = stream;
+//
+//    checkConsumed();
+//
+//    if (iterator != null) {
+//      // Collect stream to array (this will consume the stream only once)
+//      final List<T> collector = new ArrayList<>();
+//      iterator.forEachRemaining(collector::add);
+//      effectiveStream = collector.stream();
+//      this.iterator = null; // Consumed!
+//    }
+//    if (this.stream != null) {
+//      this.stream = null;
+//    }
+//    if (effectiveStream != null) {
+//      // Collect stream to array (this will consume the stream only once)
+//      final Object[] asObjects = effectiveStream.toArray(Object[]::new);
+//      if (asObjects.length == 0) {
+//        throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+//      }
+//      final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
+//      this.type = elementClass;
+//      this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
+//      this.size = this.data.length;
+//    }
+//    this.consumed = true;
+//  }
+//
+//  private void checkConsumed() {
+//    if (consumed) {
+//      throw new IllegalStateException(this + " cannot consume a Stream or Iterator more than once !");
+//    }
+//  }
+//
+//  /**
+//   * Cache the data currently held in a Set (for efficient test), and then use the set for testing presence.
+//   *
+//   * @param value
+//   * @return true if value is contained in the data.
+//   */
+//  public boolean contains(T value) {
+//    ensureData();
+//    if (this.size <= 0) {
+//      return false;
+//    }
+//    if (this.cachedSet == null) {
+//      synchronized (this) {
+//        if (this.cachedSet == null) {
+//          this.cachedSet = Arrays.stream(this.data).collect(Collectors.toSet());
+//        }
+//      }
+//    }
+//    return this.cachedSet.contains(value);
+//  }
 
-  private synchronized void ensureData() {
-    if (size >= 0) {
-      return;
-    }
-    Stream<T> effectiveStream = stream;
 
-    checkConsumed();
+  private static abstract class ConstantBase<T> implements Constant<T> {
 
-    if (iterator != null) {
-      // Collect stream to array (this will consume the stream only once)
-      final List<T> collector = new ArrayList<>();
-      iterator.forEachRemaining(collector::add);
-      effectiveStream = collector.stream();
-      this.iterator = null; // Consumed!
+    @Override
+    public Class getType() {
+      return toScalar().getClass();
     }
-    if (this.stream != null) {
-      this.stream = null;
+
+    @Override
+    public long actualSize() {
+      return size();
     }
-    if (effectiveStream != null) {
-      // Collect stream to array (this will consume the stream only once)
-      final Object[] asObjects = effectiveStream.toArray(Object[]::new);
-      if (asObjects.length == 0) {
-        throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+
+    public String toString() {
+      final StringBuilder sb = new StringBuilder();
+      if (this.getType() != null) {
+        sb.append(this.getType().getSimpleName());
+        sb.append('s');
+      } else {
+        sb.append("NoType");
       }
-      final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
-      this.type = elementClass;
-      this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
-      this.size = this.data.length;
-    }
-    this.consumed = true;
-  }
-
-  private void checkConsumed() {
-    if (consumed) {
-      throw new IllegalStateException(this + " cannot consume a Stream or Iterator more than once !");
-    }
-  }
-
-  /**
-   * Cache the data currently held in a Set (for efficient test), and then use the set for testing presence.
-   *
-   * @param value
-   * @return true if value is contained in the data.
-   */
-  public boolean contains(T value) {
-    ensureData();
-    if (this.size <= 0) {
-      return false;
-    }
-    if (this.cachedSet == null) {
-      synchronized (this) {
-        if (this.cachedSet == null) {
-          this.cachedSet = Arrays.stream(this.data).collect(Collectors.toSet());
-        }
+      if (this.size() >= 0) {
+        sb.append(this.toStream().map(Object::toString).collect(Collectors.joining(",", "<", ">")));
+      } else {
+        sb.append("<no-data-yet>");
       }
+      return sb.toString();
     }
-    return this.cachedSet.contains(value);
+
   }
-
-  // ---------------------------------------------------------------------------
-  // Consuming values
-  // ---------------------------------------------------------------------------
-
-  public long size() {
-    // In case we have a Stream or Iterator, we need to consume it all anyway
-    ensureData();
-    return this.size;
-  }
-
-  public T[] toArray() {
-    ensureData();
-    return this.data;
-  }
-
-  public T toScalar() {
-    return toArray()[0];
-  }
-
-  public Stream<T> toStream() {
-    if (this.stream!=null) {
-      checkConsumed();
-      this.consumed = true;
-      return stream;
-    }
-    if (this.iterator!=null) {
-      checkConsumed();
-      final Iterable<T> iterable = () -> this.iterator;
-      this.consumed = true;
-      return StreamSupport.stream(iterable.spliterator(), false);
-    }
-    return Arrays.stream(this.data);
-  }
-
-  @Override
-  public Class<T> getType() {
-    ensureData();
-    return type;
-  }
-
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    if (this.type!=null) {
-      sb.append(this.type.getSimpleName());
-      sb.append('s');
-    } else {
-      sb.append("NoType");
-    }
-    if (this.data != null) {
-      sb.append(Arrays.stream(data).map(Object::toString).collect(Collectors.joining(",", "<", ">")));
-    } else {
-      sb.append("<no-data-yet>");
-    }
-    return sb.toString();
-  }
-
 }
