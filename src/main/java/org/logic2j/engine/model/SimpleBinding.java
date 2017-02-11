@@ -19,19 +19,25 @@ package org.logic2j.engine.model;
 
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Provides data to predicates: one or several values of a given type. Can provide values from running {@link Iterator}s or {@link Stream}s.
+ * Provides data to predicates: one or several values of a given type.
+ * Can provide values from running {@link Iterator}s or {@link Stream}s.
  * Only one method: {@link #empty(Class)} allows empty content. Other methods require at least one element to determine the data type.
  * TODO: one should infer the data type by scanning all elements, not only checking on the first.
  *
  * @param <T>
  */
-public class SimpleBinding<T> implements Binding<T> {
+public class SimpleBinding<T> implements Constant<T> {
   Class<T> type;
 
   private long size = -1; // <0 means unknown or not enumerable
@@ -98,7 +104,6 @@ public class SimpleBinding<T> implements Binding<T> {
   public static <T> SimpleBinding<T> bind(Iterator<T> iterator) {
     return new SimpleBinding(null, null, null, iterator);
   }
-
 
   // ---------------------------------------------------------------------------
   // De-streaming or de-iterating values into data if requested so
