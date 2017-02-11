@@ -22,7 +22,7 @@ import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
-import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
  * Generate digits

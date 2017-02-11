@@ -37,7 +37,7 @@ import java.util.stream.StreamSupport;
  *
  * @param <T>
  */
-public class SimpleBinding<T> implements Constant<T> {
+public class SimpleBindings<T> implements Constant<T> {
   Class<T> type;
 
   private long size = -1; // <0 means unknown or not enumerable
@@ -53,7 +53,7 @@ public class SimpleBinding<T> implements Constant<T> {
    *
    * @param type
    */
-  private SimpleBinding(Class<T> type, T[] values, Stream<T> stream, Iterator<T> iterator) {
+  private SimpleBindings(Class<T> type, T[] values, Stream<T> stream, Iterator<T> iterator) {
     this.type = type;
     this.data = values;
     this.stream = stream;
@@ -65,22 +65,22 @@ public class SimpleBinding<T> implements Constant<T> {
   // Defining values
   // ---------------------------------------------------------------------------
 
-  public static <T> SimpleBinding<T> empty(Class<T> type) {
-    return new SimpleBinding<T>(type, (T[]) new Object[0], null, null);
+  public static <T> SimpleBindings<T> empty(Class<T> type) {
+    return new SimpleBindings<T>(type, (T[]) new Object[0], null, null);
   }
 
-  public static <T> SimpleBinding<T> bind(T... values) {
+  public static <T> Constant<T> bind(T... values) {
     if (values.length == 0) {
       throw new IllegalArgumentException("Empty SimpleBinding array, cannot determine data type of instances.");
     }
-    return new SimpleBinding(values[0].getClass(), values, null, null);
+    return new SimpleBindings(values[0].getClass(), values, null, null);
   }
 
-  public static <T> SimpleBinding<T> bind(Collection<T> coll) {
+  public static <T> Constant<T> bind(Collection<T> coll) {
     if (coll.size() == 0) {
       throw new IllegalArgumentException("Empty SimpleBinding collection, cannot determine data type of instances.");
     }
-    return new SimpleBinding(coll.iterator().next().getClass(), coll.toArray(), null, null);
+    return new SimpleBindings(coll.iterator().next().getClass(), coll.toArray(), null, null);
   }
 
   /**
@@ -90,8 +90,8 @@ public class SimpleBinding<T> implements Constant<T> {
    * @param <T>
    * @return
    */
-  public static <T> SimpleBinding<T> bind(Stream<T> stream) {
-    return new SimpleBinding(null, null, stream, null);
+  public static <T> Constant<T> bind(Stream<T> stream) {
+    return new SimpleBindings(null, null, stream, null);
   }
 
   /**
@@ -101,8 +101,8 @@ public class SimpleBinding<T> implements Constant<T> {
    * @param <T>
    * @return
    */
-  public static <T> SimpleBinding<T> bind(Iterator<T> iterator) {
-    return new SimpleBinding(null, null, null, iterator);
+  public static <T> Constant<T> bind(Iterator<T> iterator) {
+    return new SimpleBindings(null, null, null, iterator);
   }
 
   // ---------------------------------------------------------------------------

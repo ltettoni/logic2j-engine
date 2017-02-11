@@ -19,7 +19,7 @@ package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.SimpleBinding;
+import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
 
-import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -212,9 +212,9 @@ public abstract class FOPredicate extends Struct {
     if (reified == null || isFreeVar(reified)) {
       return (Q[]) EMPTY_ARRAY;
     }
-    if (reified instanceof SimpleBinding<?>) {
+    if (reified instanceof Constant<?>) {
       // FIXME This is not good when we have streams or iterators :-( We load them in memory
-      return ((SimpleBinding<Q>) reified).toArray();
+      return ((Constant<Q>) reified).toArray();
     }
     // Other object: will be a scalar
     return (Q[]) new Object[] {reified};

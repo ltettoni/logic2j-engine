@@ -18,8 +18,9 @@
 package org.logic2j.engine.predicates.impl.math;
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Var;
+
+import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
  * Successor value.
@@ -37,15 +38,15 @@ public class Succ<T extends Number> extends Pred2<T, T> {
   // --------------------------------------------------------------------------
 
   public Succ(T n0, T n1) {
-    this(SimpleBinding.bind(n0), SimpleBinding.bind(n1));
+    this(bind(n0), bind(n1));
   }
 
   public Succ(T n0, Var<T> v1) {
-    this(SimpleBinding.bind(n0), v1);
+    this(bind(n0), v1);
   }
 
   public Succ(Var<T> v0, T n1) {
-    this(v0, SimpleBinding.bind(n1));
+    this(v0, bind(n1));
   }
 
   // --------------------------------------------------------------------------

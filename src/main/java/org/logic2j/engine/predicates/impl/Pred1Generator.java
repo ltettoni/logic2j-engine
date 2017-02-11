@@ -19,14 +19,13 @@ package org.logic2j.engine.predicates.impl;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.SimpleBinding;
-import org.logic2j.engine.solver.listener.SolutionListener;
+import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
-import static org.logic2j.engine.model.SimpleBinding.bind;
 
 /**
  * Generate list of values in sequence.
@@ -34,9 +33,9 @@ import static org.logic2j.engine.model.SimpleBinding.bind;
 public abstract class Pred1Generator<T> extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Pred1Generator.class);
 
-  private final SimpleBinding<T> allowedValues;
+  private final Constant<T> allowedValues;
 
-  public Pred1Generator(String functorName, Binding<T> term, SimpleBinding<T> allowedValues) {
+  public Pred1Generator(String functorName, Binding<T> term, Constant<T> allowedValues) {
     super(functorName, term);
     this.allowedValues = allowedValues;
   }

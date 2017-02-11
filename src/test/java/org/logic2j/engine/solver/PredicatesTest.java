@@ -18,7 +18,6 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
-import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.Odd;
@@ -36,8 +35,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.logic2j.engine.model.SimpleBinding.bind;
-import static org.logic2j.engine.model.SimpleBinding.empty;
+import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.model.SimpleBindings.empty;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
@@ -201,7 +200,7 @@ public class PredicatesTest {
   @Test
   public void succInts1Forward() {
     final Var<Integer> Q = intVar("Q");
-    assertThat(solver.solve(new Succ<>(SimpleBinding.bind(5), Q)).var(Q).list().toString(), is("[6]"));
+    assertThat(solver.solve(new Succ<>(bind(5), Q)).var(Q).list().toString(), is("[6]"));
   }
 
   @Test

@@ -19,7 +19,7 @@ package org.logic2j.engine.predicates;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.SimpleBinding;
+import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
@@ -53,8 +53,8 @@ public class IntRange extends FOPredicate {
     ensureBindingIsNotAFreeVar(minBound, 0);
     ensureBindingIsNotAFreeVar(maxBound, 2);
 
-    final int min = ((SimpleBinding<Integer>) minBound).toScalar();
-    final int max = ((SimpleBinding<Integer>) maxBound).toScalar();
+    final int min = ((Constant<Integer>) minBound).toScalar();
+    final int max = ((Constant<Integer>) maxBound).toScalar();
 
     if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());

@@ -18,8 +18,9 @@
 package org.logic2j.engine.predicates;
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.predicates.impl.math.Pred1Tester;
+
+import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
  * Check a {@link Number} is even using a Java {@link java.util.function.Predicate}.
@@ -33,6 +34,6 @@ public class EvenCheck extends Pred1Tester<Number> {
   }
 
   public EvenCheck(Number v0) {
-    this(SimpleBinding.bind(v0));
+    this(bind(v0));
   }
 }

@@ -25,20 +25,20 @@ import java.util.stream.LongStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.logic2j.engine.model.SimpleBinding.bind;
-import static org.logic2j.engine.model.SimpleBinding.empty;
+import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.model.SimpleBindings.empty;
 
 public class SimpleBindingTest {
 
   @Test
   public void emptyBinding() {
-    final SimpleBinding<Integer> binding = empty(Integer.class);
+    final Constant<Integer> binding = empty(Integer.class);
     assertThat(binding.size(), is(0L));
   }
 
   @Test
   public void array() {
-    final SimpleBinding<Integer> binding = bind(new Integer[] {1,2,3,4,5,4,3,2,1});
+    final Constant<Integer> binding = bind(new Integer[] {1,2,3,4,5,4,3,2,1});
     assertThat(binding.size(), is(9L));
     // Can get several times as an array
     assertThat(binding.toArray().length, is(9));
@@ -50,7 +50,7 @@ public class SimpleBindingTest {
 
   @Test
   public void setStream1() {
-    final SimpleBinding<Long> binding = bind(LongStream.range(1, 1000).boxed());
+    final Constant<Long> binding = bind(LongStream.range(1, 1000).boxed());
     assertThat(binding.size(), is(999L));
     // Can get several times as an array
     assertThat(binding.toArray().length, is(999));
@@ -62,19 +62,19 @@ public class SimpleBindingTest {
 
   @Test
   public void setIterator1() {
-    final SimpleBinding<Long> binding = bind(LongStream.range(1, 1000).boxed().collect(Collectors.toList()).iterator());
+    final Constant<Long> binding = bind(LongStream.range(1, 1000).boxed().collect(Collectors.toList()).iterator());
     assertThat(binding.size(), is(999L));
   }
 
   @Test
   public void infiniteStream1() {
-    final SimpleBinding<Integer> binding = bind(new Random().ints().limit(20000).boxed());
+    final Constant<Integer> binding = bind(new Random().ints().limit(20000).boxed());
     assertThat(binding.size(), is(20000L));
   }
 
   @Test(expected = IllegalStateException.class)
   public void consumeStream() {
-    final SimpleBinding<Integer> binding = bind(new Random().ints().limit(10).boxed());
+    final Constant<Integer> binding = bind(new Random().ints().limit(10).boxed());
     assertThat(binding.toStream().count(), is(10L));
     assertThat(binding.toStream().count(), is(10L));
   }

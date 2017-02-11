@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
 import static org.logic2j.engine.predicates.Predicates.eq;

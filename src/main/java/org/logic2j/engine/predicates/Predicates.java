@@ -35,7 +35,7 @@ import org.logic2j.engine.predicates.internal.Or;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
  * Factory methods for common predicates.

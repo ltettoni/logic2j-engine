@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.logic2j.engine.model.SimpleBinding.bind;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.strVar;
