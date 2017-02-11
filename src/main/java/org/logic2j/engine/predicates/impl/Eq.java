@@ -17,20 +17,41 @@
 
 package org.logic2j.engine.predicates.impl;
 
-import org.logic2j.engine.solver.listener.SolutionListener;
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.Term;
+import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.unify.UnifyContext;
+
+import java.util.function.Function;
 
 /**
  * Unification operator "=".
  */
-public class Eq extends FOPredicate {
-  public Eq(Object t1, Object t2) {
+public class Eq<T> extends Pred2<T, T> {
+  public Eq(Binding<T> t1, Binding<T> t2) {
     super("=", t1, t2);
+    setImage(Function.identity());
+    setPreimage(Function.identity());
+  }
+
+  public Eq(Binding<Term> t1, Term t2) {
+    super("=", t1, t2);
+    setImage(Function.identity());
+    setPreimage(Function.identity());
   }
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
-    final Object[] args = getArgs();
-    return unifyAndNotify(currentVars, args[0], args[1]);
+  protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
+    if (isFreeVar(n0) && isFreeVar(n1)) {
+      return unifyAndNotify(currentVars, n0, n1);
+    }
+    return super.unification(currentVars, n0, n1);
   }
+
+  //
+//  @Override
+//  public Integer predicateLogic(UnifyContext currentVars) {
+//    final Object[] args = getArgs();
+//    return unifyAndNotify(currentVars, args[0], args[1]);
+//  }
 }

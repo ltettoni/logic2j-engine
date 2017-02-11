@@ -19,8 +19,8 @@ package org.logic2j.engine.predicates.impl.math;
 
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
@@ -53,12 +53,22 @@ public class Pred2<T, R> extends FOPredicate {
     super(theFunctor, arg0, arg1);
   }
 
+  // For equalling terms, eg. eq(X, or(...)), we cannot wrap the constant term in a SimpleBinding
+  // because the solution API can't find terms recursively in there.
+  public Pred2(String theFunctor, Binding<Term> t1, Term t2) {
+    super(theFunctor, t1, t2);
+  }
+
 
   @Override
   public final Integer predicateLogic(UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
+    return unification(currentVars, n0, n1);
+  }
+
+  protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
         for (final T c0 : this.<T>constants(n0)) {

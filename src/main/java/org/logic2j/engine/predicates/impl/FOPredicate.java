@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
 
+import static org.logic2j.engine.model.SimpleBinding.bind;
 import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -67,22 +68,22 @@ public abstract class FOPredicate extends Struct {
     if (arg==null) {
       return anon();
     }
-//    // Here we will convert basic types to their SimpleBindings
-//    if (arg instanceof Long) {
-//      return bind((Long)arg);
-//    }
-//    if (arg instanceof Integer) {
-//      return bind((Integer)arg);
-//    }
-//    if (arg instanceof String) {
-//      return bind((String)arg);
-//    }
-//    if (arg instanceof Double) {
-//      return bind((Double)arg);
-//    }
-//    if (arg instanceof Float) {
-//      return bind((Float)arg);
-//    }
+    // Here we will convert basic types to their SimpleBindings
+    if (arg instanceof Long) {
+      return bind((Long)arg);
+    }
+    if (arg instanceof Integer) {
+      return bind((Integer)arg);
+    }
+    if (arg instanceof String) {
+      return bind((String)arg);
+    }
+    if (arg instanceof Double) {
+      return bind((Double)arg);
+    }
+    if (arg instanceof Float) {
+      return bind((Float)arg);
+    }
     return arg;
   }
 
@@ -196,10 +197,11 @@ public abstract class FOPredicate extends Struct {
    * @param indexOfArg      zero-based index of argument causing error
    * @throws InvalidTermException
    */
-  protected void ensureBindingIsNotAFreeVar(Object term, String nameOfPrimitive, int indexOfArg) {
+  protected void ensureBindingIsNotAFreeVar(Object term, int indexOfArg) {
     if (isFreeVar(term)) {
       // TODO Should be a kind of InvalidGoalException instead?
       final int positionOfArgument = indexOfArg + 1;
+      final String nameOfPrimitive = getName();
       throw new InvalidTermException(
           "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }

@@ -18,6 +18,7 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
@@ -138,7 +139,7 @@ public class SolverLowLevelTest {
     countNSolutions(3, or(ttrue, ttrue, ttrue));
     //
     final Var<Integer> Q = intVar("Q");
-    countNSolutions(3, or(eq(Q, 1), eq(Q, 2), eq(Q, 3)));
+    countNSolutions(3, or(eq(Q, bind(1)), eq(Q, bind(2)), eq(Q, bind(3))));
     //      GoalHolder solutions;
     //      solutions = this.prolog.solve("X=a; X=b; X=c");
     //      assertEquals("[a, b, c]", solutions.var("X").list().toString());
@@ -193,7 +194,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyLiteralsNoSolution() {
-    final Object goal = eq("a", "b");
+    final Object goal = eq(bind("a"), bind("b"));
     final long nbSolutions = solve(goal).count();
     assertEquals(0, nbSolutions);
   }
@@ -201,7 +202,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyLiteralsOneSolution() {
-    final Object goal = eq("c", "c");
+    final Object goal = eq(bind("c"), bind("c"));
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -209,7 +210,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq(null, null);
+    final Object goal = eq((Binding)null, (Binding)null);
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -218,14 +219,14 @@ public class SolverLowLevelTest {
   @Test
   public void unifyVarToLiteral() {
     final Var<String> Q = strVar("Q");
-    final Object goal = eq(Q, "d");
+    final Object goal = eq(Q, bind("d"));
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
     assertEquals("[Q]", listener.getVariables().toString());
-    assertEquals("['='(d, d)]", marshall(listener.getValues(".")));
     assertEquals("[d]", marshall(listener.getValues("Q")));
+    assertEquals("['='(d, Strings<d>)]", marshall(listener.getValues(".")));
   }
 
 
@@ -266,14 +267,14 @@ public class SolverLowLevelTest {
 
   @Test
   public void digit0() {
-    final Object goal = new Digit(bind(0)); // FIXME remove bind()
+    final Object goal = new Digit(bind(0));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
   }
 
   @Test
   public void digit9() {
-    final Object goal = new Digit(bind(9)); // FIXME remove bind()
+    final Object goal = new Digit(bind(9));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
   }
@@ -337,14 +338,14 @@ public class SolverLowLevelTest {
 
   @Test
   public void intRangeCheckInvalid() {
-    final Object goal = new IntRange(10, 5, 15);
+    final Object goal = new IntRange(bind(10), bind(5), bind(15));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(0, listener.count());
   }
 
   @Test
   public void intRangeCheckValid() {
-    final Object goal = new IntRange(10, 12, 15);
+    final Object goal = new IntRange(bind(10), bind(12), bind(15));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(1, listener.count());
   }
@@ -352,7 +353,7 @@ public class SolverLowLevelTest {
   @Test
   public void intRangeCheckGenerate() {
     final Var<Integer> Q = intVar("Q");
-    final Object goal = new IntRange(10, Q, 15);
+    final Object goal = new IntRange(bind(10), Q, bind(15));
     final ExtractingSolutionListener listener = solve(goal);
     assertEquals(5, listener.count());
   }

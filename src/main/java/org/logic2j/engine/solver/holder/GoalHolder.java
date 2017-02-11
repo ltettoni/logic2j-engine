@@ -55,6 +55,7 @@ public class GoalHolder {
   }
 
   /**
+   * TODO should rather be based on limit() with an iteration up to solution #2
    * @return true if only one solution to goal.
    */
   public boolean unique() {
@@ -63,6 +64,7 @@ public class GoalHolder {
   }
 
   /**
+   * TODO should rather be based on limit() with an iteration up to solution #2
    * @return true if there is more than one solution.
    */
   public boolean multiple() {

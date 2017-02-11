@@ -27,6 +27,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.logic2j.engine.model.SimpleBinding.bind;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
 import static org.logic2j.engine.predicates.Predicates.eq;
@@ -38,28 +39,28 @@ public class SolverHighLevelTest {
   @Test
   public void exists0() {
     final Var<Integer> Q = intVar("Q");
-    final Term goal = and(eq(Q, 11), eq(Q, 12));
+    final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
   @Test
   public void exists2() {
     final Var<Integer> Q = intVar("Q");
-    final Term goal = or(eq(Q, 11), eq(Q, 12));
+    final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
     assertThat(solver.solve(goal).exists(), is(true));
   }
 
   @Test
   public void count0() {
     final Var<Integer> Q = intVar("Q");
-    final Term goal = and(eq(Q, 11), eq(Q, 12));
+    final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
     assertThat(solver.solve(goal).count(), is(0L));
   }
 
   @Test
   public void count2() {
     final Var<Integer> Q = intVar("Q");
-    final Term goal = or(eq(Q, 11), eq(Q, 12));
+    final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
     assertThat(solver.solve(goal).count(), is(2L));
   }
 

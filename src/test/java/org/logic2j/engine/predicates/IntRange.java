@@ -18,9 +18,10 @@
 package org.logic2j.engine.predicates;
 
 
+import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBinding;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
@@ -30,13 +31,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
 /**
  * IntRange(min, middle, max) is true when min <= middle < max.
  */
 public class IntRange extends FOPredicate {
   private static final Logger logger = LoggerFactory.getLogger(IntRange.class);
 
-  public IntRange(Object min, final Object middle, Object max) {
+  public IntRange(Binding<Integer> min, final Binding<Integer> middle, Binding<Integer> max) {
     super("intRange", min, middle, max);
   }
 
@@ -47,11 +50,11 @@ public class IntRange extends FOPredicate {
     final Object iterating = currentVars.reify(getArg(1));
     final Object maxBound = currentVars.reify(getArg(2));
 
-    ensureBindingIsNotAFreeVar(minBound, "int_range_classic/3", 0);
-    ensureBindingIsNotAFreeVar(maxBound, "int_range_classic/3", 2);
+    ensureBindingIsNotAFreeVar(minBound, 0);
+    ensureBindingIsNotAFreeVar(maxBound, 2);
 
-    final int min = ((Number) minBound).intValue();
-    final int max = ((Number) maxBound).intValue();
+    final int min = ((SimpleBinding<Integer>) minBound).toScalar();
+    final int max = ((SimpleBinding<Integer>) maxBound).toScalar();
 
     if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
@@ -60,11 +63,17 @@ public class IntRange extends FOPredicate {
       logger.info("{} is going to notify multi solutions: {}", this, values);
       return currentVars.getSolutionListener().onSolutions(unifyContextIterator);
     } else {
-      // Check
-      final int iter = ((Number) iterating).intValue();
-
-      return notifySolutionIf(min <= iter && iter < max, currentVars);
-
+      // Check: notify one solution for any binding within range
+      for (Object val: constants(iterating)) {
+        if (val instanceof Number) {
+          final int v = ((Number) val).intValue();
+          final Integer cont = notifySolutionIf(min <= v && v < max, currentVars);
+          if (cont != CONTINUE) {
+            return cont;
+          }
+        }
+      }
+      return CONTINUE;
     }
   }
 

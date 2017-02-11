@@ -31,11 +31,11 @@ import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Cut;
 import org.logic2j.engine.predicates.internal.Or;
-import org.logic2j.engine.solver.Solver;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
-import static org.logic2j.engine.model.SimpleBinding.*;
+
+import static org.logic2j.engine.model.SimpleBinding.bind;
 
 /**
  * Factory methods for common predicates.
@@ -106,7 +106,11 @@ public final class Predicates {
     return new Not(term);
   }
 
-  public static Eq eq(Object t1, Object t2) {
+  public static  <T> Eq eq(Binding<T> t1, Binding<T> t2) {
+    return new Eq(t1, t2);
+  }
+
+  public static Eq eq(Binding<Term> t1, Term t2) {
     return new Eq(t1, t2);
   }
 

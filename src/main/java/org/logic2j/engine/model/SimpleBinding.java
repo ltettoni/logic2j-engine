@@ -178,6 +178,10 @@ public class SimpleBinding<T> implements Binding<T> {
     return this.data;
   }
 
+  public T toScalar() {
+    return toArray()[0];
+  }
+
   public Stream<T> toStream() {
     if (this.stream!=null) {
       checkConsumed();

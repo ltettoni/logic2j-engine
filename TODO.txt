@@ -39,7 +39,7 @@ Improvements DONE:
 - Fix LGPL header message, update copyright date
 - Reintroduce lambda in Struct to calculate predicate logic
 - SolverContext now held in UnifyContext
-- SimpleBindings can be used in all predicates yet implemented, as in Succ or Abs
+- Now using "Binding", and in particular SimpleBinding allows any predicate to specify multiple (constant) values in various ways
 - Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
 - count()
 - Infinite streams in SimpleBindings
