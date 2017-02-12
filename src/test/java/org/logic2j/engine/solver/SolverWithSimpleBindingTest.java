@@ -17,7 +17,6 @@
 
 package org.logic2j.engine.solver;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
@@ -56,13 +55,16 @@ public class SolverWithSimpleBindingTest {
     assertThat(list.toString(), is("[2, 3, 4, 5]"));
   }
 
-  @Ignore("Currently fails because we load all in memory while solving :-(")
+  /**
+   * No longer failing due to loading large stream in memory. Now we really stream up to the solutions.
+   */
   @Test
   public void supplyAndConsumeLargeStream() {
     final Var<Integer> Q = intBVar("Q");
-    final Constant<Integer> vals = bind(new Random().ints().limit(10000000).boxed());
+    final long largeNumber = 1L * 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
+    final Constant<Integer> vals = bind(new Random().ints().limit(largeNumber).boxed());
     final Term goal = new Succ<>(vals, Q);
-    assertThat(solver.solve(goal).count(), is(10000000L));
+    assertThat(solver.solve(goal).count(), is(largeNumber));
   }
 
 }

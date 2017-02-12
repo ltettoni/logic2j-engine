@@ -207,7 +207,7 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
-  @Deprecated // Should really provide a Stream to handle larger sets
+  @Deprecated // see stream() to handle larger sets
   protected static <Q> Q[] constants(Object reified) {
     if (reified == null || isFreeVar(reified)) {
       return (Q[]) EMPTY_ARRAY;
