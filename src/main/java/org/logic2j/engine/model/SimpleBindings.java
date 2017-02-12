@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Provides data to predicates: one or several values of a given type.
@@ -69,6 +70,11 @@ public class SimpleBindings<T> {
     return new ConstantBase<T>() {
 
       @Override
+      public boolean isSingleFeed() {
+        return false;
+      }
+
+      @Override
       public long size() {
         return 0;
       }
@@ -100,8 +106,20 @@ public class SimpleBindings<T> {
     };
   }
 
+  /**
+   * Supply one value, must be non-null so that its type can be determined.
+   * If you need to optionally have null values specify an {@link java.util.Optional}
+   * @param supplier
+   * @param <T>
+   * @return
+   */
   public static <T> Constant<T> bind(Supplier<T> supplier) {
     return new ConstantBase<T>() {
+      @Override
+      public boolean isSingleFeed() {
+        return false;
+      }
+
       @Override
       public long size() {
         return 1;
@@ -132,6 +150,11 @@ public class SimpleBindings<T> {
 
   public static <T> Constant<T> bind(T... values) {
     return new ConstantBase<T>() {
+      @Override
+      public boolean isSingleFeed() {
+        return false;
+      }
+
       @Override
       public long size() {
         return values.length;
@@ -169,6 +192,11 @@ public class SimpleBindings<T> {
 
   public static <T> Constant<T> bind(Collection<T> coll) {
     return new ConstantBase<T>() {
+      @Override
+      public boolean isSingleFeed() {
+        return false;
+      }
+
       @Override
       public long size() {
         return coll.size();
@@ -211,12 +239,12 @@ public class SimpleBindings<T> {
       private T[] data = null;
 
       @Override
-      public long size() {
-        return -1;
+      public boolean isSingleFeed() {
+        return true;
       }
 
       @Override
-      public long actualSize() {
+      public long size() {
         consumeNow();
         return this.data.length;
       }
@@ -225,6 +253,24 @@ public class SimpleBindings<T> {
       public T[] toArray() {
         consumeNow();
         return data;
+      }
+
+      @Override
+      public T toScalar() {
+        consumeNow();
+        return Arrays.stream(this.data).findFirst().orElseThrow(() -> new IllegalArgumentException("Empty stream cannot provide a scalar form it"));
+      }
+
+      @Override
+      public boolean contains(T value) {
+        consumeNow();
+        return Arrays.stream(this.data).anyMatch(value::equals);
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        consumeNow();
+        return Arrays.stream(this.data);
       }
 
       private void consumeNow() {
@@ -238,23 +284,6 @@ public class SimpleBindings<T> {
         }
       }
 
-      @Override
-      public T toScalar() {
-        consumeNow();
-        return Arrays.stream(this.data).findFirst().orElseThrow(() -> new IllegalArgumentException("Empty stream cannot provide a scalar form it"));
-      }
-
-      @Override
-      public Stream<T> toStream() {
-        consumeNow();
-        return Arrays.stream(this.data);
-      }
-
-      @Override
-      public boolean contains(T value) {
-        consumeNow();
-        return Arrays.stream(this.data).anyMatch(value::equals);
-      }
     };
   }
 
@@ -266,9 +295,58 @@ public class SimpleBindings<T> {
    * @return
    */
   public static <T> Constant<T> bind(Iterator<T> iterator) {
-    final List<T> collector = new ArrayList<>();
-    iterator.forEachRemaining(collector::add);
-    return bind(collector);
+    return new ConstantBase<T>() {
+      private T[] data = null;
+
+      @Override
+      public boolean isSingleFeed() {
+        return true;
+      }
+
+      @Override
+      public long size() {
+        consumeNow();
+        return this.data.length;
+      }
+
+      @Override
+      public T[] toArray() {
+        consumeNow();
+        return data;
+      }
+
+      @Override
+      public T toScalar() {
+        consumeNow();
+        return Arrays.stream(this.data).findFirst().orElseThrow(() -> new IllegalArgumentException("Empty stream cannot provide a scalar form it"));
+      }
+
+      @Override
+      public boolean contains(T value) {
+        consumeNow();
+        return Arrays.stream(this.data).anyMatch(value::equals);
+      }
+
+      @Override
+      public Stream<T> toStream() {
+        final Iterable<T> iterable = () -> iterator;
+        return StreamSupport.stream(iterable.spliterator(), false);
+      }
+
+      private void consumeNow() {
+        if (this.data == null) {
+          final List<T> coll = new ArrayList<T>();
+          iterator.forEachRemaining(val -> coll.add(val));
+          final Object[] asObjects = coll.toArray();
+          if (asObjects.length == 0) {
+            throw new IllegalArgumentException("Empty Constant iterator, cannot determine data type of instances.");
+          }
+          final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
+          this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
+        }
+      }
+
+    };
   }
 
 
@@ -341,11 +419,6 @@ public class SimpleBindings<T> {
     @Override
     public Class getType() {
       return toScalar().getClass();
-    }
-
-    @Override
-    public long actualSize() {
-      return size();
     }
 
     public String toString() {

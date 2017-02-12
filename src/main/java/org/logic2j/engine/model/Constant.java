@@ -25,21 +25,35 @@ import java.util.stream.Stream;
 public interface Constant<T> extends Binding {
 
   /**
+   * @return true if data comes from a stream that cannot be consumed more than once.
+   */
+  boolean isSingleFeed();
+
+  /**
+   * Calculate the size. In case of a stream this consumes it.
    * @return Cardinality of data: 0=empty, 1=scalar, >1=vectorial, -1=unknown
    */
   long size();
 
   /**
-   * @return Effective data length. In case of streams or iterators, will get it!
+   * In case of a stream this consumes it.
+   * @return
    */
-  long actualSize();
-
   T[] toArray();
 
+  /**
+   * In case of a stream this consumes it.
+   * @return
+   */
   T toScalar();
 
   Stream<T> toStream();
 
+  /**
+   * In case of a stream this consumes it.
+   * @param value
+   * @return
+   */
   boolean contains(T value);
 
 }

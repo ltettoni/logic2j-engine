@@ -51,8 +51,8 @@ public class SimpleBindingTest {
   @Test
   public void setStream1() {
     final Constant<Long> binding = bind(LongStream.range(1, 1000).boxed());
-    assertThat(binding.size(), is(-1L));
-    assertThat(binding.actualSize(), is(999L));
+    assertThat(binding.isSingleFeed(), is(true));
+    assertThat(binding.size(), is(999L));
     // Can get several times as an array
     assertThat(binding.toArray().length, is(999));
     assertThat(binding.toArray().length, is(999));
@@ -64,15 +64,15 @@ public class SimpleBindingTest {
   @Test
   public void setIterator1() {
     final Constant<Long> binding = bind(LongStream.range(1, 1000).boxed().collect(Collectors.toList()).iterator());
-    assertThat(binding.size(), is(-1L));
-    assertThat(binding.actualSize(), is(999L));
+    assertThat(binding.isSingleFeed(), is(true));
+    assertThat(binding.size(), is(999L));
   }
 
   @Test
   public void infiniteStream1() {
     final Constant<Integer> binding = bind(new Random().ints().limit(20000).boxed());
-    assertThat(binding.size(), is(-1L));
-    assertThat(binding.actualSize(), is(20000L));
+    assertThat(binding.isSingleFeed(), is(true));
+    assertThat(binding.size(), is(20000L));
   }
 
   @Test // (expected = IllegalStateException.class)
