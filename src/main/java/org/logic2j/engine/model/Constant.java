@@ -27,7 +27,7 @@ public interface Constant<T> extends Binding {
   /**
    * @return true if data comes from a stream that cannot be consumed more than once.
    */
-  boolean isSingleFeed();
+  boolean isUniqueFeed();
 
   /**
    * Calculate the size. In case of a stream this consumes it.

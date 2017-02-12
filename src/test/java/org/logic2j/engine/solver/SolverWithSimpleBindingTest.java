@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.predicates.impl.math.Succ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,18 +40,22 @@ public class SolverWithSimpleBindingTest {
   private SolverApi solver = new SolverApi();
 
   @Test
-  public void supplyAndConsumeStream() {
+  public void supplyAndConsumeStream1() {
     final Var<Integer> Q = intBVar("Q");
     final Constant<Integer> vals = bind(IntStream.range(1,5).boxed());
     final Term goal = new Succ<>(vals, Q);
     assertThat(solver.solve(goal).count(), is(4L));
+  }
+
+  @Test
+  public void supplyAndConsumeStream2() {
+    final Var<Integer> Q = intBVar("Q");
+    final Constant<Integer> vals = bind(IntStream.range(1,5).boxed());
+    final Term goal = new Succ<>(vals, Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[2, 3, 4, 5]"));
   }
 
-  /**
-   * @see FOPredicate#constants(java.lang.Object)
-   */
   @Ignore("Currently fails because we load all in memory while solving :-(")
   @Test
   public void supplyAndConsumeLargeStream() {

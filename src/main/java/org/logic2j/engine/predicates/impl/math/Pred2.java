@@ -24,7 +24,9 @@ import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -71,8 +73,11 @@ public class Pred2<T, R> extends FOPredicate {
   protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        for (final T c0 : this.<T>constants(n0)) {
-          for (final R c1 : this.<R>constants(n1)) {
+        final R[] values1 = this.<R>stream(n1).toArray(n -> (R[])new Object[n]);
+        final Iterator<T> iter = this.<T>stream(n0).iterator();
+        while (iter.hasNext()) {
+          final T c0 = iter.next();
+          for (final R c1 : values1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
@@ -85,7 +90,7 @@ public class Pred2<T, R> extends FOPredicate {
         return CONTINUE;
       } else {
         // n1 is free, just unify in forward direction
-        final Object[] images = Arrays.stream(this.<T>constants(n0)).map(this.images).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Stream<R> images = this.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n1, images);
       }
     }
@@ -93,7 +98,7 @@ public class Pred2<T, R> extends FOPredicate {
     if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
-        final Object[] preimages = Arrays.stream(this.<R>constants(n1)).map(this.preimages).flatMap(Arrays::stream).toArray(Object[]::new);
+        final Stream<T> preimages = this.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n0, preimages);
       } else {
         // Two free variables - no solution

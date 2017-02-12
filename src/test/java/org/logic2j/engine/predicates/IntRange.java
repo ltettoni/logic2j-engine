@@ -27,6 +27,7 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -64,7 +65,9 @@ public class IntRange extends FOPredicate {
       return currentVars.getSolutionListener().onSolutions(unifyContextIterator);
     } else {
       // Check: notify one solution for any binding within range
-      for (Object val: constants(iterating)) {
+      final Iterator<Object> iter = this.<Object>stream(iterating).iterator();
+      while (iter.hasNext()) {
+        final Object val = iter.next();
         if (val instanceof Number) {
           final int v = ((Number) val).intValue();
           final Integer cont = notifySolutionIf(min <= v && v < max, currentVars);

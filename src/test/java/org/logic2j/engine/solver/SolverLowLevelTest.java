@@ -32,8 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
@@ -188,7 +191,7 @@ public class SolverLowLevelTest {
 
 
   // ---------------------------------------------------------------------------
-  // Basic unification
+  // Basic unification using the Eq predicate
   // ---------------------------------------------------------------------------
 
 
@@ -255,6 +258,21 @@ public class SolverLowLevelTest {
     assertEquals("[Q]", marshall(listener.getValues("Z")));
   }
 
+  @Test
+  public void unifyVarToStreamLiteral() throws Exception {
+    final Var<Integer> Q = intVar("Q");
+    final Object goal = eq(Q, bind(IntStream.range(1, 10).boxed()));
+    assertThat(solve(goal).count(), is(9L));
+//    final ExtractingSolutionListener listener = solve(goal);
+//    assertEquals(1, listener.count());
+//    assertEquals("[Q]", listener.getVariables().toString());
+//    assertEquals("[d]", marshall(listener.getValues("Q")));
+//    assertEquals("['='(d, Strings<d>)]", marshall(listener.getValues(".")));
+  }
+
+  // --------------------------------------------------------------------------
+  // Digit
+  // --------------------------------------------------------------------------
 
   @Test
   public void digitVar() {

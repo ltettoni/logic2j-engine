@@ -46,6 +46,7 @@ Improvements DONE:
 
 
 TODO
+- Should we rather use Splititerator instead of our internal cooking with Constant<>?
 - limit(min, max) and the LimitSolutionListener
 - better define aggregation: exists(goal, result), sum(), max(), min(). Probably count() and limit() are different beasts.
 - Can and() and or() be implemented in their own predicates not in the Solver? at the cost of sharing which methods / state?

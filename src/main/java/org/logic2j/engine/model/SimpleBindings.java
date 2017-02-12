@@ -50,9 +50,11 @@ public class SimpleBindings<T> {
   private boolean consumed = false;
 
   /**
-   * Use static factories instead.
-   *
+   * Use static factories bind*() instead.
    * @param type
+   * @param values
+   * @param stream
+   * @param iterator
    */
   private SimpleBindings(Class<T> type, T[] values, Stream<T> stream, Iterator<T> iterator) {
     this.type = type;
@@ -62,15 +64,11 @@ public class SimpleBindings<T> {
     this.size = this.data != null ? this.data.length : -1;
   }
 
-  // ---------------------------------------------------------------------------
-  // Defining values
-  // ---------------------------------------------------------------------------
-
   public static <T> Constant<T> empty(Class<T> type) {
     return new ConstantBase<T>() {
 
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return false;
       }
 
@@ -81,7 +79,7 @@ public class SimpleBindings<T> {
 
       @Override
       public T[] toArray() {
-        return (T[]) new Object[0];
+        return genericArray(type, 0);
       }
 
       @Override
@@ -116,7 +114,7 @@ public class SimpleBindings<T> {
   public static <T> Constant<T> bind(Supplier<T> supplier) {
     return new ConstantBase<T>() {
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return false;
       }
 
@@ -127,7 +125,11 @@ public class SimpleBindings<T> {
 
       @Override
       public T[] toArray() {
-        return (T[]) new Object[] {supplier.get()};
+        final T single = supplier.get();
+        final Class<T> type = (Class<T>) single.getClass();
+        final T[] objects = genericArray(type, 1);
+        objects[0] = single;
+        return objects;
       }
 
       @Override
@@ -151,7 +153,7 @@ public class SimpleBindings<T> {
   public static <T> Constant<T> bind(T... values) {
     return new ConstantBase<T>() {
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return false;
       }
 
@@ -193,7 +195,7 @@ public class SimpleBindings<T> {
   public static <T> Constant<T> bind(Collection<T> coll) {
     return new ConstantBase<T>() {
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return false;
       }
 
@@ -239,7 +241,7 @@ public class SimpleBindings<T> {
       private T[] data = null;
 
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return true;
       }
 
@@ -269,8 +271,9 @@ public class SimpleBindings<T> {
 
       @Override
       public Stream<T> toStream() {
-        consumeNow();
-        return Arrays.stream(this.data);
+//        consumeNow();
+//        return Arrays.stream(this.data);
+        return stream;
       }
 
       private void consumeNow() {
@@ -284,6 +287,10 @@ public class SimpleBindings<T> {
         }
       }
 
+      @Override
+      public String toString() {
+        return "Constant>Stream(values-not-shown)";
+      }
     };
   }
 
@@ -299,7 +306,7 @@ public class SimpleBindings<T> {
       private T[] data = null;
 
       @Override
-      public boolean isSingleFeed() {
+      public boolean isUniqueFeed() {
         return true;
       }
 
@@ -346,72 +353,13 @@ public class SimpleBindings<T> {
         }
       }
 
+      @Override
+      public String toString() {
+        return "Constant>Iterator(values-not-shown)";
+      }
     };
   }
 
-
-  // ---------------------------------------------------------------------------
-  // De-streaming or de-iterating values into data if requested so
-  // ---------------------------------------------------------------------------
-//
-//  private synchronized void ensureData() {
-//    if (size >= 0) {
-//      return;
-//    }
-//    Stream<T> effectiveStream = stream;
-//
-//    checkConsumed();
-//
-//    if (iterator != null) {
-//      // Collect stream to array (this will consume the stream only once)
-//      final List<T> collector = new ArrayList<>();
-//      iterator.forEachRemaining(collector::add);
-//      effectiveStream = collector.stream();
-//      this.iterator = null; // Consumed!
-//    }
-//    if (this.stream != null) {
-//      this.stream = null;
-//    }
-//    if (effectiveStream != null) {
-//      // Collect stream to array (this will consume the stream only once)
-//      final Object[] asObjects = effectiveStream.toArray(Object[]::new);
-//      if (asObjects.length == 0) {
-//        throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
-//      }
-//      final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
-//      this.type = elementClass;
-//      this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
-//      this.size = this.data.length;
-//    }
-//    this.consumed = true;
-//  }
-//
-//  private void checkConsumed() {
-//    if (consumed) {
-//      throw new IllegalStateException(this + " cannot consume a Stream or Iterator more than once !");
-//    }
-//  }
-//
-//  /**
-//   * Cache the data currently held in a Set (for efficient test), and then use the set for testing presence.
-//   *
-//   * @param value
-//   * @return true if value is contained in the data.
-//   */
-//  public boolean contains(T value) {
-//    ensureData();
-//    if (this.size <= 0) {
-//      return false;
-//    }
-//    if (this.cachedSet == null) {
-//      synchronized (this) {
-//        if (this.cachedSet == null) {
-//          this.cachedSet = Arrays.stream(this.data).collect(Collectors.toSet());
-//        }
-//      }
-//    }
-//    return this.cachedSet.contains(value);
-//  }
 
 
   private static abstract class ConstantBase<T> implements Constant<T> {
@@ -435,6 +383,10 @@ public class SimpleBindings<T> {
         sb.append("<no-data-yet>");
       }
       return sb.toString();
+    }
+
+    protected static <T> T[] genericArray(Class<T> elementType, int length) {
+      return (T[]) Array.newInstance(elementType, length);
     }
 
   }

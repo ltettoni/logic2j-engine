@@ -30,6 +30,7 @@ import org.logic2j.engine.unify.UnifyContext;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.anon;
@@ -65,24 +66,24 @@ public abstract class FOPredicate extends Struct {
   }
 
   private static Object createBinding(Object arg) {
-    if (arg==null) {
+    if (arg == null) {
       return anon();
     }
     // Here we will convert basic types to their SimpleBindings
     if (arg instanceof Long) {
-      return bind((Long)arg);
+      return bind((Long) arg);
     }
     if (arg instanceof Integer) {
-      return bind((Integer)arg);
+      return bind((Integer) arg);
     }
     if (arg instanceof String) {
-      return bind((String)arg);
+      return bind((String) arg);
     }
     if (arg instanceof Double) {
-      return bind((Double)arg);
+      return bind((Double) arg);
     }
     if (arg instanceof Float) {
-      return bind((Float)arg);
+      return bind((Float) arg);
     }
     return arg;
   }
@@ -149,18 +150,9 @@ public abstract class FOPredicate extends Struct {
    * @param iter
    * @return
    */
-  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator iter) {
+  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator<T> iter) {
     while (iter.hasNext()) {
-      final Integer continuation = unifyAndNotify(currentVars, t1, iter.next());
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
-    for (final Object value: values) {
+      final T value = iter.next();
       final Integer continuation = unifyAndNotify(currentVars, t1, value);
       if (continuation != CONTINUE) {
         return continuation;
@@ -169,18 +161,27 @@ public abstract class FOPredicate extends Struct {
     return CONTINUE;
   }
 
+  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
+    for (final Object value : values) {
+      final Integer continuation = unifyAndNotify(currentVars, t1, value);
+      if (continuation != CONTINUE) {
+        return continuation;
+      }
+    }
+    return CONTINUE;
+  }
+
+  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Stream<T> values) {
+    return unifyAndNotifyMany(currentVars, t1, values.iterator());
+  }
+
   protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
     final Object reified = currentVars.reify(binding);
     if (isFreeVar(reified)) {
       return unifyAndNotify(currentVars, constant, reified);
     }
     if (isConstant(reified)) {
-      for (Object value : constants(reified)) {
-        final Integer continuation = unifyAndNotify(currentVars, constant, value);
-        if (continuation != CONTINUE) {
-          return continuation;
-        }
-      }
+      return unifyAndNotifyMany(currentVars, constant, stream(reified));
     }
     return CONTINUE;
   }
@@ -193,8 +194,7 @@ public abstract class FOPredicate extends Struct {
    * Make sure term is not a free {@link Var}.
    *
    * @param term
-   * @param nameOfPrimitive Non functional - only to report the name of the primitive in case an Exception is thrown
-   * @param indexOfArg      zero-based index of argument causing error
+   * @param indexOfArg zero-based index of argument causing error
    * @throws InvalidTermException
    */
   protected void ensureBindingIsNotAFreeVar(Object term, int indexOfArg) {
@@ -207,7 +207,7 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
-  // Should really provide a Stream to handle larger sets
+  @Deprecated // Should really provide a Stream to handle larger sets
   protected static <Q> Q[] constants(Object reified) {
     if (reified == null || isFreeVar(reified)) {
       return (Q[]) EMPTY_ARRAY;
@@ -218,6 +218,17 @@ public abstract class FOPredicate extends Struct {
     }
     // Other object: will be a scalar
     return (Q[]) new Object[] {reified};
+  }
+
+  protected static <Q> Stream<Q> stream(Object reified) {
+    if (reified == null || isFreeVar(reified)) {
+      return Stream.empty();
+    }
+    if (reified instanceof Constant<?>) {
+      return ((Constant<Q>) reified).toStream();
+    }
+    // Other object: will be a scalar
+    return Stream.of((Q) reified);
   }
 
   /**

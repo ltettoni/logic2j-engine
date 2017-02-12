@@ -20,9 +20,9 @@ package org.logic2j.engine.predicates.impl.math;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
@@ -53,7 +53,9 @@ public class Pred1Tester<T> extends FOPredicate {
     final Object n0 = currentVars.reify(getArg(0));
 
     if (isConstant(n0)) {
-      for (final T c0 : this.<T>constants(n0)) {
+      final Iterator<T> iter = this.<T>stream(n0).iterator();
+      while (iter.hasNext()) {
+        final T c0 = iter.next();
         final boolean found = this.test.test(c0);
         final Integer continuation = notifySolutionIf(found, currentVars);
         if (continuation != CONTINUE) {
