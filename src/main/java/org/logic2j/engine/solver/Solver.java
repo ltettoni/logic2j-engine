@@ -35,13 +35,13 @@ import java.util.Iterator;
 /**
  * Solve goals - that's the core of the engine, the resolution algorithm is in this class.
  * There are 4 predicates managed directly in this class:
- *  "," (AND)
- *  ";" (OR)
- *  "call(X)"
- *  "!" (CUT)
- *  ( and in the future, ":-" (RULE) )
- *  All other predicates are delegated in implementations
- *  of {@link FOPredicate#predicateLogic(UnifyContext)}.
+ * "," (AND)
+ * ";" (OR)
+ * "call(X)"
+ * "!" (CUT)
+ * ( and in the future, ":-" (RULE) )
+ * All other predicates are delegated in implementations
+ * of {@link FOPredicate#predicateLogic(UnifyContext)}.
  */
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
@@ -60,6 +60,7 @@ public class Solver {
 
   /**
    * This is the naive, simplest entry point for solving a goal, when all variable have to be initially free.
+   *
    * @param goal
    * @param solutionListener
    * @return
@@ -155,6 +156,7 @@ public class Solver {
     // Then we will check if the goal is a Primitive implemented in a Java library
     // Finally we will handle classic goals matched against Prolog theories
 
+    // The AND predicate !
     if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       // Logical AND. Typically the arity=2 since "," is a binary predicate. But in logic2j we allow more, the same code supports both.
 
@@ -221,7 +223,9 @@ public class Solver {
         logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
       }
       result = solveGoalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
-    } else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+    }
+    // The OR predicate
+    else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
             /*
             * This is the Java implementation of N-arity OR
             * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
@@ -237,7 +241,9 @@ public class Solver {
           break;
         }
       }
-    } else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+    }
+    // The CALL predicate
+    else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
       if (arity != 1) {
         throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
@@ -249,13 +255,16 @@ public class Solver {
       }
       result = solveGoalRecursive(realCallTerm, currentVars, cutLevel);
 
-    } else if (Struct.FUNCTOR_CUT == functor) {
+    }
+    // The CUT functor
+    else if (Struct.FUNCTOR_CUT == functor) {
       // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
       // Doing it inline might improve performance a little although I did not measure much difference.
       // Functionally, this code may be removed
 
       // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-      final Integer continuationFromCaller = currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
+      final Integer continuationFromCaller =
+          currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
 
       if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller.intValue() > 0) {
         result = continuationFromCaller;
@@ -263,13 +272,19 @@ public class Solver {
         // Stopping there for this iteration
         result = Integer.valueOf(cutLevel);
       }
-    } else if (goalStruct.getPredicateLogic() != null) {
+    }
+    // A predicate in Java
+    else if (goalStruct.getPredicateLogic() != null) {
       // ---------------------------------------------------------------------------
       // Primitive implemented in Java
       // ---------------------------------------------------------------------------
       final Integer primitiveContinuation = goalStruct.getPredicateLogic().apply(currentVars);
       // The result will be the continuation code or CUT level
       result = primitiveContinuation;
+    }
+    // A rule
+    else {
+      // Here we would look to unify against a rule (premise :- consequence)
     }
     if (isDebug) {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);

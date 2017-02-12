@@ -6,7 +6,8 @@ The absence of "theories" implies there is no "database" features: no storage, n
 There is no inference predicate ":-" used by the solver. The solver cannot infer on rules, it can only solve expressions.
 There is no "library": set of predicates (eg. for IO, math, list processing, etc.) implemented either in Prolog or Java.
 There is no marshalling / unmarshalling of data structures from and to Prolog syntax represented as text.
-
+Strong typing introduced via the Binding<T> interface
+Constant terms can be provided as scalar or vectors (multi-valued), via streams, iterators, arrays, collections, etc.
 
 Changes from logic2j:
 
@@ -46,7 +47,7 @@ Improvements DONE:
 
 
 TODO
-- Should we rather use Splititerator instead of our internal cooking with Constant<>?
+- Should we rather use Splititerator instead of our internal cooking with Constant<T>?
 - limit(min, max) and the LimitSolutionListener
 - better define aggregation: exists(goal, result), sum(), max(), min(). Probably count() and limit() are different beasts.
 - Can and() and or() be implemented in their own predicates not in the Solver? at the cost of sharing which methods / state?

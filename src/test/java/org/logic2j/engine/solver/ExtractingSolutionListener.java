@@ -101,7 +101,7 @@ class ExtractingSolutionListener extends CountingSolutionListener {
     if (!varNames.contains(varName)) {
       throw new IllegalArgumentException("Variable \"" + varName + "\" not defined in goal \"" + this.goal + '"');
     }
-    List<Object> values = new ArrayList<Object>(this.solutions.size());
+    final List<Object> values = new ArrayList<Object>(this.solutions.size());
     for (final Map<String, Object> solution : this.solutions) {
       values.add(solution.get(varName));
     }
