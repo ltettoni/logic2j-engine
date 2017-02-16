@@ -158,6 +158,18 @@ public class SimpleBindings<T> {
       }
 
       @Override
+      public Class getType() {
+        if (values.length==0) {
+          throw new IllegalStateException("Trying to get type from empty array");
+        }
+        final T first = values[0];
+        if (first ==null) {
+          throw new IllegalStateException("Cannot determine type from array, first element is null");
+        }
+        return first.getClass();
+      }
+
+      @Override
       public long size() {
         return values.length;
       }
@@ -197,6 +209,18 @@ public class SimpleBindings<T> {
       @Override
       public boolean isUniqueFeed() {
         return false;
+      }
+
+      @Override
+      public Class getType() {
+        if (coll.isEmpty()) {
+          throw new IllegalStateException("Trying to get type from empty collection");
+        }
+        final T first = coll.iterator().next();
+        if (first ==null) {
+          throw new IllegalStateException("Cannot determine type from collection, first element is null");
+        }
+        return first.getClass();
       }
 
       @Override
@@ -271,8 +295,6 @@ public class SimpleBindings<T> {
 
       @Override
       public Stream<T> toStream() {
-//        consumeNow();
-//        return Arrays.stream(this.data);
         return stream;
       }
 
