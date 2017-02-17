@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ * FIXME Comment no longer describes actual features!
+ *
  * Term class is the root abstract class for all Prolog data types. The following notions apply on terms, see also the {@link TermApi} class
  * for methods to manage {@link Term}s.
  * <ul>
@@ -32,7 +34,7 @@ import java.util.Collection;
  * <li>Normalization: includes initialization of indexes, factorization, and identification of primitive functors</li>
  * </ul>
  *
- * @note Maybe one day we will need a subclass to represent timestamps.
+ * TODO could it become an interface?
  * @see Struct
  * @see Var
  */
