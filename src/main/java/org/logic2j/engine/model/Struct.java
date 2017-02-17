@@ -19,14 +19,13 @@ package org.logic2j.engine.model;
 
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.solver.listener.SolutionListener;
+import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.visitor.TermVisitor;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -34,7 +33,7 @@ import java.util.function.Function;
  * This class is now final, one we'll have to carefully think if this could be user-extended.
  * Note: This class MUST be immutable.
  */
-public class Struct extends Term {
+public class Struct extends Term implements Cloneable {
   private static final long serialVersionUID = 1L;
 
   // ---------------------------------------------------------------------------
@@ -166,21 +165,21 @@ public class Struct extends Term {
   }
 
   /**
-   * Efficient cloning of the structure header - but passing a specified set of already-cloned args
-   *
-   * @param original
-   * @param newArguments
+   * Clone with new arguments.
+   * @param newArguments New arguments, length must be same arity as original Struct
+   * @return A clone of this.
    */
-  public Struct(Struct original, Object[] newArguments) {
-    if (newArguments.length != original.arity) {
+  public Struct cloneWithNewArguments(Object[] newArguments) {
+    if (newArguments.length != this.arity) {
       throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
     }
-    this.name = original.name;
-    this.arity = original.arity;
-    this.signature = original.signature;
-    this.index = original.index;
-    this.args = newArguments;
-    this.predicateLogic = original.predicateLogic;
+    try {
+      final Struct clone = (Struct) this.clone();
+      clone.args = newArguments;
+      return clone;
+    } catch (CloneNotSupportedException e) {
+      throw new SolverException("Could not clone Struct " + this + ": " + e);
+    }
   }
 
   /**

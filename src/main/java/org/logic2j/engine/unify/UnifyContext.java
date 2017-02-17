@@ -170,7 +170,7 @@ public class UnifyContext {
       }
       // Structure has arguments
       final Object[] reifiedArgs = Arrays.stream(s.getArgs()).map(this::reify).toArray(Object[]::new);
-      final Struct res = new Struct(s, reifiedArgs);
+      final Struct res = s.cloneWithNewArguments(reifiedArgs);
       if (s.getIndex() > 0) {
         // The original structure had variables, maybe the cloned one will still have (if those were free)
         // We need to reassign indexes. It's costly, unfortunately.
