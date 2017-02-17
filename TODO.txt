@@ -47,6 +47,8 @@ Improvements DONE:
 
 
 TODO
+- Serious issue with BoundVars. currently a supply() predicate is instantiated at beginning of solve.
+   Very inefficient if a select() is used later on since it will receive N values in sequence :-(
 - Should we rather use Splititerator instead of our internal cooking with Constant<T>?
 - partial reify that just goes to the first non-Var? (without solving recursively ?)
 - limit(min, max) and the LimitSolutionListener
