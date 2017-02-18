@@ -20,13 +20,11 @@ package org.logic2j.engine.model;
 
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.SolverException;
-import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.visitor.TermVisitor;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * Struct class represents either Prolog compound {@link Term}s or atoms (an atom is represented by a 0-arity compound).
@@ -114,8 +112,6 @@ public class Struct extends Term implements Cloneable {
    */
   private String signature;
 
-  private Function<UnifyContext, Integer> predicateLogic = null;
-
   /**
    * Low-level constructor.
    *
@@ -149,7 +145,6 @@ public class Struct extends Term implements Cloneable {
     this.name = original.name;
     this.arity = original.arity;
     this.signature = original.signature;
-    this.predicateLogic = original.predicateLogic;
 
     // What about "this.index" ?
     if (this.arity > 0) {
@@ -351,18 +346,9 @@ public class Struct extends Term implements Cloneable {
     return this.name + VARARG_PREDICATE_TRAILER;
   }
 
-  public Function<UnifyContext, Integer> getPredicateLogic() {
-    return predicateLogic;
-  }
-
-  public void setPredicateLogic(Function<UnifyContext, Integer> predicateLogic) {
-    this.predicateLogic = predicateLogic;
-  }
-
   // ---------------------------------------------------------------------------
   // Helpers for binary predicates: defined LHS (left-hand side) and RHS (right-hand side)
   // ---------------------------------------------------------------------------
-
 
   /**
    * @return Left-hand-side term, this is, {@link #getArg(int)} at index 0.

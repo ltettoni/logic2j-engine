@@ -274,11 +274,12 @@ public class Solver {
       }
     }
     // A predicate in Java
-    else if (goalStruct.getPredicateLogic() != null) {
+    else if (goalStruct instanceof FOPredicate) {
       // ---------------------------------------------------------------------------
       // Primitive implemented in Java
       // ---------------------------------------------------------------------------
-      final Integer primitiveContinuation = goalStruct.getPredicateLogic().apply(currentVars);
+      final FOPredicate javaPredicate = (FOPredicate) goalStruct;
+      final Integer primitiveContinuation = javaPredicate.predicateLogic(currentVars);
       // The result will be the continuation code or CUT level
       result = primitiveContinuation;
     }

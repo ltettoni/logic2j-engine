@@ -58,7 +58,6 @@ public abstract class FOPredicate extends Struct {
    */
   public FOPredicate(String theFunctor, Object... argList) {
     super(theFunctor, createBindings(argList));
-    setPredicateLogic(this::predicateLogic);
   }
 
   private static Object[] createBindings(Object... argList) {
