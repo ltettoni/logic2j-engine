@@ -259,7 +259,7 @@ public class SolverLowLevelTest {
   }
 
   @Test
-  public void unifyVarToStreamLiteral() throws Exception {
+  public void unifyVarToStreamLiteral() {
     final Var<Integer> Q = intVar("Q");
     final Object goal = eq(Q, bind(IntStream.range(1, 10).boxed()));
     assertThat(solve(goal).count(), is(9L));
