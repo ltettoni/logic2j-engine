@@ -66,6 +66,16 @@ public class Pred2<T, R> extends FOPredicate {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
+    if (this.image==null && isFreeVar(n1)) {
+      // If function is not defined, won't need to find solution(s) for free preimage
+      return CONTINUE;
+    }
+
+    if (this.preimage==null && isFreeVar(n0)) {
+      // If function is not inversible, won't need to find solution(s) for free image
+      return CONTINUE;
+    }
+
     return unification(currentVars, n0, n1);
   }
 
