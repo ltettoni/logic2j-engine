@@ -51,7 +51,7 @@ public class Comp2Test {
 
   @Test(expected=SolverException.class)
   public void var2() {
-    Term goal = new LT(intVar(), intVar());
+    Term goal = new LT(123, intVar());
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
