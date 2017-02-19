@@ -19,7 +19,7 @@ package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
-import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
+import org.logic2j.engine.predicates.external.RDBComparisonPredicate;
 import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.unify.UnifyContext;
 
@@ -28,7 +28,7 @@ import java.util.function.Function;
 /**
  * Unification operator "=", used for testing or setting values.
  */
-public class Eq<T> extends Pred2<T, T> implements RDBCompatiblePredicate {
+public class Eq<T> extends Pred2<T, T> implements RDBComparisonPredicate {
   public Eq(Binding<T> t1, Binding<T> t2) {
     super("=", t1, t2);
     setImage(Function.identity());
@@ -50,4 +50,8 @@ public class Eq<T> extends Pred2<T, T> implements RDBCompatiblePredicate {
     return super.unification(currentVars, n0, n1);
   }
 
+  @Override
+  public String sqlOperator() {
+    return "=";
+  }
 }
