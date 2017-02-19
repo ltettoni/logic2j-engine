@@ -18,16 +18,22 @@
 package org.logic2j.engine.predicates.impl.math.function;
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.predicates.external.RDBFunctionPredicate;
 import org.logic2j.engine.predicates.impl.math.Pred2;
 
 /**
  * Length of a char sequence.
  */
-public class Length<T extends CharSequence, R extends Number> extends Pred2<T, R> {
+public class Length<T extends CharSequence, R extends Number> extends Pred2<T, R> implements RDBFunctionPredicate {
 
   public Length(Binding<T> arg0, Binding<R> arg1) {
     super("length", arg0, arg1);
     setPreimage(null); // Preimage function not defined - cannot infer a CharSequence of known length
     setImage(str -> (R)Integer.valueOf(str.length()));
+  }
+
+  @Override
+  public String sqlFunctionTextFormat() {
+    return "length({0})";
   }
 }

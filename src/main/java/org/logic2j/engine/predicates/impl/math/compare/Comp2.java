@@ -19,6 +19,7 @@ package org.logic2j.engine.predicates.impl.math.compare;
 
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.predicates.external.RDBComparisonPredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
@@ -29,7 +30,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
 /**
  * 2-arguments comparison.
  */
-public class Comp2<T> extends FOPredicate {
+public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredicate {
 
   private BiFunction<T, T, Boolean> check = (v0, v1) -> {
     throw new UnsupportedOperationException("Function \"check()\" of " + Comp2.this + " was not defined");

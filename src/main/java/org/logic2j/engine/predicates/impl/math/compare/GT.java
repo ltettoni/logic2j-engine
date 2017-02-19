@@ -46,4 +46,8 @@ public class GT<T extends Number> extends Comp2<T> {
     this(bind(arg0), arg1);
   }
 
+  @Override
+  public String sqlOperator() {
+    return ">";
+  }
 }

@@ -18,8 +18,13 @@
 package org.logic2j.engine.predicates.external;
 
 /**
- * Used to mark predicates that establish a comparison between bindings (constants or vars).
- * These can be processed by SQL.
+ * Used to mark predicates that available as database functions.
  */
-public interface ComparisonPredicate extends RDBCompatiblePredicate {
+public interface RDBFunctionPredicate extends RDBCompatiblePredicate {
+
+  /**
+   * @return A TextFormat that renders the SQL function.
+   */
+  String sqlFunctionTextFormat();
+
 }
