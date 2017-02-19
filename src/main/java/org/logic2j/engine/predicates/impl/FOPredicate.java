@@ -190,6 +190,7 @@ public abstract class FOPredicate extends Struct {
   // --------------------------------------------------------------------------
 
   /**
+   * FIXME Rename ensureBinding... and return the value
    * Make sure term is not a free {@link Var}.
    *
    * @param term
