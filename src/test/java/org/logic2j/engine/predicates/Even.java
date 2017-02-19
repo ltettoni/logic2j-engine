@@ -19,7 +19,6 @@ package org.logic2j.engine.predicates;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -30,11 +29,6 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 public class Even extends Pred1Generator<Integer> {
 
   public Even(Binding<Integer> term) {
-    super("even", term, 0, 2, 4, 6, 8);
-  }
-
-
-  public Even(Var<Integer> term) {
     super("even", term, 0, 2, 4, 6, 8);
   }
 

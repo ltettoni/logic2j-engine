@@ -44,6 +44,7 @@ public class Eq<T> extends Pred2<T, T> implements RDBCompatiblePredicate {
   @Override
   protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isFreeVar(n0) && isFreeVar(n1)) {
+      // Special cas because Pred2 cannot handle two free vars. Eq can.
       return unifyAndNotify(currentVars, n0, n1);
     }
     return super.unification(currentVars, n0, n1);

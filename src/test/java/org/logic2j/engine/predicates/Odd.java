@@ -19,7 +19,6 @@ package org.logic2j.engine.predicates;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
 /**
@@ -28,11 +27,6 @@ import org.logic2j.engine.predicates.impl.Pred1Generator;
 public class Odd extends Pred1Generator<Integer> {
 
   public Odd(Binding<Integer> term) {
-    super("odd", term, 1, 3, 5, 7, 9);
-  }
-
-
-  public Odd(Var<Integer> term) {
     super("odd", term, 1, 3, 5, 7, 9);
   }
 

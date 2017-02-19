@@ -40,27 +40,27 @@ public class LengthTest {
 
   @Test
   public void twoVars() {
-    Term goal = new Length(strVar(), intVar());
+    final Term goal = new Length(strVar(), intVar());
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
   @Test
   public void var1() {
-    Term goal = new Length(strVar(), bind(123));
+    final Term goal = new Length(strVar(), bind(123));
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
   @Test
   public void var2() {
     final Var<Integer> len = intVar();
-    Term goal = new Length(bind("toto"), len);
+    final Term goal = new Length(bind("toto"), len);
     assertThat(solver.solve(goal).var(len).list().toString(), is("[4]"));
   }
 
   @Test
   public void var22() {
     final Var<Integer> len = intVar();
-    Term goal = new Length(bind("a","little","dog"), len);
+    final Term goal = new Length(bind("a","little","dog"), len);
     assertThat(solver.solve(goal).var(len).list().toString(), is("[1, 6, 3]"));
   }
 
