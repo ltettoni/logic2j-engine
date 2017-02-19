@@ -15,21 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates.impl.math;
+package org.logic2j.engine.predicates.impl.math.function;
 
 import java.util.function.Function;
 
-/**
- * A {@link java.util.function.Function} that delegates its apply{@link #apply(Object)}
- * to dedicated implementations for Integer, Long, Float and Double.
- */
-public interface NumericFunction extends Function<Number, Number> {
-  Integer onInteger(Integer arg);
-  Long onLong(Long arg);
-  Float onFloat(Float arg);
-  Double onDouble(Double arg);
+public interface NumericRelation extends Function<Number, Number[]> {
+  Integer[] onInteger(Integer arg);
+  Long[] onLong(Long arg);
+  Float[] onFloat(Float arg);
+  Double[] onDouble(Double arg);
 
-  default Number apply(Number arg) {
+
+  default Number[] apply(Number arg) {
     if (arg == null) {
       return null;
     }

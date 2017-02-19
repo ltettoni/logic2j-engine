@@ -26,8 +26,8 @@ import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.io.logging.Info;
 import org.logic2j.engine.predicates.impl.io.logging.Log;
 import org.logic2j.engine.predicates.impl.io.logging.Warn;
-import org.logic2j.engine.predicates.impl.math.Abs;
-import org.logic2j.engine.predicates.impl.math.Succ;
+import org.logic2j.engine.predicates.impl.math.function.Abs;
+import org.logic2j.engine.predicates.impl.math.function.Succ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

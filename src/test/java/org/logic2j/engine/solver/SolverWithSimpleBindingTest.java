@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.math.Succ;
+import org.logic2j.engine.predicates.impl.math.function.Succ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

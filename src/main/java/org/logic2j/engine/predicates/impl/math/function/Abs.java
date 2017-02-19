@@ -15,9 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates.impl.math;
+package org.logic2j.engine.predicates.impl.math.function;
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.predicates.impl.math.Pred2;
 
 /**
  * Absolute value. Interesting because this is not a bijection.

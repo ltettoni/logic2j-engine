@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates.impl.math;
+package org.logic2j.engine.predicates.impl.math.function;
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Var;
+import org.logic2j.engine.predicates.impl.math.Pred2;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
