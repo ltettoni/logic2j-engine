@@ -19,12 +19,13 @@ package org.logic2j.engine.predicates.internal;
 
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 
 /**
  * Logical AND.
  * The implementation is hard-coded in the Solver, hence we do not provided it here.
  */
-public class And extends Struct {
+public class And extends Struct implements RDBCompatiblePredicate {
   public And(Term... conjunctions) {
     super(FUNCTOR_COMMA, (Object[]) conjunctions);
   }
