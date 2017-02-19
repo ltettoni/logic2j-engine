@@ -18,6 +18,7 @@
 package org.logic2j.engine.predicates.impl.firstorder;
 
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
@@ -27,7 +28,7 @@ import org.logic2j.engine.unify.UnifyContext;
  * Succeeds if the specified goal provides a single solution (and none other is sought); fails if
  * the specified goal does not provide a single one.
  */
-public class Exists extends FOPredicate {
+public class Exists extends FOPredicate implements RDBCompatiblePredicate {
 
   public Exists(Term theGoal) {
     super("exists", theGoal);

@@ -18,6 +18,7 @@
 package org.logic2j.engine.predicates.impl.firstorder;
 
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
@@ -28,7 +29,7 @@ import org.logic2j.engine.unify.UnifyContext;
  * the specified goal provides at least one solution (and none other is sought).
  * This actually means "Not exists".
  */
-public class Not extends FOPredicate {
+public class Not extends FOPredicate implements RDBCompatiblePredicate {
   public static final String FUNCTOR = "\\+";
 
   public Not(Term theGoal) {

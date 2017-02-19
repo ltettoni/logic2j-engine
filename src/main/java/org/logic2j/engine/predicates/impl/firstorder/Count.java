@@ -19,6 +19,7 @@ package org.logic2j.engine.predicates.impl.firstorder;
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.CountingSolutionListener;
@@ -28,7 +29,7 @@ import org.logic2j.engine.unify.UnifyContext;
  * Succeeds if the specified goal provides a single solution (and none other is sought); fails if
  * the specified goal does not provide a single one.
  */
-public class Count extends FOPredicate {
+public class Count extends FOPredicate implements RDBCompatiblePredicate {
 
   private final Binding<Long> nbSolutions;
 
