@@ -24,8 +24,6 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
-
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -60,9 +58,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
 
     if (isConstant(reified)) {
       // Variable is bound to a value
-      final Iterator<T> iter = this.<T>stream(reified).iterator();
-      while (iter.hasNext()) {
-        final T val = iter.next();
+      for (T val : (Iterable<T>) this.<T>stream(reified)::iterator) {
         final boolean contains = allowedValues.contains(val);
         final Integer continuation = notifySolutionIf(contains, currentVars);
         if (continuation != CONTINUE) {

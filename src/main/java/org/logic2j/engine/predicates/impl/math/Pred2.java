@@ -24,7 +24,6 @@ import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -74,9 +73,7 @@ public class Pred2<T, R> extends FOPredicate {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
         final R[] values1 = this.<R>stream(n1).toArray(n -> (R[])new Object[n]);
-        final Iterator<T> iter = this.<T>stream(n0).iterator();
-        while (iter.hasNext()) {
-          final T c0 = iter.next();
+        for (T c0 : (Iterable<T>) this.<T>stream(n0)::iterator) {
           for (final R c1 : values1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);

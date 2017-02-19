@@ -22,7 +22,6 @@ import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
-import java.util.Iterator;
 import java.util.function.BiFunction;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
@@ -60,9 +59,7 @@ public class Comp2<T> extends FOPredicate {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
         final T[] values1 = this.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
-        final Iterator<T> iter = this.<T>stream(n0).iterator();
-        while (iter.hasNext()) {
-          final T c0 = iter.next();
+        for (T c0 : (Iterable<T>) this.<T>stream(n0)::iterator) {
           for (final T c1 : values1) {
             // Both bound values - check
             final Integer continuation = notifySolutionIf(check.apply(c0, c1), currentVars);
