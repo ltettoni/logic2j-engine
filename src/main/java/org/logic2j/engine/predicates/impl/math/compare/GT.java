@@ -48,6 +48,6 @@ public class GT<T extends Number> extends Comp2<T> {
 
   @Override
   public String sqlOperator() {
-    return ">";
+    return "{0}>{1}";
   }
 }

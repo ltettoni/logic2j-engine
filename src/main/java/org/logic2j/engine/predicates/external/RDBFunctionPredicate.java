@@ -25,6 +25,6 @@ public interface RDBFunctionPredicate extends RDBCompatiblePredicate {
   /**
    * @return A TextFormat that renders the SQL function.
    */
-  String sqlFunctionTextFormat();
+  String[] sqlFunctionTextFormat();
 
 }

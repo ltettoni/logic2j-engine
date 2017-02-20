@@ -33,7 +33,7 @@ public class Length<T extends CharSequence, R extends Number> extends Pred2<T, R
   }
 
   @Override
-  public String sqlFunctionTextFormat() {
-    return "length({0})";
+  public String[] sqlFunctionTextFormat() {
+    return new String[] {"length({0})={1}", null, "length({0})"};
   }
 }

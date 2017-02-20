@@ -52,6 +52,6 @@ public class Eq<T> extends Pred2<T, T> implements RDBComparisonPredicate {
 
   @Override
   public String sqlOperator() {
-    return "=";
+    return "{0}={1}";
   }
 }
