@@ -165,12 +165,14 @@ public class Struct extends Term implements Cloneable {
    * @return A clone of this.
    */
   public Struct cloneWithNewArguments(Object[] newArguments) {
-    if (newArguments.length != this.arity) {
-      throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
-    }
+    // We can actually change arity, this is used when we clone ","(X,Y) to ","(X,Y,Z)
+//    if (newArguments.length != this.arity) {
+//      throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
+//    }
     try {
       final Struct clone = (Struct) this.clone();
       clone.args = newArguments;
+      clone.setNameAndArity(clone.name, clone.args.length); // Also calculate the signature
       return clone;
     } catch (CloneNotSupportedException e) {
       throw new SolverException("Could not clone Struct " + this + ": " + e);
