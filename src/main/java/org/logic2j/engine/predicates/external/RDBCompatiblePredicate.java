@@ -24,4 +24,11 @@ package org.logic2j.engine.predicates.external;
  * regular inference.
  */
 public interface RDBCompatiblePredicate {
+
+  /**
+   * @return Arguments, because most {@link RDBCompatiblePredicate} will actually
+   * be {@link org.logic2j.engine.model.Struct}.
+   */
+  Object[] getArgs();
+
 }
