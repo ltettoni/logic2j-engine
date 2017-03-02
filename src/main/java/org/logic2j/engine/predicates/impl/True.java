@@ -17,12 +17,13 @@
 
 package org.logic2j.engine.predicates.impl;
 
+import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * Always succeeds, provides one solution but does not bind any variables.
  */
-public class True extends FOUniqueSolutionPredicate {
+public class True extends FOUniqueSolutionPredicate implements RDBCompatiblePredicate {
   public True() {
     super("true");
   }
