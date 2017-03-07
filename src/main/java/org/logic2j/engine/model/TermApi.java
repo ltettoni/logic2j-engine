@@ -100,6 +100,15 @@ public final class TermApi {
   }
 
   /**
+   * Check free variable (not including anonymous)
+   * @param theTerm
+   * @return true if theTerm denotes a free variable, but not anonymous variable.
+   */
+  public static boolean isFreeNamedVar(Object theTerm) {
+    return theTerm instanceof Var<?> && Var.anon()!=theTerm;
+  }
+
+  /**
    * Recursively collect all terms and add them to the collectedTerms collection, and also initialize their {@link Term#index} to
    * {@link Term#NO_INDEX}. This is an internal template method: the public API entry point is {@link TermApi#collectTerms(Object)}; see a
    * more
