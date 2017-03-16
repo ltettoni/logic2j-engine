@@ -84,6 +84,9 @@ public abstract class FOPredicate extends Struct {
     if (arg instanceof Float) {
       return bind((Float) arg);
     }
+    if (arg instanceof Boolean) {
+      return bind((Boolean) arg);
+    }
     return arg;
   }
 

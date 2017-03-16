@@ -17,6 +17,8 @@
 
 package org.logic2j.engine.predicates.impl.firstorder;
 
+import org.logic2j.engine.exception.SolverException;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
@@ -30,8 +32,26 @@ import org.logic2j.engine.unify.UnifyContext;
  */
 public class Exists extends FOPredicate implements RDBCompatiblePredicate {
 
+  /**
+   * Succeeds if theGoal provides at least one solution.
+   * Notice that theGoal will be solved up to only its first
+   * solution, so that enumeration will not be completed, see {@link ExistsSolutionListener}.
+   * @param theGoal
+   */
   public Exists(Term theGoal) {
     super("exists", theGoal);
+  }
+
+  /**
+   * Always succeeds, and binds the booleanResult to true in case at least one solution of theGoal exists, false
+   * otherwise.
+   * Notice that theGoal will be solved up to only its first
+   * solution, so that enumeration will not be completed, see {@link ExistsSolutionListener}.
+   * @param theGoal
+   * @param booleanResult
+   */
+  public Exists(Term theGoal, Binding<Boolean> booleanResult) {
+    super("exists", theGoal, booleanResult);
   }
 
   @Override
@@ -41,9 +61,20 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
     final ExistsSolutionListener seekOnlyTheFirstSolution = new ExistsSolutionListener();
     final Solver solver = currentVars.getSolver();
     solver.solveGoal(getArg(0), currentVars.withListener(seekOnlyTheFirstSolution));
-
     final boolean exists = seekOnlyTheFirstSolution.exists();
-    return notifySolutionIf(exists, currentVars);
+
+    switch (getArity()) {
+      case 1:
+        // Normal use, the predicate will succeed with one solution if theGoal was proven to provide at least
+        // one solution. Otherwise will fail.
+        return notifySolutionIf(exists, currentVars);
+      case 2:
+        // Alternate signature: will unify the proof of existence with the second argument.
+        return unifyAndNotifyMany(currentVars, Boolean.valueOf(exists), (Binding<Boolean>)getArg(1));
+      default:
+        throw new SolverException("Illegal arity to " + this);
+    }
+
   }
 
 

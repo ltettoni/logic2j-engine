@@ -90,6 +90,10 @@ public final class Predicates {
     return new Exists(term);
   }
 
+  public static Exists exists(Term term, Binding<Boolean> result) {
+    return new Exists(term, result);
+  }
+
   public static Count count(Term term, Binding<Long> number) {
     return new Count(term, number);
   }
