@@ -19,6 +19,7 @@ package org.logic2j.engine.predicates.external;
 
 /**
  * Predicates that generate column or value equality constraints in the RDB schema.
+ * The most obvious is "=" (eq), but others like member() does the same.
  */
 public interface RDBEqualityPredicate extends RDBCompatiblePredicate {
 
