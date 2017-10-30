@@ -1,12 +1,12 @@
-Comparision to logic2j prolog engine:
--------------------------------------
+Comparision of logic2j-engine to logic2j prolog engine
+------------------------------------------------------
 
-There is no notion of a "theory": file(s) containing facts and rules in plain text, using Prolog syntax.
+In the engine, there is no notion of a "theory" (a file containing facts and rules in plain text, using Prolog syntax).
 The absence of "theories" implies there is no "database" features: no storage, no indexes, no lookup.
 There is no inference predicate ":-" used by the solver. The solver cannot infer on rules, it can only solve expressions.
-There is no "library": set of predicates (eg. for IO, math, list processing, etc.) implemented either in Prolog or Java.
+There is no "library" (a set of predicates, e.g. for IO, math, list processing, etc. implemented either in Prolog or Java).
 There is no marshalling / unmarshalling of data structures from and to Prolog syntax represented as text.
-Strong typing introduced via the Binding<T> interface
+Strong typing is introduced via the Binding<T> interface
 Constant terms can be provided as scalar or vectors (multi-valued), via streams, iterators, arrays, collections, etc.
 
 Changes from logic2j:
@@ -46,7 +46,7 @@ Improvements DONE:
 - Infinite streams in SimpleBindings
 
 
-TODO
+Improvements TODO:
 - What is the behaviour when passing free vars when not permitted (eg. LT(_, _) : no solution? exception?)
 - Serious issue with BoundVars. currently a supply() predicate is instantiated at beginning of solve.
    Very inefficient if a select() is used later on since it will receive N values in sequence :-(
