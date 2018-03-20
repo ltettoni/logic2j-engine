@@ -84,8 +84,7 @@ public class Supply extends FOPredicate {
     final Var var = this.bindingVars[ivar];
     final List<?> data = this.data[ivar];
     final int nbValues = data.size();
-    for (int j = 0; j < nbValues; j++) {
-      final Object value = data.get(j);
+    for (final Object value : data) {
       final UnifyContext afterUnification = currentVars.unify(var, value);
       final boolean couldUnifySomething = afterUnification != null;
       if (!couldUnifySomething) {

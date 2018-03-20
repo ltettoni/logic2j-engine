@@ -119,11 +119,11 @@ public final class Predicates {
   }
 
   public static <T> Pred1Tester filter(Var<T> var, Predicate<T> pred) {
-    return new Pred1Tester<T>("_lambdaFilter", var).withTest(pred);
+    return new Pred1Tester<>("_lambdaFilter", var).withTest(pred);
   }
 
   public static <T, R> Pred2 map(Var<T> v1, Function<T, R> javaFunction, Var<R> v2) {
-    return new Pred2<T, R>("_lambdaMap", v1, v2).withImage(javaFunction);
+    return new Pred2<>("_lambdaMap", v1, v2).withImage(javaFunction);
   }
 
 }

@@ -34,7 +34,7 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.or;
 
 public class SolverHighLevelTest {
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
   @Test
   public void exists0() {

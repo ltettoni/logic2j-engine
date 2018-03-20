@@ -27,14 +27,13 @@ import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.EvenCheck;
 import org.logic2j.engine.predicates.IntRange;
 import org.logic2j.engine.predicates.impl.firstorder.Not;
-import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -51,7 +50,7 @@ import static org.logic2j.engine.predicates.Predicates.ttrue;
 
 public class SolverLowLevelTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverLowLevelTest.class);
-  private Solver solver = new Solver();
+  private final Solver solver = new Solver();
 
   // ---------------------------------------------------------------------------
   // Simplest primitives and undefined goal
@@ -59,15 +58,13 @@ public class SolverLowLevelTest {
 
   @Test
   public void primitiveFail() {
-    final Object goal = fail;
-    final long nbSolutions = solve(goal).count();
+    final long nbSolutions = solve(fail).count();
     assertEquals(0, nbSolutions);
   }
 
   @Test
   public void primitiveTrue() {
-    final Object goal = ttrue;
-    final long nbSolutions = solve(goal).count();
+    final long nbSolutions = solve(ttrue).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -128,8 +125,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void primitiveCut() {
-    final Object goal = cut;
-    final long nbSolutions = solve(goal).count();
+    final long nbSolutions = solve(cut).count();
     assertEquals(1, nbSolutions);
   }
 
@@ -390,7 +386,7 @@ public class SolverLowLevelTest {
 
 
   protected String marshall(Iterable<Object> terms) {
-    ArrayList<String> marshalled = new ArrayList<String>();
+    ArrayList<String> marshalled = new ArrayList<>();
     for (final Object term : terms) {
       marshalled.add(term.toString());
     }
@@ -404,10 +400,6 @@ public class SolverLowLevelTest {
       super(goal);
     }
 
-    @Override
-    public Integer onSolution(UnifyContext currentVars) {
-      return super.onSolution(currentVars);
-    }
   }
 
   // ---------------------------------------------------------------------------

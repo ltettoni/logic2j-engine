@@ -266,11 +266,11 @@ public class Solver {
       final Integer continuationFromCaller =
           currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
 
-      if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller.intValue() > 0) {
+      if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
         result = continuationFromCaller;
       } else {
         // Stopping there for this iteration
-        result = Integer.valueOf(cutLevel);
+        result = cutLevel;
       }
     }
     // A predicate in Java
@@ -279,9 +279,8 @@ public class Solver {
       // Primitive implemented in Java
       // ---------------------------------------------------------------------------
       final FOPredicate javaPredicate = (FOPredicate) goalStruct;
-      final Integer primitiveContinuation = javaPredicate.predicateLogic(currentVars);
       // The result will be the continuation code or CUT level
-      result = primitiveContinuation;
+      result = javaPredicate.predicateLogic(currentVars);
     }
     // A rule
     else {

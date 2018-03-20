@@ -36,7 +36,7 @@ import static org.logic2j.engine.model.Var.strVar;
  */
 public class LengthTest {
   private static final Logger logger = LoggerFactory.getLogger(LengthTest.class);
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
   @Test
   public void twoVars() {

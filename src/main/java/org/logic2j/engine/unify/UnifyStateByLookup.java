@@ -151,8 +151,7 @@ public class UnifyStateByLookup {
       if (slotLiteral != null) {
         return slotLiteral;
       }
-      int slotVarIndex = boundVarIndex[slot];
-      slot = slotVarIndex;
+      slot = boundVarIndex[slot];
       runningVar = var[slot];
     }
     throw new IllegalStateException("Infinite loop detected during dereferencing of variable \"" + theVar + '"');
@@ -171,7 +170,7 @@ public class UnifyStateByLookup {
   }
 
   public String toString() {
-    final TreeMap<Integer, String> sorted = new TreeMap<Integer, String>();
+    final TreeMap<Integer, String> sorted = new TreeMap<>();
     final StringBuilder sb = new StringBuilder();
     for (int slot = 0; slot < INITIAL_SIZE; slot++) {
       final int transactionNumber = transaction[slot];

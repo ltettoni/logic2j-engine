@@ -56,7 +56,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   /**
    * Singleton "special" var that holds the value of a whole goal.
    */
-  public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<Object>(Object.class, WHOLE_SOLUTION_VAR_NAME);
+  public static final Var<Object> WHOLE_SOLUTION_VAR = new Var<>(Object.class, WHOLE_SOLUTION_VAR_NAME);
 
   public static final Comparator<Var<?>> COMPARATOR_BY_NAME = Comparator.comparing(Var::getName);
 
@@ -186,7 +186,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
     if (original.name == Var.ANONYMOUS_VAR_NAME) {
       throw new InvalidTermException("Cannot clone the anonymous variable via a copy constructor!");
     }
-    final Var<Q> cloned = new Var<Q>(original.type, original.name);
+    final Var<Q> cloned = new Var<>(original.type, original.name);
     cloned.index = original.getIndex();
     return cloned;
   }

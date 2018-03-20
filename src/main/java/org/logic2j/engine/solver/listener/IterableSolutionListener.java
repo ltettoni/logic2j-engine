@@ -40,12 +40,12 @@ public class IterableSolutionListener<T> implements SolutionListener {
   /**
    * Interface between the main thread (consumer) and the prolog solver thread (producer).
    */
-  private final SynchronizedInterface<Object> clientToEngineInterface = new SynchronizedInterface<Object>();
+  private final SynchronizedInterface<Object> clientToEngineInterface = new SynchronizedInterface<>();
 
   /**
    * Interface between the prolog solver thread (producer) and the main thread (consumer).
    */
-  private final SynchronizedInterface<Object> engineToClientInterface = new SynchronizedInterface<Object>();
+  private final SynchronizedInterface<Object> engineToClientInterface = new SynchronizedInterface<>();
 
 
   @Override

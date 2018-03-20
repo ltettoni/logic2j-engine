@@ -42,7 +42,7 @@ import static org.logic2j.engine.predicates.Predicates.or;
 
 public class FirstOrderLogicTest {
   private static final Logger logger = LoggerFactory.getLogger(FirstOrderLogicTest.class);
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
   @Test
   public void sampleData() {

@@ -44,7 +44,7 @@ public class UnifyContext {
    */
   private final UnifyStateByLookup stateStorage;
 
-  private Solver solver;
+  private final Solver solver;
 
   private SolutionListener solutionListener;
 
@@ -113,7 +113,7 @@ public class UnifyContext {
    * @return A new Var uniquely indexed
    */
   public Var<?> createVar(String theName) {
-    final Var<?> var = new Var<Object>(Object.class, theName);
+    final Var<?> var = new Var<>(Object.class, theName);
     var.index = topVarIndex++;
     return var;
   }

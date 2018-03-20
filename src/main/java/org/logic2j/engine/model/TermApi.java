@@ -80,10 +80,7 @@ public final class TermApi {
   }
 
   public static boolean isAtomic(Object theTerm) {
-    if (isAtom(theTerm)) {
-      return true;
-    }
-    return theTerm instanceof Number;
+    return isAtom(theTerm) || theTerm instanceof Number;
   }
 
   /**
@@ -134,7 +131,7 @@ public final class TermApi {
    * @return A collection of terms, never empty. Same terms may appear multiple times.
    */
   static Collection<Object> collectTerms(Object theTerm) {
-    final ArrayList<Object> recipient = new ArrayList<Object>();
+    final ArrayList<Object> recipient = new ArrayList<>();
     collectTermsInto(theTerm, recipient);
     // Remove ourself from the result - we are always at the end of the collection
     recipient.remove(recipient.size() - 1);
@@ -298,7 +295,7 @@ public final class TermApi {
 
   // TODO Currently unused - but probably we should detect cycles!
   void avoidCycle(Struct theClause) {
-    final List<Term> visited = new ArrayList<Term>(20);
+    final List<Term> visited = new ArrayList<>(20);
     theClause.avoidCycle(visited);
   }
 
@@ -359,7 +356,7 @@ public final class TermApi {
         result = new Struct("");
       } else if (Character.isUpperCase(chars.charAt(0)) || chars.startsWith(Var.ANONYMOUS_VAR_NAME)) {
         // Use Prolog's convention re variables starting with uppercase or underscore
-        result = new Var<Object>(Object.class, chars);
+        result = new Var<>(Object.class, chars);
       } else {
         // Otherwise it's an atom
         // result = new Struct(chars);

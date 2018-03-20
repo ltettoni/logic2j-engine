@@ -69,7 +69,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    */
   public SolutionHolder(GoalHolder goalHolder, String varName, Class<? extends T> desiredTypeOfResult) {
     this.goalHolder = goalHolder;
-    this.singleVarExtractor = new SingleVarExtractor<T>(goalHolder.getGoal(), varName, desiredTypeOfResult);
+    this.singleVarExtractor = new SingleVarExtractor<>(goalHolder.getGoal(), varName, desiredTypeOfResult);
     this.multiVarExtractor = null;
   }
 
@@ -183,7 +183,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * SolutionExtractor.extractSolution() is called, ie in one of the various
    */
   public Set<T> set() {
-    return new HashSet<T>(list());
+    return new HashSet<>(list());
   }
 
 

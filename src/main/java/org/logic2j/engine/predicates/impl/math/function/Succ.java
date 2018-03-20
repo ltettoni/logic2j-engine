@@ -54,7 +54,7 @@ public class Succ<T extends Number> extends Pred2<T, T> {
   // Implementation
   // --------------------------------------------------------------------------
 
-  private static NumericFunction nextNumber = new NumericFunction() {
+  private static final NumericFunction nextNumber = new NumericFunction() {
     @Override
     public Integer onInteger(Integer arg) {
       return arg + 1;
@@ -76,7 +76,7 @@ public class Succ<T extends Number> extends Pred2<T, T> {
     }
   };
 
-  private static NumericFunction previousNumber = new NumericFunction() {
+  private static final NumericFunction previousNumber = new NumericFunction() {
     @Override
     public Integer onInteger(Integer arg) {
       return arg - 1;

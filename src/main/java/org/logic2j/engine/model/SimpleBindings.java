@@ -39,10 +39,10 @@ import java.util.stream.StreamSupport;
  * @param <T>
  */
 public class SimpleBindings<T> {
-  private Class<T> type;
+  private final Class<T> type;
 
   private long size = -1; // <0 means unknown or not enumerable
-  private T[] data; // Data stored there
+  private final T[] data; // Data stored there
   private Set<T> cachedSet = null; // Data optionally stored there (if "contains" operations are requested)
 
   private Stream<T> stream = null;
@@ -152,6 +152,7 @@ public class SimpleBindings<T> {
     };
   }
 
+  @SafeVarargs
   public static <T> Constant<T> bind(T... values) {
     return new ConstantBase<T>() {
       @Override
@@ -196,8 +197,8 @@ public class SimpleBindings<T> {
 
       @Override
       public boolean contains(T value) {
-        for (int i = 0; i < values.length; i++) {
-          if (value.equals(values[i])) {
+        for (T value1 : values) {
+          if (value.equals(value1)) {
             return true;
           }
         }
@@ -366,7 +367,7 @@ public class SimpleBindings<T> {
 
       private void consumeNow() {
         if (this.data == null) {
-          final List<T> coll = new ArrayList<T>();
+          final List<T> coll = new ArrayList<>();
           iterator.forEachRemaining(coll::add);
           final Object[] asObjects = coll.toArray();
           if (asObjects.length == 0) {

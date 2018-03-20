@@ -34,7 +34,7 @@ public class ProfilingInfo {
 
   public static long timer1;
 
-  public static final HashMap<Object, Integer> events = new HashMap<Object, Integer>();
+  public static final HashMap<Object, Integer> events = new HashMap<>();
 
   static {
     resetAll();

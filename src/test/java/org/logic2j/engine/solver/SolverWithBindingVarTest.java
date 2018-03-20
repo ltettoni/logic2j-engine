@@ -37,7 +37,7 @@ import static org.logic2j.engine.solver.holder.BindingVar.strBVar;
 
 public class SolverWithBindingVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
   @Test
   public void supplyFromBoundVar() {

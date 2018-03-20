@@ -72,7 +72,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
         return notifySolutionIf(exists, currentVars);
       case 2:
         // Alternate signature: will unify the proof of existence with the second argument.
-        return unifyAndNotifyMany(currentVars, Boolean.valueOf(exists), (Binding<Boolean>) getArg(1));
+        return unifyAndNotifyMany(currentVars, exists, (Binding<Boolean>) getArg(1));
       default:
         throw new SolverException("Illegal arity to " + this);
     }

@@ -99,7 +99,7 @@ public class GoalHolder {
    * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
    */
   public SolutionHolder<Object> solution() {
-    return new SolutionHolder<Object>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class);
+    return new SolutionHolder<>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class);
   }
 
   /**
@@ -111,7 +111,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
-    final SolutionHolder<T> solutionHolder = new SolutionHolder<T>(this, varName, desiredTypeOfResult);
+    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult);
     return solutionHolder;
   }
 

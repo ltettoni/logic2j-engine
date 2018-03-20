@@ -40,6 +40,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
     this.allowedValues = allowedValues;
   }
 
+  @SafeVarargs
   public Pred1Generator(String functorName, Binding<T> term, T... allowedValues) {
     this(functorName, term, bind(allowedValues));
   }

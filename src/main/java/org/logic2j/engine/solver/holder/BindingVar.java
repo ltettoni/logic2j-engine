@@ -67,6 +67,7 @@ public class BindingVar<T> extends Var<T> {
    * @param theName
    * @param input
    */
+  @SafeVarargs
   public BindingVar(Class<T> theType, CharSequence theName, T... input) {
     super(theType, theName);
     this.input = Arrays.asList(input);
@@ -77,7 +78,7 @@ public class BindingVar<T> extends Var<T> {
   }
 
   public static BindingVar<Integer> intBVar(CharSequence theName, Integer... values) {
-    return new BindingVar<Integer>(Integer.class, theName, values);
+    return new BindingVar<>(Integer.class, theName, values);
   }
 
   public static BindingVar<Integer> intBVar(CharSequence theName, Stream<Integer> stream) {
@@ -130,7 +131,7 @@ public class BindingVar<T> extends Var<T> {
     if (this.input instanceof Collection) {
       return (List<T>) this.input;
     }
-    final ArrayList<T> list = new ArrayList<T>();
+    final ArrayList<T> list = new ArrayList<>();
     this.input.forEach(list::add);
     return list;
   }
@@ -139,14 +140,14 @@ public class BindingVar<T> extends Var<T> {
     if (this.input instanceof Set) {
       return (Set<T>) this.input;
     }
-    final HashSet<T> set = new HashSet<T>();
+    final HashSet<T> set = new HashSet<>();
     this.input.forEach(set::add);
     return set;
   }
 
   public void addResult(Object value) {
     if (result == null) {
-      result = new ArrayList<T>();
+      result = new ArrayList<>();
     }
     if (!(result instanceof Collection)) {
       throw new SolverException("BindingVar needs a Collection in order to collect solver results");

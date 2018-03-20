@@ -49,7 +49,7 @@ import static org.logic2j.engine.predicates.Predicates.not;
 
 public class PredicatesTest {
   private static final Logger logger = LoggerFactory.getLogger(PredicatesTest.class);
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
 
   @Test
@@ -132,7 +132,7 @@ public class PredicatesTest {
   @Test
   public void testExists2_solve_true() {
     final Var<Integer> x = intVar("X");
-    final Var<Boolean> result = new Var<Boolean>(Boolean.class, "Result");
+    final Var<Boolean> result = new Var<>(Boolean.class, "Result");
     final String res = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), result)).var(result).list().toString();
     assertThat(res, is("[true]"));
   }
@@ -140,7 +140,7 @@ public class PredicatesTest {
   @Test
   public void testExists2_solve_false() {
     final Var<Integer> x = intVar("X");
-    final Var<Boolean> result = new Var<Boolean>(Boolean.class, "Result");
+    final Var<Boolean> result = new Var<>(Boolean.class, "Result");
     final String res =
         solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), result)).var(result).list().toString();
     assertThat(res, is("[false]"));

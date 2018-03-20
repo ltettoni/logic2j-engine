@@ -34,9 +34,8 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
   private final Var<?>[] vars;
 
   public MapExtractor(Object goal) {
-    final Var<?>[] distinctVars = TermApi.distinctVars(goal);
     // Actually we don't need to clone:  this.vars = Arrays.copyOf(distinctVars, distinctVars.length);
-    this.vars = distinctVars;
+    this.vars = TermApi.distinctVars(goal);
   }
 
 
@@ -46,7 +45,7 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
    */
   @Override
   public Map<Var, Object> extractSolution(UnifyContext currentVars) {
-    final Map<Var, Object> result = new HashMap<Var, Object>();
+    final Map<Var, Object> result = new HashMap<>();
     for (final Var<?> var : vars) {
       final Object value = currentVars.reify(var);
       result.put(var, value);

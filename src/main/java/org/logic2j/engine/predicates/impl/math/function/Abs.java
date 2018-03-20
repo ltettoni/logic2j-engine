@@ -35,7 +35,7 @@ public class Abs<T extends Number> extends Pred2<T, T> {
   // Implementation
   // --------------------------------------------------------------------------
 
-  private static NumericFunction forward = new NumericFunction() {
+  private static final NumericFunction forward = new NumericFunction() {
     @Override
     public Integer onInteger(Integer arg) {
       return Math.abs(arg);
@@ -58,7 +58,7 @@ public class Abs<T extends Number> extends Pred2<T, T> {
   };
 
 
-  private static NumericRelation reverse = new NumericRelation() {
+  private static final NumericRelation reverse = new NumericRelation() {
     @Override
     public Integer[] onInteger(Integer arg) {
       final int v = Math.abs(arg);

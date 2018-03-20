@@ -43,7 +43,7 @@ public class SingleVarSolutionListener<T> extends RangeSolutionListener<T> {
    */
   public SingleVarSolutionListener(SolutionExtractor<T> extractor) {
     this.extractor = extractor;
-    this.results = new ArrayList<T>();
+    this.results = new ArrayList<>();
   }
 
 

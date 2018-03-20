@@ -40,7 +40,7 @@ public class MultiVarSolutionListener extends RangeSolutionListener {
    */
   public MultiVarSolutionListener(SolutionExtractor<Map<Var, Object>> extractor) {
     this.extractor = extractor;
-    this.results = new ArrayList<Map<Var, Object>>();
+    this.results = new ArrayList<>();
   }
 
 

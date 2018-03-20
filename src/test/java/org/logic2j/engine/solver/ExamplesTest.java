@@ -35,7 +35,7 @@ import static org.logic2j.engine.model.Var.intVar;
  */
 public class ExamplesTest {
   private static final Logger logger = LoggerFactory.getLogger(ExamplesTest.class);
-  private SolverApi solver = new SolverApi();
+  private final SolverApi solver = new SolverApi();
 
   @Test
   @Ignore("Do not run not workable")
