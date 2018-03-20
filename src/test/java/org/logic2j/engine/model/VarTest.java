@@ -44,7 +44,7 @@ public class VarTest {
 
   @Test(expected = InvalidTermException.class)
   public void constructorNull() {
-    anyVar((String) null);
+    anyVar(null);
   }
 
   @Test(expected = InvalidTermException.class)

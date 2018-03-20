@@ -59,8 +59,8 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
   protected Integer comparison(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final T[] values1 = this.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
-        for (T c0 : (Iterable<T>) this.<T>stream(n0)::iterator) {
+        final T[] values1 = FOPredicate.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
+        for (T c0 : (Iterable<T>) FOPredicate.<T>stream(n0)::iterator) {
           for (final T c1 : values1) {
             // Both bound values - check
             final Integer continuation = notifySolutionIf(check.apply(c0, c1), currentVars);

@@ -38,7 +38,6 @@ public class ArrayExtractor implements SolutionExtractor<Object[]> {
     for (final Var<?> var : this.vars) {
       high = Math.max(high, var.getIndex());
     }
-    ;
     this.highestIndex = high;
   }
 

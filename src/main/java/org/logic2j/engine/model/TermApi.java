@@ -58,7 +58,7 @@ public final class TermApi {
       return theVisitor.visit((Struct) theTerm);
     }
     if (theTerm instanceof Var) {
-      return (T) theVisitor.visit((Var) theTerm);
+      return theVisitor.visit((Var) theTerm);
     }
     // Other possible cases require instanceof since any Object can be
     if (theTerm instanceof String) {
@@ -83,11 +83,7 @@ public final class TermApi {
     if (isAtom(theTerm)) {
       return true;
     }
-    if (theTerm instanceof Number) {
-      // Now plain Strings are atoms!
-      return true;
-    }
-    return false;
+    return theTerm instanceof Number;
   }
 
   /**

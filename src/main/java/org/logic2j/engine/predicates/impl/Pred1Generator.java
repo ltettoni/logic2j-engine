@@ -51,14 +51,14 @@ public abstract class Pred1Generator<T> extends FOPredicate {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
       if (allowedValues != null) {
-        return unifyAndNotifyMany(currentVars, reified, (Object[]) allowedValues.toArray());
+        return unifyAndNotifyMany(currentVars, reified, allowedValues.toArray());
       }
       return CONTINUE;
     }
 
     if (isConstant(reified)) {
       // Variable is bound to a value
-      for (T val : (Iterable<T>) this.<T>stream(reified)::iterator) {
+      for (T val : (Iterable<T>) FOPredicate.<T>stream(reified)::iterator) {
         final boolean contains = allowedValues.contains(val);
         final Integer continuation = notifySolutionIf(contains, currentVars);
         if (continuation != CONTINUE) {

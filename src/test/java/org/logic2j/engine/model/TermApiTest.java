@@ -51,7 +51,7 @@ public class TermApiTest {
     final Struct s = new Struct("s", x1, x2);
     assertFalse(TermApi.structurallyEquals(s.getArg(0), s.getArg(1)));
     // After factorization, the 2 X will be same
-    final Struct s2 = (Struct) TermApi.factorize(s);
+    final Struct s2 = TermApi.factorize(s);
     assertNotSame(s, s2);
     assertFalse(s.structurallyEquals(s2));
     assertTrue(TermApi.structurallyEquals(s2.getArg(0), s2.getArg(1)));

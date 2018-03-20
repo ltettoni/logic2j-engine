@@ -213,7 +213,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq((Binding) null, (Binding) null);
+    final Object goal = eq(null, (Binding) null);
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }

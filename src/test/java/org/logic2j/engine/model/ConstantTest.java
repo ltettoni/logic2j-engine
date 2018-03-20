@@ -41,7 +41,7 @@ public class ConstantTest {
 
   @Test
   public void array() {
-    final Constant<Integer> binding = bind(new Integer[] {1, 2, 3, 4, 5, 4, 3, 2, 1});
+    final Constant<Integer> binding = bind(1, 2, 3, 4, 5, 4, 3, 2, 1);
     assertThat(binding.size(), is(9L));
     // Can get several times as an array
     assertThat(binding.toArray().length, is(9));

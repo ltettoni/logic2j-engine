@@ -82,8 +82,8 @@ public class Pred2<T, R> extends FOPredicate {
   protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final R[] values1 = this.<R>stream(n1).toArray(n -> (R[]) new Object[n]);
-        for (T c0 : (Iterable<T>) this.<T>stream(n0)::iterator) {
+        final R[] values1 = FOPredicate.<R>stream(n1).toArray(n -> (R[]) new Object[n]);
+        for (T c0 : (Iterable<T>) FOPredicate.<T>stream(n0)::iterator) {
           for (final R c1 : values1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
@@ -97,7 +97,7 @@ public class Pred2<T, R> extends FOPredicate {
         return CONTINUE;
       } else {
         // n1 is free, just unify in forward direction
-        final Stream<R> images = this.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
+        final Stream<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n1, images);
       }
     }
@@ -105,7 +105,7 @@ public class Pred2<T, R> extends FOPredicate {
     if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
-        final Stream<T> preimages = this.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
+        final Stream<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n0, preimages);
       } else {
         // Two free variables - no solution
