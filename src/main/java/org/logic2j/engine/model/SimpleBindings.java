@@ -43,7 +43,7 @@ public class SimpleBindings<T> {
 
   private long size = -1; // <0 means unknown or not enumerable
   private T[] data; // Data stored there
-  private Set<T> cachedSet = null; // Data optionally stored there (if contains operations are requested)
+  private Set<T> cachedSet = null; // Data optionally stored there (if "contains" operations are requested)
 
   private Stream<T> stream = null;
   private Iterator<T> iterator = null;
