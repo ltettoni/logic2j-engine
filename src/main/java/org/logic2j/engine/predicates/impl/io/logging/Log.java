@@ -64,7 +64,7 @@ public class Log extends FOUniqueSolutionPredicate {
 
   @Override
   public void sideEffect(UnifyContext currentVars) {
-    if (getArity()>0) {
+    if (getArity() > 0) {
       final String str = Arrays.stream(getArgs()).map(currentVars::reify).map(String::valueOf).collect(Collectors.joining(" "));
       loggingMethod.accept(str);
     } else {

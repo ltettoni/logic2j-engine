@@ -60,7 +60,7 @@ public class LengthTest {
   @Test
   public void var22() {
     final Var<Integer> len = intVar();
-    final Term goal = new Length(bind("a","little","dog"), len);
+    final Term goal = new Length(bind("a", "little", "dog"), len);
     assertThat(solver.solve(goal).var(len).list().toString(), is("[1, 6, 3]"));
   }
 

@@ -51,6 +51,7 @@ public class SimpleBindings<T> {
 
   /**
    * Use static factories bind*() instead.
+   *
    * @param type
    * @param values
    * @param stream
@@ -107,6 +108,7 @@ public class SimpleBindings<T> {
   /**
    * Supply one value, must be non-null so that its type can be determined.
    * If you need to optionally have null values specify an {@link java.util.Optional}
+   *
    * @param supplier
    * @param <T>
    * @return
@@ -159,11 +161,11 @@ public class SimpleBindings<T> {
 
       @Override
       public Class getType() {
-        if (values.length==0) {
+        if (values.length == 0) {
           throw new IllegalStateException("Trying to get type from empty array");
         }
         final T first = values[0];
-        if (first ==null) {
+        if (first == null) {
           throw new IllegalStateException("Cannot determine type from array, first element is null");
         }
         return first.getClass();
@@ -217,7 +219,7 @@ public class SimpleBindings<T> {
           throw new IllegalStateException("Trying to get type from empty collection");
         }
         final T first = coll.iterator().next();
-        if (first ==null) {
+        if (first == null) {
           throw new IllegalStateException("Cannot determine type from collection, first element is null");
         }
         return first.getClass();

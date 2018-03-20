@@ -21,8 +21,11 @@ import java.util.function.Function;
 
 public interface NumericRelation extends Function<Number, Number[]> {
   Integer[] onInteger(Integer arg);
+
   Long[] onLong(Long arg);
+
   Float[] onFloat(Float arg);
+
   Double[] onDouble(Double arg);
 
 
@@ -31,16 +34,16 @@ public interface NumericRelation extends Function<Number, Number[]> {
       return null;
     }
     if (arg instanceof Integer) {
-      return onInteger((Integer)arg);
+      return onInteger((Integer) arg);
     }
     if (arg instanceof Long) {
-      return onLong((Long)arg);
+      return onLong((Long) arg);
     }
     if (arg instanceof Double) {
-      return onDouble((Double)arg);
+      return onDouble((Double) arg);
     }
     if (arg instanceof Float) {
-      return onFloat((Float)arg);
+      return onFloat((Float) arg);
     }
     throw new IllegalArgumentException(
         "Apply method for " + this.getClass().getSimpleName() + " cannot handle argument " + arg + " of " + arg.getClass());

@@ -45,7 +45,7 @@ public class BindingVar<T> extends Var<T> {
    * @param theName
    */
   public BindingVar(Class<T> theType, CharSequence theName) {
-    this(theType, theName, (Iterable)null);
+    this(theType, theName, (Iterable) null);
   }
 
   /**
@@ -59,6 +59,7 @@ public class BindingVar<T> extends Var<T> {
     super(theType, theName);
     this.input = input;
   }
+
   /**
    * A "bound" {@link BindingVar} used to inject values.
    *
@@ -147,7 +148,7 @@ public class BindingVar<T> extends Var<T> {
     if (result == null) {
       result = new ArrayList<T>();
     }
-    if (! (result instanceof Collection)){
+    if (!(result instanceof Collection)) {
       throw new SolverException("BindingVar needs a Collection in order to collect solver results");
     }
     ((Collection) result).add(value);

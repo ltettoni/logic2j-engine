@@ -51,12 +51,12 @@ public class Struct extends Term implements Cloneable {
   public static final String FUNCTOR_SEMICOLON = ";".intern();
 
   public static final String FUNCTOR_TRUE = "true";
-      // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
+  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
 
   public static final String FUNCTOR_FALSE = "false".intern(); // TODO do we need "false" or is this "fail"?
 
   public static final String FUNCTOR_CUT = "!";
-      // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
+  // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
 
   public static final String FUNCTOR_CALL = "call".intern();
 
@@ -161,14 +161,15 @@ public class Struct extends Term implements Cloneable {
 
   /**
    * Clone with new arguments.
+   *
    * @param newArguments New arguments, length must be same arity as original Struct
    * @return A clone of this.
    */
   public Struct cloneWithNewArguments(Object[] newArguments) {
     // We can actually change arity, this is used when we clone ","(X,Y) to ","(X,Y,Z)
-//    if (newArguments.length != this.arity) {
-//      throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
-//    }
+    //    if (newArguments.length != this.arity) {
+    //      throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
+    //    }
     try {
       final Struct clone = (Struct) this.clone();
       clone.args = newArguments;
@@ -228,7 +229,7 @@ public class Struct extends Term implements Cloneable {
    */
   void collectTermsInto(Collection<Object> theCollectedTerms) {
     this.index = NO_INDEX;
-    if (this.arity>0) {
+    if (this.arity > 0) {
       Arrays.stream(this.args).forEach(child -> TermApi.collectTermsInto(child, theCollectedTerms));
     }
     theCollectedTerms.add(this);

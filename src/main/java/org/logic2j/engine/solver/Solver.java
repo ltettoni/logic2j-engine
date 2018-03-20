@@ -226,10 +226,10 @@ public class Solver {
     }
     // The OR predicate
     else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-            /*
-            * This is the Java implementation of N-arity OR
-            * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
-            */
+      /*
+       * This is the Java implementation of N-arity OR
+       * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
+       */
       for (int i = 0; i < arity; i++) {
         // Solve all the elements of the "OR", in sequence.
         // For a binary OR, this means solving the left-hand-side and then the right-hand-side

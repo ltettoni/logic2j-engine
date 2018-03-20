@@ -19,28 +19,16 @@ package org.logic2j.engine.solver;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
-import org.logic2j.engine.predicates.Even;
-import org.logic2j.engine.predicates.impl.firstorder.Count;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.internal.And;
-import org.logic2j.engine.predicates.internal.Call;
-import org.logic2j.engine.predicates.internal.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.model.Var.longVar;
-import static org.logic2j.engine.predicates.Predicates.*;
 
 /**
  * Examples to explain what logic2j-engine is.
@@ -58,11 +46,12 @@ public class ExamplesTest {
     final long nbr = solver.solve(expr).count();
   }
 
-  private class Is extends Struct{
+  private class Is extends Struct {
     public Is(Object... argList) {
       super("is", argList);
     }
   }
+
 
   private class Square extends Struct {
     public Square(Object... argList) {
@@ -70,7 +59,8 @@ public class ExamplesTest {
     }
   }
 
-  private class Mod  extends Struct{
+
+  private class Mod extends Struct {
     public Mod(Object... argList) {
       super("mod", argList);
     }

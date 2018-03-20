@@ -24,7 +24,7 @@ import java.util.Collection;
 
 /**
  * FIXME Comment no longer describes actual features!
- *
+ * <p>
  * Term class is the root abstract class for all Prolog data types. The following notions apply on terms, see also the {@link TermApi} class
  * for methods to manage {@link Term}s.
  * <ul>
@@ -33,8 +33,9 @@ import java.util.Collection;
  * <li>Initialization of {@link Var} indexes, see {@link TermApi#assignIndexes(Object, int)}</li>
  * <li>Normalization: includes initialization of indexes, factorization, and identification of primitive functors</li>
  * </ul>
- *
+ * <p>
  * TODO could it become an interface?
+ *
  * @see Struct
  * @see Var
  */

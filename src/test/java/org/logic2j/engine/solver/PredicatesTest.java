@@ -141,29 +141,30 @@ public class PredicatesTest {
   public void testExists2_solve_false() {
     final Var<Integer> x = intVar("X");
     final Var<Boolean> result = new Var<Boolean>(Boolean.class, "Result");
-    final String res = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), result)).var(result).list().toString();
+    final String res =
+        solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), result)).var(result).list().toString();
     assertThat(res, is("[false]"));
   }
 
   @Test
   public void testExists2_check_true() {
     final Var<Integer> x = intVar("X");
-    final long nbr1= solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true))).count();
+    final long nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true))).count();
     assertThat(nbr1, is(1L));
     final long nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(false))).count();
     assertThat(nbr2, is(0L));
-    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true,false))).count();
+    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true, false))).count();
     assertThat(nbr3, is(1L));
   }
 
   @Test
   public void testExists2_check_false() {
     final Var<Integer> x = intVar("X");
-    final long nbr1= solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(false))).count();
+    final long nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(false))).count();
     assertThat(nbr1, is(1L));
     final long nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true))).count();
     assertThat(nbr2, is(0L));
-    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true,false))).count();
+    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true, false))).count();
     assertThat(nbr3, is(1L));
   }
 

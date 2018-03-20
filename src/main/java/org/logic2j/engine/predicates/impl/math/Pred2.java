@@ -66,12 +66,12 @@ public class Pred2<T, R> extends FOPredicate {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
-    if (this.image==null && isFreeVar(n1)) {
+    if (this.image == null && isFreeVar(n1)) {
       // If function is not defined, won't need to find solution(s) for free preimage
       return CONTINUE;
     }
 
-    if (this.preimage==null && isFreeVar(n0)) {
+    if (this.preimage == null && isFreeVar(n0)) {
       // If function is not inversible, won't need to find solution(s) for free image
       return CONTINUE;
     }
@@ -82,7 +82,7 @@ public class Pred2<T, R> extends FOPredicate {
   protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final R[] values1 = this.<R>stream(n1).toArray(n -> (R[])new Object[n]);
+        final R[] values1 = this.<R>stream(n1).toArray(n -> (R[]) new Object[n]);
         for (T c0 : (Iterable<T>) this.<T>stream(n0)::iterator) {
           for (final R c1 : values1) {
             // Both bound values - check

@@ -31,18 +31,21 @@ public interface Constant<T> extends Binding {
 
   /**
    * Calculate the size. In case of a stream this consumes it.
+   *
    * @return Cardinality of data: 0=empty, 1=scalar, >1=vectorial, -1=unknown
    */
   long size();
 
   /**
    * In case of a stream this consumes it.
+   *
    * @return
    */
   T[] toArray();
 
   /**
    * In case of a stream this consumes it.
+   *
    * @return
    */
   T toScalar();
@@ -51,6 +54,7 @@ public interface Constant<T> extends Binding {
 
   /**
    * In case of a stream this consumes it.
+   *
    * @param value
    * @return
    */

@@ -24,6 +24,7 @@ public class Debug extends Log {
 
   /**
    * Log the arguments at debug level.
+   *
    * @param argList
    */
   public Debug(Object... argList) {

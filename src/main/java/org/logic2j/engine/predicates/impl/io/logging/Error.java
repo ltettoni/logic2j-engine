@@ -24,6 +24,7 @@ public class Error extends Log {
 
   /**
    * Log the arguments at error level.
+   *
    * @param argList
    */
   public Error(Object... argList) {

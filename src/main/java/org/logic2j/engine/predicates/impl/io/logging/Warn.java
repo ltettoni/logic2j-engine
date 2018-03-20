@@ -24,6 +24,7 @@ public class Warn extends Log {
 
   /**
    * Log the arguments at warning level.
+   *
    * @param argList
    */
   public Warn(Object... argList) {

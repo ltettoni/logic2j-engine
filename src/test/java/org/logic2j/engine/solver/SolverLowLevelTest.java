@@ -213,7 +213,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq((Binding)null, (Binding)null);
+    final Object goal = eq((Binding) null, (Binding) null);
     final long nbSolutions = solve(goal).count();
     assertEquals(1, nbSolutions);
   }
@@ -263,11 +263,11 @@ public class SolverLowLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Object goal = eq(Q, bind(IntStream.range(1, 10).boxed()));
     assertThat(solve(goal).count(), is(9L));
-//    final ExtractingSolutionListener listener = solve(goal);
-//    assertEquals(1, listener.count());
-//    assertEquals("[Q]", listener.getVariables().toString());
-//    assertEquals("[d]", marshall(listener.getValues("Q")));
-//    assertEquals("['='(d, Strings<d>)]", marshall(listener.getValues(".")));
+    //    final ExtractingSolutionListener listener = solve(goal);
+    //    assertEquals(1, listener.count());
+    //    assertEquals("[Q]", listener.getVariables().toString());
+    //    assertEquals("[d]", marshall(listener.getValues("Q")));
+    //    assertEquals("['='(d, Strings<d>)]", marshall(listener.getValues(".")));
   }
 
   // --------------------------------------------------------------------------

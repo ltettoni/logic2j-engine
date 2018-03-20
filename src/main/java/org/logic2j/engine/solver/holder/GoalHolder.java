@@ -51,25 +51,27 @@ public class GoalHolder {
   }
 
   public boolean none() {
-    return ! exists();
+    return !exists();
   }
 
   /**
    * TODO should rather be based on limit() with an iteration up to solution #2
+   *
    * @return true if only one solution to goal.
    */
   public boolean unique() {
     // TODO This is not an efficient implementation
-    return count()==1;
+    return count() == 1;
   }
 
   /**
    * TODO should rather be based on limit() with an iteration up to solution #2
+   *
    * @return true if there is more than one solution.
    */
   public boolean multiple() {
     // TODO This is not an efficient implementation
-    return count()>1;
+    return count() > 1;
   }
 
   public long count() {
@@ -116,7 +118,7 @@ public class GoalHolder {
   /**
    * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
    *
-   * @param var             The variable to solve for.
+   * @param var                 The variable to solve for.
    * @param desiredTypeOfResult
    * @param <T>
    * @return A SolutionHolder for only the specified variable.
@@ -173,8 +175,8 @@ public class GoalHolder {
     return var(varName, Integer.class).unique();
   }
 
-//  public String toString(String varName) {
-//    return var(varName).unique().toString();
-//  }
+  //  public String toString(String varName) {
+  //    return var(varName).unique().toString();
+  //  }
 
 }

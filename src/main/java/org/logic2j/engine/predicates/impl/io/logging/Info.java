@@ -24,6 +24,7 @@ public class Info extends Log {
 
   /**
    * Log the arguments at info level.
+   *
    * @param argList
    */
   public Info(Object... argList) {

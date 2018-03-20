@@ -37,19 +37,19 @@ public class Comp2Test {
   private static final Logger logger = LoggerFactory.getLogger(Comp2Test.class);
   private SolverApi solver = new SolverApi();
 
-  @Test(expected=SolverException.class)
+  @Test(expected = SolverException.class)
   public void twoVars() {
     Term goal = new LT(intVar(), intVar());
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
-  @Test(expected=SolverException.class)
+  @Test(expected = SolverException.class)
   public void var1() {
     Term goal = new LT(intVar(), 123);
     assertThat(solver.solve(goal).exists(), is(false));
   }
 
-  @Test(expected=SolverException.class)
+  @Test(expected = SolverException.class)
   public void var2() {
     Term goal = new LT(123, intVar());
     assertThat(solver.solve(goal).exists(), is(false));

@@ -62,6 +62,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
 
   /**
    * The anonymous variable (following Prolog's standard name "_"), with a generic.
+   *
    * @param <T>
    * @return The non-typed anonymous variable - does not bind any value.
    */
@@ -117,6 +118,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
 
   /**
    * Auto-named variable. The name will be "_n" with N a unique sequence number per this JVM.
+   *
    * @param theType
    * @return
    */
@@ -144,6 +146,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   public static Var<String> strVar() {
     return new Var<>(String.class);
   }
+
   public static Var<String> strVar(CharSequence varName) {
     return new Var<>(String.class, varName);
   }
@@ -151,12 +154,15 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   public static Var<Integer> intVar() {
     return new Var<>(Integer.class);
   }
+
   public static Var<Integer> intVar(CharSequence varName) {
     return new Var<>(Integer.class, varName);
   }
+
   public static Var<Double> doubleVar() {
     return new Var<>(Double.class);
   }
+
   public static Var<Double> doubleVar(CharSequence varName) {
     return new Var<>(Double.class, varName);
   }
@@ -164,6 +170,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   public static Var<Long> longVar() {
     return new Var<>(Long.class);
   }
+
   public static Var<Long> longVar(CharSequence varName) {
     return new Var<>(Long.class, varName);
   }

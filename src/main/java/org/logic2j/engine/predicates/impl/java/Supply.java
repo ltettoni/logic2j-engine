@@ -21,7 +21,6 @@ import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.holder.BindingVar;
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class Supply extends FOPredicate {
   private List<?>[] data;
 
   public Supply(BindingVar<?>... vars) {
-    super("supplyN", (Object[])vars);
+    super("supplyN", (Object[]) vars);
     this.bindingVars = vars;
     this.data = null;
     // Do nothing in constructor, lazy initialization will occur later
@@ -77,9 +76,9 @@ public class Supply extends FOPredicate {
   private UnifyContext notifyFromVar(int ivar, UnifyContext currentVars) {
     if (ivar >= this.bindingVars.length) {
       final Integer cont = currentVars.getSolutionListener().onSolution(currentVars);
-//      if (cont != Continuation.CONTINUE) {
-//        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
-//      }
+      //      if (cont != Continuation.CONTINUE) {
+      //        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
+      //      }
       return currentVars;
     }
     final Var var = this.bindingVars[ivar];
@@ -94,6 +93,7 @@ public class Supply extends FOPredicate {
       }
 
       notifyFromVar(ivar + 1, afterUnification);
-    } return currentVars;
+    }
+    return currentVars;
   }
 }

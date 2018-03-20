@@ -36,6 +36,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
    * Succeeds if theGoal provides at least one solution.
    * Notice that theGoal will be solved up to only its first
    * solution, so that enumeration will not be completed, see {@link ExistsSolutionListener}.
+   *
    * @param theGoal
    */
   public Exists(Term theGoal) {
@@ -47,6 +48,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
    * otherwise.
    * Notice that theGoal will be solved up to only its first
    * solution, so that enumeration will not be completed, see {@link ExistsSolutionListener}.
+   *
    * @param theGoal
    * @param booleanResult
    */
@@ -70,7 +72,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
         return notifySolutionIf(exists, currentVars);
       case 2:
         // Alternate signature: will unify the proof of existence with the second argument.
-        return unifyAndNotifyMany(currentVars, Boolean.valueOf(exists), (Binding<Boolean>)getArg(1));
+        return unifyAndNotifyMany(currentVars, Boolean.valueOf(exists), (Binding<Boolean>) getArg(1));
       default:
         throw new SolverException("Illegal arity to " + this);
     }

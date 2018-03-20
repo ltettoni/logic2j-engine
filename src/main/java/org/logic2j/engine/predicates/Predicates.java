@@ -50,13 +50,13 @@ public final class Predicates {
     return Var.anon();
   }
 
-//  public static Var<Integer> anonInt() {
-//    return Var.anon();
-//  }
-//
-//  public static Var<String> anonStr() {
-//    return Var.anon();
-//  }
+  //  public static Var<Integer> anonInt() {
+  //    return Var.anon();
+  //  }
+  //
+  //  public static Var<String> anonStr() {
+  //    return Var.anon();
+  //  }
 
   public static And and(Term... conjunctions) {
     return new And(conjunctions);
@@ -103,14 +103,14 @@ public final class Predicates {
   }
 
   public static Count count(Term term, Integer number) {
-    return new Count(term, bind((long)number));
+    return new Count(term, bind((long) number));
   }
 
   public static Not not(Term term) {
     return new Not(term);
   }
 
-  public static  <T> Eq eq(Binding<T> t1, Binding<T> t2) {
+  public static <T> Eq eq(Binding<T> t1, Binding<T> t2) {
     return new Eq(t1, t2);
   }
 

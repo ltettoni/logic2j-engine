@@ -41,7 +41,7 @@ public class SolverApi extends Solver {
     final BindingVar[] bindingVars = Arrays.stream(vars).filter(BindingVar.class::isInstance).map(BindingVar.class::cast).toArray(BindingVar[]::new);
     final BindingVar[] boundBindingVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
 
-    if (boundBindingVars.length>0) {
+    if (boundBindingVars.length > 0) {
       goalList.add(0, new Supply(boundBindingVars));
     }
 

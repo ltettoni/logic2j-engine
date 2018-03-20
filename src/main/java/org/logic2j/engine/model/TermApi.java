@@ -92,6 +92,7 @@ public final class TermApi {
 
   /**
    * Check free variable (incl. anonymous)
+   *
    * @param theTerm
    * @return true if theTerm denotes a free variable, or the anonymous variable.
    */
@@ -101,11 +102,12 @@ public final class TermApi {
 
   /**
    * Check free variable (not including anonymous)
+   *
    * @param theTerm
    * @return true if theTerm denotes a free variable, but not anonymous variable.
    */
   public static boolean isFreeNamedVar(Object theTerm) {
-    return theTerm instanceof Var<?> && Var.anon()!=theTerm;
+    return theTerm instanceof Var<?> && Var.anon() != theTerm;
   }
 
   /**
@@ -279,9 +281,9 @@ public final class TermApi {
     }
     final String textAsString = theText.toString();
     final boolean needQuote =
-                /* Fast check */ !Character.isLowerCase(theText.charAt(0)) ||
-                /* For numbers */ textAsString.indexOf('.') >= 0 ||
-                /* Much slower */ !ATOM_PATTERN.matcher(textAsString).matches();
+        /* Fast check */ !Character.isLowerCase(theText.charAt(0)) ||
+        /* For numbers */ textAsString.indexOf('.') >= 0 ||
+        /* Much slower */ !ATOM_PATTERN.matcher(textAsString).matches();
     if (needQuote) {
       final StringBuilder sb = new StringBuilder(theText.length() + 2);
       sb.append(Struct.QUOTE); // Opening quote

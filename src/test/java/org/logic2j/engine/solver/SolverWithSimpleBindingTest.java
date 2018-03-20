@@ -41,7 +41,7 @@ public class SolverWithSimpleBindingTest {
   @Test
   public void supplyAndConsumeStream1() {
     final Var<Integer> Q = intBVar("Q");
-    final Constant<Integer> vals = bind(IntStream.range(1,5).boxed());
+    final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
     assertThat(solver.solve(goal).count(), is(4L));
   }
@@ -49,7 +49,7 @@ public class SolverWithSimpleBindingTest {
   @Test
   public void supplyAndConsumeStream2() {
     final Var<Integer> Q = intBVar("Q");
-    final Constant<Integer> vals = bind(IntStream.range(1,5).boxed());
+    final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
     assertThat(list.toString(), is("[2, 3, 4, 5]"));
