@@ -37,13 +37,13 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String WHOLE_SOLUTION_VAR_NAME = ".".intern();
+  public static final String WHOLE_SOLUTION_VAR_NAME = "."; // No need to "intern()" a compile-time constant
 
   /**
    * Name of the anonymous variable is always "_". This constant is internalized, you
    * can safely compare it with ==.
    */
-  public static final String ANONYMOUS_VAR_NAME = "_".intern();
+  public static final String ANONYMOUS_VAR_NAME = "_"; // No need to "intern()" a compile-time constant
 
   /**
    * Singleton anonymous variable. You can safely compare them with ==.

@@ -17,7 +17,6 @@
 
 package org.logic2j.engine.solver.holder;
 
-import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 
 import java.util.ArrayList;
@@ -149,9 +148,6 @@ public class BindingVar<T> extends Var<T> {
     if (result == null) {
       result = new ArrayList<>();
     }
-    if (!(result instanceof Collection)) {
-      throw new SolverException("BindingVar needs a Collection in order to collect solver results");
-    }
     ((Collection) result).add(value);
   }
 
@@ -166,8 +162,7 @@ public class BindingVar<T> extends Var<T> {
       sb.append("(empty)");
     } else {
       final Collection<T> copy = toList();
-      sb.append("#" + copy.size());
-      sb.append(copy);
+      sb.append("#").append(copy.size()).append(copy);
     }
     return sb.toString();
   }

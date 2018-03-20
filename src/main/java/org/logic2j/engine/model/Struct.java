@@ -43,24 +43,24 @@ public class Struct extends Term implements Cloneable {
   /**
    * This is the logical "AND" operator, usable with /2 or /* arity.
    */
-  public static final String FUNCTOR_COMMA = ",".intern();
+  public static final String FUNCTOR_COMMA = ","; // No need to "intern()" a compile-time constant
 
   /**
    * This is the logical "OR" operator, usable with /2 or /* arity.
    */
-  public static final String FUNCTOR_SEMICOLON = ";".intern();
+  public static final String FUNCTOR_SEMICOLON = ";"; // No need to "intern()" a compile-time constant
 
   public static final String FUNCTOR_TRUE = "true";
   // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
 
-  public static final String FUNCTOR_FALSE = "false".intern(); // TODO do we need "false" or is this "fail"?
+  public static final String FUNCTOR_FALSE = "false"; // TODO do we need "false" or is this "fail"? // No need to "intern()" a compile-time constant
 
   public static final String FUNCTOR_CUT = "!";
   // Would like .intern() but it's anyway the case, and using this constant from an annotation won't work
 
-  public static final String FUNCTOR_CALL = "call".intern();
+  public static final String FUNCTOR_CALL = "call"; // No need to "intern()" a compile-time constant
 
-  public static final String FUNCTOR_CLAUSE = ":-".intern();
+  public static final String FUNCTOR_CLAUSE = ":-"; // No need to "intern()" a compile-time constant
 
 
   // ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public class Struct extends Term implements Cloneable {
 
   public static final Struct ATOM_CUT = new Struct(FUNCTOR_CUT);
 
-  public static final String LIST_SEPARATOR = ",".intern(); // In notations pred(a, b, c)
+  public static final String LIST_SEPARATOR = ","; // In notations pred(a, b, c)
 
   public static final char PAR_CLOSE = ')';
 
@@ -90,7 +90,7 @@ public class Struct extends Term implements Cloneable {
   private static final String VARARG_PREDICATE_TRAILER = "/" + VARARG_ARITY_SIGNATURE;
 
   // Separator of functor arguments: f(a,b), NOT the ',' functor for logical AND.
-  public static final String ARG_SEPARATOR = ", ".intern();
+  public static final String ARG_SEPARATOR = ", ";
 
   public static final char QUOTE = '\'';
 
