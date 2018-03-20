@@ -61,7 +61,7 @@ public class SingleVarSolutionListener<T> extends RangeSolutionListener<T> {
   // Accessors
   // ---------------------------------------------------------------------------
 
-
+  @Override
   public List<T> getResults() {
     return results;
   }

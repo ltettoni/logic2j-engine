@@ -48,19 +48,15 @@ public class Supply extends FOPredicate {
     // Do nothing in constructor, lazy initialization will occur later
   }
 
-  private void ensureInit() {
+  private synchronized void ensureInit() {
     if (this.data == null) {
-      synchronized (this) {
-        if (this.data == null) {
-          final BindingVar[] boundVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
-          final int nbVars = boundVars.length;
-          this.data = new List<?>[nbVars];
-          // Load data (only once) into memory
-          for (int i = 0; i < nbVars; i++) {
-            final BindingVar var = boundVars[i];
-            this.data[i] = var.toList();
-          }
-        }
+      final BindingVar[] boundVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
+      final int nbVars = boundVars.length;
+      this.data = new List<?>[nbVars];
+      // Load data (only once) into memory
+      for (int i = 0; i < nbVars; i++) {
+        final BindingVar var = boundVars[i];
+        this.data[i] = var.toList();
       }
     }
   }
@@ -75,16 +71,11 @@ public class Supply extends FOPredicate {
 
   private UnifyContext notifyFromVar(int ivar, UnifyContext currentVars) {
     if (ivar >= this.bindingVars.length) {
-      final Integer cont = currentVars.getSolutionListener().onSolution(currentVars);
-      //      if (cont != Continuation.CONTINUE) {
-      //        throw new SolverException(this + " is unable to bind " + var + " to value " + value);
-      //      }
+      currentVars.getSolutionListener().onSolution(currentVars);
       return currentVars;
     }
     final Var var = this.bindingVars[ivar];
-    final List<?> data = this.data[ivar];
-    final int nbValues = data.size();
-    for (final Object value : data) {
+    for (final Object value : this.data[ivar]) {
       final UnifyContext afterUnification = currentVars.unify(var, value);
       final boolean couldUnifySomething = afterUnification != null;
       if (!couldUnifySomething) {

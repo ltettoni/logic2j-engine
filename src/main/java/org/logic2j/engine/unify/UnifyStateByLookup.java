@@ -88,7 +88,6 @@ public class UnifyStateByLookup {
     }
     final int transactionNumber = currentVars.currentTransaction;
     if (theVar == Var.anon()) {
-      // assert theRef != Var.ANONYMOUS_VAR: "must not bind an anonymous var to another anonymous var";
       final Object finalRef = (theRef instanceof Var) ? dereference((Var) theRef, transactionNumber) : theRef;
       if (finalRef == Var.anon()) {
         return currentVars; // Nothing done

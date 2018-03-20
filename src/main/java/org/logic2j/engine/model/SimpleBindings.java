@@ -128,8 +128,7 @@ public class SimpleBindings<T> {
       @Override
       public T[] toArray() {
         final T single = supplier.get();
-        final Class<T> type = (Class<T>) single.getClass();
-        final T[] objects = genericArray(type, 1);
+        final T[] objects = genericArray((Class<T>) single.getClass(), 1);
         objects[0] = single;
         return objects;
       }
@@ -387,7 +386,7 @@ public class SimpleBindings<T> {
 
 
 
-  private static abstract class ConstantBase<T> implements Constant<T> {
+  private abstract static class ConstantBase<T> implements Constant<T> {
 
     @Override
     public Class getType() {

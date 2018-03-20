@@ -193,7 +193,7 @@ public final class TermApi {
    * @param theVariableName
    * @return A {@link Var} with the specified name, or null when not found.
    */
-  public static Var<?> findVar(Object theTerm, String theVariableName) {
+  public static Var findVar(Object theTerm, String theVariableName) {
     if (theVariableName == Var.WHOLE_SOLUTION_VAR_NAME) {
       return Var.WHOLE_SOLUTION_VAR;
     }
@@ -240,7 +240,7 @@ public final class TermApi {
 
 
   public static String functorFromSignature(String signature) {
-    int pos = signature.lastIndexOf("/");
+    int pos = signature.lastIndexOf('/');
     if (pos <= 0) {
       throw new InvalidTermException("Cannot find character '/' in predicate signature \"" + signature + "\" (supposed to be functor/arity)");
     }
@@ -249,7 +249,7 @@ public final class TermApi {
 
 
   public static int arityFromSignature(String signature) {
-    int pos = signature.lastIndexOf("/");
+    int pos = signature.lastIndexOf('/');
     if (pos <= 0) {
       throw new InvalidTermException("Cannot find character '/' in predicate signature \"" + signature + "\" (supposed to be functor/arity)");
     }
@@ -359,7 +359,6 @@ public final class TermApi {
         result = new Var<>(Object.class, chars);
       } else {
         // Otherwise it's an atom
-        // result = new Struct(chars);
         result = chars.intern();
       }
     } else if (theObject instanceof Number) {
@@ -378,7 +377,6 @@ public final class TermApi {
     } else {
       // POJOs are also valid terms now
       result = theObject;
-      // throw new InvalidTermException("Cannot (yet) create a Term from '" + theObject + "' of " + theObject.getClass());
     }
     return result;
   }
@@ -409,8 +407,7 @@ public final class TermApi {
    * @param term
    * @return Array of unique Vars, in the order found by depth-first traversal.
    */
-  public static Var<?>[] distinctVars(Object term) {
-    // TODO Does it make sense to use a Map for a few 1-5 vars?
+  public static Var[] distinctVars(Object term) {
     final Var<?>[] tempArray = new Var<?>[100]; // Enough for the moment - we could plan an auto-allocating array if needed, I doubt it
     final int[] nbVars = new int[] {0};
 

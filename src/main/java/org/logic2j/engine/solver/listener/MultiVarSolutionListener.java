@@ -55,6 +55,7 @@ public class MultiVarSolutionListener extends RangeSolutionListener {
   // ---------------------------------------------------------------------------
 
 
+  @Override
   public List<Map<Var, Object>> getResults() {
     return results;
   }

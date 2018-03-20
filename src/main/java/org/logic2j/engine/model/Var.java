@@ -88,7 +88,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    */
   private Var() {
     this.name = ANONYMOUS_VAR_NAME;
-    this.type = /* FIXME */ null;
+    this.type = null; // TODO Not sure null is the best. Should we use Void.class instead?
     this.index = NO_INDEX;  // Actually the default value but let's enforce that here
   }
 
@@ -276,7 +276,6 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    */
   int assignIndexes(int theIndexOfNextNonIndexedVar) {
     if (this.index != NO_INDEX) {
-      // assert false : "We are re-indexing an indexed Var but return a wrong value";
       // Already assigned, avoid changing the index! Do nothing
       return theIndexOfNextNonIndexedVar; // return the argument, since we did not assign anything new
     }

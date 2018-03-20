@@ -39,7 +39,6 @@ public class Struct extends Term implements Cloneable {
   // ---------------------------------------------------------------------------
 
   // TODO Move these constants to a common place?
-  // TODO Replace all calls to intern() by some factory to initialize our constants. Useless to do it here in Java all constant strings are already internalized?
   /**
    * This is the logical "AND" operator, usable with /2 or /* arity.
    */
@@ -167,9 +166,6 @@ public class Struct extends Term implements Cloneable {
    */
   public Struct cloneWithNewArguments(Object[] newArguments) {
     // We can actually change arity, this is used when we clone ","(X,Y) to ","(X,Y,Z)
-    //    if (newArguments.length != this.arity) {
-    //      throw new IllegalArgumentException("Different number of arguments than arity of original Struct");
-    //    }
     try {
       final Struct clone = (Struct) this.clone();
       clone.args = newArguments;
@@ -259,7 +255,7 @@ public class Struct extends Term implements Cloneable {
     return factorized;
   }
 
-  Var<?> findVar(String theVariableName) {
+  Var findVar(String theVariableName) {
     for (int i = 0; i < this.arity; i++) {
       final Object term = this.args[i];
       final Var<?> found = TermApi.findVar(term, theVariableName);
@@ -496,17 +492,16 @@ public class Struct extends Term implements Cloneable {
 
   private String formatStruct() {
     final StringBuilder sb = new StringBuilder();
-    final String name = getName();
-    final int arity = getArity();
+    final int nArity = getArity();
     // list case
-    sb.append(TermApi.quoteIfNeeded(name));
-    if (arity > 0) {
+    sb.append(TermApi.quoteIfNeeded(getName()));
+    if (nArity > 0) {
       sb.append(PAR_OPEN);
-      for (int c = 0; c < arity; c++) {
+      for (int c = 0; c < nArity; c++) {
         final Object arg = getArg(c);
         final String formatted = arg.toString();
         sb.append(formatted);
-        if (c < arity - 1) {
+        if (c < nArity - 1) {
           sb.append(ARG_SEPARATOR);
         }
       }

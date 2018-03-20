@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * FIXME Comment no longer describes actual features!
  * <p>
  * Term class is the root abstract class for all Prolog data types. The following notions apply on terms, see also the {@link TermApi} class
  * for methods to manage {@link Term}s.
@@ -34,7 +33,6 @@ import java.util.Collection;
  * <li>Normalization: includes initialization of indexes, factorization, and identification of primitive functors</li>
  * </ul>
  * <p>
- * TODO could it become an interface?
  *
  * @see Struct
  * @see Var
@@ -51,7 +49,7 @@ public abstract class Term implements Serializable {
    * For {@link Var}s: defines the unique index to the variable.
    * For a {@link Struct}: defines the number of distinct variables within all nested substructures.
    * The default value is NO_INDEX.
-   * TODO A field must not be public !!!
+   * FIXME A field must not be public !!!
    */
   public int index = NO_INDEX;
 

@@ -42,6 +42,9 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
  */
 public final class Predicates {
 
+  private Predicates() {
+  }
+
   public static final True ttrue = new True(); // Singleton
   public static final Fail fail = new Fail(); // Singleton
   public static final Cut cut = new Cut(); // Singleton
@@ -49,14 +52,6 @@ public final class Predicates {
   public static Var anon() {
     return Var.anon();
   }
-
-  //  public static Var<Integer> anonInt() {
-  //    return Var.anon();
-  //  }
-  //
-  //  public static Var<String> anonStr() {
-  //    return Var.anon();
-  //  }
 
   public static And and(Term... conjunctions) {
     return new And(conjunctions);

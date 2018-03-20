@@ -34,7 +34,6 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
   private final Var<?>[] vars;
 
   public MapExtractor(Object goal) {
-    // Actually we don't need to clone:  this.vars = Arrays.copyOf(distinctVars, distinctVars.length);
     this.vars = TermApi.distinctVars(goal);
   }
 

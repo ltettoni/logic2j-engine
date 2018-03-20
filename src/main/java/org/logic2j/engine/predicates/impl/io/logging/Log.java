@@ -48,8 +48,6 @@ public class Log extends FOUniqueSolutionPredicate {
       case "debug":
         loggingMethod = logger::debug;
         break;
-      default:
-        logger.error(this + " predicate sets level to " + level + " which is unknown - using info instead");
       case "info":
         loggingMethod = logger::info;
         break;
@@ -58,6 +56,10 @@ public class Log extends FOUniqueSolutionPredicate {
         break;
       case "error":
         loggingMethod = logger::error;
+        break;
+      default:
+        logger.error("{} predicate sets level to {} which is unknown - using info instead", this, level);
+        loggingMethod = logger::info;
         break;
     }
   }

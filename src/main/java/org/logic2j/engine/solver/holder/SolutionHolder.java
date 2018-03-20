@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -85,7 +86,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @param goalHolder
    * @return Holds solutions as a List of Maps
    */
-  public static SolutionHolder<Map<Var<?>, Object>> extractingMaps(GoalHolder goalHolder) {
+  public static SolutionHolder<Map<Var, Object>> extractingMaps(GoalHolder goalHolder) {
     final SolutionHolder withMaps = new SolutionHolder(goalHolder, new MapExtractor(goalHolder.getGoal()));
     return withMaps;
   }
@@ -243,8 +244,8 @@ public class SolutionHolder<T> implements Iterable<T> {
       @Override
       public T next() {
         if (this.solution == null) {
-          throw new SolverException(
-              "Program error: next() called when either hasNext() did not return true previously, or next() was called more " + "than once");
+          throw new NoSuchElementException(
+              "Program error: next() called when either hasNext() did not return true previously, or next() was called more than once");
         }
         final Object toReturn = this.solution;
         // Indicate that we have just "consumed" the solution, and any subsequent call to next() without first calling hasNext()

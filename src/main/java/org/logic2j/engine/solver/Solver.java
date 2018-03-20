@@ -95,10 +95,8 @@ public class Solver {
   public Integer solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
-    if (goal instanceof Struct) {
-      if (((Struct) goal).getIndex() == Term.NO_INDEX) {
-        throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
-      }
+    if (goal instanceof Struct && ((Struct) goal).getIndex() == Term.NO_INDEX) {
+      throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
     }
 
     final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
@@ -184,7 +182,7 @@ public class Solver {
             final int nextIndex = index + 1;
             final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
             if (isDebug) {
-              logger.debug(this + ": onSolution() called; will now solve rhs={}", rhs);
+              logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
             }
             final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
             return continuationFromSubGoal;
@@ -244,7 +242,7 @@ public class Solver {
     }
     // The CALL predicate
     else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-      // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
+      // call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
       if (arity != 1) {
         throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
       }
