@@ -72,7 +72,7 @@ public class Pred2<T, R> extends FOPredicate {
     }
 
     if (this.preimage == null && isFreeVar(n0)) {
-      // If function is not inversible, won't need to find solution(s) for free image
+      // If function is not invertible, won't need to find solution(s) for free image
       return CONTINUE;
     }
 

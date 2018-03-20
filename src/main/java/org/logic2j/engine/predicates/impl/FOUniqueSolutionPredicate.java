@@ -17,7 +17,6 @@
 
 package org.logic2j.engine.predicates.impl;
 
-import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**

@@ -367,7 +367,7 @@ public class SimpleBindings<T> {
       private void consumeNow() {
         if (this.data == null) {
           final List<T> coll = new ArrayList<T>();
-          iterator.forEachRemaining(val -> coll.add(val));
+          iterator.forEachRemaining(coll::add);
           final Object[] asObjects = coll.toArray();
           if (asObjects.length == 0) {
             throw new IllegalArgumentException("Empty Constant iterator, cannot determine data type of instances.");

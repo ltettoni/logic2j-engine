@@ -156,7 +156,7 @@ public final class TermApi {
   /**
    * Factorizing will either return a new {@link Term} or this {@link Term} depending if it already exists in the supplied Collection.
    * This will factorize duplicated atoms, numbers, variables, or even structures that are statically equal. A factorized {@link Struct}
-   * will have all occurences of the same {@link Var}iable sharing the same object reference. This is an internal template method: the
+   * will have all occurrences of the same {@link Var}iable sharing the same object reference. This is an internal template method: the
    * public API entry point is {@link TermApi#factorize(Object)}; see a more detailed description there.
    *
    * @return Either this, or a new equivalent but factorized Term.

@@ -29,7 +29,6 @@ import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -96,7 +95,7 @@ public abstract class FOPredicate extends Struct {
   // ---------------------------------------------------------------------------
 
   /**
-   * This method will specify the {@link Struct#setPredicateLogic(Function)} .
+   * This method will implement the logic of the predicate.
    *
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.engine.solver.Continuation} values.

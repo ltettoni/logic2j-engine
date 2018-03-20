@@ -17,7 +17,7 @@
 - What is the behaviour when passing free vars when not permitted (eg. LT(_, _) : no solution? exception?)
 - Serious issue with BoundVars. currently a supply() predicate is instantiated at beginning of solve.
    Very inefficient if a select() is used later on since it will receive N values in sequence :-(
-- Should we rather use Splititerator instead of our internal cooking with Constant<T>?
+- Should we rather use Spliterator instead of our internal cooking with Constant<T>?
 - partial reify that just goes to the first non-Var? (without solving recursively ?)
 - limit(min, max) and the LimitSolutionListener
 - better define aggregation: exists(goal, result), sum(), max(), min(). Probably count() and limit() are different beasts.
@@ -27,7 +27,7 @@
 - Predicates binding real data tuples - reintroduce DataFact ????
 - Does the cut (!) work in the context of or(), or only in the context of inference???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
-  - sync or asnyc ???
+  - sync or async ???
   - all in memory or cursor style ???  (JooQ's Cursor: Iterable<R>, AutoCloseable)
   - exists
   - count

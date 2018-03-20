@@ -61,7 +61,7 @@ public class SolverWithSimpleBindingTest {
   @Test
   public void supplyAndConsumeLargeStream() {
     final Var<Integer> Q = intBVar("Q");
-    final long largeNumber = 1L * 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
+    final long largeNumber = (long) 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
     final Constant<Integer> vals = bind(new Random().ints().limit(largeNumber).boxed());
     final Term goal = new Succ<>(vals, Q);
     assertThat(solver.solve(goal).count(), is(largeNumber));

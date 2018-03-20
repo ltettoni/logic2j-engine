@@ -146,7 +146,7 @@ public class SolutionHolder<T> implements Iterable<T> {
 
 
   // ---------------------------------------------------------------------------
-  // Vectorial extractors (collections, arrays, iterables)
+  // vector extractors (collections, arrays, iterables)
   // ---------------------------------------------------------------------------
 
   /**
@@ -210,23 +210,19 @@ public class SolutionHolder<T> implements Iterable<T> {
     }
     final IterableSolutionListener listener = new IterableSolutionListener(effectiveExtractor);
 
-    final Runnable prologSolverThread = new Runnable() {
-
-      @Override
-      public void run() {
-        logger.debug("Started producer (prolog solver engine) thread");
-        // Start solving in a parallel thread, and rush to first solution (that will be called back in the listener)
-        // and will wait for the main thread to extract it
-        SolutionHolder.this.goalHolder.getSolver().solveGoal(SolutionHolder.this.goalHolder.getGoal(), listener);
-        logger.debug("Producer (prolog solver engine) thread finishes");
-        // Last solution was extracted. Producer's callback won't now be called any more - so to
-        // prevent the consumer for listening forever for the next solution that won't come...
-        // We wait from a last notify from our client
-        listener.clientToEngineInterface().waitUntilAvailable();
-        // And we tell it we are aborting. No solution transferred for this last "hang up" message
-        listener.engineToClientInterface().wakeUp();
-        // Notice the 2 lines above are exactly the sames as those in the listener's onSolution()
-      }
+    final Runnable prologSolverThread = () -> {
+      logger.debug("Started producer (prolog solver engine) thread");
+      // Start solving in a parallel thread, and rush to first solution (that will be called back in the listener)
+      // and will wait for the main thread to extract it
+      SolutionHolder.this.goalHolder.getSolver().solveGoal(SolutionHolder.this.goalHolder.getGoal(), listener);
+      logger.debug("Producer (prolog solver engine) thread finishes");
+      // Last solution was extracted. Producer's callback won't now be called any more - so to
+      // prevent the consumer for listening forever for the next solution that won't come...
+      // We wait from a last notify from our client
+      listener.clientToEngineInterface().waitUntilAvailable();
+      // And we tell it we are aborting. No solution transferred for this last "hang up" message
+      listener.engineToClientInterface().wakeUp();
+      // Notice the 2 lines above are exactly the sames as those in the listener's onSolution()
     };
     new Thread(prologSolverThread).start();
 

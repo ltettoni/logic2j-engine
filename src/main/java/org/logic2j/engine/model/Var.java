@@ -224,7 +224,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   // ---------------------------------------------------------------------------
 
   @Override
-  public <T> T accept(TermVisitor<T> theVisitor) {
+  public <R> R accept(TermVisitor<R> theVisitor) {
     return theVisitor.visit(this);
   }
 

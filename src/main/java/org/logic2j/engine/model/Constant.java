@@ -20,7 +20,7 @@ package org.logic2j.engine.model;
 import java.util.stream.Stream;
 
 /**
- * A {@link Binding} that provides constant value (scalar) or values (vectorial).
+ * A {@link Binding} that provides constant value (scalar) or values (vector).
  */
 public interface Constant<T> extends Binding {
 
@@ -32,7 +32,7 @@ public interface Constant<T> extends Binding {
   /**
    * Calculate the size. In case of a stream this consumes it.
    *
-   * @return Cardinality of data: 0=empty, 1=scalar, >1=vectorial, -1=unknown
+   * @return Cardinality of data: 0=empty, 1=scalar, >1=vector, -1=unknown
    */
   long size();
 
