@@ -25,8 +25,7 @@ import org.logic2j.engine.predicates.Even;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
@@ -40,28 +39,28 @@ public class SolverHighLevelTest {
   public void exists0() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).exists(), is(false));
+    assertThat(solver.solve(goal).exists()).isFalse();
   }
 
   @Test
   public void exists2() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).exists(), is(true));
+    assertThat(solver.solve(goal).exists()).isTrue();
   }
 
   @Test
   public void count0() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).count(), is(0L));
+    assertThat(solver.solve(goal).count()).isEqualTo(0L);
   }
 
   @Test
   public void count2() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).count(), is(2L));
+    assertThat(solver.solve(goal).count()).isEqualTo(2L);
   }
 
 
@@ -70,7 +69,7 @@ public class SolverHighLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
     final List<Object> list = solver.solve(goal).solution().list();
-    assertThat(list.toString(), is("[even(0), even(2), even(4), even(6), even(8)]"));
+    assertThat(list.toString()).isEqualTo("[even(0), even(2), even(4), even(6), even(8)]");
   }
 
   @Test
@@ -78,7 +77,7 @@ public class SolverHighLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
-    assertThat(list.toString(), is("[0, 2, 4, 6, 8]"));
+    assertThat(list.toString()).isEqualTo("[0, 2, 4, 6, 8]");
   }
 
   @Test
@@ -86,7 +85,7 @@ public class SolverHighLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
     final List<Map<Var, Object>> list = solver.solve(goal).vars().list();
-    assertThat(list.toString(), is("[{Q=0}, {Q=2}, {Q=4}, {Q=6}, {Q=8}]"));
+    assertThat(list.toString()).isEqualTo("[{Q=0}, {Q=2}, {Q=4}, {Q=6}, {Q=8}]");
   }
 
 

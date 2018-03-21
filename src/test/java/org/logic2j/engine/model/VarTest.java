@@ -20,16 +20,7 @@ package org.logic2j.engine.model;
 import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.predicates.Predicates.anon;
 
@@ -38,8 +29,8 @@ public class VarTest {
   @Test
   public void constructorValid() {
     final Var<?> v1 = anyVar("X");
-    assertSame("X", v1.getName());
-    assertEquals(Term.NO_INDEX, v1.getIndex());
+    assertThat(v1.getName()).isEqualTo("X");
+    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
   }
 
   @Test(expected = InvalidTermException.class)
@@ -71,25 +62,25 @@ public class VarTest {
   @Test
   public void constructorWithCharSequence() {
     final Var<?> v1 = anyVar(new StringBuilder("X"));
-    assertSame("X", v1.getName());
-    assertEquals(Term.NO_INDEX, v1.getIndex());
+    assertThat(v1.getName()).isEqualTo("X");
+    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
   }
 
   @Test
   public void automaticName() {
     final Var<String> stringVar = new Var<>(String.class);
     final String name1 = stringVar.getName();
-    assertThat(name1, not(isEmptyString()));
-    assertThat(name1, startsWith("_"));
+    assertThat(name1).isNotEmpty();
+    assertThat(name1).startsWith("_");
     final Var<String> stringVar2 = new Var<>(String.class);
     final String name2 = stringVar2.getName();
-    assertThat(name2, not(is(name1)));
+    assertThat(name2).isNotSameAs(name1);
   }
 
   @Test
   public void idempotence() {
     final Var<?> v1 = anyVar("X");
-    assertEquals(v1, v1);
+    assertThat(v1).isEqualTo(v1);
   }
 
 
@@ -97,17 +88,17 @@ public class VarTest {
   public void equality() {
     final Var<?> v1 = anyVar("X");
     final Var<?> v2 = anyVar("X");
-    assertNotSame(v1, v2);
-    assertEquals(v1, v2);
-    assertEquals(v2, v1);
+    assertThat(v2).isNotSameAs(v1);
+    assertThat(v2).isEqualTo(v1);
+    assertThat(v1).isEqualTo(v2);
   }
 
 
   @Test
   public void lowerCaseIsValid() {
     final Var<?> v1 = anyVar("lowercase");
-    assertSame("lowercase", v1.getName());
-    assertEquals(Term.NO_INDEX, v1.getIndex());
+    assertThat(v1.getName()).isEqualTo("lowercase");
+    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
   }
 
 
@@ -118,12 +109,12 @@ public class VarTest {
 
   @Test
   public void isAnonymousTrue() {
-    assertTrue(anon().isAnon());
+    assertThat(anon().isAnon()).isTrue();
   }
 
   @Test
   public void isAnonymousFalse() {
-    assertFalse(anyVar("X").isAnon());
+    assertThat(anyVar("X").isAnon()).isFalse();
   }
 
 

@@ -19,11 +19,7 @@ package org.logic2j.engine.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StructTest {
 
@@ -31,43 +27,43 @@ public class StructTest {
   @Test
   public void struct0() {
     Struct a1 = new Struct("f");
-    assertEquals(0, a1.getArity());
-    assertSame("f", a1.getName());
+    assertThat(a1.getArity()).isEqualTo(0);
+    assertThat(a1.getName()).isEqualTo("f");
     Struct a2 = new Struct("f");
-    assertNotSame(a1, a2);
-    assertEquals(a1, a2);
+    assertThat(a2).isNotSameAs(a1);
+    assertThat(a2).isEqualTo(a1);
   }
 
   @Test
   public void atomAsString() {
     Object a1 = Struct.atom("f");
-    assertTrue(a1 instanceof String);
-    assertSame("f", a1);
+    assertThat(a1 instanceof String).isTrue();
+    assertThat(a1).isEqualTo("f");
     Object a2 = Struct.atom("f");
-    assertSame(a1, a2);
+    assertThat(a2).isEqualTo(a1);
   }
 
 
   @Test
   public void atomAsStruct() {
     Object a1 = Struct.atom("true");
-    assertTrue(a1 instanceof Struct);
-    assertSame("true", ((Struct) a1).getName());
+    assertThat(a1 instanceof Struct).isTrue();
+    assertThat(((Struct) a1).getName()).isEqualTo("true");
     Object a2 = Struct.atom("true");
-    assertNotSame(a1, a2);
+    assertThat(a2).isNotSameAs(a1);
   }
 
   @Test
   public void struct2() {
     Struct a1 = new Struct("f", "a", "b");
-    assertEquals(2, a1.getArity());
-    assertSame("f", a1.getName());
-    assertSame("a", a1.getArg(0));
-    assertSame("b", a1.getArg(1));
+    assertThat(a1.getArity()).isEqualTo(2);
+    assertThat(a1.getName()).isEqualTo("f");
+    assertThat(a1.getArg(0)).isEqualTo("a");
+    assertThat(a1.getArg(1)).isEqualTo("b");
     Struct a2 = new Struct("f", "a", "b");
-    assertNotSame(a1, a2);
-    assertEquals(a1, a2);
-    assertNotEquals(a1, new Struct("f", "b", "a"));
+    assertThat(a2).isNotSameAs(a1);
+    assertThat(a2).isEqualTo(a1);
+    assertThat(new Struct("f", "b", "a")).isNotEqualTo(a1);
   }
 
 

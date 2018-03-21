@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
 import static org.logic2j.engine.solver.holder.BindingVar.strBVar;
@@ -43,9 +42,9 @@ public class SolverWithBindingVarTest {
   public void supplyFromBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
-    assertThat(solver.solve(goal).count(), is(19L));
+    assertThat(solver.solve(goal).count()).isEqualTo(19L);
     final List<Integer> list = solver.solve(goal).var(Q).list();
-    assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
+    assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 
   @Test
@@ -53,7 +52,7 @@ public class SolverWithBindingVarTest {
     final BindingVar<String> S = strBVar("S", "A", "B");
     final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
     final List<Object> list = solver.solve(eq(S, S), eq(Q, Q)).var("S").list();
-    assertThat(list.toString(), is("[A, A, A, B, B, B]"));
+    assertThat(list.toString()).isEqualTo("[A, A, A, B, B, B]");
   }
 
   @Test
@@ -61,7 +60,7 @@ public class SolverWithBindingVarTest {
     final BindingVar<String> S = strBVar("S", "A", "B");
     final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
     final List<Integer> list = solver.solve(eq(S, S), eq(Q, Q)).var(Q).list();
-    assertThat(list.toString(), is("[1, 2, 3, 1, 2, 3]"));
+    assertThat(list.toString()).isEqualTo("[1, 2, 3, 1, 2, 3]");
   }
 
   @Test
@@ -69,7 +68,7 @@ public class SolverWithBindingVarTest {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = eq(Q, Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
-    assertThat(list.toString(), is("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]"));
+    assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 
   @Test
@@ -77,7 +76,7 @@ public class SolverWithBindingVarTest {
     final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
     final Term goal = new Even(Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
-    assertThat(list.toString(), is("[2, 4, 6, 8]"));
+    assertThat(list.toString()).isEqualTo("[2, 4, 6, 8]");
   }
 
 
@@ -88,8 +87,8 @@ public class SolverWithBindingVarTest {
     final BindingVar[] boundVars = solver.solve(new Even(Q), new Odd(R)).boundVariables();
     logger.info("Result: {}", Q.getResults());
     logger.info("Result: {}", R.getResults());
-    assertThat(Q.getResults().toString(), is("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]"));
-    assertThat(R.getResults().toString(), is("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]"));
+    assertThat(Q.getResults().toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
+    assertThat(R.getResults().toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
   }
 
   // --------------------------------------------------------------------------

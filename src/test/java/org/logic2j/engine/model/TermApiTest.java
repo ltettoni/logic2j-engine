@@ -20,11 +20,7 @@ package org.logic2j.engine.model;
 import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.predicates.Predicates.anon;
 
@@ -43,18 +39,18 @@ public class TermApiTest {
   @Test
   public void structurallyEquals() {
     // Vars are never structurally equal ...
-    assertFalse(anyVar("X").structurallyEquals(anyVar("Y")));
+    assertThat(anyVar("X").structurallyEquals(anyVar("Y"))).isFalse();
     final Var<?> x1 = anyVar("X");
     final Var<?> x2 = anyVar("X");
     // ... even when they have the same name
-    assertFalse(x1.structurallyEquals(x2));
+    assertThat(x1.structurallyEquals(x2)).isFalse();
     final Struct s = new Struct("s", x1, x2);
-    assertFalse(TermApi.structurallyEquals(s.getArg(0), s.getArg(1)));
+    assertThat(TermApi.structurallyEquals(s.getArg(0), s.getArg(1))).isFalse();
     // After factorization, the 2 X will be same
     final Struct s2 = TermApi.factorize(s);
-    assertNotSame(s, s2);
-    assertFalse(s.structurallyEquals(s2));
-    assertTrue(TermApi.structurallyEquals(s2.getArg(0), s2.getArg(1)));
+    assertThat(s2).isNotSameAs(s);
+    assertThat(s.structurallyEquals(s2)).isFalse();
+    assertThat(TermApi.structurallyEquals(s2.getArg(0), s2.getArg(1))).isTrue();
   }
 
   @Test
@@ -74,25 +70,25 @@ public class TermApiTest {
     logger.info("Flat terms of original {}", TermApi.collectTerms(clause));
     final Object t2 = TermApi.normalize(clause);
     logger.info("Found {} bindings", ((Struct) t2).getIndex());
-    assertEquals(2, ((Struct) t2).getIndex());
+    assertThat(((Struct) t2).getIndex()).isEqualTo(2);
     logger.info("Flat terms of copy     {}", TermApi.collectTerms(t2));
-    assertEquals(clause.toString(), t2.toString());
+    assertThat(t2.toString()).isEqualTo(clause.toString());
   }
 
   @Test
   public void assignIndexes() {
     int nbVars;
     nbVars = TermApi.assignIndexes(new Struct("f"), 0);
-    assertEquals(0, nbVars);
+    assertThat(nbVars).isEqualTo(0);
     nbVars = TermApi.assignIndexes(anyVar("X"), 0);
-    assertEquals(1, nbVars);
+    assertThat(nbVars).isEqualTo(1);
     nbVars = TermApi.assignIndexes(anon(), 0);
-    assertEquals(0, nbVars);
+    assertThat(nbVars).isEqualTo(0);
     //
     nbVars = TermApi.assignIndexes(2L, 0);
-    assertEquals(0, nbVars);
+    assertThat(nbVars).isEqualTo(0);
     nbVars = TermApi.assignIndexes(1.1, 0);
-    assertEquals(0, nbVars);
+    assertThat(nbVars).isEqualTo(0);
   }
 
 
@@ -105,7 +101,7 @@ public class TermApiTest {
 
   @Test
   public void functorFromSignature1() {
-    assertEquals("toto", TermApi.functorFromSignature("toto/4"));
+    assertThat(TermApi.functorFromSignature("toto/4")).isEqualTo("toto");
   }
 
 
@@ -117,18 +113,18 @@ public class TermApiTest {
 
   @Test
   public void arityFromSignature1() {
-    assertEquals(4, TermApi.arityFromSignature("toto/4"));
+    assertThat(TermApi.arityFromSignature("toto/4")).isEqualTo(4);
   }
 
   @Test
   public void quoteIfNeeded() {
-    assertNull(TermApi.quoteIfNeeded(null));
-    assertEquals("''", TermApi.quoteIfNeeded("").toString());
-    assertEquals("' '", TermApi.quoteIfNeeded(" ").toString());
-    assertEquals("ab", TermApi.quoteIfNeeded("ab").toString());
-    assertEquals("'Ab'", TermApi.quoteIfNeeded("Ab").toString());
-    assertEquals("'it''s'", TermApi.quoteIfNeeded("it's").toString());
-    assertEquals("'a''''b'", TermApi.quoteIfNeeded("a''b").toString());
-    assertEquals("'''that'''", TermApi.quoteIfNeeded("'that'").toString());
+    assertThat(TermApi.quoteIfNeeded(null)).isNull();
+    assertThat(TermApi.quoteIfNeeded("").toString()).isEqualTo("''");
+    assertThat(TermApi.quoteIfNeeded(" ").toString()).isEqualTo("' '");
+    assertThat(TermApi.quoteIfNeeded("ab").toString()).isEqualTo("ab");
+    assertThat(TermApi.quoteIfNeeded("Ab").toString()).isEqualTo("'Ab'");
+    assertThat(TermApi.quoteIfNeeded("it's").toString()).isEqualTo("'it''s'");
+    assertThat(TermApi.quoteIfNeeded("a''b").toString()).isEqualTo("'a''''b'");
+    assertThat(TermApi.quoteIfNeeded("'that'").toString()).isEqualTo("'''that'''");
   }
 }

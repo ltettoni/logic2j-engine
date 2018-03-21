@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
 
@@ -43,7 +42,7 @@ public class SolverWithSimpleBindingTest {
     final Var<Integer> Q = intBVar("Q");
     final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
-    assertThat(solver.solve(goal).count(), is(4L));
+    assertThat(solver.solve(goal).count()).isEqualTo(4L);
   }
 
   @Test
@@ -52,7 +51,7 @@ public class SolverWithSimpleBindingTest {
     final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
-    assertThat(list.toString(), is("[2, 3, 4, 5]"));
+    assertThat(list.toString()).isEqualTo("[2, 3, 4, 5]");
   }
 
   /**
@@ -64,7 +63,7 @@ public class SolverWithSimpleBindingTest {
     final long largeNumber = (long) 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
     final Constant<Integer> vals = bind(new Random().ints().limit(largeNumber).boxed());
     final Term goal = new Succ<>(vals, Q);
-    assertThat(solver.solve(goal).count(), is(largeNumber));
+    assertThat(solver.solve(goal).count()).isEqualTo(largeNumber);
   }
 
 }

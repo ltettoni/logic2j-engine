@@ -33,9 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
@@ -59,13 +57,13 @@ public class SolverLowLevelTest {
   @Test
   public void primitiveFail() {
     final long nbSolutions = solve(fail).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
   public void primitiveTrue() {
     final long nbSolutions = solve(ttrue).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
   }
 
 
@@ -73,21 +71,21 @@ public class SolverLowLevelTest {
   public void dataOnlyAtom() {
     final Object goal = new Struct("atom");
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
   public void dataOnlyStructWithParam() {
     final Object goal = new Struct("atom", "p1");
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
   public void dataOnlyStructWithParams() {
     final Object goal = new Struct("atom", "p1", new Struct("p2", "p21", "p22"));
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
@@ -95,7 +93,7 @@ public class SolverLowLevelTest {
     final Var<Object> X = anyVar("X");
     final Object goal = new Struct("atom", X);
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
@@ -104,7 +102,7 @@ public class SolverLowLevelTest {
     final Var<Object> Y = anyVar("Y");
     final Object goal = new Struct("atom", X, Y);
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
 
@@ -112,7 +110,7 @@ public class SolverLowLevelTest {
   public void primitiveTrueAndTrue() {
     final Object goal = and(ttrue, ttrue);
     final long nbSolutions = solve(goal).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
   }
 
 
@@ -120,13 +118,13 @@ public class SolverLowLevelTest {
   public void primitiveTrueOrTrue() {
     final Object goal = or(ttrue, ttrue);
     final long nbSolutions = solve(goal).count();
-    assertEquals(2, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(2);
   }
 
   @Test
   public void primitiveCut() {
     final long nbSolutions = solve(cut).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
   }
 
 
@@ -195,7 +193,7 @@ public class SolverLowLevelTest {
   public void unifyLiteralsNoSolution() {
     final Object goal = eq(bind("a"), bind("b"));
     final long nbSolutions = solve(goal).count();
-    assertEquals(0, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(0);
   }
 
 
@@ -203,7 +201,7 @@ public class SolverLowLevelTest {
   public void unifyLiteralsOneSolution() {
     final Object goal = eq(bind("c"), bind("c"));
     final long nbSolutions = solve(goal).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
   }
 
 
@@ -211,7 +209,7 @@ public class SolverLowLevelTest {
   public void unifyAnonymousToAnonymous() {
     final Object goal = eq(null, (Binding) null);
     final long nbSolutions = solve(goal).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
   }
 
 
@@ -220,12 +218,12 @@ public class SolverLowLevelTest {
     final Var<String> Q = strVar("Q");
     final Object goal = eq(Q, bind("d"));
     final long nbSolutions = solve(goal).count();
-    assertEquals(1, nbSolutions);
+    assertThat(nbSolutions).isEqualTo(1);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
-    assertEquals("[Q]", listener.getVariables().toString());
-    assertEquals("[d]", marshall(listener.getValues("Q")));
-    assertEquals("['='(d, Strings<d>)]", marshall(listener.getValues(".")));
+    assertThat(listener.count()).isEqualTo(1);
+    assertThat(listener.getVariables().toString()).isEqualTo("[Q]");
+    assertThat(marshall(listener.getValues("Q"))).isEqualTo("[d]");
+    assertThat(marshall(listener.getValues("."))).isEqualTo("['='(d, Strings<d>)]");
   }
 
 
@@ -234,10 +232,10 @@ public class SolverLowLevelTest {
     final Var<String> Q = strVar("Q");
     final Object goal = eq(Q, null);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
-    assertEquals("[Q]", listener.getVariables().toString());
-    assertEquals("['='(_, _)]", marshall(listener.getValues(".")));
-    assertEquals("[_]", marshall(listener.getValues("Q")));
+    assertThat(listener.count()).isEqualTo(1);
+    assertThat(listener.getVariables().toString()).isEqualTo("[Q]");
+    assertThat(marshall(listener.getValues("."))).isEqualTo("['='(_, _)]");
+    assertThat(marshall(listener.getValues("Q"))).isEqualTo("[_]");
   }
 
 
@@ -247,18 +245,18 @@ public class SolverLowLevelTest {
     final Var<String> Z = strVar("Z");
     final Object goal = eq(Q, Z);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
-    assertEquals("[., Q, Z]", listener.getVarNames().toString());
-    assertEquals("['='(Q, Q)]", marshall(listener.getValues(".")));
-    assertEquals("[Q]", marshall(listener.getValues("Q")));
-    assertEquals("[Q]", marshall(listener.getValues("Z")));
+    assertThat(listener.count()).isEqualTo(1);
+    assertThat(listener.getVarNames().toString()).isEqualTo("[., Q, Z]");
+    assertThat(marshall(listener.getValues("."))).isEqualTo("['='(Q, Q)]");
+    assertThat(marshall(listener.getValues("Q"))).isEqualTo("[Q]");
+    assertThat(marshall(listener.getValues("Z"))).isEqualTo("[Q]");
   }
 
   @Test
   public void unifyVarToStreamLiteral() {
     final Var<Integer> Q = intVar("Q");
     final Object goal = eq(Q, bind(IntStream.range(1, 10).boxed()));
-    assertThat(solve(goal).count(), is(9L));
+    assertThat(solve(goal).count()).isEqualTo(9L);
     //    final ExtractingSolutionListener listener = solve(goal);
     //    assertEquals(1, listener.count());
     //    assertEquals("[Q]", listener.getVariables().toString());
@@ -275,7 +273,7 @@ public class SolverLowLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Object goal = new Digit(Q);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(10, listener.count());
+    assertThat(listener.count()).isEqualTo(10);
   }
 
 
@@ -283,14 +281,14 @@ public class SolverLowLevelTest {
   public void digit0() {
     final Object goal = new Digit(bind(0));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   @Test
   public void digit9() {
     final Object goal = new Digit(bind(9));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   @Test
@@ -298,7 +296,7 @@ public class SolverLowLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Object goal = and(new Digit(Q), not(new Even(Q)));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(5, listener.count());
+    assertThat(listener.count()).isEqualTo(5);
   }
 
 
@@ -306,7 +304,7 @@ public class SolverLowLevelTest {
   public void even8() {
     final Object goal = new Even(8);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   // --------------------------------------------------------------------------
@@ -317,35 +315,35 @@ public class SolverLowLevelTest {
   public void EvenCheck_12() {
     final Object goal = new EvenCheck(12);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   @Test
   public void EvenCheck_13() {
     final Object goal = new EvenCheck(13);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(0, listener.count());
+    assertThat(listener.count()).isEqualTo(0);
   }
 
   @Test
   public void EvenCheck_2period0() {
     final Object goal = new EvenCheck(2.0);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   @Test
   public void EvenCheck_2period1() {
     final Object goal = new EvenCheck(2.1);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(0, listener.count());
+    assertThat(listener.count()).isEqualTo(0);
   }
 
   @Test
   public void EvenCheck_3period0() {
     final Object goal = new EvenCheck(3.0);
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(0, listener.count());
+    assertThat(listener.count()).isEqualTo(0);
   }
 
 
@@ -354,14 +352,14 @@ public class SolverLowLevelTest {
   public void intRangeCheckInvalid() {
     final Object goal = new IntRange(bind(10), bind(5), bind(15));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(0, listener.count());
+    assertThat(listener.count()).isEqualTo(0);
   }
 
   @Test
   public void intRangeCheckValid() {
     final Object goal = new IntRange(bind(10), bind(12), bind(15));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(1, listener.count());
+    assertThat(listener.count()).isEqualTo(1);
   }
 
   @Test
@@ -369,7 +367,7 @@ public class SolverLowLevelTest {
     final Var<Integer> Q = intVar("Q");
     final Object goal = new IntRange(bind(10), Q, bind(15));
     final ExtractingSolutionListener listener = solve(goal);
-    assertEquals(5, listener.count());
+    assertThat(listener.count()).isEqualTo(5);
   }
 
 
@@ -418,7 +416,7 @@ public class SolverLowLevelTest {
   protected void countNSolutions(int nbr, Object... theGoals) {
     for (final Object term : theGoals) {
       final LocalSolutionListener listener = solve(term);
-      assertEquals("Solving goalText \"" + term + '"', nbr, listener.count());
+      assertThat(listener.count()).as("Solving goalText \"" + term + '"').isEqualTo(nbr);
     }
   }
 
