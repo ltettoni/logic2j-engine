@@ -23,7 +23,7 @@ package org.logic2j.engine.exception;
  *
  * @author tettoni
  */
-public class TooManySolutionsException extends RuntimeException {
+public class TooManySolutionsException extends Logic2jException {
   private static final long serialVersionUID = 1L;
 
   public TooManySolutionsException(CharSequence theMessage) {

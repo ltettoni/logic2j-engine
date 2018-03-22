@@ -23,7 +23,7 @@ package org.logic2j.engine.exception;
  *
  * @author tettoni
  */
-public class MissingSolutionException extends RuntimeException {
+public class MissingSolutionException extends Logic2jException {
   private static final long serialVersionUID = 1L;
 
   public MissingSolutionException(CharSequence theMessage) {

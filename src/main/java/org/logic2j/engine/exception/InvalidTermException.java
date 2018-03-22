@@ -20,7 +20,7 @@ package org.logic2j.engine.exception;
 /**
  * Exception used to indicate that a {@link org.logic2j.engine.model.Term} cannot be parsed from a text, of is used in a context where it should not.
  */
-public class InvalidTermException extends RuntimeException {
+public class InvalidTermException extends Logic2jException {
 
   private static final long serialVersionUID = -4416801118548866803L;
 

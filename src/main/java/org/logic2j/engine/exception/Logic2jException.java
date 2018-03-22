@@ -1,5 +1,5 @@
 /*
- * logic2j - "Bring Logic to your Java" - Copyright (c) 2017 Laurent.Tettoni@gmail.com
+ * logic2j - "Bring Logic to your Java" - Copyright (c) 2018 Laurent.Tettoni@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser Public License as published by
@@ -14,20 +14,19 @@
  * You should have received a copy of the GNU Lesser Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.logic2j.engine.exception;
 
 /**
- * Root class for all logic2j Prolog Exceptions - all a {@link RuntimeException}s.
+ * Root class for all logic2j {@link RuntimeException}.
  */
-public class SolverException extends Logic2jException {
+abstract class Logic2jException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
-  public SolverException(CharSequence theMessage) {
+  public Logic2jException(CharSequence theMessage) {
     super(theMessage.toString());
   }
 
-  public SolverException(CharSequence theMessage, Throwable theRootCause) {
+  public Logic2jException(CharSequence theMessage, Throwable theRootCause) {
     super(theMessage.toString(), theRootCause);
   }
 
