@@ -61,10 +61,10 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
 
   public UnifyContextIterator(UnifyContext currentVars, Iterator<UnifyContext> multiLHS, Iterator<UnifyContext> multiRHS) {
     if (!(multiLHS instanceof UnifyContextIterator)) {
-      throw new UnsupportedOperationException("Left argument must be instanceof UnifyContextIterator");
+      throw new UnsupportedOperationException("Left argument must be instanceof UnifyContextIterator, was of " + multiLHS.getClass());
     }
     if (!(multiRHS instanceof UnifyContextIterator)) {
-      throw new UnsupportedOperationException("Right argument must be instanceof UnifyContextIterator");
+      throw new UnsupportedOperationException("Right argument must be instanceof UnifyContextIterator, was of " + multiLHS.getClass());
     }
     final UnifyContextIterator left = (UnifyContextIterator) multiLHS;
     final UnifyContextIterator right = (UnifyContextIterator) multiRHS;

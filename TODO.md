@@ -14,6 +14,7 @@
 
 
 # Improvements TODO
+- Use existing interface instead of Iterator<UnifyContext>
 - What is the behaviour when passing free vars when not permitted (eg. LT(_, _) : no solution? exception?)
 - Serious issue with BoundVars. currently a supply() predicate is instantiated at beginning of solve.
    Very inefficient if a select() is used later on since it will receive N values in sequence :-(
