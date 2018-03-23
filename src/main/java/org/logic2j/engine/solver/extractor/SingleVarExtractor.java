@@ -45,7 +45,7 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
   /**
    * The target class, or Object if no conversion is asked.
    */
-  private Class<? extends T> targetClass;
+  private final Class<? extends T> targetClass;
 
   /**
    * Will be used to convert the type.
