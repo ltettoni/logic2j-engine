@@ -20,7 +20,10 @@ package org.logic2j.engine.solver.holder;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
+import org.logic2j.engine.solver.extractor.ArrayExtractor;
+import org.logic2j.engine.solver.extractor.FactoryExtractor;
 import org.logic2j.engine.solver.extractor.MapExtractor;
+import org.logic2j.engine.solver.extractor.ObjectFactory;
 import org.logic2j.engine.solver.extractor.SingleVarExtractor;
 import org.logic2j.engine.solver.extractor.SolutionExtractor;
 import org.logic2j.engine.solver.listener.IterableSolutionListener;
@@ -89,6 +92,22 @@ public class SolutionHolder<T> implements Iterable<T> {
   public static SolutionHolder<Map<Var, Object>> extractingMaps(GoalHolder goalHolder) {
     final SolutionHolder withMaps = new SolutionHolder(goalHolder, new MapExtractor(goalHolder.getGoal()));
     return withMaps;
+  }
+
+  /**
+   * Factory: extract all variables in Arrays (the efficient way)
+   *
+   * @param goalHolder
+   * @return Holds solutions as a List of Arrays
+   */
+  public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder) {
+    final SolutionHolder withArrays = new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.getGoal()));
+    return withArrays;
+  }
+
+  public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
+    final SolutionHolder withFactory = new SolutionHolder(goalHolder, new FactoryExtractor<T>(goalHolder.getGoal(), factory));
+    return withFactory;
   }
 
 
