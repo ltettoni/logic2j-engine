@@ -26,6 +26,8 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.BiFunction;
+
 /**
  * A {@link SolutionExtractor} that will extract the individual
  * values of a single Var or of a single "goal" Term, and possibly convert them to a desired class.
@@ -46,6 +48,12 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
   private Class<? extends T> targetClass;
 
   /**
+   * Will be used to convert the type.
+   */
+  private BiFunction<Object, Class, Object> termToSolutionFunction;
+
+
+  /**
    * Create a {@link SolutionListener} that will enumerate
    * solutions up to theMaxCount before aborting by "user request". We will usually
    * supply 1 or 2, see derived classes.
@@ -60,6 +68,14 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
     this.targetClass = desiredTypeOfResult;
   }
 
+  public void setTermToSolutionFunction(BiFunction<Object, Class, Object> termToSolutionFunction) {
+    this.termToSolutionFunction = termToSolutionFunction;
+  }
+
+  public BiFunction<Object, Class, Object> getTermToSolutionFunction() {
+    return termToSolutionFunction;
+  }
+
   @Override
   public T extractSolution(UnifyContext currentVars) {
     Object reifiedValue;
@@ -70,6 +86,9 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
       reifiedValue = currentVars.reify(var);
       if (logger.isDebugEnabled() && reifiedValue instanceof Term && !targetClass.isAssignableFrom(reifiedValue.getClass())) {
         logger.debug("Will convert solution from {} to {}", reifiedValue.getClass(), this.targetClass);
+      }
+      if (this.termToSolutionFunction != null) {
+        reifiedValue = this.termToSolutionFunction.apply(reifiedValue, this.targetClass);
       }
     }
     return (T) reifiedValue;
