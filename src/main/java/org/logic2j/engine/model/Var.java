@@ -253,7 +253,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
     // TODO I'm not actually sure why we do this - we should probably log and identify why this case
     for (final Object term : theCollectedTerms) {
       if (term instanceof Var) {
-        final Var<?> var = (Var) term;
+        final Var var = (Var) term;
         if (this.getName().equals(var.getName())) {
           return var;
         }
@@ -310,7 +310,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
     if (!(other instanceof Var)) {
       return false;
     }
-    final Var<?> that = (Var) other;
+    final Var that = (Var) other;
     return this.name == that.name && this.index == that.index; // Names are {@link String#intern()}alized so OK to check by reference
   }
 

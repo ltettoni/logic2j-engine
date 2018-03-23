@@ -29,13 +29,13 @@ import org.logic2j.engine.unify.UnifyContext;
  */
 public class ArrayExtractor implements SolutionExtractor<Object[]> {
 
-  private final Var<?>[] vars;
+  private final Var[] vars;
   private final int highestIndex;
 
   public ArrayExtractor(Object goal) {
     int high = 0;
     this.vars = TermApi.distinctVars(goal);
-    for (final Var<?> var : this.vars) {
+    for (final Var var : this.vars) {
       high = Math.max(high, var.getIndex());
     }
     this.highestIndex = high;
@@ -49,7 +49,7 @@ public class ArrayExtractor implements SolutionExtractor<Object[]> {
   @Override
   public Object[] extractSolution(UnifyContext currentVars) {
     final Object[] result = new Object[this.highestIndex + 1];
-    for (final Var<?> var : this.vars) {
+    for (final Var var : this.vars) {
       final Object value = currentVars.reify(var);
       result[var.getIndex()] = value;
     }

@@ -40,8 +40,8 @@ public class TermApiTest {
   public void structurallyEquals() {
     // Vars are never structurally equal ...
     assertThat(anyVar("X").structurallyEquals(anyVar("Y"))).isFalse();
-    final Var<?> x1 = anyVar("X");
-    final Var<?> x2 = anyVar("X");
+    final Var x1 = anyVar("X");
+    final Var x2 = anyVar("X");
     // ... even when they have the same name
     assertThat(x1.structurallyEquals(x2)).isFalse();
     final Struct s = new Struct("s", x1, x2);

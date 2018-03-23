@@ -43,7 +43,7 @@ import java.util.Iterator;
 
 public class UnifyContextIterator implements Iterator<UnifyContext> {
 
-  private final Var<?> var;
+  private final Var var;
 
   private final Collection<?> values;
 
@@ -51,7 +51,7 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
 
   private final Iterator<?> iter;
 
-  public UnifyContextIterator(UnifyContext currentVars, Var<?> theVar, Collection<?> values) {
+  public UnifyContextIterator(UnifyContext currentVars, Var theVar, Collection<?> values) {
     this.var = theVar;
     this.values = values;
     this.currentVars = currentVars;

@@ -38,10 +38,10 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  */
 public class Supply extends FOPredicate {
 
-  private final BindingVar<?>[] bindingVars;
+  private final BindingVar[] bindingVars;
   private List<?>[] data;
 
-  public Supply(BindingVar<?>... vars) {
+  public Supply(BindingVar... vars) {
     super("supplyN", (Object[]) vars);
     this.bindingVars = vars;
     this.data = null;

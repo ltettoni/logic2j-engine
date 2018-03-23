@@ -37,7 +37,7 @@ public class SolverApi extends Solver {
   public GoalHolder solve(Term... goals) {
     final List<Term> goalList = Arrays.stream(goals).collect(Collectors.toList());
 
-    final Var<?>[] vars = TermApi.distinctVars(and(goalList.toArray(new Term[goalList.size()])));
+    final Var[] vars = TermApi.distinctVars(and(goalList.toArray(new Term[goalList.size()])));
     final BindingVar[] bindingVars = Arrays.stream(vars).filter(BindingVar.class::isInstance).map(BindingVar.class::cast).toArray(BindingVar[]::new);
     final BindingVar[] boundBindingVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
 

@@ -30,7 +30,7 @@ import org.logic2j.engine.model.Var;
  */
 public interface TermVisitor<T> {
 
-  T visit(Var<?> theVar);
+  T visit(Var theVar);
 
   T visit(Struct theStruct);
 

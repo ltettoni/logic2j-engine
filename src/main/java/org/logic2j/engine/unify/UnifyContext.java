@@ -113,7 +113,7 @@ public class UnifyContext {
    * @return A new Var uniquely indexed
    */
   public Var createVar(String theName) {
-    final Var<?> var = new Var<>(Object.class, theName);
+    final Var var = new Var<>(Object.class, theName);
     var.index = topVarIndex++;
     return var;
   }
@@ -127,7 +127,7 @@ public class UnifyContext {
    * @param ref
    * @return
    */
-  UnifyContext bind(Var<?> var, Object ref) {
+  UnifyContext bind(Var var, Object ref) {
     if (var == ref) {
       if (logger.isDebugEnabled()) {
         logger.debug("Not mapping {} onto itself", var);
@@ -145,7 +145,7 @@ public class UnifyContext {
    * @param theVar
    * @return The dereferenced content of theVar, or theVar if it was free
    */
-  private Object finalValue(Var<?> theVar) {
+  private Object finalValue(Var theVar) {
     final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
     return dereference;
   }
@@ -205,7 +205,7 @@ public class UnifyContext {
     }
     if (TermApi.isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
-      Var<?> var1 = (Var) term1;
+      Var var1 = (Var) term1;
       final Object final1 = finalValue(var1);
       if (!(TermApi.isFreeVar(final1))) {
         // term1 is bound - unify
@@ -216,7 +216,7 @@ public class UnifyContext {
       // free Var var1 need to be bound
       if (TermApi.isFreeVar(term2)) {
         // Binding two vars
-        final Var<?> var2 = (Var) term2;
+        final Var var2 = (Var) term2;
         // Link one to two (should we link to the final or the initial value???)
         // Now do the binding of two vars
         return bind(var1, var2);
