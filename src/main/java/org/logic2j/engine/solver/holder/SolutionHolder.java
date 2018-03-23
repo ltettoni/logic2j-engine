@@ -147,7 +147,7 @@ public class SolutionHolder<T> implements Iterable<T> {
 
 
   // ---------------------------------------------------------------------------
-  // vector extractors (collections, arrays, iterables)
+  // Vector extractors (collections, arrays, iterables)
   // ---------------------------------------------------------------------------
 
   /**
