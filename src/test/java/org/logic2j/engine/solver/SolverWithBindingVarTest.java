@@ -84,15 +84,15 @@ public class SolverWithBindingVarTest {
   public void retrieveCrossProductFromBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q");
     final BindingVar<Integer> R = intBVar("R");
-    final BindingVar[] boundVars = solver.solve(new Even(Q), new Odd(R)).boundVariables();
+    // Unused:  final BindingVar[] boundVars = solver.solve(new Even(Q), new Odd(R)).boundVariables();
+    // Unused - here we should pass the BindingVars as arguments such as
+    // solver.solve(new Even(Q), new Odd(R)).boundVariables(Q, R);
+
+    solver.solve(new Even(Q), new Odd(R)).boundVariables(Q, R);
     logger.info("Result: {}", Q.getResults());
     logger.info("Result: {}", R.getResults());
     assertThat(Q.getResults().toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
     assertThat(R.getResults().toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
   }
-
-  // --------------------------------------------------------------------------
-  // Support methods
-  // --------------------------------------------------------------------------
 
 }

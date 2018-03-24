@@ -37,12 +37,10 @@ public class GoalHolder {
 
   private final Solver solver;
   private final Object goal;
-  private final BindingVar[] bindingVars;
 
-  public GoalHolder(Solver solver, Object theGoal, BindingVar[] bindingVars) {
+  public GoalHolder(Solver solver, Object theGoal) {
     this.solver = solver;
     this.goal = theGoal;
-    this.bindingVars = bindingVars;
   }
 
   public boolean exists() {
@@ -81,19 +79,24 @@ public class GoalHolder {
     return listener.count();
   }
 
-  public BindingVar[] boundVariables() {
+  /**
+   * Not yet used - we were extracting variables form the
+   * @param vars The variables to populate with the solution
+   * @return
+   */
+  public BindingVar[] boundVariables(BindingVar... vars) {
     final CountingSolutionListener listener = new CountingSolutionListener() {
       @Override
       public Integer onSolution(UnifyContext currentVars) {
-        for (final BindingVar bv : bindingVars) {
-          final Object reify = currentVars.reify(bv);
-          bv.addResult(reify);
+        for (final BindingVar bv : vars) {
+          final Object reified = currentVars.reify(bv);
+          bv.addResult(reified);
         }
         return super.onSolution(currentVars);
       }
     };
     solver.solveGoal(goal, listener);
-    return bindingVars;
+    return vars;
   }
 
   /**
