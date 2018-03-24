@@ -24,6 +24,7 @@ import org.logic2j.engine.solver.listener.ExistsSolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * An intermediate class in the fluent API to extract solutions; a GoalHolder holds the state of what the user
@@ -99,33 +100,35 @@ public class GoalHolder {
    * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
    */
   public SolutionHolder<Object> solution() {
-    return new SolutionHolder<>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class);
+    return new SolutionHolder<>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class, null);
   }
 
   /**
    * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
    *
+   * @param <T>
    * @param varName             The name of the variable to solve for.
    * @param desiredTypeOfResult
-   * @param <T>
+   * @param termToSolutionFunction
    * @return A SolutionHolder for only the specified variable.
    */
-  public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
-    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult);
+  public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult, BiFunction<Object, Class, Object> termToSolutionFunction) {
+    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult, termToSolutionFunction);
     return solutionHolder;
   }
 
   /**
    * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
    *
+   * @param <T>
    * @param var                 The variable to solve for.
    * @param desiredTypeOfResult
-   * @param <T>
+   * @param termToSolutionFunction
    * @return A SolutionHolder for only the specified variable.
    */
-  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
+  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult, BiFunction<Object, Class, Object> termToSolutionFunction) {
     // FIXME temporary implementation this should be the principal implementation (not the one by name)
-    return var(var.getName(), desiredTypeOfResult);
+    return var(var.getName(), desiredTypeOfResult, termToSolutionFunction);
   }
 
   /**
@@ -135,7 +138,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public SolutionHolder<Object> var(String varName) {
-    return var(varName, Object.class);
+    return var(varName, Object.class, null);
   }
 
   /**
@@ -145,7 +148,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public <T> SolutionHolder<T> var(Var<T> var) {
-    return var(var, var.getType());
+    return var(var, var.getType(), null);
   }
 
   public SolutionHolder<Map<Var, Object>> vars() {
@@ -172,7 +175,7 @@ public class GoalHolder {
 
 
   public Object intValue(String varName) {
-    return var(varName, Integer.class).unique();
+    return var(varName, Integer.class, null).unique();
   }
 
 }

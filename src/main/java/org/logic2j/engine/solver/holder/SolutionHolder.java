@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Launch the solver with appropriate SolutionListener to obtain what the user asks:
@@ -66,14 +67,16 @@ public class SolutionHolder<T> implements Iterable<T> {
 
   /**
    * Extract one particular variable or the solution to the goal.
-   *
-   * @param goalHolder
+   *  @param goalHolder
    * @param varName
    * @param desiredTypeOfResult
+   * @param termToSolutionFunction
    */
-  public SolutionHolder(GoalHolder goalHolder, String varName, Class<? extends T> desiredTypeOfResult) {
+  public SolutionHolder(GoalHolder goalHolder, String varName, Class<? extends T> desiredTypeOfResult,
+      BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.goalHolder = goalHolder;
     this.singleVarExtractor = new SingleVarExtractor<>(goalHolder.getGoal(), varName, desiredTypeOfResult);
+    this.singleVarExtractor.setTermToSolutionFunction(termToSolutionFunction);
     this.multiVarExtractor = null;
   }
 
