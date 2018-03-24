@@ -47,6 +47,6 @@ public class SolverApi extends Solver {
 
     final Term effective = goalList.size() == 1 ? goalList.get(0) : and(goalList.toArray(new Term[goalList.size()]));
     final Object normalized = TermApi.normalize(effective);
-    return new GoalHolder(this, normalized);
+    return new GoalHolder(this, normalized, null);
   }
 }

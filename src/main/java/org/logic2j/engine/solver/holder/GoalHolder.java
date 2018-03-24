@@ -19,6 +19,7 @@ package org.logic2j.engine.solver.holder;
 
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Solver;
+import org.logic2j.engine.solver.extractor.ObjectFactory;
 import org.logic2j.engine.solver.listener.CountingSolutionListener;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -37,10 +38,12 @@ public class GoalHolder {
 
   private final Solver solver;
   private final Object goal;
+  private BiFunction<Object, Class, Object> termToSolutionFunction;
 
-  public GoalHolder(Solver solver, Object theGoal) {
+  public GoalHolder(Solver solver, Object theGoal, BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.solver = solver;
     this.goal = theGoal;
+    this.termToSolutionFunction = termToSolutionFunction;
   }
 
   public boolean exists() {
@@ -103,7 +106,7 @@ public class GoalHolder {
    * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
    */
   public SolutionHolder<Object> solution() {
-    return new SolutionHolder<>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class, null);
+    return new SolutionHolder<>(this, Var.WHOLE_SOLUTION_VAR_NAME, Object.class, this.termToSolutionFunction);
   }
 
   /**
@@ -112,11 +115,10 @@ public class GoalHolder {
    * @param <T>
    * @param varName             The name of the variable to solve for.
    * @param desiredTypeOfResult
-   * @param termToSolutionFunction
    * @return A SolutionHolder for only the specified variable.
    */
-  public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult, BiFunction<Object, Class, Object> termToSolutionFunction) {
-    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult, termToSolutionFunction);
+  public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
+    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult, this.termToSolutionFunction);
     return solutionHolder;
   }
 
@@ -126,12 +128,11 @@ public class GoalHolder {
    * @param <T>
    * @param var                 The variable to solve for.
    * @param desiredTypeOfResult
-   * @param termToSolutionFunction
    * @return A SolutionHolder for only the specified variable.
    */
-  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult, BiFunction<Object, Class, Object> termToSolutionFunction) {
+  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
     // FIXME temporary implementation this should be the principal implementation (not the one by name)
-    return var(var.getName(), desiredTypeOfResult, termToSolutionFunction);
+    return var(var.getName(), desiredTypeOfResult);
   }
 
   /**
@@ -141,7 +142,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public SolutionHolder<Object> var(String varName) {
-    return var(varName, Object.class, null);
+    return var(varName, Object.class);
   }
 
   /**
@@ -151,7 +152,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public <T> SolutionHolder<T> var(Var<T> var) {
-    return var(var, var.getType(), null);
+    return var(var, var.getType());
   }
 
   public SolutionHolder<Map<Var, Object>> vars() {
@@ -178,7 +179,31 @@ public class GoalHolder {
 
 
   public Object intValue(String varName) {
-    return var(varName, Integer.class, null).unique();
+    return var(varName, Integer.class).unique();
   }
+
+  public String toString(String varName) {
+    return var(varName).unique().toString();
+  }
+
+
+  /**
+   * @return A SolutionHolder that returns solutions as array of Objects
+   */
+  public SolutionHolder<Object[]> varsArray() {
+    return SolutionHolder.extractingArrays(this);
+  }
+
+  /**
+   * Instantiate objects directly.
+   *
+   * @param factory
+   * @param <T>     Type of objects to create
+   * @return A SolutionHolder for objects created by the factory
+   */
+  public <T> SolutionHolder<T> varsToFactory(ObjectFactory<T> factory) {
+    return SolutionHolder.extractingFactory(this, factory);
+  }
+
 
 }
