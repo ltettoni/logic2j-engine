@@ -67,6 +67,7 @@ public class SolutionHolder<T> implements Iterable<T> {
 
   /**
    * Extract one particular variable or the solution to the goal.
+   *
    *  @param goalHolder
    * @param varName
    * @param desiredTypeOfResult
