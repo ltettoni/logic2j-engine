@@ -28,6 +28,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.logic2j.engine.model.Var.strVar;
+
 /**
  * Facade API to the {@link Term} hierarchy, to ease their handling. This class resides in the same package than the {@link Term}
  * subclasses, so they can invoke its package-scoped methods. See important notes re. Term factorization ({@link #factorize(Object)}) and
@@ -356,7 +358,7 @@ public final class TermApi {
         result = new Struct("");
       } else if (Character.isUpperCase(chars.charAt(0)) || chars.startsWith(Var.ANONYMOUS_VAR_NAME)) {
         // Use Prolog's convention re variables starting with uppercase or underscore
-        result = new Var<>(Object.class, chars);
+        result = strVar(chars);
       } else {
         // Otherwise it's an atom
         result = chars.intern();
