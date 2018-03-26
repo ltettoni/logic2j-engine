@@ -31,7 +31,7 @@ import java.util.TreeMap;
  * The monadic view of the current state of variables is visible through the lightweight
  * facade object {@link UnifyContext}.
  */
-public class UnifyStateByLookup {
+class UnifyStateByLookup {
   private static final Logger logger = LoggerFactory.getLogger(UnifyStateByLookup.class);
   private static final int INITIAL_SIZE = 500;
 
