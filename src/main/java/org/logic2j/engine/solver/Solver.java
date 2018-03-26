@@ -27,7 +27,6 @@ import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
-import org.logic2j.engine.unify.UnifyStateByLookup;
 import org.logic2j.engine.util.ProfilingInfo;
 
 import java.util.Iterator;
@@ -69,7 +68,7 @@ public class Solver {
     if (TermApi.isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
-    final UnifyContext initialContext = new UnifyContext(new UnifyStateByLookup(), this, solutionListener);
+    final UnifyContext initialContext = new UnifyContext(this, solutionListener);
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
       // for any new var must be higher than any of the currently used vars.

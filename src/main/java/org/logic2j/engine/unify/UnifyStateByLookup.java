@@ -45,7 +45,7 @@ public class UnifyStateByLookup {
   /**
    * This object is instantiated only once at the beginning of solving a goal.
    */
-  public UnifyStateByLookup() {
+  UnifyStateByLookup() {
     transaction = new int[INITIAL_SIZE];
     Arrays.fill(transaction, -1);
     var = new Var[INITIAL_SIZE];
@@ -82,7 +82,7 @@ public class UnifyStateByLookup {
    * @param theRef
    * @return
    */
-  public UnifyContext bind(UnifyContext currentVars, Var theVar, Object theRef) {
+  UnifyContext bind(UnifyContext currentVars, Var theVar, Object theRef) {
     if (logger.isDebugEnabled()) {
       logger.debug(" bind {}->{}", theVar, theRef);
     }

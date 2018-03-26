@@ -60,11 +60,22 @@ public class UnifyContext {
   /**
    * Initial facade to all empty vars.
    *
+   * @param solver
+   * @param solutionListener
+   */
+  public UnifyContext(Solver solver, SolutionListener solutionListener) {
+    this(new UnifyStateByLookup(), solver, solutionListener);
+  }
+
+
+  /**
+   * Initial facade to all empty vars.
+   *
    * @param stateStorage
    * @param solver
    * @param solutionListener
    */
-  public UnifyContext(UnifyStateByLookup stateStorage, Solver solver, SolutionListener solutionListener) {
+  private UnifyContext(UnifyStateByLookup stateStorage, Solver solver, SolutionListener solutionListener) {
     this.stateStorage = stateStorage;
     this.solver = solver;
     this.solutionListener = solutionListener;
