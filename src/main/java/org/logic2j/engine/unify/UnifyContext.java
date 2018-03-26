@@ -148,7 +148,9 @@ public class UnifyContext {
    *
    * @param theName
    * @return A new Var uniquely indexed
+   * @deprecated not used?
    */
+  @Deprecated
   public Var createVar(String theName) {
     final Var var = new Var<>(Object.class, theName);
     var.index = topVarIndex++;
