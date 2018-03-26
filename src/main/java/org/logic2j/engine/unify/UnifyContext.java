@@ -33,6 +33,12 @@ import java.util.Arrays;
  * This is a lightweight object that is very frequently instantiated.
  * It contains logic to bind variables, unify structures, and reify variables to their effective current
  * values. The real data store is the more heavy {@link UnifyStateByLookup} object.
+ *
+ * This context also stores the current {@link SolutionListener} although this data is not required for inference.
+ * In a previous version of logic2j, it was not stored here, the result was that most methods in the code, and in particular
+ * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
+ * Since logic2j-engine, the two are now grouped in the context.
+ *
  */
 public class UnifyContext {
   private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
@@ -44,21 +50,31 @@ public class UnifyContext {
    */
   private final UnifyStateByLookup stateStorage;
 
+  /**
+   * The solver algorithm to use
+   */
   private final Solver solver;
 
+  /**
+   * Just stored in this context object for convenience (to avoid passing two args in all methods throughout the code base).
+   * Only exposed with {@link #getSolutionListener()}.
+   */
   private SolutionListener solutionListener;
 
+  /**
+   * TODO Document this
+   */
   final int currentTransaction;
 
   /**
-   * The highest variable index seen so far. When recurse goals through inference, we need a new set
-   * of free variables for evey goal (think of fact(X) :- fact(X1), ...). This is achieved by
-   * adding an offset to all variable of a goal, hence emulating new free vars.
+   * The highest variable index seen so far. When solving goals recursively through inference, we need a new set
+   * of free variables when we consider solving a new clause (think of fact(X) :- fact(X1), ...). This is achieved by
+   * adding an offset to all variable of a goal, hence emulating "new" free vars.
    */
   private int topVarIndex;
 
   /**
-   * Initial facade to all empty vars.
+   * Create initial {@link UnifyContext} with all empty vars.
    *
    * @param solver
    * @param solutionListener
@@ -86,19 +102,24 @@ public class UnifyContext {
   }
 
   /**
-   * A new facade to the state of vars after one has been set.
+   * Copy constructor, will share the same state of variables as the original one.
    *
-   * @param previous
+   * @param original The original to copy
    */
-  UnifyContext(UnifyContext previous, int newTransaction) {
-    this.stateStorage = previous.stateStorage;
-    this.solver = previous.solver;
-    this.solutionListener = previous.solutionListener;
-    this.topVarIndex = previous.topVarIndex;
-    this.currentTransaction = previous.currentTransaction + newTransaction;
+  UnifyContext(UnifyContext original, int newTransaction) {
+    this.stateStorage = original.stateStorage;
+    this.solver = original.solver;
+    this.solutionListener = original.solutionListener;
+    this.topVarIndex = original.topVarIndex;
+    this.currentTransaction = original.currentTransaction + newTransaction;
   }
 
 
+  /**
+   * Copy and set a new {@link SolutionListener}
+   * @param newListener
+   * @return A copy with the specified {@link SolutionListener}
+   */
   public UnifyContext withListener(SolutionListener newListener) {
     final UnifyContext copy = new UnifyContext(this, 0);
     copy.solutionListener = newListener;
@@ -106,10 +127,10 @@ public class UnifyContext {
   }
 
   /**
-   * Increment and/or obtain top variable index.
+   * Increment and obtain new top variable index.
    *
-   * @param incrementOrZero
-   * @return The new top variable index, after adding incrementOrZero to its previous value
+   * @param incrementOrZero Specify zero to get the current value
+   * @return The new top variable index, after adding incrementOrZero to its current value
    */
   public int topVarIndex(int incrementOrZero) {
     this.topVarIndex += incrementOrZero;
@@ -128,6 +149,10 @@ public class UnifyContext {
     var.index = topVarIndex++;
     return var;
   }
+
+  // --------------------------------------------------------------------------
+  // Unification methods
+  // --------------------------------------------------------------------------
 
   /**
    * Bind var to ref (var will be altered in the returned UnifyContext); ref is untouched.
@@ -149,49 +174,6 @@ public class UnifyContext {
     return stateStorage.bind(this, var, ref);
   }
 
-
-  /**
-   * In principle one must use the recursive form reify()
-   *
-   * @param theVar
-   * @return The dereferenced content of theVar, or theVar if it was free
-   */
-  private Object finalValue(Var theVar) {
-    final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
-    return dereference;
-  }
-
-  /**
-   * Resolve variables to their values.
-   *
-   * @param term
-   * @return The dereferenced content of term, or theVar if it was free, or null if term is null
-   */
-  public Object reify(Object term) {
-    if (TermApi.isFreeVar(term)) {
-      term = finalValue((Var) term);
-      // The var might end up on a Struct, that needs recursive reification
-    }
-    if (term instanceof Struct) {
-      //            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
-      final Struct s = (Struct) term;
-      if (s.getIndex() == 0) {
-        // Structure is an atom or a constant term - no need to further transform
-        return term;
-      }
-      // Structure has arguments
-      final Object[] reifiedArgs = Arrays.stream(s.getArgs()).map(this::reify).toArray(Object[]::new);
-      final Struct res = s.cloneWithNewArguments(reifiedArgs);
-      if (s.getIndex() > 0) {
-        // The original structure had variables, maybe the cloned one will still have (if those were free)
-        // We need to reassign indexes. It's costly, unfortunately.
-        TermApi.assignIndexes(res, 0);
-      }
-      //            audit.info("               yields {}", res);
-      return res;
-    }
-    return term;
-  }
 
   /**
    * Unify two terms. Most optimal invocation is Var against non-Var.
@@ -267,8 +249,56 @@ public class UnifyContext {
     }
   }
 
+  // --------------------------------------------------------------------------
+  // Reify values
+  // --------------------------------------------------------------------------
+
+  /**
+   * In principle one must use the recursive form reify()
+   *
+   * @param theVar
+   * @return The dereferenced content of theVar, or theVar if it was free
+   */
+  private Object finalValue(Var theVar) {
+    final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
+    return dereference;
+  }
+
+  /**
+   * Resolve variables to their values.
+   *
+   * @param term
+   * @return The dereferenced content of term, or theVar if it was free, or null if term is null
+   */
+  public Object reify(Object term) {
+    if (TermApi.isFreeVar(term)) {
+      term = finalValue((Var) term);
+      // The var might end up on a Struct, that needs recursive reification
+    }
+    if (term instanceof Struct) {
+      //            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
+      final Struct s = (Struct) term;
+      if (s.getIndex() == 0) {
+        // Structure is an atom or a constant term - no need to further transform
+        return term;
+      }
+      // Structure has arguments
+      final Object[] reifiedArgs = Arrays.stream(s.getArgs()).map(this::reify).toArray(Object[]::new);
+      final Struct res = s.cloneWithNewArguments(reifiedArgs);
+      if (s.getIndex() > 0) {
+        // The original structure had variables, maybe the cloned one will still have (if those were free)
+        // We need to reassign indexes. It's costly, unfortunately.
+        TermApi.assignIndexes(res, 0);
+      }
+      //            audit.info("               yields {}", res);
+      return res;
+    }
+    return term;
+  }
+
+
   // ------------------------------------------------------
-  // Managing the SolverContext
+  // Accessors
   // ------------------------------------------------------
 
   public Solver getSolver() {
