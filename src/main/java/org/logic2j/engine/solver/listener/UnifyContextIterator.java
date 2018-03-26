@@ -24,24 +24,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * An {@link Iterator} providing the results of attempt to unify a {@link Var}iable to a collection of values, in sequence.
+ */
 public class UnifyContextIterator implements Iterator<UnifyContext> {
 
-  private final Var var;
-
-  private final Collection<?> values;
-
   private final UnifyContext currentVars;
+  private final Var var;
+  private final Collection<?> values; // Just for reporting in toString()
+  private final Iterator<?> valueIterator;
 
-  private final Iterator<?> iter;
-
+  /**
+   * Instantiate for a single {@link Var}iable and a collection of values.
+   * @param currentVars The current state of variables
+   * @param theVar The variable to attempt unification
+   * @param values The collection of values to unify in sequence
+   */
   public UnifyContextIterator(UnifyContext currentVars, Var theVar, Collection<?> values) {
+    this.currentVars = currentVars;
     this.var = theVar;
     this.values = values;
-    this.currentVars = currentVars;
-    this.iter = this.values.iterator();
+    this.valueIterator = values.iterator();
   }
 
-
+  /**
+   * Create a new {@link UnifyContextIterator} from two existing, both must have the same variable,
+   * and the result will iterate on the UNION set of the left-hand-side and the right-hand-side arguments, in respected order.
+   * @param currentVars
+   * @param multiLHS
+   * @param multiRHS
+   */
   public UnifyContextIterator(UnifyContext currentVars, Iterator<UnifyContext> multiLHS, Iterator<UnifyContext> multiRHS) {
     if (!(multiLHS instanceof UnifyContextIterator)) {
       throw new UnsupportedOperationException("Left argument must be instanceof UnifyContextIterator, was of " + multiLHS.getClass());
@@ -54,23 +66,30 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
     if (left.var != right.var) {
       throw new UnsupportedOperationException("Must have same var to combine");
     }
+    this.currentVars = currentVars;
     this.var = left.var;
+    // Compose the UNION set of the LHS and RHS, in same order
     this.values = new ArrayList<>(left.values);
     this.values.retainAll(right.values);
-    this.currentVars = currentVars;
-    this.iter = this.values.iterator();
+    this.valueIterator = this.values.iterator();
   }
 
 
+  /**
+   * @return true if there is a next value to attempt to unify
+   */
   @Override
   public boolean hasNext() {
-    return iter.hasNext();
+    return valueIterator.hasNext();
   }
 
+  /**
+   * @return The new {@link UnifyContext} resulting from unifying the variable with the next value
+   */
   @Override
   public UnifyContext next() {
-    final Object next = iter.next();
-    final UnifyContext after = currentVars.unify(var, next);
+    final Object next = this.valueIterator.next();
+    final UnifyContext after = currentVars.unify(this.var, next);
     return after;
   }
 
