@@ -33,7 +33,12 @@ import java.util.Arrays;
  * This is a lightweight object that is very frequently instantiated.
  * It contains logic to bind variables, unify structures, and reify variables to their effective current
  * values. The real data store is the more heavy {@link UnifyStateByLookup} object.
- *
+ * <p/>
+ * In the early phases of logic2j we needed to unify (bind) variables, then undo the work explicitly while backtracking.
+ * This needed cumbersome programming. Now UnifyContext is like a state monad, a new value is returned after each bind that results
+ * in effectively setting a value to a variable. Backtracking is done by just forgetting the state, and reusing a previous state, from
+ * which the value was not yet set.
+ * <p/>
  * This context also stores the current {@link SolutionListener} although this data is not required for inference.
  * In a previous version of logic2j, it was not stored here, the result was that most methods in the code, and in particular
  * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
@@ -199,7 +204,7 @@ public class UnifyContext {
     if (TermApi.isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
       Var var1 = (Var) term1;
-      final Object final1 = finalValue(var1);
+      final Object final1 = reifiedVar(var1);
       if (!(TermApi.isFreeVar(final1))) {
         // term1 is bound - unify
         return unify(final1, term2);
@@ -254,25 +259,27 @@ public class UnifyContext {
   // --------------------------------------------------------------------------
 
   /**
-   * In principle one must use the recursive form reify()
+   * Recursively dereference a {@link Var}iable until a constant, or free variable is reached, and return it.
+   * In principle one must use the recursive form reify(Object)
    *
    * @param theVar
    * @return The dereferenced content of theVar, or theVar if it was free
    */
-  private Object finalValue(Var theVar) {
+  private Object reifiedVar(Var theVar) {
     final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
     return dereference;
   }
 
   /**
-   * Resolve variables to their values.
+   * Recursively resolve one {@link Var}iable, or a structure containing variables,
+   * until a constant, or free variable is reached, and return it.
    *
    * @param term
    * @return The dereferenced content of term, or theVar if it was free, or null if term is null
    */
   public Object reify(Object term) {
     if (TermApi.isFreeVar(term)) {
-      term = finalValue((Var) term);
+      term = reifiedVar((Var) term);
       // The var might end up on a Struct, that needs recursive reification
     }
     if (term instanceof Struct) {
