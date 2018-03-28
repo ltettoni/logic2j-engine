@@ -70,7 +70,7 @@ public abstract class Term implements Serializable {
     this.index = index;
   }
 
-  public void clearIndex() {
+  protected void clearIndex() {
     setIndex(NO_INDEX);
   }
 
