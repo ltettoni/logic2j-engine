@@ -30,7 +30,7 @@ public class EvenCheck extends Pred1Tester<Number> {
   public EvenCheck(Binding<Number> v0) {
     super("evenCheck", v0);
     // Implementation is straightforward
-    this.setTest(val -> val.doubleValue() % 2 == 0);
+    setTest(val -> val.doubleValue() % 2 == 0);
   }
 
   public EvenCheck(Number v0) {
