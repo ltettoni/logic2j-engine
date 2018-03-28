@@ -134,28 +134,14 @@ public class UnifyContext {
   /**
    * Increment and obtain new top variable index.
    *
-   * @param incrementOrZero Specify zero to get the current value
-   * @return The new top variable index, after adding incrementOrZero to its current value
+   * @param incrementOrZero Amount to increment, specify zero to get the current value
+   * @return The new top variable index, after adding incrementOrZero to its previous value
    */
   public int topVarIndex(int incrementOrZero) {
     this.topVarIndex += incrementOrZero;
     return this.topVarIndex;
   }
 
-
-  /**
-   * Instantiate a new Var and assign a unique index
-   *
-   * @param theName
-   * @return A new Var uniquely indexed
-   * @deprecated not used?
-   */
-  @Deprecated
-  public Var createVar(String theName) {
-    final Var var = new Var<>(Object.class, theName);
-    var.index = topVarIndex++;
-    return var;
-  }
 
   // --------------------------------------------------------------------------
   // Unification methods
