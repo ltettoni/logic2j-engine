@@ -38,7 +38,7 @@ public class GoalHolder {
 
   private final Solver solver;
   private final Object goal;
-  private BiFunction<Object, Class, Object> termToSolutionFunction;
+  private final BiFunction<Object, Class, Object> termToSolutionFunction;
 
   public GoalHolder(Solver solver, Object theGoal, BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.solver = solver;

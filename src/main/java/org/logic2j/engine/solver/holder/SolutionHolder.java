@@ -110,7 +110,7 @@ public class SolutionHolder<T> implements Iterable<T> {
   }
 
   public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
-    final SolutionHolder withFactory = new SolutionHolder(goalHolder, new FactoryExtractor<T>(goalHolder.getGoal(), factory));
+    final SolutionHolder withFactory = new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.getGoal(), factory));
     return withFactory;
   }
 
@@ -226,7 +226,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return An iterator for all solutions.
    */
   public Iterator<T> iterator() {
-    SolutionExtractor<?> effectiveExtractor;
+    final SolutionExtractor<?> effectiveExtractor;
     if (SolutionHolder.this.singleVarExtractor != null) {
       effectiveExtractor = SolutionHolder.this.singleVarExtractor;
     } else {
