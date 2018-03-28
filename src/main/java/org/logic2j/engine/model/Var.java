@@ -89,7 +89,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   private Var() {
     this.name = ANONYMOUS_VAR_NAME;
     this.type = null; // TODO Not sure null is the best. Should we use Void.class instead?
-    this.index = NO_INDEX;  // Actually the default value but let's enforce that here
+    clearIndex();
   }
 
   /**
@@ -187,7 +187,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
       throw new InvalidTermException("Cannot clone the anonymous variable via a copy constructor!");
     }
     final Var<Q> cloned = new Var<>(original.type, original.name);
-    cloned.index = original.getIndex();
+    cloned.setIndex(original.getIndex());
     return cloned;
   }
 
@@ -238,7 +238,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    * @param theCollectedTerms
    */
   void collectTermsInto(Collection<Object> theCollectedTerms) {
-    this.index = NO_INDEX;
+    clearIndex();
     theCollectedTerms.add(this);
   }
 
@@ -254,7 +254,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
     for (final Object term : theCollectedTerms) {
       if (term instanceof Var) {
         final Var var = (Var) term;
-        if (this.getName().equals(var.getName())) {
+        if (getName().equals(var.getName())) {
           return var;
         }
       }
@@ -275,18 +275,18 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    * Assign a new {@link Term#index} to a Var if it was not assigned before.
    */
   int assignIndexes(int theIndexOfNextNonIndexedVar) {
-    if (this.index != NO_INDEX) {
+    if (hasIndex()) {
       // Already assigned, avoid changing the index! Do nothing
       return theIndexOfNextNonIndexedVar; // return the argument, since we did not assign anything new
     }
     if (isAnon()) {
       // Anonymous variable is not a var, don't count it, but assign an
       // index that is different from NO_INDEX but that won't be ever used
-      this.index = ANON_INDEX;
+      setIndex(ANON_INDEX);
       return theIndexOfNextNonIndexedVar; // return same index since we did nothing
     }
     // Index this var
-    this.index = (short) theIndexOfNextNonIndexedVar;
+    setIndex(theIndexOfNextNonIndexedVar);
     return theIndexOfNextNonIndexedVar + 1;
   }
 
@@ -296,7 +296,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
 
   @Override
   public int hashCode() {
-    return this.name.hashCode() ^ this.index;
+    return this.name.hashCode() ^ this.getIndex();
   }
 
   /**
@@ -311,13 +311,13 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
       return false;
     }
     final Var that = (Var) other;
-    return this.name == that.name && this.index == that.index; // Names are {@link String#intern()}alized so OK to check by reference
+    return this.getName() == that.getName() && this.getIndex() == that.getIndex(); // Names are {@link String#intern()}alized so OK to check by reference
   }
 
   @Override
   public String toString() {
     if (logger.isDebugEnabled()) {
-      return this.name + '#' + this.getIndex();
+      return this.getName() + '#' + this.getIndex();
     }
     return this.name;
   }

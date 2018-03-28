@@ -30,7 +30,7 @@ public class VarTest {
   public void constructorValid() {
     final Var v1 = anyVar("X");
     assertThat(v1.getName()).isEqualTo("X");
-    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
+    assertThat(v1.hasIndex()).isFalse();
   }
 
   @Test(expected = InvalidTermException.class)
@@ -63,7 +63,7 @@ public class VarTest {
   public void constructorWithCharSequence() {
     final Var v1 = anyVar(new StringBuilder("X"));
     assertThat(v1.getName()).isEqualTo("X");
-    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
+    assertThat(v1.hasIndex()).isFalse();
   }
 
   @Test
@@ -98,7 +98,7 @@ public class VarTest {
   public void lowerCaseIsValid() {
     final Var v1 = anyVar("lowercase");
     assertThat(v1.getName()).isEqualTo("lowercase");
-    assertThat(v1.getIndex()).isEqualTo(Term.NO_INDEX);
+    assertThat(v1.hasIndex()).isFalse();
   }
 
 
@@ -116,7 +116,5 @@ public class VarTest {
   public void isAnonymousFalse() {
     assertThat(anyVar("X").isAnon()).isFalse();
   }
-
-
 
 }

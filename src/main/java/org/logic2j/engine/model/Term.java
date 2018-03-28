@@ -46,18 +46,17 @@ public abstract class Term implements Serializable {
   public static final int NO_INDEX = -1;
 
   /**
+   * A value of index=={@value} (ANON_INDEX) means this is the anonymous variable.
+   */
+  public static final int ANON_INDEX = -2;
+
+  /**
    * For {@link Var}s: defines the unique index to the variable.
    * For a {@link Struct}: defines the number of distinct variables within all nested substructures.
    * The default value is NO_INDEX.
    * FIXME A field must not be public !!!
    */
-  public int index = NO_INDEX;
-
-  /**
-   * A value of index=={@value} (ANON_INDEX) means this is the anonymous variable.
-   */
-  public static final int ANON_INDEX = -2;
-
+  private int index = NO_INDEX;
 
   // ---------------------------------------------------------------------------
   // Accessors
@@ -65,6 +64,18 @@ public abstract class Term implements Serializable {
 
   public int getIndex() {
     return this.index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
+
+  public void clearIndex() {
+    setIndex(NO_INDEX);
+  }
+
+  public boolean hasIndex() {
+    return getIndex() != NO_INDEX;
   }
 
   // ---------------------------------------------------------------------------
@@ -93,6 +104,5 @@ public abstract class Term implements Serializable {
     }
     return null;
   }
-
 
 }

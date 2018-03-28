@@ -60,11 +60,11 @@ public class UnifyContextTest {
     _anon = Struct.valueOf("_");
 
     X = anyVar("X");
-    X.index = 1;
+    X.setIndex(1);
     Y = anyVar("Y");
-    Y.index = 2;
+    Y.setIndex(2);
     Z = anyVar("Z");
-    Z.index = 3;
+    Z.setIndex(3);
 
     Var X2 = anyVar("X2");
     Var X3 = anyVar("X3");

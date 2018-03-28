@@ -395,8 +395,8 @@ public class SimpleBindings<T> {
 
     public String toString() {
       final StringBuilder sb = new StringBuilder();
-      if (this.getType() != null) {
-        sb.append(this.getType().getSimpleName());
+      if (getType() != null) {
+        sb.append(getType().getSimpleName());
         sb.append('s');
       } else {
         sb.append("NoType");

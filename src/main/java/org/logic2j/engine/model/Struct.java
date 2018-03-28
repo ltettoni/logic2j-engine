@@ -141,7 +141,7 @@ public class Struct extends Term implements Cloneable {
    * Creates a shallow copy but with all children which are Struct also cloned.
    */
   public Struct(Struct original) {
-    this.name = original.name;
+    this.name = original.getName();
     this.arity = original.arity;
     this.signature = original.signature;
 
@@ -224,7 +224,7 @@ public class Struct extends Term implements Cloneable {
    * @param theCollectedTerms
    */
   void collectTermsInto(Collection<Object> theCollectedTerms) {
-    this.index = NO_INDEX;
+    clearIndex();
     if (this.arity > 0) {
       Arrays.stream(this.args).forEach(child -> TermApi.collectTermsInto(child, theCollectedTerms));
     }
@@ -306,7 +306,7 @@ public class Struct extends Term implements Cloneable {
     }
     this.name = theFunctor.intern();
     this.arity = theArity;
-    this.signature = (this.name + '/' + this.arity).intern();
+    this.signature = (this.getName() + '/' + this.arity).intern();
   }
 
   // --------------------------------------------------------------------------
@@ -342,7 +342,7 @@ public class Struct extends Term implements Cloneable {
   }
 
   public String getVarargsPredicateSignature() {
-    return this.name + VARARG_PREDICATE_TRAILER;
+    return this.getName() + VARARG_PREDICATE_TRAILER;
   }
 
   // ---------------------------------------------------------------------------
@@ -397,7 +397,7 @@ public class Struct extends Term implements Cloneable {
    * goal(A, Z, Y) will guarantee that indexes are: A=0, Z=1, Y=2.
    */
   int assignIndexes(int theIndexOfNextNonIndexedVar) {
-    if (this.index != NO_INDEX) {
+    if (hasIndex()) {
       // Already assigned, do nothing and return the argument since we did
       // not assigned anything new
       return theIndexOfNextNonIndexedVar;
@@ -407,7 +407,7 @@ public class Struct extends Term implements Cloneable {
     for (int i = 0; i < this.arity; i++) {
       runningIndex = TermApi.assignIndexes(this.args[i], runningIndex);
     }
-    this.index = (short) runningIndex;
+    setIndex(runningIndex);
     return runningIndex;
   }
 
@@ -452,7 +452,7 @@ public class Struct extends Term implements Cloneable {
 
   @Override
   public int hashCode() {
-    int result = this.name.hashCode();
+    int result = this.getName().hashCode();
     result ^= this.arity << 8;
     for (int i = 0; i < this.arity; i++) {
       result ^= this.args[i].hashCode();

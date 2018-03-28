@@ -21,7 +21,6 @@ package org.logic2j.engine.solver;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.listener.SolutionListener;
@@ -94,7 +93,7 @@ public class Solver {
   public Integer solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
-    if (goal instanceof Struct && ((Struct) goal).getIndex() == Term.NO_INDEX) {
+    if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
     }
 
