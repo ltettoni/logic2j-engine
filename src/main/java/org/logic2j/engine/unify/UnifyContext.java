@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.unify;
 
+import org.logic2j.engine.model.DataFact;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
@@ -56,12 +57,15 @@ public class UnifyContext {
   private final UnifyStateByLookup stateStorage;
 
   /**
-   * The solver algorithm to use
+   * Just to hold the solver algorithm currently in use.
+   * Not functionally used in this class, but hold as an important context reference.
+   * Only exposed via {@link #getSolver()}
    */
   private final Solver solver;
 
   /**
    * Just stored in this context object for convenience (to avoid passing two args in all methods throughout the code base).
+   * Not functionally used in this class, but hold as an important context reference.
    * Only exposed with {@link #getSolutionListener()}.
    */
   private SolutionListener solutionListener;
@@ -240,6 +244,45 @@ public class UnifyContext {
     } else {
       return term1.equals(term2) ? this : null;
     }
+  }
+
+
+  /**
+   * Unify against DataFact
+   *
+   * @param term1
+   * @param dataFact
+   * @return
+   */
+  public UnifyContext unify(Object term1, DataFact dataFact) {
+    if (!(term1 instanceof Struct)) {
+      // Only Struct could match a DataFact
+      return null;
+    }
+    final Struct struct = (Struct) term1;
+    final Object[] dataFactElements = dataFact.elements;
+    if (struct.getName() != dataFactElements[0]) {// Names are {@link String#intern()}alized so OK to check by reference
+      // Functor must match
+      return null;
+    }
+    final int arity = struct.getArity();
+    if (arity != dataFactElements.length - 1) {
+      // Arity must match as well
+      return null;
+    }
+    final Object[] structArgs = struct.getArgs();
+    UnifyContext runningMonad = this;
+    // Unify all dataFactElements
+    for (int i = 0; i < arity; i++) {
+      final Object structArg = structArgs[i];
+      final Object dataFactElement = dataFactElements[1 + i];
+      runningMonad = runningMonad.unify(structArg, dataFactElement);
+      if (runningMonad == null) {
+        // Struct sub-dataFactElement not unified - fail the whole unification
+        return null;
+      }
+    }
+    return runningMonad;
   }
 
   // --------------------------------------------------------------------------
