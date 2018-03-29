@@ -38,13 +38,13 @@ import java.util.Iterator;
  * "call(X)"
  * "!" (CUT)
  * ( and in the future, ":-" (RULE) )
- * All other predicates are delegated in implementations
- * of {@link FOPredicate#predicateLogic(UnifyContext)}.
+ * All other predicates are delegated in implementations of {@link FOPredicate#predicateLogic(UnifyContext)}.
  */
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
   private static final boolean isDebug = logger.isDebugEnabled();
+
   /**
    * Do we solve the ";" (OR) predicate internally here, or in the predicate.
    * (see note re. processing of OR in CoreLibrary.pro)
@@ -97,7 +97,6 @@ public class Solver {
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
     }
-
     final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
     return cutIntercepted;
   }
@@ -241,7 +240,7 @@ public class Solver {
     }
     // The CALL predicate
     else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-      // call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
+      // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
       if (arity != 1) {
         throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
       }
