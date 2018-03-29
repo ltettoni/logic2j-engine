@@ -279,15 +279,35 @@ public class Solver {
       result = javaPredicate.predicateLogic(currentVars);
     }
     //---------------------------------------------------------------------------
-    // Regular prolog inference rule: goal :- subGoal
+    // Not any "special" handling
     //---------------------------------------------------------------------------
+
     else {
-      // Here we would look to unify against a rule (premise :- consequence)
+      //---------------------------------------------------------------------------
+      // Regular prolog inference rule: goal :- subGoal
+      //---------------------------------------------------------------------------
+      result = solveAgainstClauseProviders(goalTerm, currentVars, cutLevel + 1);
+
+      //---------------------------------------------------------------------------
+      // Solve against data facts
+      //---------------------------------------------------------------------------
+      if (result == Continuation.CONTINUE) {
+        result = solveAgainstDataProviders(goalTerm, currentVars, cutLevel + 1);
+      }
     }
     if (isDebug) {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
     }
     return result;
+  }
+
+
+  protected Integer solveAgainstClauseProviders(final Object goalTerm, UnifyContext currentVars, final int cutLevel) {
+    return Continuation.CONTINUE;
+  }
+
+  protected Integer solveAgainstDataProviders(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+    return Continuation.CONTINUE;
   }
 
   @Override
