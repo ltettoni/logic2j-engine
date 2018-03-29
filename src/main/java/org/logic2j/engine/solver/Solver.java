@@ -50,6 +50,7 @@ public class Solver {
    * (see note re. processing of OR in CoreLibrary.pro)
    */
   private static final boolean INTERNAL_OR = true;
+
   /**
    * Do we acquire profiling information (number of inferences, etc)
    */
@@ -278,7 +279,9 @@ public class Solver {
       // The result will be the continuation code or CUT level
       result = javaPredicate.predicateLogic(currentVars);
     }
-    // A rule
+    //---------------------------------------------------------------------------
+    // Regular prolog inference rule: goal :- subGoal
+    //---------------------------------------------------------------------------
     else {
       // Here we would look to unify against a rule (premise :- consequence)
     }
@@ -286,6 +289,11 @@ public class Solver {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
     }
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.getClass().getSimpleName();
   }
 
 }
