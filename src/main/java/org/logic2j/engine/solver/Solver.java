@@ -19,6 +19,7 @@ package org.logic2j.engine.solver;
 
 
 import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.exception.Logic2jException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.TermApi;
@@ -76,11 +77,11 @@ public class Solver {
     }
     try {
       return solveGoal(goal, initialContext);
-    } catch (SolverException e) {
+    } catch (Logic2jException e) {
       // "Functional" exception thrown during solving will just be forwarded
       throw e;
     } catch (RuntimeException e) {
-      // Anything not a PrologException will be encapsulated
+      // Anything not a Logic2jException will be encapsulated
       throw new SolverException("Solver failed with: " + e, e);
     }
   }
@@ -269,11 +270,10 @@ public class Solver {
         result = cutLevel;
       }
     }
-    // A predicate in Java
+    // ---------------------------------------------------------------------------
+    // Primitive implemented in Java
+    // ---------------------------------------------------------------------------
     else if (goalStruct instanceof FOPredicate) {
-      // ---------------------------------------------------------------------------
-      // Primitive implemented in Java
-      // ---------------------------------------------------------------------------
       final FOPredicate javaPredicate = (FOPredicate) goalStruct;
       // The result will be the continuation code or CUT level
       result = javaPredicate.predicateLogic(currentVars);

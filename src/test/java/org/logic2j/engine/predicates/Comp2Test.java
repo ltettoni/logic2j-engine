@@ -18,7 +18,7 @@
 package org.logic2j.engine.predicates;
 
 import org.junit.Test;
-import org.logic2j.engine.exception.SolverException;
+import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.math.compare.LT;
 import org.logic2j.engine.solver.SolverApi;
@@ -36,19 +36,19 @@ public class Comp2Test {
   private static final Logger logger = LoggerFactory.getLogger(Comp2Test.class);
   private final SolverApi solver = new SolverApi();
 
-  @Test(expected = SolverException.class)
+  @Test(expected = InvalidTermException.class)
   public void twoVars() {
     Term goal = new LT(intVar(), intVar());
     assertThat(solver.solve(goal).exists()).isFalse();
   }
 
-  @Test(expected = SolverException.class)
+  @Test(expected = InvalidTermException.class)
   public void var1() {
     Term goal = new LT(intVar(), 123);
     assertThat(solver.solve(goal).exists()).isFalse();
   }
 
-  @Test(expected = SolverException.class)
+  @Test(expected = InvalidTermException.class)
   public void var2() {
     Term goal = new LT(123, intVar());
     assertThat(solver.solve(goal).exists()).isFalse();
