@@ -46,17 +46,17 @@ public class Solver {
 
   private static final boolean isDebug = logger.isDebugEnabled();
 
+
   /**
    * Do we solve the ";" (OR) predicate internally here, or in the predicate.
    * (see note re. processing of OR in CoreLibrary.pro)
    */
-  private static final boolean INTERNAL_OR = true;
+  protected boolean isInternalOr() { return true; }// FIXME Bug with false on a number of test case
 
   /**
    * Do we acquire profiling information (number of inferences, etc)
    */
-  private static final boolean PROFILING = true;
-
+  protected boolean isProfiling() { return false; }
 
   /**
    * This is the naive, simplest entry point for solving a goal, when all variable have to be initially free.
@@ -116,7 +116,7 @@ public class Solver {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
       logger.debug("     cutLevel={}", cutLevel);
     }
-    if (PROFILING) {
+    if (isProfiling()) {
       ProfilingInfo.nbInferences++;
     }
     Integer result = Continuation.CONTINUE;
@@ -222,7 +222,7 @@ public class Solver {
       result = solveGoalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
     }
     // The OR predicate
-    else if (INTERNAL_OR && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+    else if (isInternalOr() && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       /*
        * This is the Java implementation of N-arity OR
        * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
