@@ -273,10 +273,8 @@ public class Solver {
     // ---------------------------------------------------------------------------
     // Primitive implemented in Java
     // ---------------------------------------------------------------------------
-    else if (goalStruct instanceof FOPredicate) {
-      final FOPredicate javaPredicate = (FOPredicate) goalStruct;
-      // The result will be the continuation code or CUT level
-      result = javaPredicate.predicateLogic(currentVars);
+    else if (isJava(goalStruct)) {
+      result = invokeJava(goalStruct, currentVars);
     }
     //---------------------------------------------------------------------------
     // Not any "special" handling
@@ -299,6 +297,16 @@ public class Solver {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
     }
     return result;
+  }
+
+  protected boolean isJava(Struct goalStruct) {
+    return goalStruct instanceof FOPredicate;
+  }
+
+  protected Integer invokeJava(Object goal, UnifyContext currentVars) {
+    final FOPredicate javaPredicate = (FOPredicate) goal;
+    // The result will be the continuation code or CUT level
+    return javaPredicate.predicateLogic(currentVars);
   }
 
 
