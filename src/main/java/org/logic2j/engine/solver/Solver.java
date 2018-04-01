@@ -110,7 +110,7 @@ public class Solver {
    * @param cutLevel
    * @return
    */
-  private Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+  protected Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
     if (isDebug) {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
