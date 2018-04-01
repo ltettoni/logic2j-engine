@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import static org.logic2j.engine.predicates.Predicates.and;
 
 /**
- * Higher level API.
+ * Higher level API only used in test cases.
  */
 public class SolverApi extends Solver {
   public GoalHolder solve(Term... goals) {
