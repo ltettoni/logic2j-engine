@@ -303,7 +303,7 @@ public class Solver {
     return goalStruct instanceof FOPredicate;
   }
 
-  protected Integer invokeJava(Object goal, UnifyContext currentVars) {
+  protected Integer invokeJava(Struct goal, UnifyContext currentVars) {
     final FOPredicate javaPredicate = (FOPredicate) goal;
     // The result will be the continuation code or CUT level
     return javaPredicate.predicateLogic(currentVars);
