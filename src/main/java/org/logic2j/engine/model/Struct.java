@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.logic2j.engine.model;
 
 
@@ -210,7 +209,6 @@ public class Struct extends Term implements Cloneable {
     }
     return newInstance;
   }
-
 
   // ---------------------------------------------------------------------------
   // Template methods defined in abstract class Term
