@@ -294,11 +294,9 @@ public final class TermApi {
     return theText;
   }
 
-  // TODO move to TermApi or some marshalling class?
   public static <T> String formatStruct(Struct<T> struct) {
     final StringBuilder sb = new StringBuilder();
     final int nArity = struct.getArity();
-    // list case
     sb.append(quoteIfNeeded(struct.getName()));
     if (nArity > 0) {
       sb.append(Struct.PAR_OPEN);
