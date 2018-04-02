@@ -30,7 +30,7 @@ import java.util.List;
  * This class is now final, one we'll have to carefully think if this could be user-extended.
  * Note: This class MUST be immutable.
  */
-public class Struct extends Term implements Cloneable {
+public class Struct<T> extends Term implements Cloneable {
   private static final long serialVersionUID = 1L;
 
   // ---------------------------------------------------------------------------
@@ -67,10 +67,6 @@ public class Struct extends Term implements Cloneable {
   public static final Struct ATOM_TRUE = new Struct(FUNCTOR_TRUE);
 
   public static final Struct ATOM_FALSE = new Struct(FUNCTOR_FALSE);
-
-  public static final Struct ATOM_CUT = new Struct(FUNCTOR_CUT);
-
-  public static final String LIST_SEPARATOR = ","; // In notations pred(a, b, c)
 
   public static final char PAR_CLOSE = ')';
 
@@ -111,6 +107,11 @@ public class Struct extends Term implements Cloneable {
   private String signature;
 
   /**
+   * Payload
+   */
+  private T content;
+
+  /**
    * Low-level constructor.
    *
    * @param theFunctor
@@ -139,11 +140,11 @@ public class Struct extends Term implements Cloneable {
    * Copy constructor.
    * Creates a shallow copy but with all children which are Struct also cloned.
    */
-  public Struct(Struct original) {
+  public Struct(Struct<T> original) {
     this.name = original.getName();
     this.arity = original.arity;
     this.signature = original.signature;
-
+    this.content = original.content;
     // What about "this.index" ?
     if (this.arity > 0) {
       this.args = new Object[this.arity];
@@ -442,6 +443,13 @@ public class Struct extends Term implements Cloneable {
     return this.name;
   }
 
+  public T getContent() {
+    return content;
+  }
+
+  public void setContent(T content) {
+    this.content = content;
+  }
 
   // ---------------------------------------------------------------------------
   // Methods of java.lang.Object
@@ -487,7 +495,7 @@ public class Struct extends Term implements Cloneable {
     return formatStruct();
   }
 
-
+  // TODO move to TermApi or some marshalling class?
   private String formatStruct() {
     final StringBuilder sb = new StringBuilder();
     final int nArity = getArity();
