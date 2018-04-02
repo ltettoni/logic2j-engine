@@ -294,6 +294,27 @@ public final class TermApi {
     return theText;
   }
 
+  // TODO move to TermApi or some marshalling class?
+  public static <T> String formatStruct(Struct<T> struct) {
+    final StringBuilder sb = new StringBuilder();
+    final int nArity = struct.getArity();
+    // list case
+    sb.append(quoteIfNeeded(struct.getName()));
+    if (nArity > 0) {
+      sb.append(Struct.PAR_OPEN);
+      for (int c = 0; c < nArity; c++) {
+        final Object arg = struct.getArg(c);
+        final String formatted = arg.toString();
+        sb.append(formatted);
+        if (c < nArity - 1) {
+          sb.append(Struct.ARG_SEPARATOR);
+        }
+      }
+      sb.append(Struct.PAR_CLOSE);
+    }
+    return sb.toString();
+  }
+
 
   // TODO Currently unused - but probably we should detect cycles!
   void avoidCycle(Struct theClause) {

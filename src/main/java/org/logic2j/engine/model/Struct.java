@@ -492,28 +492,7 @@ public class Struct<T> extends Term implements Cloneable {
   // ---------------------------------------------------------------------------
 
   public String toString() {
-    return formatStruct();
-  }
-
-  // TODO move to TermApi or some marshalling class?
-  private String formatStruct() {
-    final StringBuilder sb = new StringBuilder();
-    final int nArity = getArity();
-    // list case
-    sb.append(TermApi.quoteIfNeeded(getName()));
-    if (nArity > 0) {
-      sb.append(PAR_OPEN);
-      for (int c = 0; c < nArity; c++) {
-        final Object arg = getArg(c);
-        final String formatted = arg.toString();
-        sb.append(formatted);
-        if (c < nArity - 1) {
-          sb.append(ARG_SEPARATOR);
-        }
-      }
-      sb.append(PAR_CLOSE);
-    }
-    return sb.toString();
+    return TermApi.formatStruct(this);
   }
 
 }
