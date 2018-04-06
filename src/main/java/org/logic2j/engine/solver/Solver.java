@@ -22,7 +22,6 @@ import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.Logic2jException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
@@ -30,6 +29,8 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.util.ProfilingInfo;
 
 import java.util.Iterator;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * Solve goals - that's the core of the engine, the resolution algorithm is in this class.
@@ -66,7 +67,7 @@ public class Solver {
    * @return
    */
   public Integer solveGoal(Object goal, SolutionListener solutionListener) {
-    if (TermApi.isFreeVar(goal)) {
+    if (termApi().isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
     final UnifyContext initialContext = new UnifyContext(this, solutionListener);
@@ -96,7 +97,7 @@ public class Solver {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
-      throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
+      throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
     final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
     return cutIntercepted;
@@ -127,10 +128,10 @@ public class Solver {
       // Yet we are not capable of handing String everywhere below - so use a Struct atom still
       goalStruct = new Struct((String) goalTerm);
         /* Prototype code - does actually not work but could
-        } else if (TermApi.isFreeVar(goalTerm)) {
+        } else if (termApi().isFreeVar(goalTerm)) {
             // Crazy we, we allow a single Var to be considered as a goal - just assuming it is bound to a Struct
             final Object goalReified = currentVars.reify(goalTerm);
-            if (TermApi.isFreeVar(goalReified)) {
+            if (termApi().isFreeVar(goalReified)) {
                 throw new UnsupportedOperationException("A free variable cannot be used as a goal in a rule: \"" + goalTerm + '"');
             }
             if (! (goalReified instanceof Struct)) {
@@ -247,7 +248,7 @@ public class Solver {
       }
       final Object callTerm = goalStruct.getArg(0);  // Often a Var
       final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
-      if (TermApi.isFreeVar(realCallTerm)) {
+      if (termApi().isFreeVar(realCallTerm)) {
         throw new SolverException("Cannot call/* on a free variable");
       }
       result = solveGoalRecursive(realCallTerm, currentVars, cutLevel);

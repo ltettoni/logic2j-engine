@@ -18,9 +18,10 @@
 package org.logic2j.engine.solver.extractor;
 
 
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.unify.UnifyContext;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A {@link SolutionExtractor} that will extract values of
@@ -34,7 +35,7 @@ public class ArrayExtractor implements SolutionExtractor<Object[]> {
 
   public ArrayExtractor(Object goal) {
     int high = 0;
-    this.vars = TermApi.distinctVars(goal);
+    this.vars = termApi().distinctVars(goal);
     for (final Var var : this.vars) {
       high = Math.max(high, var.getIndex());
     }

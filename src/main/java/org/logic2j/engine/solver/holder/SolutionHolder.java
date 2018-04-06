@@ -18,7 +18,6 @@
 package org.logic2j.engine.solver.holder;
 
 import org.logic2j.engine.exception.SolverException;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.ArrayExtractor;
 import org.logic2j.engine.solver.extractor.FactoryExtractor;
@@ -41,6 +40,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.BiFunction;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * Launch the solver with appropriate SolutionListener to obtain what the user asks:
@@ -161,7 +162,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return true if solution is not bound to a literal term.
    */
   public boolean isFree() {
-    return TermApi.isFreeVar(unique());
+    return termApi().isFreeVar(unique());
   }
 
   // ---------------------------------------------------------------------------

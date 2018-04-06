@@ -17,12 +17,13 @@
 
 package org.logic2j.engine.solver.extractor;
 
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A {@link SolutionExtractor} that will extract values of
@@ -34,7 +35,7 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
   private final Var[] vars;
 
   public MapExtractor(Object goal) {
-    this.vars = TermApi.distinctVars(goal);
+    this.vars = termApi().distinctVars(goal);
   }
 
 

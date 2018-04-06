@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static org.logic2j.engine.model.TermApiLocator.termApi;
+
 /**
  * Struct class represents either Prolog compound {@link Term}s or atoms (an atom is represented by a 0-arity compound).
  * This class is now final, one we'll have to carefully think if this could be user-extended.
@@ -206,7 +208,7 @@ public class Struct<T> extends Term implements Cloneable {
     final Struct newInstance = new Struct(theFunctor, argList.length);
     int i = 0;
     for (final Object element : argList) {
-      newInstance.args[i++] = TermApi.valueOf(element);
+      newInstance.args[i++] = termApi().valueOf(element);
     }
     return newInstance;
   }
@@ -225,7 +227,7 @@ public class Struct<T> extends Term implements Cloneable {
   void collectTermsInto(Collection<Object> theCollectedTerms) {
     clearIndex();
     if (this.arity > 0) {
-      Arrays.stream(this.args).forEach(child -> TermApi.collectTermsInto(child, theCollectedTerms));
+      Arrays.stream(this.args).forEach(child -> termApi().collectTermsInto(child, theCollectedTerms));
     }
     theCollectedTerms.add(this);
   }
@@ -235,7 +237,7 @@ public class Struct<T> extends Term implements Cloneable {
     final Object[] newArgs = new Object[this.arity];
     boolean anyChange = false;
     for (int i = 0; i < this.arity; i++) {
-      newArgs[i] = TermApi.factorize(this.args[i], theCollectedTerms);
+      newArgs[i] = termApi().factorize(this.args[i], theCollectedTerms);
       anyChange |= (newArgs[i] != this.args[i]);
     }
     // Now initialize result - a new Struct only if any change was found below
@@ -257,7 +259,7 @@ public class Struct<T> extends Term implements Cloneable {
   Var findVar(String theVariableName) {
     for (int i = 0; i < this.arity; i++) {
       final Object term = this.args[i];
-      final Var found = TermApi.findVar(term, theVariableName);
+      final Var found = termApi().findVar(term, theVariableName);
       if (found != null) {
         return found;
       }
@@ -281,7 +283,7 @@ public class Struct<T> extends Term implements Cloneable {
     // Arity and names must match.
     if (this.arity == that.arity && this.name == that.name) { // Names are {@link String#intern()}alized so OK to check by reference
       for (int i = 0; i < this.arity; i++) {
-        if (!TermApi.structurallyEquals(this.args[i], that.args[i])) {
+        if (!termApi().structurallyEquals(this.args[i], that.args[i])) {
           return false;
         }
       }
@@ -404,7 +406,7 @@ public class Struct<T> extends Term implements Cloneable {
     // Recursive assignment
     int runningIndex = theIndexOfNextNonIndexedVar;
     for (int i = 0; i < this.arity; i++) {
-      runningIndex = TermApi.assignIndexes(this.args[i], runningIndex);
+      runningIndex = termApi().assignIndexes(this.args[i], runningIndex);
     }
     setIndex(runningIndex);
     return runningIndex;
@@ -492,7 +494,7 @@ public class Struct<T> extends Term implements Cloneable {
   // ---------------------------------------------------------------------------
 
   public String toString() {
-    return TermApi.formatStruct(this);
+    return termApi().formatStruct(this);
   }
 
 }

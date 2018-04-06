@@ -20,7 +20,6 @@ package org.logic2j.engine.solver;
 import org.junit.Test;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.Even;
@@ -35,6 +34,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.strVar;
@@ -376,7 +376,7 @@ public class SolverLowLevelTest {
   // --------------------------------------------------------------------------
 
   private LocalSolutionListener solve(Object goal) {
-    final Object normalized = TermApi.normalize(goal);
+    final Object normalized = termApi().normalize(goal);
     final LocalSolutionListener solutionListener = new LocalSolutionListener(normalized);
     solver.solveGoal(normalized, solutionListener);
     return solutionListener;

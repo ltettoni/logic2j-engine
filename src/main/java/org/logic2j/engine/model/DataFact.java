@@ -22,6 +22,8 @@ import org.logic2j.engine.exception.InvalidTermException;
 
 import java.util.Arrays;
 
+import static org.logic2j.engine.model.TermApiLocator.termApi;
+
 /**
  * Represent one constant data element that can unify to a n-arity flat {@link Struct},
  * for example functor(a, 'B', 12).
@@ -43,7 +45,7 @@ public final class DataFact {
     this.elements[0] = ((String) arguments[0]).intern();
     // Internalize all strings
     for (int i = 1; i < arguments.length; i++) {
-      this.elements[i] = TermApi.valueOf(arguments[i]);
+      this.elements[i] = termApi().valueOf(arguments[i]);
     }
   }
 

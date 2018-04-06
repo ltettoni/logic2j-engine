@@ -21,7 +21,6 @@ import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
@@ -32,6 +31,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -238,10 +238,10 @@ public abstract class FOPredicate extends Struct {
    * @return true if reified is not a {@link Var}, including true when reified is null
    */
   protected static boolean isConstant(Object reified) {
-    return !TermApi.isFreeVar(reified) && reified != anon();
+    return !termApi().isFreeVar(reified) && reified != anon();
   }
 
   protected static boolean isFreeVar(Object reified) {
-    return TermApi.isFreeVar(reified);
+    return termApi().isFreeVar(reified);
   }
 }

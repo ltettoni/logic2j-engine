@@ -22,6 +22,8 @@ import org.logic2j.engine.visitor.TermVisitor;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static org.logic2j.engine.model.TermApiLocator.termApi;
+
 /**
  * <p>
  * Term class is the root abstract class for all Prolog data types. The following notions apply on terms, see also the {@link TermApi} class
@@ -98,7 +100,7 @@ public abstract class Term implements Serializable {
    */
   protected Object findStructurallyEqualWithin(Collection<Object> findWithin) {
     for (final Object term : findWithin) {
-      if (term != this && TermApi.structurallyEquals(term, this)) {
+      if (term != this && termApi().structurallyEquals(term, this)) {
         return term;
       }
     }

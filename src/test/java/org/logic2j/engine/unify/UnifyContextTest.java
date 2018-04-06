@@ -20,12 +20,12 @@ package org.logic2j.engine.unify;
 import org.junit.Before;
 import org.junit.Test;
 import org.logic2j.engine.model.Struct;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.anyVar;
 
 /**
@@ -71,13 +71,13 @@ public class UnifyContextTest {
     Var X4 = anyVar("X4");
     Var X5 = anyVar("X5");
 
-    f_ab = TermApi.normalize(Struct.valueOf("f", "a", "b"));
-    f_aZ = TermApi.normalize(Struct.valueOf("f", "a", Z));
-    f_XY = TermApi.normalize(Struct.valueOf("f", X, Y));
-    f_XX = TermApi.normalize(Struct.valueOf("f", X2, X2));
-    f_aZZ = TermApi.normalize(Struct.valueOf("f", "a", X3, X3));
-    f_XXa = TermApi.normalize(Struct.valueOf("f", X4, X4, "a"));
-    f_XXb = TermApi.normalize(Struct.valueOf("f", X5, X5, "b"));
+    f_ab = termApi().normalize(Struct.valueOf("f", "a", "b"));
+    f_aZ = termApi().normalize(Struct.valueOf("f", "a", Z));
+    f_XY = termApi().normalize(Struct.valueOf("f", X, Y));
+    f_XX = termApi().normalize(Struct.valueOf("f", X2, X2));
+    f_aZZ = termApi().normalize(Struct.valueOf("f", "a", X3, X3));
+    f_XXa = termApi().normalize(Struct.valueOf("f", X4, X4, "a"));
+    f_XXb = termApi().normalize(Struct.valueOf("f", X5, X5, "b"));
 
     initialContext = new UnifyContext(null, null);
   }

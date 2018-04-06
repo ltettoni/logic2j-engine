@@ -39,13 +39,9 @@ import static org.logic2j.engine.model.Var.strVar;
  * there. I find it acceptable since subclasses of {@link Term} don't sprout every day and are not for end-user extension.
  * @note Avoid static methods, prefer instantiating this class where needed.
  */
-public final class TermApi {
+public class TermApi {
 
   private static final Pattern ATOM_PATTERN = Pattern.compile("(!|[a-z][a-zA-Z_0-9]*)");
-
-  private TermApi() {
-    // Forbid instantiation - this class contains static functions
-  }
 
   /**
    * Apply a {@link ExtendedTermVisitor} to visit theTerm.
@@ -54,7 +50,7 @@ public final class TermApi {
    * @param theTerm
    * @return The transformed result as per theVisitor's logic
    */
-  public static <T> T accept(ExtendedTermVisitor<T> theVisitor, Object theTerm) {
+  public <T> T accept(ExtendedTermVisitor<T> theVisitor, Object theTerm) {
     // Most common cases are Struct and Var, handled by super interface TermVisitor
     if (theTerm instanceof Struct) {
       return theVisitor.visit((Struct) theTerm);
@@ -69,7 +65,7 @@ public final class TermApi {
     return theVisitor.visit(theTerm);
   }
 
-  public static boolean isAtom(Object theTerm) {
+  public boolean isAtom(Object theTerm) {
     if (theTerm instanceof String) {
       // Now plain Strings are atoms!
       return true;
@@ -81,7 +77,7 @@ public final class TermApi {
     return false;
   }
 
-  public static boolean isAtomic(Object theTerm) {
+  public boolean isAtomic(Object theTerm) {
     return isAtom(theTerm) || theTerm instanceof Number;
   }
 
@@ -91,7 +87,7 @@ public final class TermApi {
    * @param theTerm
    * @return true if theTerm denotes a free variable, or the anonymous variable.
    */
-  public static boolean isFreeVar(Object theTerm) {
+  public boolean isFreeVar(Object theTerm) {
     return theTerm instanceof Var;
   }
 
@@ -101,7 +97,7 @@ public final class TermApi {
    * @param theTerm
    * @return true if theTerm denotes a free variable, but not anonymous variable.
    */
-  public static boolean isFreeNamedVar(Object theTerm) {
+  public boolean isFreeNamedVar(Object theTerm) {
     return theTerm instanceof Var && Var.anon() != theTerm;
   }
 
@@ -113,7 +109,7 @@ public final class TermApi {
    *
    * @param collection Recipient collection, {@link Term}s add here.
    */
-  public static void collectTermsInto(Object theTerm, Collection<Object> collection) {
+  public void collectTermsInto(Object theTerm, Collection<Object> collection) {
     if (theTerm instanceof Struct) {
       ((Struct) theTerm).collectTermsInto(collection);
     } else if (theTerm instanceof Var) {
@@ -132,7 +128,7 @@ public final class TermApi {
    * @param theTerm
    * @return A collection of terms, never empty. Same terms may appear multiple times.
    */
-  static Collection<Object> collectTerms(Object theTerm) {
+  public Collection<Object> collectTerms(Object theTerm) {
     final ArrayList<Object> recipient = new ArrayList<>();
     collectTermsInto(theTerm, recipient);
     // Remove ourself from the result - we are always at the end of the collection
@@ -147,7 +143,7 @@ public final class TermApi {
    * @param theTerm
    * @return The factorized term, may be same as argument theTerm in case nothing was needed, or a new object.
    */
-  public static <T> T factorize(T theTerm) {
+  public <T> T factorize(T theTerm) {
     final Collection<Object> collection = collectTerms(theTerm);
     return (T) factorize(theTerm, collection);
   }
@@ -160,7 +156,7 @@ public final class TermApi {
    *
    * @return Either this, or a new equivalent but factorized Term.
    */
-  public static Object factorize(Object theTerm, Collection<Object> collection) {
+  public Object factorize(Object theTerm, Collection<Object> collection) {
     if (theTerm instanceof Struct) {
       return ((Struct) theTerm).factorize(collection);
     } else if (theTerm instanceof Var) {
@@ -178,7 +174,7 @@ public final class TermApi {
    * @param theOther
    * @return true when theOther is structurally equal to this. Same references (==) will always yield true.
    */
-  public static boolean structurallyEquals(Object theTerm, Object theOther) {
+  public boolean structurallyEquals(Object theTerm, Object theOther) {
     if (theTerm instanceof Struct) {
       return ((Struct) theTerm).structurallyEquals(theOther);
     } else if (theTerm instanceof Var) {
@@ -195,7 +191,7 @@ public final class TermApi {
    * @param theVariableName
    * @return A {@link Var} with the specified name, or null when not found.
    */
-  public static Var findVar(Object theTerm, String theVariableName) {
+  public Var findVar(Object theTerm, String theVariableName) {
     if (theVariableName == Var.WHOLE_SOLUTION_VAR_NAME) {
       return Var.WHOLE_SOLUTION_VAR;
     }
@@ -217,7 +213,7 @@ public final class TermApi {
    * @return The next value for theIndexOfNextNonIndexedVar, allow successive calls to increment. First caller
    * must pass 0.
    */
-  public static int assignIndexes(Object theTerm, int theIndexOfNextNonIndexedVar) {
+  public int assignIndexes(Object theTerm, int theIndexOfNextNonIndexedVar) {
     if (theTerm instanceof Struct) {
       return ((Struct) theTerm).assignIndexes(theIndexOfNextNonIndexedVar);
     } else if (theTerm instanceof Var) {
@@ -233,7 +229,7 @@ public final class TermApi {
    *
    * @return The predicate's name + '/' + arity for normal {@link Struct}, or just the toString() of any other Object
    */
-  public static String predicateSignature(Object thePredicate) {
+  public String predicateSignature(Object thePredicate) {
     if (thePredicate instanceof Struct) {
       return ((Struct) thePredicate).getPredicateSignature();
     }
@@ -241,7 +237,7 @@ public final class TermApi {
   }
 
 
-  public static String functorFromSignature(String signature) {
+  public String functorFromSignature(String signature) {
     int pos = signature.lastIndexOf('/');
     if (pos <= 0) {
       throw new InvalidTermException("Cannot find character '/' in predicate signature \"" + signature + "\" (supposed to be functor/arity)");
@@ -250,7 +246,7 @@ public final class TermApi {
   }
 
 
-  public static int arityFromSignature(String signature) {
+  public int arityFromSignature(String signature) {
     int pos = signature.lastIndexOf('/');
     if (pos <= 0) {
       throw new InvalidTermException("Cannot find character '/' in predicate signature \"" + signature + "\" (supposed to be functor/arity)");
@@ -266,7 +262,7 @@ public final class TermApi {
    * @return theText, quoted if necessary (typically "X" will become "'X'" whereas "x" will remain unchanged.
    * Null will return null. The empty string will become "''". If not quoted, the same reference (theText) is returned.
    */
-  public static CharSequence quoteIfNeeded(CharSequence theText) {
+  public CharSequence quoteIfNeeded(CharSequence theText) {
     if (theText == null) {
       return null;
     }
@@ -294,7 +290,7 @@ public final class TermApi {
     return theText;
   }
 
-  public static <T> String formatStruct(Struct<T> struct) {
+  public <T> String formatStruct(Struct<T> struct) {
     final StringBuilder sb = new StringBuilder();
     final int nArity = struct.getArity();
     sb.append(quoteIfNeeded(struct.getName()));
@@ -327,7 +323,7 @@ public final class TermApi {
    * @param theTerm To be normalized
    * @return A normalized COPY of theTerm ready to be used for inference (in a Theory ore as a goal)
    */
-  public static Object normalize(Object theTerm) {
+  public Object normalize(Object theTerm) {
     final Object factorized = factorize(theTerm);
     assignIndexes(factorized, 0);
     return factorized;
@@ -346,7 +342,7 @@ public final class TermApi {
    * @return An instance of a subclass of {@link Term}.
    * @throws InvalidTermException If theObject cannot be converted to a Term
    */
-  public static Object valueOf(Object theObject) {
+  public Object valueOf(Object theObject) {
     if (theObject == null) {
       throw new InvalidTermException("Cannot create Term from a null argument");
     }
@@ -428,7 +424,7 @@ public final class TermApi {
    * @param term
    * @return Array of unique Vars, in the order found by depth-first traversal.
    */
-  public static Var[] distinctVars(Object term) {
+  public Var[] distinctVars(Object term) {
     final Var[] tempArray = new Var[100]; // Enough for the moment - we could plan an auto-allocating array if needed, I doubt it
     final int[] nbVars = new int[] {0};
 

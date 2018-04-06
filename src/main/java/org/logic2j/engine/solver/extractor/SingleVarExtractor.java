@@ -19,7 +19,6 @@ package org.logic2j.engine.solver.extractor;
 
 import org.logic2j.engine.exception.MissingSolutionException;
 import org.logic2j.engine.model.Term;
-import org.logic2j.engine.model.TermApi;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -27,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.BiFunction;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A {@link SolutionExtractor} that will extract the individual
@@ -60,7 +61,7 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
    */
   public SingleVarExtractor(Object goal, String varName, Class<? extends T> desiredTypeOfResult) {
     this.goal = goal;
-    final Var found = TermApi.findVar(goal, varName);
+    final Var found = termApi().findVar(goal, varName);
     if (found == null) {
       throw new MissingSolutionException("No var named \"" + varName + "\" in term \"" + goal + '"');
     }
