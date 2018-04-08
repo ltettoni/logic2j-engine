@@ -298,8 +298,7 @@ public class UnifyContext {
    * @return The dereferenced content of theVar, or theVar if it was free
    */
   private Object reifiedVar(Var theVar) {
-    final Object dereference = this.stateStorage.dereference(theVar, this.currentTransaction);
-    return dereference;
+    return this.stateStorage.dereference(theVar, this.currentTransaction);
   }
 
   /**

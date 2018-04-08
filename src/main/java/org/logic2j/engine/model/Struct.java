@@ -101,7 +101,7 @@ public class Struct<T> extends Term implements Cloneable {
 
   private int arity;
 
-  private Object[] args;
+  private transient Object[] args;
 
   /**
    * The signature is internalized and allows for fast matching during unification
@@ -111,7 +111,7 @@ public class Struct<T> extends Term implements Cloneable {
   /**
    * Payload
    */
-  private T content;
+  private transient T content;
 
   /**
    * Low-level constructor.
@@ -193,8 +193,7 @@ public class Struct<T> extends Term implements Cloneable {
       // We can return an internalized String
       return functor;
     }
-    final Struct instance = new Struct(functor, 0);
-    return instance;
+    return new Struct(functor, 0);
   }
 
   /**

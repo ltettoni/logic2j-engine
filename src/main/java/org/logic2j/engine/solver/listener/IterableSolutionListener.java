@@ -113,6 +113,8 @@ public class IterableSolutionListener<T> implements SolutionListener {
         try {
           this.wait();
         } catch (final InterruptedException e) {
+          // Restore interrupted state...
+          Thread.currentThread().interrupt();
           throw new SolverException("Exception not handled: " + e, e);
         }
       }

@@ -465,8 +465,7 @@ public class TermApi {
       ((Term) term).accept(findVarsVisitor);
     }
     // Now copy the values found as the tempArray
-    final Var[] result = Arrays.copyOf(tempArray, nbVars[0]);
-    return result;
+    return Arrays.copyOf(tempArray, nbVars[0]);
   }
 
 }

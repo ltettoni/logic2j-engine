@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class Log extends FOUniqueSolutionPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Log.class);
-  private final Consumer<String> loggingMethod;
+  private transient final Consumer<String> loggingMethod;
 
   /**
    * Log the arguments at the level specified.

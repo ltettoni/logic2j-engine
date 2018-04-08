@@ -18,6 +18,8 @@
 package org.logic2j.engine.model;
 
 public class TermApiLocator {
+  private TermApiLocator() {
+  }
 
   private static final TermApi termApi = new TermApi();
 

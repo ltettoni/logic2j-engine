@@ -45,14 +45,12 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
-  private static final boolean isDebug = logger.isDebugEnabled();
-
 
   /**
    * Do we solve the ";" (OR) predicate internally here, or in the predicate.
    * (see note re. processing of OR in CoreLibrary.pro)
    */
-  protected boolean isInternalOr() { return true; }// FIXME Bug with false on a number of test case
+  protected boolean isInternalOr() { return true; } // FIXME Bug with false on a number of test case
 
   /**
    * Do we acquire profiling information (number of inferences, etc)
@@ -99,8 +97,7 @@ public class Solver {
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
-    final Integer cutIntercepted = solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
-    return cutIntercepted;
+    return solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
   }
 
   /**
@@ -113,7 +110,7 @@ public class Solver {
    */
   protected Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
-    if (isDebug) {
+    if (logger.isDebugEnabled()) {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
       logger.debug("     cutLevel={}", cutLevel);
     }
@@ -181,11 +178,10 @@ public class Solver {
           public Integer onSolution(UnifyContext currentVars) {
             final int nextIndex = index + 1;
             final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-            if (isDebug) {
+            if (logger.isDebugEnabled()) {
               logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
             }
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
-            return continuationFromSubGoal;
+            return solveGoalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
           }
 
           @Override
@@ -206,8 +202,7 @@ public class Solver {
               }
 
             };
-            final Integer continuationFromSubGoal = solveGoalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
-            return continuationFromSubGoal;
+            return solveGoalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
           }
 
           @Override
@@ -217,7 +212,7 @@ public class Solver {
         };
       }
       // Solve the first goal, redirecting all solutions to the first listener defined above
-      if (isDebug) {
+      if (logger.isDebugEnabled()) {
         logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
       }
       result = solveGoalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
@@ -231,7 +226,7 @@ public class Solver {
       for (int i = 0; i < arity; i++) {
         // Solve all the elements of the "OR", in sequence.
         // For a binary OR, this means solving the left-hand-side and then the right-hand-side
-        if (isDebug) {
+        if (logger.isDebugEnabled()) {
           logger.debug("Handling OR, element={} of {}", i, goalStruct);
         }
         result = solveGoalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
@@ -294,7 +289,7 @@ public class Solver {
         result = solveAgainstDataProviders(goalTerm, currentVars, cutLevel + 1);
       }
     }
-    if (isDebug) {
+    if (logger.isDebugEnabled()) {
       logger.debug("<<-- Exiting  solveRecursive#" + inferenceCounter + ", reifiedGoal = {}, result={}", currentVars.reify(goalTerm), result);
     }
     return result;

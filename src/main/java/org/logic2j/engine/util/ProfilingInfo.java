@@ -25,6 +25,10 @@ import java.util.HashMap;
  */
 public class ProfilingInfo {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ProfilingInfo.class);
+
+  private ProfilingInfo() {
+  }
+
   public static long counter1;
   public static int max1;
   public static long nbInferences;
@@ -88,11 +92,7 @@ public class ProfilingInfo {
   }
 
   public static int countEvent(Object theEventKey) {
-    final Integer val = events.get(theEventKey);
-    if (val == null) {
-      events.put(theEventKey, 1);
-      return 1;
-    }
+    final Integer val = events.computeIfAbsent(theEventKey, anyKey -> 1);
     events.put(theEventKey, val + 1);
     return val + 1;
   }

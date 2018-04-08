@@ -118,8 +118,7 @@ public class GoalHolder {
    * @return A SolutionHolder for only the specified variable.
    */
   public <T> SolutionHolder<T> var(String varName, Class<? extends T> desiredTypeOfResult) {
-    final SolutionHolder<T> solutionHolder = new SolutionHolder<>(this, varName, desiredTypeOfResult, this.termToSolutionFunction);
-    return solutionHolder;
+    return new SolutionHolder<>(this, varName, desiredTypeOfResult, this.termToSolutionFunction);
   }
 
   /**

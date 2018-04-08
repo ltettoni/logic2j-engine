@@ -95,8 +95,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return Holds solutions as a List of Maps
    */
   public static SolutionHolder<Map<Var, Object>> extractingMaps(GoalHolder goalHolder) {
-    final SolutionHolder withMaps = new SolutionHolder(goalHolder, new MapExtractor(goalHolder.getGoal()));
-    return withMaps;
+    return new SolutionHolder(goalHolder, new MapExtractor(goalHolder.getGoal()));
   }
 
   /**
@@ -106,13 +105,11 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return Holds solutions as a List of Arrays
    */
   public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder) {
-    final SolutionHolder withArrays = new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.getGoal()));
-    return withArrays;
+    return new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.getGoal()));
   }
 
   public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
-    final SolutionHolder withFactory = new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.getGoal(), factory));
-    return withFactory;
+    return new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.getGoal(), factory));
   }
 
 
@@ -213,7 +210,7 @@ public class SolutionHolder<T> implements Iterable<T> {
 
 
 
-  public <ArrayType> ArrayType[] array(ArrayType[] destinationArray) {
+  public <R> R[] array(R[] destinationArray) {
     return list().toArray(destinationArray);
   }
 

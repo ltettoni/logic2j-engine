@@ -89,8 +89,7 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
   @Override
   public UnifyContext next() {
     final Object next = this.valueIterator.next();
-    final UnifyContext after = currentVars.unify(this.var, next);
-    return after;
+    return currentVars.unify(this.var, next);
   }
 
   @Override

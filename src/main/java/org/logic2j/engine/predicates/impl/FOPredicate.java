@@ -113,8 +113,7 @@ public abstract class FOPredicate extends Struct {
    * @return The {@link Continuation} as returned by listener's {@link SolutionListener#onSolution(UnifyContext)}
    */
   protected Integer notifySolution(UnifyContext currentVars) {
-    final Integer continuation = currentVars.getSolutionListener().onSolution(currentVars);
-    return continuation;
+    return currentVars.getSolutionListener().onSolution(currentVars);
   }
 
 
