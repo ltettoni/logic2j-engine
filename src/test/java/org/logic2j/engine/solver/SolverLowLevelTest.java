@@ -401,7 +401,7 @@ public class SolverLowLevelTest {
   }
 
   // ---------------------------------------------------------------------------
-  // Low-lever solution counting assertions just using a COuntingSolutionListener
+  // Low-lever solution counting assertions just using a CountingSolutionListener
   // ---------------------------------------------------------------------------
 
   protected void countOneSolution(Object... theGoals) {

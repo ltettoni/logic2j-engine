@@ -380,7 +380,7 @@ public class Struct<T> extends Term implements Cloneable {
   // ---------------------------------------------------------------------------
 
   @Override
-  public <T> T accept(TermVisitor<T> theVisitor) {
+  public <R> R accept(TermVisitor<R> theVisitor) {
     return theVisitor.visit(this);
   }
 

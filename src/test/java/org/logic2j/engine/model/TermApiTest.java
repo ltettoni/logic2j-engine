@@ -32,12 +32,6 @@ public class TermApiTest {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TermApiTest.class);
 
   @Test
-  public void placeholderToReproduceError() {
-    //
-  }
-
-
-  @Test
   public void structurallyEquals() {
     // Vars are never structurally equal ...
     assertThat(anyVar("X").structurallyEquals(anyVar("Y"))).isFalse();

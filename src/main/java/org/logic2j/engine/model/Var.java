@@ -323,7 +323,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   }
 
   /**
-   * Just to allow odering of Var, by their name
+   * Just to allow ordering of Var, by their name
    *
    * @param that
    * @return Comparison based on #getName()
