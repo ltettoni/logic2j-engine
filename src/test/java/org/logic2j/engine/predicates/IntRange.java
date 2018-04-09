@@ -45,7 +45,7 @@ public class IntRange extends FOPredicate {
 
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
+  public int predicateLogic(UnifyContext currentVars) {
     final Object minBound = currentVars.reify(getArg(0));
     final Object iterating = currentVars.reify(getArg(1));
     final Object maxBound = currentVars.reify(getArg(2));
@@ -67,7 +67,7 @@ public class IntRange extends FOPredicate {
       for (Object val : (Iterable<Object>) stream(iterating)::iterator) {
         if (val instanceof Number) {
           final int v = ((Number) val).intValue();
-          final Integer cont = notifySolutionIf(min <= v && v < max, currentVars);
+          final int cont = notifySolutionIf(min <= v && v < max, currentVars);
           if (cont != CONTINUE) {
             return cont;
           }

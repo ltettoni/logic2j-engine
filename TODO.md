@@ -60,7 +60,7 @@
 ```
 public Continuation onSolution(UnifyContext currentVars) {
     ...
-    final Integer continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
+    final int continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
     return continuationFromSubGoal;
 }
 ```

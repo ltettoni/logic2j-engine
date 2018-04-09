@@ -41,7 +41,7 @@ public interface SolutionListener {
    * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
    * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
    */
-  Integer onSolution(UnifyContext currentVars);
+  int onSolution(UnifyContext currentVars);
 
   /**
    * Allow specifying multiple solutions in one call to the listener.
@@ -50,10 +50,10 @@ public interface SolutionListener {
    * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
    * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
    */
-  default Integer onSolutions(Iterator<UnifyContext> allSolutions) {
+  default int onSolutions(Iterator<UnifyContext> allSolutions) {
     while (allSolutions.hasNext()) {
       final UnifyContext next = allSolutions.next();
-      final Integer continuation = this.onSolution(next);
+      final int continuation = this.onSolution(next);
       if (continuation != CONTINUE) {
         return continuation;
       }
@@ -61,7 +61,7 @@ public interface SolutionListener {
     return CONTINUE;
   }
 
-  default Integer onSolutions(Iterable<UnifyContext> allSolutions) {
+  default int onSolutions(Iterable<UnifyContext> allSolutions) {
     return onSolutions(allSolutions.iterator());
   }
 }

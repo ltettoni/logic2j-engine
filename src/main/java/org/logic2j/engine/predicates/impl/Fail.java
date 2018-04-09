@@ -31,7 +31,7 @@ public class Fail extends FOPredicate implements RDBCompatiblePredicate {
   }
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
+  public int predicateLogic(UnifyContext currentVars) {
     // Provide no solution
     return CONTINUE;
   }

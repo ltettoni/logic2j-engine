@@ -46,7 +46,7 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
   }
 
   @Override
-  public final Integer predicateLogic(UnifyContext currentVars) {
+  public final int predicateLogic(UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
@@ -56,14 +56,14 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
     return comparison(currentVars, n0, n1);
   }
 
-  protected Integer comparison(UnifyContext currentVars, Object n0, Object n1) {
+  protected int comparison(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
         final T[] values1 = FOPredicate.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
         for (T c0 : (Iterable<T>) FOPredicate.<T>stream(n0)::iterator) {
           for (final T c1 : values1) {
             // Both bound values - check
-            final Integer continuation = notifySolutionIf(check.apply(c0, c1), currentVars);
+            final int continuation = notifySolutionIf(check.apply(c0, c1), currentVars);
             if (continuation != CONTINUE) {
               return continuation;
             }

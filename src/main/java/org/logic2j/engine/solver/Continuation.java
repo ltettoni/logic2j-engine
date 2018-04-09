@@ -34,11 +34,11 @@ public interface Continuation {
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
    * must return for the inference engine to continue solving (search for alternate solutions).
    */
-  Integer CONTINUE = 0;
+  int CONTINUE = 0;
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
    * must return for the inference engine to stop solving (ie. means caller requests abort).
    */
-  Integer USER_ABORT = -1;
+  int USER_ABORT = -1;
 
 }

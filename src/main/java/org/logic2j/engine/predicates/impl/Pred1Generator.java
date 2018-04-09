@@ -46,7 +46,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
   }
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
+  public int predicateLogic(UnifyContext currentVars) {
     final Object reified = currentVars.reify(getArg(0));
     if (isFreeVar(reified)) {
       // Still a free var, we will attempt to read values from the getter and provide bindings
@@ -61,7 +61,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
       // Variable is bound to a value
       for (T val : (Iterable<T>) FOPredicate.<T>stream(reified)::iterator) {
         final boolean contains = allowedValues.contains(val);
-        final Integer continuation = notifySolutionIf(contains, currentVars);
+        final int continuation = notifySolutionIf(contains, currentVars);
         if (continuation != CONTINUE) {
           return continuation;
         }

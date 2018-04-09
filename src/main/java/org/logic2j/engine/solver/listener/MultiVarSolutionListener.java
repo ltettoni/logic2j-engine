@@ -45,7 +45,7 @@ public class MultiVarSolutionListener extends RangeSolutionListener {
 
 
   @Override
-  public Integer onSolution(UnifyContext currentVars) {
+  public int onSolution(UnifyContext currentVars) {
     results.add(extractor.extractSolution(currentVars));
     return super.onSolution(currentVars);
   }

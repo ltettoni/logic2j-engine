@@ -49,7 +49,7 @@ public class IterableSolutionListener<T> implements SolutionListener {
 
 
   @Override
-  public Integer onSolution(UnifyContext currentVars) {
+  public int onSolution(UnifyContext currentVars) {
     // We've got one solution already!
     final T solution = extractor.extractSolution(currentVars);
     // Ask our client to stop requesting more and wait!

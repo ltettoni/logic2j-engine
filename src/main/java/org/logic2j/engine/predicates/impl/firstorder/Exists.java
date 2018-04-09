@@ -57,7 +57,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
   }
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
+  public int predicateLogic(UnifyContext currentVars) {
 
     // Solve against a minimal SolutionListener just interested on the first solution
     final ExistsSolutionListener seekOnlyTheFirstSolution = new ExistsSolutionListener();

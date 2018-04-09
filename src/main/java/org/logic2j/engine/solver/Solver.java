@@ -64,7 +64,7 @@ public class Solver {
    * @param solutionListener
    * @return
    */
-  public Integer solveGoal(Object goal, SolutionListener solutionListener) {
+  public int solveGoal(Object goal, SolutionListener solutionListener) {
     if (termApi().isFreeVar(goal)) {
       throw new InvalidTermException("Cannot solve the goal \"" + goal + "\", the variable is not bound to a value");
     }
@@ -91,7 +91,7 @@ public class Solver {
    * not(), exists(), etc.
    * You enter here when part of the variables have been bound already.
    */
-  public Integer solveGoal(Object goal, UnifyContext currentVars) {
+  public int solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
@@ -108,7 +108,7 @@ public class Solver {
    * @param cutLevel
    * @return
    */
-  protected Integer solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+  protected int solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
     if (logger.isDebugEnabled()) {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
@@ -117,7 +117,7 @@ public class Solver {
     if (isProfiling()) {
       ProfilingInfo.nbInferences++;
     }
-    Integer result = Continuation.CONTINUE;
+    int result = Continuation.CONTINUE;
 
     // At the moment we don't properly manage atoms as goals...
     final Struct goalStruct;
@@ -175,7 +175,7 @@ public class Solver {
         andingListeners[index] = new SolutionListener() {
 
           @Override
-          public Integer onSolution(UnifyContext currentVars) {
+          public int onSolution(UnifyContext currentVars) {
             final int nextIndex = index + 1;
             final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
             if (logger.isDebugEnabled()) {
@@ -185,17 +185,17 @@ public class Solver {
           }
 
           @Override
-          public Integer onSolutions(final Iterator<UnifyContext> multiLHS) {
+          public int onSolutions(final Iterator<UnifyContext> multiLHS) {
             final int nextIndex = index + 1;
             final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
             final SolutionListener subListener = new SolutionListener() {
               @Override
-              public Integer onSolution(UnifyContext currentVars) {
+              public int onSolution(UnifyContext currentVars) {
                 throw new UnsupportedOperationException("Should not be here");
               }
 
               @Override
-              public Integer onSolutions(Iterator<UnifyContext> multiRHS) {
+              public int onSolutions(Iterator<UnifyContext> multiRHS) {
                 logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
                 final UnifyContextIterator combined = new UnifyContextIterator(currentVars, multiLHS, multiRHS);
                 return andingListeners[nextIndex].onSolutions(combined);
@@ -256,7 +256,7 @@ public class Solver {
       // Functionally, this code may be removed
 
       // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-      final Integer continuationFromCaller =
+      final int continuationFromCaller =
           currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
 
       if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
@@ -299,18 +299,18 @@ public class Solver {
     return goalStruct instanceof FOPredicate;
   }
 
-  protected Integer invokeJava(Struct goal, UnifyContext currentVars) {
+  protected int invokeJava(Struct goal, UnifyContext currentVars) {
     final FOPredicate javaPredicate = (FOPredicate) goal;
     // The result will be the continuation code or CUT level
     return javaPredicate.predicateLogic(currentVars);
   }
 
 
-  protected Integer solveAgainstClauseProviders(final Object goalTerm, UnifyContext currentVars, final int cutLevel) {
+  protected int solveAgainstClauseProviders(final Object goalTerm, UnifyContext currentVars, final int cutLevel) {
     return Continuation.CONTINUE;
   }
 
-  protected Integer solveAgainstDataProviders(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+  protected int solveAgainstDataProviders(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     return Continuation.CONTINUE;
   }
 

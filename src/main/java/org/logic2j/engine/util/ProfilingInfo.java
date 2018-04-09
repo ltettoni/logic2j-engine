@@ -92,7 +92,7 @@ public class ProfilingInfo {
   }
 
   public static int countEvent(Object theEventKey) {
-    final Integer val = events.computeIfAbsent(theEventKey, anyKey -> 1);
+    final Integer val = events.computeIfAbsent(theEventKey, anyKey -> 0);
     events.put(theEventKey, val + 1);
     return val + 1;
   }

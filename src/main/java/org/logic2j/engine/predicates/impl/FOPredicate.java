@@ -100,7 +100,7 @@ public abstract class FOPredicate extends Struct {
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.engine.solver.Continuation} values.
    */
-  public abstract Integer predicateLogic(UnifyContext currentVars);
+  public abstract int predicateLogic(UnifyContext currentVars);
 
 
   // --------------------------------------------------------------------------
@@ -112,12 +112,12 @@ public abstract class FOPredicate extends Struct {
    *
    * @return The {@link Continuation} as returned by listener's {@link SolutionListener#onSolution(UnifyContext)}
    */
-  protected Integer notifySolution(UnifyContext currentVars) {
+  protected int notifySolution(UnifyContext currentVars) {
     return currentVars.getSolutionListener().onSolution(currentVars);
   }
 
 
-  protected Integer notifySolutionIf(boolean condition, UnifyContext currentVars) {
+  protected int notifySolutionIf(boolean condition, UnifyContext currentVars) {
     if (condition) {
       return notifySolution(currentVars);
     } else {
@@ -134,7 +134,7 @@ public abstract class FOPredicate extends Struct {
    * @param t2
    * @return
    */
-  protected Integer unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
+  protected int unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
     final UnifyContext afterUnification = currentVars.unify(t1, t2);
 
     final boolean couldUnifySomething = afterUnification != null;
@@ -150,10 +150,10 @@ public abstract class FOPredicate extends Struct {
    * @param iter
    * @return
    */
-  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator<T> iter) {
+  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator<T> iter) {
     while (iter.hasNext()) {
       final T value = iter.next();
-      final Integer continuation = unifyAndNotify(currentVars, t1, value);
+      final int continuation = unifyAndNotify(currentVars, t1, value);
       if (continuation != CONTINUE) {
         return continuation;
       }
@@ -161,9 +161,9 @@ public abstract class FOPredicate extends Struct {
     return CONTINUE;
   }
 
-  protected Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
+  protected int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
     for (final Object value : values) {
-      final Integer continuation = unifyAndNotify(currentVars, t1, value);
+      final int continuation = unifyAndNotify(currentVars, t1, value);
       if (continuation != CONTINUE) {
         return continuation;
       }
@@ -171,11 +171,11 @@ public abstract class FOPredicate extends Struct {
     return CONTINUE;
   }
 
-  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, Object t1, Stream<T> values) {
+  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Stream<T> values) {
     return unifyAndNotifyMany(currentVars, t1, values.iterator());
   }
 
-  protected <T> Integer unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
+  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
     final Object reified = currentVars.reify(binding);
     if (isFreeVar(reified)) {
       return unifyAndNotify(currentVars, constant, reified);

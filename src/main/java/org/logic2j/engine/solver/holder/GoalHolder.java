@@ -90,7 +90,7 @@ public class GoalHolder {
   public BindingVar[] boundVariables(BindingVar... vars) {
     final CountingSolutionListener listener = new CountingSolutionListener() {
       @Override
-      public Integer onSolution(UnifyContext currentVars) {
+      public int onSolution(UnifyContext currentVars) {
         for (final BindingVar bv : vars) {
           final Object reified = currentVars.reify(bv);
           bv.addResult(reified);

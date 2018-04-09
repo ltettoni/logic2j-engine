@@ -62,7 +62,7 @@ public class Pred2<T, R> extends FOPredicate {
 
 
   @Override
-  public final Integer predicateLogic(UnifyContext currentVars) {
+  public final int predicateLogic(UnifyContext currentVars) {
     final Object n0 = currentVars.reify(getArg(0));
     final Object n1 = currentVars.reify(getArg(1));
 
@@ -79,7 +79,7 @@ public class Pred2<T, R> extends FOPredicate {
     return unification(currentVars, n0, n1);
   }
 
-  protected Integer unification(UnifyContext currentVars, Object n0, Object n1) {
+  protected int unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
         final R[] values1 = FOPredicate.<R>stream(n1).toArray(n -> (R[]) new Object[n]);
@@ -88,7 +88,7 @@ public class Pred2<T, R> extends FOPredicate {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
-            final Integer continuation = notifySolutionIf(found, currentVars);
+            final int continuation = notifySolutionIf(found, currentVars);
             if (continuation != CONTINUE) {
               return continuation;
             }

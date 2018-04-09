@@ -39,7 +39,7 @@ public class CountingSolutionListener implements SolutionListener {
 
 
   @Override
-  public Integer onSolution(UnifyContext currentVars) {
+  public int onSolution(UnifyContext currentVars) {
     this.count++;
     if (DEBUG_ENABLED) {
       logger.debug(" onSolution(#{})", this.count);

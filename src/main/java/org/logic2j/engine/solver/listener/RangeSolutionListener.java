@@ -56,7 +56,7 @@ public class RangeSolutionListener<T> implements SolutionListener {
 
 
   @Override
-  public Integer onSolution(UnifyContext currentVars) {
+  public int onSolution(UnifyContext currentVars) {
     this.counter++;
     if (this.counter > this.maxCount) {
       // OOps, we already had solutions? This is not desired

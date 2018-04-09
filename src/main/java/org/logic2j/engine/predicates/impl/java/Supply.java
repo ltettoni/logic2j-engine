@@ -63,7 +63,7 @@ public class Supply extends FOPredicate {
 
 
   @Override
-  public Integer predicateLogic(UnifyContext currentVars) {
+  public int predicateLogic(UnifyContext currentVars) {
     ensureInit();
     notifyFromVar(0, currentVars);
     return CONTINUE;
