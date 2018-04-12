@@ -23,7 +23,7 @@ import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 
 /**
  * Logical OR.
- * The implementation is hard-coded in the Solver, hence we do not provided it here.
+ * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
 public class Or extends Struct implements RDBCompatiblePredicate {
   public Or(Term... disjunctions) {

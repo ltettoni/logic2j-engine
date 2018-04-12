@@ -21,7 +21,7 @@ import org.logic2j.engine.model.Struct;
 
 /**
  * Provides one solution and cuts backtracking.
- * The implementation is hard-coded in the Solver, hence we do not provided it here.
+ * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
 public class Cut extends Struct {
   public Cut() {

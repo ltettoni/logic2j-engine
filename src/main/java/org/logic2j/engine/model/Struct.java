@@ -29,7 +29,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A {@link Struct} represents either a Prolog compound {@link Term}s such as functor(arg1, arg2),
- * or Prolog atoms (an atom is represented by a 0-arity compound).
+ * or a Prolog atom (a 0-arity compound).
  * Note: Instances MUST be immutable.
  */
 public class Struct<T> extends Term implements Cloneable {
@@ -41,12 +41,12 @@ public class Struct<T> extends Term implements Cloneable {
 
   // TODO Move these constants to a common place?
   /**
-   * This is the logical "AND" operator, usable with /2 or /* arity.
+   * This is the logical "AND" operator, usable with arity of  /2 or /*.
    */
   public static final String FUNCTOR_COMMA = ","; // No need to "intern()" a compile-time constant
 
   /**
-   * This is the logical "OR" operator, usable with /2 or /* arity.
+   * This is the logical "OR" operator, usable with arity of  /2 or /*.
    */
   public static final String FUNCTOR_SEMICOLON = ";"; // No need to "intern()" a compile-time constant
 
