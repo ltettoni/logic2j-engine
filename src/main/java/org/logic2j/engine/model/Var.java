@@ -29,8 +29,8 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This class represents a variable term. Variables are identified by a name (which must starts with an upper case letter) or the anonymous
  * ('_') name.
- * Note: This class MUST be immutable.
- * Switch logging for this class to DEBUG level in order to have the details of variables, such as the variable index.
+ * Note: Instances MUST be immutable.
+ * Set the level of this class' logger to DEBUG to reveal details of variables (such as the variable index) in toString().
  */
 public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   private static final Logger logger = LoggerFactory.getLogger(Var.class);

@@ -18,8 +18,7 @@
 package org.logic2j.engine.model;
 
 /**
- * A Binding allows to connect variables or values to predicates.
- * Values may be scalar, collections, or generators.
+ * A Binding allows to associate a {@link Var} or constant(s) to arguments of a {@link Struct}.
  */
 public interface Binding<T> {
 

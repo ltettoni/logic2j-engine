@@ -20,7 +20,7 @@ package org.logic2j.engine.model;
 import java.util.stream.Stream;
 
 /**
- * A {@link Binding} that provides constant value (scalar) or values (vector).
+ * A {@link Binding} that provides a constant value (scalar) or multiple values (vector).
  */
 public interface Constant<T> extends Binding {
 
@@ -30,21 +30,21 @@ public interface Constant<T> extends Binding {
   boolean isUniqueFeed();
 
   /**
-   * Calculate the size. In case of a stream this consumes it.
+   * Calculate the size. In case of a stream this will consumes it.
    *
    * @return Cardinality of data: 0=empty, 1=scalar, >1=vector, -1=unknown
    */
   long size();
 
   /**
-   * In case of a stream this consumes it.
+   * Convert to array; in case of a stream this will consumes it.
    *
    * @return
    */
   T[] toArray();
 
   /**
-   * In case of a stream this consumes it.
+   * Convert to single value; in case of a stream this will consumes it.
    *
    * @return
    */
@@ -53,7 +53,7 @@ public interface Constant<T> extends Binding {
   Stream<T> toStream();
 
   /**
-   * In case of a stream this consumes it.
+   * Check content; in case of a stream this will consumes it.
    *
    * @param value
    * @return

@@ -65,6 +65,11 @@ public class SimpleBindings<T> {
     this.size = this.data != null ? this.data.length : -1;
   }
 
+  /**
+   * @param type
+   * @param <T>
+   * @return A {@link Constant} representing no data.
+   */
   public static <T> Constant<T> empty(Class<T> type) {
     return new ConstantBase<T>() {
 
@@ -106,12 +111,12 @@ public class SimpleBindings<T> {
   }
 
   /**
-   * Supply one value, must be non-null so that its type can be determined.
-   * If you need to optionally have null values specify an {@link java.util.Optional}
+   *
    *
    * @param supplier
    * @param <T>
-   * @return
+   * @return A {@link Constant} that supplies one value, must be non-null so that its type can be determined.
+   * @note If you need to optionally have null values specify an {@link java.util.Optional}
    */
   public static <T> Constant<T> bind(Supplier<T> supplier) {
     return new ConstantBase<T>() {
@@ -151,6 +156,12 @@ public class SimpleBindings<T> {
     };
   }
 
+  /**
+   *
+   * @param values
+   * @param <T>
+   * @return A {@link Constant} that supplies several values.
+   */
   @SafeVarargs
   public static <T> Constant<T> bind(T... values) {
     return new ConstantBase<T>() {
@@ -206,6 +217,12 @@ public class SimpleBindings<T> {
     };
   }
 
+  /**
+   *
+   * @param values
+   * @param <T>
+   * @return A {@link Constant} that supplies several values.
+   */
   public static <T> Constant<T> bind(Collection<T> coll) {
     return new ConstantBase<T>() {
       @Override

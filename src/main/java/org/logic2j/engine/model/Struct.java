@@ -18,7 +18,6 @@ package org.logic2j.engine.model;
 
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.visitor.TermVisitor;
 
 import java.util.Arrays;
@@ -174,7 +173,7 @@ public class Struct<T> extends Term implements Cloneable {
       clone.setNameAndArity(clone.name, clone.args.length); // Also calculate the signature
       return clone;
     } catch (CloneNotSupportedException e) {
-      throw new SolverException("Could not clone Struct " + this + ": " + e);
+      throw new InvalidTermException("Could not clone Struct " + this + ": " + e);
     }
   }
 

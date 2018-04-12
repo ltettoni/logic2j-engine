@@ -17,6 +17,10 @@
 
 package org.logic2j.engine.model;
 
+/**
+ * Obtain the {@link TermApi} for this library. This class could be overloaded by other versions that return
+ * enhanced-featured {@link TermApi} instances.
+ */
 public class TermApiLocator {
   private TermApiLocator() {
   }
