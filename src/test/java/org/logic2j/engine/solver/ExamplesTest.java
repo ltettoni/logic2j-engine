@@ -17,15 +17,16 @@
 
 package org.logic2j.engine.solver;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.logic2j.engine.model.Struct;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
+import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.logic2j.engine.model.Var.intVar;
 
 /**
@@ -34,32 +35,39 @@ import static org.logic2j.engine.model.Var.intVar;
 public class ExamplesTest {
   private final SolverApi solver = new SolverApi();
 
+  /**
+   * Solving the problem: find all digit integers (0..9) for which the
+   * reminder (base 10) of their square is equal to themselves.
+   * 4 solutions: 0, 1, 5 (=25), 6 (=36)
+   */
   @Test
-  @Ignore("Do not run not workable")
-  public void sampleData() {
+  public void reminder_of_square_equal_to_digit() {
     final Var<Integer> x = intVar("X");
-    final Var<Integer> y = intVar("Y");
-    final Term expr = new Exists(new And(new Digit(x), new Square(x, y), new Is(x, new Mod(y, 10))));
+    final Var<Integer> square = intVar("S");
+    final Term expr = new And(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */);
     final long nbr = solver.solve(expr).count();
+    assertThat(nbr).isEqualTo(4L);
+    // Solution exists
+    final Term exists = new Exists(expr);
+    final long nbrEx = solver.solve(exists).count();
+    assertThat(nbrEx).isEqualTo(1L);
   }
 
-  private class Is extends Struct {
-    public Is(Object... argList) {
-      super("is", argList);
+
+  private class Square extends Pred2<Integer, Integer> {
+    public Square(Binding<Integer> arg0, Binding<Integer> arg1) {
+      super("square", arg0, arg1);
+      setPreimage(val -> (int)Math.sqrt(val));
+      setImage(val -> val * val);
     }
   }
 
 
-  private class Square extends Struct {
-    public Square(Object... argList) {
-      super("square", argList);
-    }
-  }
-
-
-  private class Mod extends Struct {
-    public Mod(Object... argList) {
-      super("mod", argList);
+  private class Mod10 extends Pred2<Integer, Integer> {
+    public Mod10(Binding<Integer> arg0, Binding<Integer> arg1) {
+      super("mod", arg0, arg1);
+      setPreimage(null); // Preimage function not defined
+      setImage(val -> val % 10);
     }
   }
 }
