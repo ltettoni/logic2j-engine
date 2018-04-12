@@ -261,7 +261,7 @@ public class UnifyContext {
       return null;
     }
     final Struct struct = (Struct) term1;
-    final Object[] dataFactElements = dataFact.elements;
+    final Object[] dataFactElements = dataFact.getElements();
     if (struct.getName() != dataFactElements[0]) {// Names are {@link String#intern()}alized so OK to check by reference
       // Functor must match
       return null;

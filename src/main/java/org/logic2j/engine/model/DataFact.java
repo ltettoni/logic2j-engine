@@ -27,23 +27,24 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 /**
  * Represent one constant data element that can unify to a n-arity flat {@link Struct},
  * for example functor(a, 'B', 12).
- * This is intended for efficient storage of data instead of using Clauses.
+ * This is intended for efficient storage of data instead of using {@link Struct}.
  * This is an immutable value object.
  */
 public final class DataFact {
 
-  /**
-   * Elments are actually public - this object id just a data container, not a JavaBean.
-   */
-  public final Object[] elements;
+  private final Object[] elements;
 
+  /**
+   * functor and arguments
+   * @param arguments The element at index 0 is assumed to be the functor. At least 2 elements required.
+   */
   public DataFact(Object... arguments) {
     if (arguments == null || arguments.length < 2) {
       throw new InvalidTermException("Dubious instantiation of DataFact with null record, or arity < 1");
     }
     this.elements = new Object[arguments.length];
     this.elements[0] = ((String) arguments[0]).intern();
-    // Internalize all strings
+    // Will internalize all strings
     for (int i = 1; i < arguments.length; i++) {
       this.elements[i] = termApi().valueOf(arguments[i]);
     }
@@ -61,8 +62,13 @@ public final class DataFact {
     return this.elements.length - 1;
   }
 
+  public Object[] getElements() {
+    return this.elements;
+  }
+
   @Override
   public String toString() {
     return this.getClass().getSimpleName() + Arrays.asList(this.elements).toString();
   }
+
 }
