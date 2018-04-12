@@ -11,7 +11,7 @@
 - Predicate signatures (Integer, Integer..., Var<Integer>) to the power^N... See if we can use Binding<> everywhere
 - count()
 - Infinite streams in SimpleBindings
-
+- continuation carried in int no longer Integer
 
 # Improvements TODO
 - Use existing interface instead of Iterator<UnifyContext>
@@ -51,17 +51,3 @@
   - list of map
 - Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
     --> Listener has a strong async flavour are we are not async at all!
-
-
-# CANNOT DO / REQUIRES STUDY
-- Continuation should become and enum, and two types of ABORT: user ABORT or cancellation of enumeration, and boolean checkers.
-  However the cutLevel is used to abort execution currently uses an integer.
-  In the solver we have code like:
-```
-public Continuation onSolution(UnifyContext currentVars) {
-    ...
-    final int continuationFromSubGoal = solveGoalRecursive(rhs, andingListeners[nextIndex], currentVars, cutLevel);
-    return continuationFromSubGoal;
-}
-```
--  Clearly onSolution needs to return more than just 2 possible values.

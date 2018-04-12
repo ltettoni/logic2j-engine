@@ -1,5 +1,8 @@
 # logic2j-engine
-A First-order logic inference engine for Java; core of logic2j
+A first-order logic inference engine for Java; the engine underlying logic2j
+
+## Goals
+
 
 ## Comparison of logic2j-engine to logic2j prolog engine
 
@@ -10,24 +13,3 @@ There is no "library" (a set of predicates, e.g. for IO, math, list processing, 
 There is no marshalling / unmarshalling of data structures from and to Prolog syntax represented as text.
 Strong typing is introduced via the Binding<T> interface
 Constant terms can be provided as scalar or vectors (multi-valued), via streams, iterators, arrays, collections, etc.
-
-### Changes from logic2j
-
-Term:
-  nothing
-
-Var:
-  nothing
-
-Struct:
-- remove all handling of prolog lists and conversion of lists to java lists
-- removed PrimitiveInfo
-- no longer final
-- Adding PrimitiveType, and adding the DATA value
-
-TermApi:
-- removed handling of prolog lists
-- removed evaluate()
-- removed normalization signature using LibraryContent
-- valueOf: removed second argument FactoryMode (using always non ATOM)
-- removed selectTerm()
