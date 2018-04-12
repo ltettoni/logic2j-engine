@@ -22,8 +22,6 @@ import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.math.function.Length;
 import org.logic2j.engine.solver.SolverApi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -34,7 +32,6 @@ import static org.logic2j.engine.model.Var.strVar;
  * Test the Length operator.
  */
 public class LengthTest {
-  private static final Logger logger = LoggerFactory.getLogger(LengthTest.class);
   private final SolverApi solver = new SolverApi();
 
   @Test

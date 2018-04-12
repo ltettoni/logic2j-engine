@@ -22,8 +22,6 @@ import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.math.function.Succ;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Random;
@@ -34,7 +32,6 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
 
 public class SolverWithSimpleBindingTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverWithSimpleBindingTest.class);
   private final SolverApi solver = new SolverApi();
 
   @Test

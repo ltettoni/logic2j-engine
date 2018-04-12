@@ -28,9 +28,9 @@ import java.util.List;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
- * Struct class represents either Prolog compound {@link Term}s or atoms (an atom is represented by a 0-arity compound).
- * This class is now final, one we'll have to carefully think if this could be user-extended.
- * Note: This class MUST be immutable.
+ * A {@link Struct} represents either a Prolog compound {@link Term}s such as functor(arg1, arg2),
+ * or Prolog atoms (an atom is represented by a 0-arity compound).
+ * Note: Instances MUST be immutable.
  */
 public class Struct<T> extends Term implements Cloneable {
   private static final long serialVersionUID = 1L;

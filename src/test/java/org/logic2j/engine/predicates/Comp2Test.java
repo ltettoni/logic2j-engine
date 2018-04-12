@@ -22,8 +22,6 @@ import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.math.compare.LT;
 import org.logic2j.engine.solver.SolverApi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -33,7 +31,6 @@ import static org.logic2j.engine.model.Var.intVar;
  * Test the comparison operators.
  */
 public class Comp2Test {
-  private static final Logger logger = LoggerFactory.getLogger(Comp2Test.class);
   private final SolverApi solver = new SolverApi();
 
   @Test(expected = InvalidTermException.class)

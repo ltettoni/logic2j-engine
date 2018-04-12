@@ -36,7 +36,7 @@ import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
- * First-Order logic Predicate, not to be confused with java.function.Predicates.
+ * First-Order logic Predicate (not to be confused with java.function.Predicate).
  * First-order logic is about binding variables to all solutions, not just checking one value.
  * <p>
  * All subclasses are required to implement {@link #predicateLogic(UnifyContext)}.

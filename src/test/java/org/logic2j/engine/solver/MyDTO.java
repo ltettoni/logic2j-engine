@@ -20,7 +20,7 @@ package org.logic2j.engine.solver;
 import java.util.List;
 
 /**
- * Sample.
+ * Sample DTO.
  */
 public class MyDTO {
 

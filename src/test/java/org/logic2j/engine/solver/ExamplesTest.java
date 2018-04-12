@@ -25,8 +25,6 @@ import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.internal.And;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.logic2j.engine.model.Var.intVar;
 
@@ -34,7 +32,6 @@ import static org.logic2j.engine.model.Var.intVar;
  * Examples to explain what logic2j-engine is.
  */
 public class ExamplesTest {
-  private static final Logger logger = LoggerFactory.getLogger(ExamplesTest.class);
   private final SolverApi solver = new SolverApi();
 
   @Test

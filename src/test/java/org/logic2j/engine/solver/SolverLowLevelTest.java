@@ -47,7 +47,6 @@ import static org.logic2j.engine.predicates.Predicates.or;
 import static org.logic2j.engine.predicates.Predicates.ttrue;
 
 public class SolverLowLevelTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverLowLevelTest.class);
   private final Solver solver = new Solver();
 
   // ---------------------------------------------------------------------------

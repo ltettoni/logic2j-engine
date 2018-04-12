@@ -26,8 +26,6 @@ import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.impl.firstorder.Count;
 import org.logic2j.engine.predicates.internal.Call;
 import org.logic2j.engine.predicates.internal.Or;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -40,7 +38,6 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.or;
 
 public class FirstOrderLogicTest {
-  private static final Logger logger = LoggerFactory.getLogger(FirstOrderLogicTest.class);
   private final SolverApi solver = new SolverApi();
 
   @Test
