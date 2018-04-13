@@ -20,7 +20,9 @@ package org.logic2j.engine.model;
 import java.util.stream.Stream;
 
 /**
- * A {@link Binding} that provides a constant value (scalar) or multiple values (vector).
+ * A typed {@link Binding} that provides a constant value (scalar) or multiple constant values (vector)
+ * from various collections or generators of Java objects.
+ * Use static factories in {@link SimpleBindings} to instantiate {@link Constant}s.
  */
 public interface Constant<T> extends Binding {
 
@@ -37,6 +39,14 @@ public interface Constant<T> extends Binding {
   long size();
 
   /**
+   * Check content; in case of a stream this will consumes it.
+   *
+   * @param value
+   * @return
+   */
+  boolean contains(T value);
+
+  /**
    * Convert to array; in case of a stream this will consumes it.
    *
    * @return
@@ -50,14 +60,11 @@ public interface Constant<T> extends Binding {
    */
   T toScalar();
 
-  Stream<T> toStream();
-
   /**
-   * Check content; in case of a stream this will consumes it.
+   * Convert to a Stream.
    *
-   * @param value
    * @return
    */
-  boolean contains(T value);
+  Stream<T> toStream();
 
 }

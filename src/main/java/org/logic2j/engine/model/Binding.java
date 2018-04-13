@@ -19,9 +19,14 @@ package org.logic2j.engine.model;
 
 /**
  * A Binding allows to associate a {@link Var} or constant(s) to arguments of a {@link Struct}.
+ * The arguments of a {@link Struct} may be any java Object; however if you
+ * need strong typing you should rather pass Binding<T>.
  */
 public interface Binding<T> {
 
+  /**
+   * @return The type of the bound values.
+   */
   Class<T> getType();
 
 }
