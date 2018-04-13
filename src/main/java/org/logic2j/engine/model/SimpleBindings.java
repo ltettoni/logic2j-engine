@@ -24,45 +24,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Provides data to predicates: one or several values of a given type.
- * Can provide values from running {@link Iterator}s or {@link Stream}s.
+ * Static factories for {@link Constant}, used to provide data to predicates: one or several values of a given type.
+ * Can provide values from {@link Iterator}s or {@link Stream}s.
  * Only one method: {@link #empty(Class)} allows empty content. Other methods require at least one element to determine the data type.
- * TODO: one should infer the data type by scanning all elements, not only checking on the first.
+ * TODO: should we ensure the data type by scanning all elements, not only checking on the first?
  *
- * @param <T>
+ * @param <T> Data type
  */
 public class SimpleBindings<T> {
-  private final Class<T> type;
-
-  private long size = -1; // <0 means unknown or not enumerable
-  private final T[] data; // Data stored there
-  private Set<T> cachedSet = null; // Data optionally stored there (if "contains" operations are requested)
-
-  private Stream<T> stream = null;
-  private Iterator<T> iterator = null;
-  private boolean consumed = false;
 
   /**
-   * Use static factories bind*() instead.
-   *
-   * @param type
-   * @param values
-   * @param stream
-   * @param iterator
+   * Forbid instantiation
    */
-  private SimpleBindings(Class<T> type, T[] values, Stream<T> stream, Iterator<T> iterator) {
-    this.type = type;
-    this.data = values;
-    this.stream = stream;
-    this.iterator = iterator;
-    this.size = this.data != null ? this.data.length : -1;
+  private SimpleBindings() {
   }
 
   /**
@@ -219,7 +199,7 @@ public class SimpleBindings<T> {
 
   /**
    *
-   * @param values
+   * @param coll
    * @param <T>
    * @return A {@link Constant} that supplies several values.
    */
@@ -401,7 +381,9 @@ public class SimpleBindings<T> {
     };
   }
 
-
+  public static <T> Constant<T> bind(Iterable<T> iterable) {
+    return bind(iterable.iterator());
+  }
 
   private abstract static class ConstantBase<T> implements Constant<T> {
 
