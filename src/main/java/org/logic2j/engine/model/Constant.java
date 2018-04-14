@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * from various collections or generators of Java objects.
  * Use static factories in {@link SimpleBindings} to instantiate {@link Constant}s.
  */
-public interface Constant<T> extends Binding {
+public interface Constant<T> extends Binding<T> {
 
   /**
    * @return true if data comes from a stream that cannot be consumed more than once.
