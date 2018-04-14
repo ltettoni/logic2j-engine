@@ -25,6 +25,7 @@ import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Call;
+import org.logic2j.engine.predicates.internal.Cut;
 import org.logic2j.engine.predicates.internal.Or;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -169,20 +170,7 @@ public class Solver {
     }
     // The CUT functor
     else if (Struct.FUNCTOR_CUT == functor) {
-      // This is a "native" implementation of CUT, which works as good as using the primitive in CoreLibrary
-      // Doing it inline might improve performance a little although I did not measure much difference.
-      // Functionally, this code may be removed
-
-      // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-      final int continuationFromCaller =
-          currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
-
-      if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
-        result = continuationFromCaller;
-      } else {
-        // Stopping there for this iteration
-        result = cutLevel;
-      }
+      result = Cut.cutLogic(goalStruct, currentVars, cutLevel);
     }
     // ---------------------------------------------------------------------------
     // Primitive implemented in Java

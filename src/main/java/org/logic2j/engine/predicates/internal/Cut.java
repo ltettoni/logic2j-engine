@@ -18,6 +18,8 @@
 package org.logic2j.engine.predicates.internal;
 
 import org.logic2j.engine.model.Struct;
+import org.logic2j.engine.solver.Continuation;
+import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * Provides one solution and cuts backtracking.
@@ -28,4 +30,26 @@ public class Cut extends Struct {
     super(FUNCTOR_CUT);
   }
 
+  /**
+   * This is a "native" implementation of CUT.
+   *
+   * @param goalStruct
+   * @param currentVars
+   * @param cutLevel
+   * @return
+   */
+  public static int cutLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+    // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
+    final int continuationFromCaller =
+        currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
+
+    final int result;
+    if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
+      result = continuationFromCaller;
+    } else {
+      // Stopping there for this iteration
+      result = cutLevel;
+    }
+    return result;
+  }
 }
