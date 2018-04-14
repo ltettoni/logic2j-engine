@@ -20,14 +20,41 @@ package org.logic2j.engine.predicates.internal;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
+import org.logic2j.engine.solver.Continuation;
+import org.logic2j.engine.solver.Solver;
+import org.logic2j.engine.unify.UnifyContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Logical OR.
  * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
 public class Or extends Struct implements RDBCompatiblePredicate {
+  private static final Logger logger = LoggerFactory.getLogger(Or.class);
+  
   public Or(Term... disjunctions) {
     super(FUNCTOR_SEMICOLON, (Object[]) disjunctions);
   }
 
+  /*
+   * This is the Java implementation of N-arity OR
+   * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
+   */
+  public static int orLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+    final int arity = goalStruct.getArity();
+    final Solver solver = currentVars.getSolver();
+    for (int i = 0; i < arity; i++) {
+      // Solve all the elements of the "OR", in sequence.
+      // For a binary OR, this means solving the left-hand-side and then the right-hand-side
+      if (logger.isDebugEnabled()) {
+        logger.debug("Handling OR, element={} of {}", i, goalStruct);
+      }
+      final int result = solver.solveInternalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
+      if (result != Continuation.CONTINUE) {
+        break;
+      }
+    }
+    return Continuation.CONTINUE;
+  }
 }

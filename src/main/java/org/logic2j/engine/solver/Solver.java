@@ -24,6 +24,7 @@ import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.predicates.internal.And;
+import org.logic2j.engine.predicates.internal.Or;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.util.ProfilingInfo;
@@ -121,7 +122,7 @@ public class Solver {
     }
     int result = Continuation.CONTINUE;
 
-    // At the moment we don't properly manage atoms as goals...
+    // Make sure the term specified is solvable: atoms are not, variables not (yet)
     final Struct goalStruct;
     if (goalTerm instanceof String) {
       // Yet we are not capable of handing String everywhere below - so use a Struct atom still
@@ -159,21 +160,7 @@ public class Solver {
     }
     // The OR predicate
     else if (isInternalOr() && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-      /*
-       * This is the Java implementation of N-arity OR
-       * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
-       */
-      for (int i = 0; i < arity; i++) {
-        // Solve all the elements of the "OR", in sequence.
-        // For a binary OR, this means solving the left-hand-side and then the right-hand-side
-        if (logger.isDebugEnabled()) {
-          logger.debug("Handling OR, element={} of {}", i, goalStruct);
-        }
-        result = solveInternalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
-        if (result != Continuation.CONTINUE) {
-          break;
-        }
-      }
+      result = Or.orLogic(goalStruct, currentVars, cutLevel);
     }
     // The CALL predicate
     else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
