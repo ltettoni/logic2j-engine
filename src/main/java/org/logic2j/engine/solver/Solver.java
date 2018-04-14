@@ -23,12 +23,10 @@ import org.logic2j.engine.exception.Logic2jException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.FOPredicate;
+import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.solver.listener.SolutionListener;
-import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.util.ProfilingInfo;
-
-import java.util.Iterator;
 
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 
@@ -97,18 +95,22 @@ public class Solver {
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
-    return solveGoalRecursive(goal, currentVars, /* FIXME why this value?*/10);
+    return solveInternalRecursive(goal, currentVars, /* FIXME why this value?*/10);
   }
 
+
+
+
   /**
-   * That's the complex method - the heart of the Solver.
+   * That's the complex method - the heart of the Solver, it needs to be public for friend predicates such as
+   * {@link And}, {@link org.logic2j.engine.predicates.internal.Call} to be able to invoke recursion.
    *
    * @param goalTerm
    * @param currentVars
    * @param cutLevel
    * @return
    */
-  protected int solveGoalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+  public int solveInternalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
     if (logger.isDebugEnabled()) {
       logger.debug("-->> Entering solveRecursive#{}, reifiedGoal = {}", inferenceCounter, currentVars.reify(goalTerm));
@@ -153,69 +155,7 @@ public class Solver {
 
     // The AND predicate !
     if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-      // Logical AND. Typically the arity=2 since "," is a binary predicate. But in logic2j we allow more, the same code supports both.
-
-      // Algorithm: for the sequential AND of N goals G1,G2,G3,...,GN, we defined N-1 listeners, and solve G1 against
-      // the first listener: all solutions to G1, will be escalated to that listener that handles G2,G3,...,GN
-      // Then that listener will solve G2 against the listener for (final G3,...,GN). Finally GN will solve against the
-      // "normal" listener received as argument (hence propagating the ANDed solution to our caller).
-
-      // Note that instantiating all these listeners could be costly - if we found a way to have a cache (eg. storing them
-      // at parse-time in Clauses) it could improve performance.
-
-      final SolutionListener[] andingListeners = new SolutionListener[arity];
-      // The last listener is the one that called us (typically the one of the application, if this is the outermost "AND")
-      andingListeners[arity - 1] = currentVars.getSolutionListener();
-      // Allocates N-1 andingListeners, usually this means one.
-      // On solution, each will trigger solving of the next term
-      final Object[] goalStructArgs = goalStruct.getArgs();
-      final Object lhs = goalStructArgs[0];
-      for (int i = 0; i < arity - 1; i++) {
-        final int index = i;
-        andingListeners[index] = new SolutionListener() {
-
-          @Override
-          public int onSolution(UnifyContext currentVars) {
-            final int nextIndex = index + 1;
-            final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-            if (logger.isDebugEnabled()) {
-              logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
-            }
-            return solveGoalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
-          }
-
-          @Override
-          public int onSolutions(final Iterator<UnifyContext> multiLHS) {
-            final int nextIndex = index + 1;
-            final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-            final SolutionListener subListener = new SolutionListener() {
-              @Override
-              public int onSolution(UnifyContext currentVars) {
-                throw new UnsupportedOperationException("Should not be here");
-              }
-
-              @Override
-              public int onSolutions(Iterator<UnifyContext> multiRHS) {
-                logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
-                final UnifyContextIterator combined = new UnifyContextIterator(currentVars, multiLHS, multiRHS);
-                return andingListeners[nextIndex].onSolutions(combined);
-              }
-
-            };
-            return solveGoalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
-          }
-
-          @Override
-          public String toString() {
-            return "AND sub-listener to " + lhs;
-          }
-        };
-      }
-      // Solve the first goal, redirecting all solutions to the first listener defined above
-      if (logger.isDebugEnabled()) {
-        logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
-      }
-      result = solveGoalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
+      result = And.andLogic(goalStruct, currentVars, cutLevel);
     }
     // The OR predicate
     else if (isInternalOr() && Struct.FUNCTOR_SEMICOLON == functor) { // Names are {@link String#intern()}alized so OK to check by reference
@@ -229,7 +169,7 @@ public class Solver {
         if (logger.isDebugEnabled()) {
           logger.debug("Handling OR, element={} of {}", i, goalStruct);
         }
-        result = solveGoalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
+        result = solveInternalRecursive(goalStruct.getArg(i), currentVars, cutLevel);
         if (result != Continuation.CONTINUE) {
           break;
         }
@@ -246,7 +186,7 @@ public class Solver {
       if (termApi().isFreeVar(realCallTerm)) {
         throw new SolverException("Cannot call/* on a free variable");
       }
-      result = solveGoalRecursive(realCallTerm, currentVars, cutLevel);
+      result = solveInternalRecursive(realCallTerm, currentVars, cutLevel);
 
     }
     // The CUT functor
@@ -286,7 +226,7 @@ public class Solver {
       // Solve against data facts
       //---------------------------------------------------------------------------
       if (result == Continuation.CONTINUE) {
-        result = solveAgainstDataProviders(goalTerm, currentVars, cutLevel + 1);
+        result = solveAgainstDataProviders(goalTerm, currentVars);
       }
     }
     if (logger.isDebugEnabled()) {
@@ -310,7 +250,7 @@ public class Solver {
     return Continuation.CONTINUE;
   }
 
-  protected int solveAgainstDataProviders(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
+  protected int solveAgainstDataProviders(final Object goalTerm, final UnifyContext currentVars) {
     return Continuation.CONTINUE;
   }
 
