@@ -20,6 +20,7 @@ package org.logic2j.engine.predicates.internal;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
+import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
@@ -65,6 +66,7 @@ public class And extends Struct implements RDBCompatiblePredicate {
     // On solution, each will trigger solving of the next term
     final Object[] goalStructArgs = goal.getArgs();
     final Object lhs = goalStructArgs[0];
+    final Solver solver = currentVars.getSolver();
     for (int i = 0; i < arity - 1; i++) {
       final int index = i;
       andingListeners[index] = new SolutionListener() {
@@ -97,7 +99,7 @@ public class And extends Struct implements RDBCompatiblePredicate {
             }
 
           };
-          return currentVars.getSolver().solveInternalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
+          return solver.solveInternalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
         }
 
         @Override
@@ -110,7 +112,7 @@ public class And extends Struct implements RDBCompatiblePredicate {
     if (logger.isDebugEnabled()) {
       logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
     }
-    return currentVars.getSolver().solveInternalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
+    return solver.solveInternalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
   }
 
 }
