@@ -17,9 +17,13 @@
 
 package org.logic2j.engine.predicates.internal;
 
+import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.unify.UnifyContext;
 
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.predicates.Predicates.conjunction;
 
 /**
@@ -29,4 +33,19 @@ public class Call extends Struct {
   public Call(Term... goals) {
     super(FUNCTOR_CALL, conjunction(goals));
   }
+
+  public static int callLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+    final int arity = goalStruct.getArity();
+    if (arity != 1) {
+      throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
+    }
+    final Object callTerm = goalStruct.getArg(0);  // Often a Var
+    final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
+    if (termApi().isFreeVar(realCallTerm)) {
+      throw new SolverException("Cannot call/* on a free variable");
+    }
+    return currentVars.getSolver().solveInternalRecursive(realCallTerm, currentVars, cutLevel);
+  }
+
+
 }

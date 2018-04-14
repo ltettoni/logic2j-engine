@@ -24,6 +24,7 @@ import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.predicates.internal.And;
+import org.logic2j.engine.predicates.internal.Call;
 import org.logic2j.engine.predicates.internal.Or;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -164,17 +165,7 @@ public class Solver {
     }
     // The CALL predicate
     else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
-      // TODO call/1 is handled here for efficiency, see if it's really needed we could as well use the Primitive (already implemented)
-      if (arity != 1) {
-        throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);
-      }
-      final Object callTerm = goalStruct.getArg(0);  // Often a Var
-      final Object realCallTerm = currentVars.reify(callTerm); // The real value of the Var
-      if (termApi().isFreeVar(realCallTerm)) {
-        throw new SolverException("Cannot call/* on a free variable");
-      }
-      result = solveInternalRecursive(realCallTerm, currentVars, cutLevel);
-
+      result = Call.callLogic(goalStruct, currentVars, cutLevel);
     }
     // The CUT functor
     else if (Struct.FUNCTOR_CUT == functor) {
