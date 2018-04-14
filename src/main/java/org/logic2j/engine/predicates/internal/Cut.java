@@ -31,7 +31,7 @@ public class Cut extends Struct {
   }
 
   /**
-   * This is a "native" implementation of CUT.
+   * This is a "native" implementation of CUT: we are currently executing a "!" predicate to break backtracking.
    *
    * @param goalStruct
    * @param currentVars
@@ -43,13 +43,13 @@ public class Cut extends Struct {
     final int continuationFromCaller =
         currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
 
-    final int result;
     if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
-      result = continuationFromCaller;
+      // We've got a cut from the solution listener
+      return continuationFromCaller;
     } else {
-      // Stopping there for this iteration
-      result = cutLevel;
+      // The solution listener notified either a CONTINUE or a FAIL.
+      // Stopping the backtracking here
+      return cutLevel;
     }
-    return result;
   }
 }
