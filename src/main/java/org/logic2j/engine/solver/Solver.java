@@ -98,7 +98,7 @@ public class Solver {
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
-    return solveInternalRecursive(goal, currentVars, /* FIXME why this value?*/10);
+    return solveInternalRecursive(goal, currentVars, /* Recursion counter uses positive numbers */1);
   }
 
 
