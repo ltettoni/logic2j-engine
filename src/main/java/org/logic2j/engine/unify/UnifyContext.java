@@ -58,9 +58,7 @@ public class UnifyContext {
   private final UnifyStateByLookup stateStorage;
 
   /**
-   * Just to hold the solver algorithm currently in use.
-   * Not functionally used in this class, but hold as an important context reference.
-   * Only exposed via {@link #getSolver()}
+   * Hold the solver algorithm currently in use.
    */
   private final Solver solver;
 
