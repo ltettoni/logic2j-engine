@@ -35,9 +35,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * <li>Normalization: includes initialization of indexes, factorization, and identification of primitive functors</li>
  * </ul>
  * <p>
- *
- * @see Struct
- * @see Var
+ * TODO Why Serializable?
  */
 public abstract class Term implements Serializable {
   private static final long serialVersionUID = 1L;

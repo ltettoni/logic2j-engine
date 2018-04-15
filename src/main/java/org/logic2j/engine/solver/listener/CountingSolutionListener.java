@@ -21,6 +21,7 @@ package org.logic2j.engine.solver.listener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
+import static org.logic2j.engine.solver.Continuation.USER_ABORT;
 
 /**
  * A base implementation of {@link SolutionListener} that holds a counter of the number of solutions reached.
@@ -30,19 +31,33 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  */
 public class CountingSolutionListener implements SolutionListener {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CountingSolutionListener.class);
-  private static final boolean DEBUG_ENABLED = logger.isDebugEnabled();
 
   /**
    * Number of solutions (so far).
    */
-  private long count = 0;
+  private long count = 0L;
 
+  /**
+   * Will stop counting after that number of iterations.
+   */
+  private long maxIteration;
+
+  public CountingSolutionListener() {
+    this(Long.MAX_VALUE);
+  }
+
+  public CountingSolutionListener(long maxIteration) {
+    this.maxIteration = maxIteration;
+  }
 
   @Override
   public int onSolution(UnifyContext currentVars) {
     this.count++;
-    if (DEBUG_ENABLED) {
+    if (logger.isDebugEnabled()) {
       logger.debug(" onSolution(#{})", this.count);
+    }
+    if (this.count >= this.maxIteration) {
+      return USER_ABORT;
     }
     return CONTINUE;
   }
@@ -51,10 +66,17 @@ public class CountingSolutionListener implements SolutionListener {
   // Accessors
   // ---------------------------------------------------------------------------
 
+  /**
+   * @return the total number of solutions that were demonstrated (to the last one).
+   */
   public long count() {
     return this.count;
   }
 
+  /**
+   * This is not an efficient way of proving existence, rather look for {@link ExistsSolutionListener}
+   * @return true of there was at least one solution demonstrated.
+   */
   public boolean exists() {
     return this.count > 0;
   }

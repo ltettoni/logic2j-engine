@@ -88,7 +88,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
    */
   private Var() {
     this.name = ANONYMOUS_VAR_NAME;
-    this.type = null; // TODO Not sure null is the best. Should we use Void.class instead?
+    this.type = null; // TODO Not sure null is the best. Should we use Void.class or Object.class instead?
     clearIndex();
   }
 

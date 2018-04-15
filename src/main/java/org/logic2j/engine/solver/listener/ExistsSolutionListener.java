@@ -49,9 +49,7 @@ public class ExistsSolutionListener implements SolutionListener {
   public int onSolution(UnifyContext currentVars) {
     // Do NOT relay the solution further, just remember there was one
     this.atLeastOneSolution = true;
-    // No need to seek for further solutions. Watch out this means the goal will stop evaluating on first success.
-    // TODO Should rather say the enumeration was cancelled on purpose (optimized like in AND statements)
-    // Maybe we should distinguish between first-order predicate listeners that abort solving, and user cancellation.
+    // No need to seek for further solutions. Watch out this means the goal will stop evaluating on first success!
     return Continuation.USER_ABORT;
   }
 

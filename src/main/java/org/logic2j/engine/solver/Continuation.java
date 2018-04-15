@@ -29,16 +29,16 @@ import org.logic2j.engine.unify.UnifyContext;
  *
  * @author tettoni
  */
-public interface Continuation {
+public final class Continuation {
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
    * must return for the inference engine to continue solving (search for alternate solutions).
    */
-  int CONTINUE = 0;
+  public static final int CONTINUE = 0;
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
    * must return for the inference engine to stop solving (ie. means caller requests abort).
    */
-  int USER_ABORT = -1;
+  public static final int USER_ABORT = -1;
 
 }

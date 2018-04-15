@@ -17,7 +17,6 @@
 
 package org.logic2j.engine.predicates.internal;
 
-import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.unify.UnifyContext;
 
@@ -32,18 +31,17 @@ public class Cut extends SolverPredicate {
 
   @Override
   public int predicateLogic(UnifyContext currentVars, int cutLevel) {
-    return cutLogic(this, currentVars, cutLevel);
+    return cutLogic(currentVars, cutLevel);
   }
 
   /**
    * This is a "native" implementation of CUT: we are currently executing a "!" predicate to break backtracking.
    *
-   * @param goalStruct
    * @param currentVars
    * @param cutLevel
    * @return
    */
-  public static int cutLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+  public static int cutLogic(UnifyContext currentVars, int cutLevel) {
     // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
     final int continuationFromCaller =
         currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value

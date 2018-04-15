@@ -46,34 +46,38 @@ public class GoalHolder {
     this.termToSolutionFunction = termToSolutionFunction;
   }
 
+  /**
+   * @return True if at least one solution can be demonstrated. Solving will stop at the first solution.
+   */
   public boolean exists() {
     final ExistsSolutionListener listener = new ExistsSolutionListener();
     solver.solveGoal(goal, listener);
     return listener.exists();
   }
 
+  /**
+   * @return True if no solution could be demonstrated
+   */
   public boolean none() {
     return !exists();
   }
 
   /**
-   * TODO should rather be based on limit() with an iteration up to solution #2
-   *
-   * @return true if only one solution to goal.
+   * @return true if there is exactly ONE solution to goal.
    */
   public boolean unique() {
-    // TODO This is not an efficient implementation
-    return count() == 1;
+    final CountingSolutionListener listener = new CountingSolutionListener(2);
+    solver.solveGoal(goal, listener);
+    return listener.count() == 1;
   }
 
   /**
-   * TODO should rather be based on limit() with an iteration up to solution #2
-   *
-   * @return true if there is more than one solution.
+   * @return true if there are more than one solution.
    */
   public boolean multiple() {
-    // TODO This is not an efficient implementation
-    return count() > 1;
+    final CountingSolutionListener listener = new CountingSolutionListener(2);
+    solver.solveGoal(goal, listener);
+    return listener.count() > 1;
   }
 
   public long count() {

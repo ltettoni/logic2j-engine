@@ -33,11 +33,9 @@ import java.util.stream.StreamSupport;
  * Static factories for {@link Constant}, used to provide data to predicates: one or several values of a given type.
  * Can provide values from {@link Iterator}s or {@link Stream}s.
  * Only one method: {@link #empty(Class)} allows empty content. Other methods require at least one element to determine the data type.
- * TODO: should we ensure the data type by scanning all elements, not only checking on the first?
- *
- * @param <T> Data type
+ * TODO: factories for collections should maybe ensure the data type by scanning all elements, not only checking on the first?
  */
-public class SimpleBindings<T> {
+public class SimpleBindings {
 
   /**
    * Forbid instantiation

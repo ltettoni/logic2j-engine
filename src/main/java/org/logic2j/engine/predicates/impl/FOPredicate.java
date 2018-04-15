@@ -191,7 +191,6 @@ public abstract class FOPredicate extends Struct {
   // --------------------------------------------------------------------------
 
   /**
-   * FIXME Rename ensureBinding... and return the value
    * Make sure term is not a free {@link Var}.
    *
    * @param term
@@ -200,7 +199,6 @@ public abstract class FOPredicate extends Struct {
    */
   protected void ensureBindingIsNotAFreeVar(Object term, int indexOfArg) {
     if (isFreeVar(term)) {
-      // TODO Should be a kind of InvalidGoalException instead?
       final int positionOfArgument = indexOfArg + 1;
       final String nameOfPrimitive = getName();
       throw new InvalidTermException(
@@ -208,18 +206,6 @@ public abstract class FOPredicate extends Struct {
     }
   }
 
-  @Deprecated // see stream() to handle larger sets
-  protected static <Q> Q[] constants(Object reified) {
-    if (reified == null || isFreeVar(reified)) {
-      return (Q[]) EMPTY_ARRAY;
-    }
-    if (reified instanceof Constant<?>) {
-      // FIXME This is not good when we have streams or iterators :-( We load them in memory
-      return ((Constant<Q>) reified).toArray();
-    }
-    // Other object: will be a scalar
-    return (Q[]) new Object[] {reified};
-  }
 
   protected static <Q> Stream<Q> stream(Object reified) {
     if (reified == null || isFreeVar(reified)) {

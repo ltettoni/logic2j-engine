@@ -126,7 +126,7 @@ public class Solver {
     if (isProfiling()) {
       ProfilingInfo.nbInferences++;
     }
-    int result = Continuation.CONTINUE;
+    int result;
 
     // Make sure the term specified is solvable: atoms are not, variables not (yet)
     final Struct goalStruct;
@@ -153,7 +153,6 @@ public class Solver {
 
     // Extract all features of the goal to solve
     final String functor = goalStruct.getName();
-    final int arity = goalStruct.getArity();
 
     // First we will check the goal against core predicates such as
     // AND (","), OR (";"), CUT ("!") and CALL
@@ -178,7 +177,7 @@ public class Solver {
     }
     // The CUT functor
     else if (Struct.FUNCTOR_CUT == functor) {
-      result = Cut.cutLogic(goalStruct, currentVars, cutLevel);
+      result = Cut.cutLogic(currentVars, cutLevel);
     }
     // ---------------------------------------------------------------------------
     // Primitive implemented in Java
