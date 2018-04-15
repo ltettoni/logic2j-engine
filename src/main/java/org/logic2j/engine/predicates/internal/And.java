@@ -47,12 +47,12 @@ public class And extends SolverPredicate implements RDBCompatiblePredicate {
 
   /**
    * Logical AND. Typically the arity=2 since "," is a binary predicate. But in logic2j we allow more, the same code supports both.
-   *
+   * <p>
    * Algorithm: for the sequential AND of N goals G1,G2,G3,...,GN, we defined N-1 listeners, and solve G1 against
    * the first listener: all solutions to G1, will be escalated to that listener that handles G2,G3,...,GN
    * Then that listener will solve G2 against the listener for (final G3,...,GN). Finally GN will solve against the
    * "normal" listener received as argument (hence propagating the ANDed solution to our caller).
-   *
+   * <p>
    * Note that instantiating all these listeners could be costly - if we found a way to have a cache (eg. storing them
    * at parse-time in Clauses) it could improve performance.
    *

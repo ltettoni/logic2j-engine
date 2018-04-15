@@ -36,6 +36,7 @@ public final class DataFact {
 
   /**
    * functor and arguments
+   *
    * @param arguments The element at index 0 is assumed to be the functor. At least 2 elements required.
    */
   public DataFact(Object... arguments) {

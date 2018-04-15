@@ -84,6 +84,7 @@ public class GoalHolder {
 
   /**
    * Not yet used - we were extracting variables form the
+   *
    * @param vars The variables to populate with the solution
    * @return
    */

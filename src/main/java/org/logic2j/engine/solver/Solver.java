@@ -52,12 +52,16 @@ public class Solver {
    * Do we solve the ";" (OR) predicate internally here, or in the predicate.
    * (see note re. processing of OR in CoreLibrary.pro)
    */
-  protected boolean isInternalOr() { return true; } // FIXME Bug with false on a number of test case
+  protected boolean isInternalOr() {
+    return true;
+  } // FIXME Bug with false on a number of test case
 
   /**
    * Do we acquire profiling information (number of inferences, etc)
    */
-  protected boolean isProfiling() { return false; }
+  protected boolean isProfiling() {
+    return false;
+  }
 
   /**
    * This is the naive, simplest entry point for solving a goal, when all variable have to be initially free.
@@ -101,7 +105,6 @@ public class Solver {
     }
     return solveInternalRecursive(goal, currentVars, /* Recursion counter uses positive numbers */1);
   }
-
 
 
 
@@ -158,7 +161,7 @@ public class Solver {
     // Finally we will handle classic goals matched against Prolog theories
 
     if (goalStruct instanceof SolverPredicate) {
-      result = ((SolverPredicate)goalStruct).predicateLogic(currentVars, cutLevel);
+      result = ((SolverPredicate) goalStruct).predicateLogic(currentVars, cutLevel);
     }
 
     // A classic Struct with the functor representing And

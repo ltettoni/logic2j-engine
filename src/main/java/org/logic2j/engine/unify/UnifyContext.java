@@ -45,7 +45,6 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * In a previous version of logic2j, it was not stored here, the result was that most methods in the code, and in particular
  * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
  * Since logic2j-engine, the two are now grouped in the context.
- *
  */
 public class UnifyContext {
   private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
@@ -125,6 +124,7 @@ public class UnifyContext {
 
   /**
    * Copy and set a new {@link SolutionListener}
+   *
    * @param newListener
    * @return A copy with the specified {@link SolutionListener}
    */

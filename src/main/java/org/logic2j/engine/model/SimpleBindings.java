@@ -91,8 +91,6 @@ public class SimpleBindings<T> {
   }
 
   /**
-   *
-   *
    * @param supplier
    * @param <T>
    * @return A {@link Constant} that supplies one value, must be non-null so that its type can be determined.
@@ -137,7 +135,6 @@ public class SimpleBindings<T> {
   }
 
   /**
-   *
    * @param values
    * @param <T>
    * @return A {@link Constant} that supplies several values.
@@ -198,7 +195,6 @@ public class SimpleBindings<T> {
   }
 
   /**
-   *
    * @param coll
    * @param <T>
    * @return A {@link Constant} that supplies several values.

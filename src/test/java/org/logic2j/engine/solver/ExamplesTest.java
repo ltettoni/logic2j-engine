@@ -56,7 +56,7 @@ public class ExamplesTest {
   private class Square extends Pred2<Integer, Integer> {
     public Square(Binding<Integer> arg0, Binding<Integer> arg1) {
       super("square", arg0, arg1);
-      setPreimage(val -> (int)Math.sqrt(val));
+      setPreimage(val -> (int) Math.sqrt(val));
       setImage(val -> val * val);
     }
   }

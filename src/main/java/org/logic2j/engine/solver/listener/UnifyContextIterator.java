@@ -36,9 +36,10 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
 
   /**
    * Instantiate for a single {@link Var}iable and a collection of values.
+   *
    * @param currentVars The current state of variables
-   * @param theVar The variable to attempt unification
-   * @param values The collection of values to unify in sequence
+   * @param theVar      The variable to attempt unification
+   * @param values      The collection of values to unify in sequence
    */
   public UnifyContextIterator(UnifyContext currentVars, Var theVar, Collection<?> values) {
     this.currentVars = currentVars;
@@ -50,6 +51,7 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
   /**
    * Create a new {@link UnifyContextIterator} from two existing, both must have the same variable,
    * and the result will iterate on the UNION set of the left-hand-side and the right-hand-side arguments, in respected order.
+   *
    * @param currentVars
    * @param multiLHS
    * @param multiRHS
