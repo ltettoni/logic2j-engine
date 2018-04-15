@@ -29,9 +29,14 @@ import static org.logic2j.engine.predicates.Predicates.conjunction;
 /**
  * Invoke the solver on a sub-goal or conjunction (AND) of sub-goals.
  */
-public class Call extends Struct {
+public class Call extends SolverPredicate {
   public Call(Term... goals) {
     super(FUNCTOR_CALL, conjunction(goals));
+  }
+
+  @Override
+  public int predicateLogic(UnifyContext currentVars, int cutLevel) {
+    return callLogic(this, currentVars, cutLevel);
   }
 
   public static int callLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {

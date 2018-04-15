@@ -30,11 +30,16 @@ import org.slf4j.LoggerFactory;
  * Logical OR.
  * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
-public class Or extends Struct implements RDBCompatiblePredicate {
+public class Or extends SolverPredicate implements RDBCompatiblePredicate {
   private static final Logger logger = LoggerFactory.getLogger(Or.class);
-  
+
   public Or(Term... disjunctions) {
     super(FUNCTOR_SEMICOLON, (Object[]) disjunctions);
+  }
+
+  @Override
+  public int predicateLogic(UnifyContext currentVars, int cutLevel) {
+    return orLogic(this, currentVars, cutLevel);
   }
 
   /*

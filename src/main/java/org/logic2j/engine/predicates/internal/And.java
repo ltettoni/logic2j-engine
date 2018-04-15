@@ -33,11 +33,16 @@ import java.util.Iterator;
  * Logical AND.
  * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
-public class And extends Struct implements RDBCompatiblePredicate {
+public class And extends SolverPredicate implements RDBCompatiblePredicate {
   private static final Logger logger = LoggerFactory.getLogger(And.class);
-  
+
   public And(Term... conjunctions) {
     super(FUNCTOR_COMMA, (Object[]) conjunctions);
+  }
+
+  @Override
+  public int predicateLogic(UnifyContext currentVars, int cutLevel) {
+    return andLogic(this, currentVars, cutLevel);
   }
 
   /**

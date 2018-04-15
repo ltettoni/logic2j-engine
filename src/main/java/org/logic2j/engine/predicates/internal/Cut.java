@@ -25,9 +25,14 @@ import org.logic2j.engine.unify.UnifyContext;
  * Provides one solution and cuts backtracking.
  * The implementation is hard-coded in the Solver, hence we do not provide it here.
  */
-public class Cut extends Struct {
+public class Cut extends SolverPredicate {
   public Cut() {
     super(FUNCTOR_CUT);
+  }
+
+  @Override
+  public int predicateLogic(UnifyContext currentVars, int cutLevel) {
+    return cutLogic(this, currentVars, cutLevel);
   }
 
   /**

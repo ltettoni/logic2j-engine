@@ -27,6 +27,7 @@ import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Call;
 import org.logic2j.engine.predicates.internal.Cut;
 import org.logic2j.engine.predicates.internal.Or;
+import org.logic2j.engine.predicates.internal.SolverPredicate;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.util.ProfilingInfo;
@@ -156,8 +157,12 @@ public class Solver {
     // Then we will check if the goal is a Primitive implemented in a Java library
     // Finally we will handle classic goals matched against Prolog theories
 
-    // The AND predicate !
-    if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
+    if (goalStruct instanceof SolverPredicate) {
+      result = ((SolverPredicate)goalStruct).predicateLogic(currentVars, cutLevel);
+    }
+
+    // A classic Struct with the functor representing And
+    else if (Struct.FUNCTOR_COMMA == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       result = And.andLogic(goalStruct, currentVars, cutLevel);
     }
     // The OR predicate

@@ -52,15 +52,15 @@ public abstract class FOPredicate extends Struct {
    * A functional predicate is a plain data structure like a {@link Struct}, with some executable logic
    * attached through the {@link #predicateLogic(UnifyContext)} abstract method.
    *
-   * @param theFunctor
-   * @param argList
+   * @param functor
+   * @param arguments
    */
-  public FOPredicate(String theFunctor, Object... argList) {
-    super(theFunctor, createBindings(argList));
+  protected FOPredicate(String functor, Object... arguments) {
+    super(functor, createBindings(arguments));
   }
 
-  private static Object[] createBindings(Object... argList) {
-    return Arrays.stream(argList).map(FOPredicate::createBinding).toArray(Object[]::new);
+  private static Object[] createBindings(Object... arguments) {
+    return Arrays.stream(arguments).map(FOPredicate::createBinding).toArray(Object[]::new);
   }
 
   private static Object createBinding(Object arg) {
