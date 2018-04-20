@@ -1,5 +1,5 @@
 /*
- * logic2j - "Bring Logic to your Java" - Copyright (c) 2017 Laurent.Tettoni@gmail.com
+ * logic2j - "Bring Logic to your Java" - Copyright (c) 2018 Laurent.Tettoni@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates.impl.java;
+package org.logic2j.engine.predicates;
 
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
@@ -36,6 +36,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * variables (S, Q) as (A, 1), (A, 2), (A, 3), (B, 1), (B, 2), (B, 3).
  * On the contrary, invoking Supply(Q, S) will reverse the cross-product.
  */
+@Deprecated
 public class Supply extends FOPredicate {
 
   private final BindingVar[] bindingVars;
@@ -81,7 +82,6 @@ public class Supply extends FOPredicate {
       if (!couldUnifySomething) {
         throw new SolverException(this + " is unable to bind " + var + " to value " + value);
       }
-
       notifyFromVar(ivar + 1, afterUnification);
     }
     return currentVars;
