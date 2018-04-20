@@ -19,7 +19,7 @@ package org.logic2j.engine.solver;
 
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.Supply;
+import org.logic2j.engine.predicates.impl.Eq;
 import org.logic2j.engine.solver.holder.BindingVar;
 import org.logic2j.engine.solver.holder.GoalHolder;
 
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.predicates.Predicates.and;
 
@@ -41,8 +42,11 @@ public class SolverApi extends Solver {
 
     // Compose goals
     final List<Term> allGoals = new ArrayList<>();
-    if (boundBindingVars.length > 0) {
-      allGoals.add(0, new Supply(boundBindingVars));
+//    if (boundBindingVars.length > 0) {
+//      allGoals.add(0, new Supply(boundBindingVars));
+//    }
+    for (BindingVar bVar: boundBindingVars) {
+      allGoals.add(new Eq(bVar, bind(bVar.toList())));
     }
     for (Term goal: goals) {
       allGoals.add(goal);
