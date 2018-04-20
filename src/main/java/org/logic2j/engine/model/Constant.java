@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 /**
  * A typed {@link Binding} that provides a constant value (scalar) or multiple constant values (vector)
- * from various collections or generators of Java objects.
+ * from various collections or suppliers of Java objects.
  * Use static factories in {@link SimpleBindings} to instantiate {@link Constant}s.
  */
 public interface Constant<T> extends Binding<T> {

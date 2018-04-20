@@ -27,7 +27,8 @@ import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * This class represents a variable term. Variables are identified by a name (which must starts with an upper case letter) or the anonymous
+ * This class represents a variable term.
+ * Variables are identified by a name (which must starts with an upper case letter) or the anonymous
  * ('_') name.
  * Note: Instances MUST be immutable.
  * Set the level of this class' logger to DEBUG to reveal details of variables (such as the variable index) in toString().
