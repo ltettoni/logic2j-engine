@@ -18,16 +18,8 @@
 package org.logic2j.engine.solver;
 
 import org.logic2j.engine.model.Term;
-import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.Eq;
-import org.logic2j.engine.solver.holder.BindingVar;
 import org.logic2j.engine.solver.holder.GoalHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.predicates.Predicates.and;
 
@@ -36,20 +28,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  */
 public class SolverApi extends Solver {
   public GoalHolder solve(Term... goals) {
-    final Var[] vars = termApi().distinctVars(and(goals));
-    final BindingVar[] bindingVars = Arrays.stream(vars).filter(BindingVar.class::isInstance).map(BindingVar.class::cast).toArray(BindingVar[]::new);
-    final BindingVar[] boundBindingVars = Arrays.stream(bindingVars).filter(BindingVar::isBound).toArray(BindingVar[]::new);
-
-    // Compose goals
-    final List<Term> allGoals = new ArrayList<>();
-    for (BindingVar bVar: boundBindingVars) {
-      allGoals.add(new Eq(bVar, bind(bVar.toList())));
-    }
-    for (Term goal: goals) {
-      allGoals.add(goal);
-    }
-
-    final Term effective = allGoals.size() == 1 ? allGoals.get(0) : and(allGoals.toArray(new Term[0]));
+    final Term effective = goals.length == 1 ? goals[0] : and(goals);
     final Object normalized = termApi().normalize(effective);
     return new GoalHolder(this, normalized, null);
   }
