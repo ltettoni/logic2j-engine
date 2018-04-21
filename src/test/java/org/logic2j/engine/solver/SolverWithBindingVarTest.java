@@ -22,6 +22,7 @@ import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.Odd;
 import org.logic2j.engine.solver.holder.BindingVar;
+import org.logic2j.engine.solver.holder.GoalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,15 +85,14 @@ public class SolverWithBindingVarTest {
   public void retrieveCrossProductFromBoundVar() {
     final BindingVar<Integer> Q = intBVar("Q");
     final BindingVar<Integer> R = intBVar("R");
-    // Unused:  final BindingVar[] boundVars = solver.solve(new Even(Q), new Odd(R)).boundVariables();
-    // Unused - here we should pass the BindingVars as arguments such as
-    // solver.solve(new Even(Q), new Odd(R)).boundVariables(Q, R);
 
-    solver.solve(new Even(Q), new Odd(R)).boundVariables(Q, R);
-    logger.info("Result: {}", Q.getResults());
-    logger.info("Result: {}", R.getResults());
-    assertThat(Q.getResults().toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
-    assertThat(R.getResults().toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
+    final GoalHolder holder = solver.solve(new Even(Q), new Odd(R));
+    final List<Integer> qs = holder.var(Q).list();
+    final List<Integer> rs = holder.var(R).list();
+    logger.info("Result: {}", qs);
+    logger.info("Result: {}", rs);
+    assertThat(qs.toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
+    assertThat(rs.toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
   }
 
 }

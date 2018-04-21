@@ -116,17 +116,6 @@ public class BindingVar<T> extends Var<T> {
   }
 
 
-  public void addResult(Object value) {
-    if (result == null) {
-      result = new ArrayList<>();
-    }
-    ((Collection) result).add(value);
-  }
-
-  public List<T> getResults() {
-    return this.result;
-  }
-
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder(super.toString());

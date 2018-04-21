@@ -22,7 +22,6 @@ import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.extractor.ObjectFactory;
 import org.logic2j.engine.solver.listener.CountingSolutionListener;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
-import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -86,26 +85,6 @@ public class GoalHolder {
     return listener.count();
   }
 
-  /**
-   * Not yet used - we were extracting variables form the
-   *
-   * @param vars The variables to populate with the solution
-   * @return
-   */
-  public BindingVar[] boundVariables(BindingVar... vars) {
-    final CountingSolutionListener listener = new CountingSolutionListener() {
-      @Override
-      public int onSolution(UnifyContext currentVars) {
-        for (final BindingVar bv : vars) {
-          final Object reified = currentVars.reify(bv);
-          bv.addResult(reified);
-        }
-        return super.onSolution(currentVars);
-      }
-    };
-    solver.solveGoal(goal, listener);
-    return vars;
-  }
 
   /**
    * @return Solution to the whole goal. If the goal was a(X), will return a(1), a(2), etc.
