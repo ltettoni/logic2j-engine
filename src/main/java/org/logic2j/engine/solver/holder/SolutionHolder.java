@@ -351,7 +351,7 @@ public class SolutionHolder<T> implements Iterable<T> {
 
   @Override
   public String toString() {
-    return this.getClass().getSimpleName() + '(' + this.goalHolder.effectiveGoal() + ')';
+    return this.getClass().getSimpleName() + '(' + this.goalHolder + ')';
   }
 
 }
