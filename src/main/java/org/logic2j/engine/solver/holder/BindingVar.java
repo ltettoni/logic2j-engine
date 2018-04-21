@@ -22,10 +22,7 @@ import org.logic2j.engine.model.Var;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +40,7 @@ public class BindingVar<T> extends Var<T> {
    * @param theType
    * @param theName
    */
-  public BindingVar(Class<T> theType, CharSequence theName) {
+  private BindingVar(Class<T> theType, CharSequence theName) {
     this(theType, theName, (Iterable) null);
   }
 
@@ -54,7 +51,7 @@ public class BindingVar<T> extends Var<T> {
    * @param theName
    * @param input
    */
-  public BindingVar(Class<T> theType, CharSequence theName, Iterable<T> input) {
+  private BindingVar(Class<T> theType, CharSequence theName, Iterable<T> input) {
     super(theType, theName);
     this.input = input;
   }
@@ -67,7 +64,7 @@ public class BindingVar<T> extends Var<T> {
    * @param input
    */
   @SafeVarargs
-  public BindingVar(Class<T> theType, CharSequence theName, T... input) {
+  private BindingVar(Class<T> theType, CharSequence theName, T... input) {
     super(theType, theName);
     this.input = Arrays.asList(input);
   }
@@ -97,7 +94,7 @@ public class BindingVar<T> extends Var<T> {
     return new BindingVar<>(String.class, theName, values);
   }
 
-  public static BindingVar<String> strBVar(CharSequence theName, Stream<String> stream) {
+  private static BindingVar<String> strBVar(CharSequence theName, Stream<String> stream) {
     return new BindingVar<>(String.class, theName, stream.collect(Collectors.toList()));
   }
 
@@ -105,25 +102,8 @@ public class BindingVar<T> extends Var<T> {
     return new BindingVar<>(Integer.class, theName);
   }
 
-  public boolean isFree() {
-    return input == null;
-  }
-
   public boolean isBound() {
     return input != null;
-  }
-
-  public Iterable<T> iterable() {
-    return input;
-  }
-
-  /**
-   * Supply values
-   *
-   * @return The values or null when none.
-   */
-  public Iterator<T> iterator() {
-    return input == null ? null : input.iterator();
   }
 
   public List<T> toList() {
@@ -135,14 +115,6 @@ public class BindingVar<T> extends Var<T> {
     return list;
   }
 
-  public Set<T> toSet() {
-    if (this.input instanceof Set) {
-      return (Set<T>) this.input;
-    }
-    final HashSet<T> set = new HashSet<>();
-    this.input.forEach(set::add);
-    return set;
-  }
 
   public void addResult(Object value) {
     if (result == null) {

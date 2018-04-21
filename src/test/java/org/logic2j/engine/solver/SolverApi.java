@@ -42,9 +42,6 @@ public class SolverApi extends Solver {
 
     // Compose goals
     final List<Term> allGoals = new ArrayList<>();
-//    if (boundBindingVars.length > 0) {
-//      allGoals.add(0, new Supply(boundBindingVars));
-//    }
     for (BindingVar bVar: boundBindingVars) {
       allGoals.add(new Eq(bVar, bind(bVar.toList())));
     }
