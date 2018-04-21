@@ -84,7 +84,7 @@ public class GoalHolder {
     // Create the "and" conjunction of all equality predicates used to bind variables to their values, and then the original goal.
     final List<Term> effectiveGoals = new ArrayList<>();
     for (Map.Entry<Var, Constant> binding : varBindings.entrySet()) {
-      final Eq toBindVar = new Eq<>(binding.getKey(), binding.getValue());
+      final Eq toBindVar = new Eq(binding.getKey(), binding.getValue());
       effectiveGoals.add(toBindVar);
     }
     effectiveGoals.add((Term) getGoal());

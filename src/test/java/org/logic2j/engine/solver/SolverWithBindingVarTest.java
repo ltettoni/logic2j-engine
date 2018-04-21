@@ -22,7 +22,6 @@ import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.Odd;
-import org.logic2j.engine.solver.holder.BindingVar;
 import org.logic2j.engine.solver.holder.GoalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,8 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
+import static org.logic2j.engine.model.Var.strVar;
 import static org.logic2j.engine.predicates.Predicates.eq;
-import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
-import static org.logic2j.engine.solver.holder.BindingVar.strBVar;
 
 public class SolverWithBindingVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
@@ -54,33 +52,33 @@ public class SolverWithBindingVarTest {
 
   @Test
   public void supplyFrom2BoundVarS() {
-    final BindingVar<String> S = strBVar("S", "A", "B");
-    final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
-    final List<Object> list = solver.solve(eq(S, S), eq(Q, Q)).var("S").list();
+    final Var<String> S = strVar("S");
+    final Var<Integer> Q = intVar("Q");
+    final List<String> list = solver.solve(eq(S, S), eq(Q, Q)).withBoundVar(S, bind("A", "B")).withBoundVar(Q, bind(1, 2, 3)).var(S).list();
     assertThat(list.toString()).isEqualTo("[A, A, A, B, B, B]");
   }
 
   @Test
   public void supplyFrom2BoundVarQ() {
-    final BindingVar<String> S = strBVar("S", "A", "B");
-    final BindingVar<Integer> Q = intBVar("Q", 1, 2, 3);
-    final List<Integer> list = solver.solve(eq(S, S), eq(Q, Q)).var(Q).list();
+    final Var<String> S = strVar("S");
+    final Var<Integer> Q = intVar("Q");
+    final List<Integer> list = solver.solve(eq(S, S), eq(Q, Q)).withBoundVar(S, bind("A", "B")).withBoundVar(Q, bind(1, 2, 3)).var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 1, 2, 3]");
   }
 
   @Test
   public void supplyFrom2BoundVarInverse() {
-    final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
+    final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    final List<Integer> list = solver.solve(goal).var(Q).list();
+    final List<Integer> list = solver.solve(goal).withBoundVar(Q,  bind(IntStream.range(1, 20).boxed().collect(Collectors.toList()))).var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 
   @Test
   public void supplyAndFilterBoundVar() {
-    final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
+    final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
-    final List<Integer> list = solver.solve(goal).var(Q).list();
+    final List<Integer> list = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed().collect(Collectors.toList()))).var(Q).list();
     assertThat(list.toString()).isEqualTo("[2, 4, 6, 8]");
   }
 

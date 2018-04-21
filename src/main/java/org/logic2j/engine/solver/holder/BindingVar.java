@@ -20,7 +20,6 @@ package org.logic2j.engine.solver.holder;
 import org.logic2j.engine.model.Var;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,30 +53,6 @@ public class BindingVar<T> extends Var<T> {
     this.input = input;
   }
 
-  /**
-   * A "bound" {@link BindingVar} used to inject values.
-   *
-   * @param theType
-   * @param theName
-   * @param input
-   */
-  @SafeVarargs
-  private BindingVar(Class<T> theType, CharSequence theName, T... input) {
-    super(theType, theName);
-    this.input = Arrays.asList(input);
-  }
-
-  public static BindingVar<Integer> intBVar(CharSequence theName, Iterable<Integer> iterable) {
-    return new BindingVar<>(Integer.class, theName, iterable);
-  }
-
-  public static BindingVar<Integer> intBVar(CharSequence theName, Integer... values) {
-    return new BindingVar<>(Integer.class, theName, values);
-  }
-
-  public static BindingVar<String> strBVar(CharSequence theName, String... values) {
-    return new BindingVar<>(String.class, theName, values);
-  }
 
   public boolean isBound() {
     return input != null;
