@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.predicates.Predicates.and;
 
@@ -48,12 +49,14 @@ public class GoalHolder {
 
   private final Solver solver;
   private final Object goal;
+  private Object effectiveGoal;
   private final BiFunction<Object, Class, Object> termToSolutionFunction;
   private final LinkedHashMap<Var, Constant> varBindings;
 
   public GoalHolder(Solver solver, Object theGoal, BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.solver = solver;
     this.goal = theGoal;
+    this.effectiveGoal = null;
     this.termToSolutionFunction = termToSolutionFunction;
     this.varBindings = new LinkedHashMap<>();
   }
@@ -72,24 +75,35 @@ public class GoalHolder {
   /**
    * Based on the existence of bindings of free vars to constants, see {@link #withBoundVar(Var, Constant)},
    * modify the predefined goal to add Eq/2 predicates to bind the free vars to real values.
+   *
    * @return A potentially modified goal, otherwise the value of {@link #getGoal()}
    */
   public Object effectiveGoal() {
+    if (effectiveGoal != null) {
+      return effectiveGoal;
+    }
     if (varBindings.isEmpty()) {
-      return getGoal();
+      effectiveGoal = getGoal();
+    } else {
+      if (!(getGoal() instanceof Term)) {
+        throw new InvalidTermException("Goal for solving must be a Term: " + getGoal());
+      }
+      // Create the "and" conjunction of all equality predicates used to bind variables to their values, and then the original goal.
+      final List<Term> effectiveGoals = new ArrayList<>();
+      for (Map.Entry<Var, Constant> binding : varBindings.entrySet()) {
+        Constant values = binding.getValue();
+        final Var var = binding.getKey();
+        if (values.isUniqueFeed()) {
+          values = bind(values.toArray());
+        }
+        final Eq toBindVar = new Eq(var, values);
+        effectiveGoals.add(toBindVar);
+      }
+      effectiveGoals.add((Term) getGoal());
+      final Term and = and(effectiveGoals.toArray(new Term[0]));
+      effectiveGoal = termApi().normalize(and);
     }
-    if (!(getGoal() instanceof Term)) {
-      throw new InvalidTermException("Goal for solving must be a Term: " + getGoal());
-    }
-    // Create the "and" conjunction of all equality predicates used to bind variables to their values, and then the original goal.
-    final List<Term> effectiveGoals = new ArrayList<>();
-    for (Map.Entry<Var, Constant> binding : varBindings.entrySet()) {
-      final Eq toBindVar = new Eq(binding.getKey(), binding.getValue());
-      effectiveGoals.add(toBindVar);
-    }
-    effectiveGoals.add((Term) getGoal());
-    final Term and = and(effectiveGoals.toArray(new Term[0]));
-    return termApi().normalize(and);
+    return effectiveGoal;
   }
 
 
@@ -201,6 +215,7 @@ public class GoalHolder {
 
   /**
    * Public users, use {@link #effectiveGoal()} instead.
+   *
    * @return The original goal
    */
   private Object getGoal() {
@@ -245,4 +260,9 @@ public class GoalHolder {
     varBindings.put(var, binding);
     return this;
   }
+
+  public String toString() {
+    return this.getClass().getSimpleName() + "(" + this.getGoal() + ")";
+  }
+
 }
