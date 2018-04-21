@@ -77,7 +77,7 @@ public class SolutionHolder<T> implements Iterable<T> {
   public SolutionHolder(GoalHolder goalHolder, String varName, Class<? extends T> desiredTypeOfResult,
       BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.goalHolder = goalHolder;
-    this.singleVarExtractor = new SingleVarExtractor<>(goalHolder.getGoal(), varName, desiredTypeOfResult);
+    this.singleVarExtractor = new SingleVarExtractor<>(goalHolder.effectiveGoal(), varName, desiredTypeOfResult);
     this.singleVarExtractor.setTermToSolutionFunction(termToSolutionFunction);
     this.multiVarExtractor = null;
   }
@@ -95,7 +95,7 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return Holds solutions as a List of Maps
    */
   public static SolutionHolder<Map<Var, Object>> extractingMaps(GoalHolder goalHolder) {
-    return new SolutionHolder(goalHolder, new MapExtractor(goalHolder.getGoal()));
+    return new SolutionHolder(goalHolder, new MapExtractor(goalHolder.effectiveGoal()));
   }
 
   /**
@@ -105,11 +105,11 @@ public class SolutionHolder<T> implements Iterable<T> {
    * @return Holds solutions as a List of Arrays
    */
   public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder) {
-    return new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.getGoal()));
+    return new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.effectiveGoal()));
   }
 
   public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
-    return new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.getGoal(), factory));
+    return new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.effectiveGoal(), factory));
   }
 
 
@@ -236,7 +236,7 @@ public class SolutionHolder<T> implements Iterable<T> {
       logger.debug("Started producer (prolog solver engine) thread");
       // Start solving in a parallel thread, and rush to first solution (that will be called back in the listener)
       // and will wait for the main thread to extract it
-      SolutionHolder.this.goalHolder.getSolver().solveGoal(SolutionHolder.this.goalHolder.getGoal(), listener);
+      SolutionHolder.this.goalHolder.getSolver().solveGoal(SolutionHolder.this.goalHolder.effectiveGoal(), listener);
       logger.debug("Producer (prolog solver engine) thread finishes");
       // Last solution was extracted. Producer's callback won't now be called any more - so to
       // prevent the consumer for listening forever for the next solution that won't come...
@@ -344,14 +344,14 @@ public class SolutionHolder<T> implements Iterable<T> {
   }
 
   private void solveAndCheckRanges() {
-    this.goalHolder.getSolver().solveGoal(this.goalHolder.getGoal(), this.rangeListener);
+    this.goalHolder.getSolver().solveGoal(this.goalHolder.effectiveGoal(), this.rangeListener);
     this.rangeListener.checkRange();
   }
 
 
   @Override
   public String toString() {
-    return this.getClass().getSimpleName() + '(' + this.goalHolder.getGoal() + ')';
+    return this.getClass().getSimpleName() + '(' + this.goalHolder.effectiveGoal() + ')';
   }
 
 }

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
@@ -43,10 +44,11 @@ public class SolverWithBindingVarTest {
 
   @Test
   public void supplyFromBoundVar() {
-    final BindingVar<Integer> Q = intBVar("Q", IntStream.range(1, 20).boxed().collect(Collectors.toList()));
+    final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    assertThat(solver.solve(goal).count()).isEqualTo(19L);
-    final List<Integer> list = solver.solve(goal).var(Q).list();
+    final GoalHolder holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed().collect(Collectors.toList())));
+    assertThat(holder.count()).isEqualTo(19L);
+    final List<Integer> list = holder.var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 

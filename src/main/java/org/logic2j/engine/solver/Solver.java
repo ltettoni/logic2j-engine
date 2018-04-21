@@ -68,7 +68,7 @@ public class Solver {
    *
    * @param goal
    * @param solutionListener
-   * @return
+   * @return Continuation
    */
   public int solveGoal(Object goal, SolutionListener solutionListener) {
     if (termApi().isFreeVar(goal)) {

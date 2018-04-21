@@ -17,14 +17,25 @@
 
 package org.logic2j.engine.solver.holder;
 
+import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.model.Constant;
+import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
+import org.logic2j.engine.predicates.impl.Eq;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.extractor.ObjectFactory;
 import org.logic2j.engine.solver.listener.CountingSolutionListener;
 import org.logic2j.engine.solver.listener.ExistsSolutionListener;
+import org.logic2j.engine.solver.listener.SolutionListener;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+
+import static org.logic2j.engine.model.TermApiLocator.termApi;
+import static org.logic2j.engine.predicates.Predicates.and;
 
 /**
  * An intermediate class in the fluent API to extract solutions; a GoalHolder holds the state of what the user
@@ -38,19 +49,56 @@ public class GoalHolder {
   private final Solver solver;
   private final Object goal;
   private final BiFunction<Object, Class, Object> termToSolutionFunction;
+  private final LinkedHashMap<Var, Constant> varBindings;
 
   public GoalHolder(Solver solver, Object theGoal, BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.solver = solver;
     this.goal = theGoal;
     this.termToSolutionFunction = termToSolutionFunction;
+    this.varBindings = new LinkedHashMap<>();
   }
+
+  /**
+   * Entry point for solving, in case we have variable bound to values, we will prepend the goal with
+   * Eq/2 predicates that will bind the variables to the specified values
+   *
+   * @param listener
+   * @return Continuation
+   */
+  private int solve(SolutionListener listener) {
+    return solver.solveGoal(effectiveGoal(), listener);
+  }
+
+  /**
+   * Based on the existence of bindings of free vars to constants, see {@link #withBoundVar(Var, Constant)},
+   * modify the predefined goal to add Eq/2 predicates to bind the free vars to real values.
+   * @return A potentially modified goal, otherwise the value of {@link #getGoal()}
+   */
+  public Object effectiveGoal() {
+    if (varBindings.isEmpty()) {
+      return getGoal();
+    }
+    if (!(getGoal() instanceof Term)) {
+      throw new InvalidTermException("Goal for solving must be a Term: " + getGoal());
+    }
+    // Create the "and" conjunction of all equality predicates used to bind variables to their values, and then the original goal.
+    final List<Term> effectiveGoals = new ArrayList<>();
+    for (Map.Entry<Var, Constant> binding : varBindings.entrySet()) {
+      final Eq toBindVar = new Eq<>(binding.getKey(), binding.getValue());
+      effectiveGoals.add(toBindVar);
+    }
+    effectiveGoals.add((Term) getGoal());
+    final Term and = and(effectiveGoals.toArray(new Term[0]));
+    return termApi().normalize(and);
+  }
+
 
   /**
    * @return True if at least one solution can be demonstrated. Solving will stop at the first solution.
    */
   public boolean exists() {
     final ExistsSolutionListener listener = new ExistsSolutionListener();
-    solver.solveGoal(goal, listener);
+    solve(listener);
     return listener.exists();
   }
 
@@ -66,7 +114,7 @@ public class GoalHolder {
    */
   public boolean unique() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
-    solver.solveGoal(goal, listener);
+    solve(listener);
     return listener.count() == 1;
   }
 
@@ -75,13 +123,13 @@ public class GoalHolder {
    */
   public boolean multiple() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
-    solver.solveGoal(goal, listener);
+    solve(listener);
     return listener.count() > 1;
   }
 
   public long count() {
     final CountingSolutionListener listener = new CountingSolutionListener();
-    solver.solveGoal(goal, listener);
+    solve(listener);
     return listener.count();
   }
 
@@ -151,7 +199,11 @@ public class GoalHolder {
     return solver;
   }
 
-  public Object getGoal() {
+  /**
+   * Public users, use {@link #effectiveGoal()} instead.
+   * @return The original goal
+   */
+  private Object getGoal() {
     return goal;
   }
 
@@ -189,4 +241,8 @@ public class GoalHolder {
   }
 
 
+  public <T> GoalHolder withBoundVar(Var<T> var, Constant<T> binding) {
+    varBindings.put(var, binding);
+    return this;
+  }
 }
