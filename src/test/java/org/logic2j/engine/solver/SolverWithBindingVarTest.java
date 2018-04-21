@@ -19,6 +19,7 @@ package org.logic2j.engine.solver;
 
 import org.junit.Test;
 import org.logic2j.engine.model.Term;
+import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.Odd;
 import org.logic2j.engine.solver.holder.BindingVar;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
 import static org.logic2j.engine.solver.holder.BindingVar.strBVar;
@@ -83,8 +85,8 @@ public class SolverWithBindingVarTest {
 
   @Test
   public void retrieveCrossProductFromBoundVar() {
-    final BindingVar<Integer> Q = intBVar("Q");
-    final BindingVar<Integer> R = intBVar("R");
+    final Var<Integer> Q = intVar("Q");
+    final Var<Integer> R = intVar("R");
 
     final GoalHolder holder = solver.solve(new Even(Q), new Odd(R));
     final List<Integer> qs = holder.var(Q).list();

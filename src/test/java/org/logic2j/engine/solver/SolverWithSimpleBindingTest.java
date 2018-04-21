@@ -29,14 +29,14 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
-import static org.logic2j.engine.solver.holder.BindingVar.intBVar;
+import static org.logic2j.engine.model.Var.intVar;
 
 public class SolverWithSimpleBindingTest {
   private final SolverApi solver = new SolverApi();
 
   @Test
   public void supplyAndConsumeStream1() {
-    final Var<Integer> Q = intBVar("Q");
+    final Var<Integer> Q = intVar("Q");
     final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
     assertThat(solver.solve(goal).count()).isEqualTo(4L);
@@ -44,7 +44,7 @@ public class SolverWithSimpleBindingTest {
 
   @Test
   public void supplyAndConsumeStream2() {
-    final Var<Integer> Q = intBVar("Q");
+    final Var<Integer> Q = intVar("Q");
     final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
     final List<Integer> list = solver.solve(goal).var(Q).list();
@@ -56,7 +56,7 @@ public class SolverWithSimpleBindingTest {
    */
   @Test
   public void supplyAndConsumeLargeStream() {
-    final Var<Integer> Q = intBVar("Q");
+    final Var<Integer> Q = intVar("Q");
     final long largeNumber = (long) 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
     final Constant<Integer> vals = bind(new Random().ints().limit(largeNumber).boxed());
     final Term goal = new Succ<>(vals, Q);

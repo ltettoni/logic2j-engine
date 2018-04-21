@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * A {@link Var} with bound values to a Java objects.
@@ -77,29 +75,8 @@ public class BindingVar<T> extends Var<T> {
     return new BindingVar<>(Integer.class, theName, values);
   }
 
-  public static BindingVar<Integer> intBVar(CharSequence theName, Stream<Integer> stream) {
-    return new BindingVar<>(Integer.class, theName, stream.collect(Collectors.toList()));
-  }
-
-  public static BindingVar<String> strBVar(CharSequence theName) {
-    return new BindingVar<>(String.class, theName);
-  }
-
-
-  public static BindingVar<String> strBVar(CharSequence theName, Iterable<String> iterable) {
-    return new BindingVar<>(String.class, theName, iterable);
-  }
-
   public static BindingVar<String> strBVar(CharSequence theName, String... values) {
     return new BindingVar<>(String.class, theName, values);
-  }
-
-  private static BindingVar<String> strBVar(CharSequence theName, Stream<String> stream) {
-    return new BindingVar<>(String.class, theName, stream.collect(Collectors.toList()));
-  }
-
-  public static BindingVar<Integer> intBVar(CharSequence theName) {
-    return new BindingVar<>(Integer.class, theName);
   }
 
   public boolean isBound() {
