@@ -32,7 +32,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
 
 public class SolverWithSimpleBindingTest {
-  private final SolverApi solver = new SolverApi();
+  private final SolverTestHelper solver = new SolverTestHelper();
 
   @Test
   public void supplyAndConsumeStream1() {

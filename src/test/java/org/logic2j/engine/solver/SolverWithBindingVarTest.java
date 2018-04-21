@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,13 +37,13 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 
 public class SolverWithBindingVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
-  private final SolverApi solver = new SolverApi();
+  private final SolverTestHelper solver = new SolverTestHelper();
 
   @Test
   public void supplyFromBoundVar() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    final GoalHolder holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed().collect(Collectors.toList())));
+    final GoalHolder holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed()));
     assertThat(holder.count()).isEqualTo(19L);
     final List<Integer> list = holder.var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
@@ -70,7 +69,7 @@ public class SolverWithBindingVarTest {
   public void supplyFrom2BoundVarInverse() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    final List<Integer> list = solver.solve(goal).withBoundVar(Q,  bind(IntStream.range(1, 20).boxed().collect(Collectors.toList()))).var(Q).list();
+    final List<Integer> list = solver.solve(goal).withBoundVar(Q,  bind(IntStream.range(1, 20).boxed())).var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 
@@ -78,7 +77,7 @@ public class SolverWithBindingVarTest {
   public void supplyAndFilterBoundVar() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
-    final List<Integer> list = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed().collect(Collectors.toList()))).var(Q).list();
+    final List<Integer> list = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed())).var(Q).list();
     assertThat(list.toString()).isEqualTo("[2, 4, 6, 8]");
   }
 

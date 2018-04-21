@@ -24,9 +24,9 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.predicates.Predicates.and;
 
 /**
- * Higher level API only used in test cases.
+ * Higher level convenience API only used in test cases.
  */
-public class SolverApi extends Solver {
+public class SolverTestHelper extends Solver {
   public GoalHolder solve(Term... goals) {
     final Term effective = goals.length == 1 ? goals[0] : and(goals);
     final Object normalized = termApi().normalize(effective);

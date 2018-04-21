@@ -48,7 +48,7 @@ import static org.logic2j.engine.predicates.Predicates.not;
 
 public class PredicatesTest {
   private static final Logger logger = LoggerFactory.getLogger(PredicatesTest.class);
-  private final SolverApi solver = new SolverApi();
+  private final SolverTestHelper solver = new SolverTestHelper();
 
 
   @Test
