@@ -67,12 +67,12 @@ public class Pred2<T, R> extends FOPredicate {
     final Object n1 = currentVars.reify(getArg(1));
 
     if (this.image == null && isFreeVar(n1)) {
-      // If function is not defined, won't need to find solution(s) for free preimage
+      // If function is not defined, won't need to find solution(s) for image
       return CONTINUE;
     }
 
     if (this.preimage == null && isFreeVar(n0)) {
-      // If function is not invertible, won't need to find solution(s) for free image
+      // If inverse function is not defined, won't need to find solution(s) for preimage
       return CONTINUE;
     }
 
@@ -96,7 +96,7 @@ public class Pred2<T, R> extends FOPredicate {
         }
         return CONTINUE;
       } else {
-        // n1 is free, just unify in forward direction
+        // n0 is constant, n1 is free: just unify in forward direction
         final Stream<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n1, images);
       }
@@ -108,7 +108,7 @@ public class Pred2<T, R> extends FOPredicate {
         final Stream<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n0, preimages);
       } else {
-        // Two free variables - no solution
+        // Two free variables - no solution (exception: this method is overridden in predicate Eq/2)
         return CONTINUE;
       }
     }

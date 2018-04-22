@@ -220,7 +220,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * @param reified Result of {@link UnifyContext#reify(Object)}
-   * @return true if reified is not a {@link Var}, including true when reified is null
+   * @return true if reified is not a free {@link Var}, including true when reified is null
    */
   protected static boolean isConstant(Object reified) {
     return !termApi().isFreeVar(reified) && reified != anon();
