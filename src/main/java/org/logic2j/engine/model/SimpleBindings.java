@@ -193,6 +193,7 @@ public class SimpleBindings {
   }
 
   /**
+   * Bind a Java collection.
    * @param coll
    * @param <T>
    * @return A {@link Constant} that supplies several values.
@@ -259,7 +260,7 @@ public class SimpleBindings {
 
       @Override
       public boolean isUniqueFeed() {
-        return true;
+        return data==null;
       }
 
       @Override
@@ -322,7 +323,7 @@ public class SimpleBindings {
 
       @Override
       public boolean isUniqueFeed() {
-        return true;
+        return data == null;
       }
 
       @Override
@@ -346,7 +347,12 @@ public class SimpleBindings {
       @Override
       public boolean contains(T value) {
         consumeNow();
-        return Arrays.stream(this.data).anyMatch(value::equals);
+        for (T elem : this.data) {
+          if (value.equals(elem)) {
+            return true;
+          }
+        }
+        return false;
       }
 
       @Override
@@ -359,12 +365,11 @@ public class SimpleBindings {
         if (this.data == null) {
           final List<T> coll = new ArrayList<>();
           iterator.forEachRemaining(coll::add);
-          final Object[] asObjects = coll.toArray();
-          if (asObjects.length == 0) {
+          if (coll.size() == 0) {
             throw new IllegalArgumentException("Empty Constant iterator, cannot determine data type of instances.");
           }
-          final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
-          this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
+          final Class<T> elementType = (Class<T>) coll.get(0).getClass();
+          this.data = coll.stream().toArray(n -> (T[]) Array.newInstance(elementType, n));
         }
       }
 
