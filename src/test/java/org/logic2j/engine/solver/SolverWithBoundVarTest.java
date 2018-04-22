@@ -35,8 +35,8 @@ import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.strVar;
 import static org.logic2j.engine.predicates.Predicates.eq;
 
-public class SolverWithBindingVarTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverWithBindingVarTest.class);
+public class SolverWithBoundVarTest {
+  private static final Logger logger = LoggerFactory.getLogger(SolverWithBoundVarTest.class);
   private final SolverTestHelper solver = new SolverTestHelper();
 
   @Test
