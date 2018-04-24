@@ -19,6 +19,7 @@ package org.logic2j.engine.solver.extractor;
 /**
  * A Single Abstract Method interface to instantiate objects from an array of Objects.
  */
+@FunctionalInterface
 public interface ObjectFactory<T> {
 
   T valueOf(Object[] values);

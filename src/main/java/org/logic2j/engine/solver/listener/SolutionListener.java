@@ -25,8 +25,9 @@ import org.logic2j.engine.unify.UnifyContext;
  * The lowest-level API through which the inference engine provides solutions.
  * The return values of the two methods are defined in interface Continuation.
  * Never return a positive value this is used internally to manage the CUT predicate.
- * TODO Should be renamed SolutionConsumer and extend Consumer?
+ * TODO Should be renamed SolutionConsumer and extend Consumer? Does this make sense re. composability (andThen())?
  */
+@FunctionalInterface
 public interface SolutionListener {
 
 
@@ -35,7 +36,8 @@ public interface SolutionListener {
    * goal's variables.
    *
    * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
-   * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
+   * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation).
+   * Never return a positive number this reserved for the backtracking cut '!' operator.
    */
   int onSolution(UnifyContext currentVars);
 

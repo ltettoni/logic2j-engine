@@ -26,6 +26,7 @@ import org.logic2j.engine.unify.UnifyContext;
  * The unique method receives the monad with all the current state of variables, whereas the implementers of
  * this interface will remember what Term or Var needs to be extracted.
  */
+@FunctionalInterface
 public interface SolutionExtractor<T> {
 
   T extractSolution(UnifyContext currentVars);
