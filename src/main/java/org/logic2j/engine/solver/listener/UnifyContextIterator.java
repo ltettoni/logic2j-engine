@@ -50,7 +50,7 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
 
   /**
    * Create a new {@link UnifyContextIterator} from two existing, both must have the same variable,
-   * and the result will iterate on the UNION set of the left-hand-side and the right-hand-side arguments, in respected order.
+   * and the result will iterate on the INTERSECTION set of the left-hand-side and the right-hand-side arguments, in respected order.
    *
    * @param currentVars
    * @param multiLHS
@@ -70,7 +70,7 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
     }
     this.currentVars = currentVars;
     this.var = left.var;
-    // Compose the UNION set of the LHS and RHS, in same order
+    // Compose the INTERSECTION set of the LHS and RHS, in same order
     this.values = new ArrayList<>(left.values);
     this.values.retainAll(right.values);
     this.valueIterator = this.values.iterator();
@@ -90,8 +90,8 @@ public class UnifyContextIterator implements Iterator<UnifyContext> {
    */
   @Override
   public UnifyContext next() {
-    final Object next = this.valueIterator.next();
-    return currentVars.unify(this.var, next);
+    final Object nextVal = this.valueIterator.next();
+    return currentVars.unify(this.var, nextVal);
   }
 
   @Override
