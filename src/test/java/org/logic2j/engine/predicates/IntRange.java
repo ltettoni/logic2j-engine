@@ -20,9 +20,7 @@ package org.logic2j.engine.predicates;
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
-import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,9 +57,13 @@ public class IntRange extends FOPredicate {
     if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
 
-      final UnifyContextIterator unifyContextIterator = new UnifyContextIterator(currentVars, (Var) iterating, values);
-      logger.info("{} is going to notify multi solutions: {}", this, values);
-      return currentVars.getSolutionListener().onSolutions(unifyContextIterator);
+      logger.info("{} is going to notify solutions: {}", this, values);
+      for (int increment = min; increment < max; increment++) {
+        final int cont = unifyAndNotify(currentVars, iterating, increment);
+        if (cont != CONTINUE) {
+          return cont;
+        }
+      }
     } else {
       // Check: notify one solution for any binding within range
       for (Object val : (Iterable<Object>) stream(iterating)::iterator) {
@@ -73,8 +75,7 @@ public class IntRange extends FOPredicate {
           }
         }
       }
-      return CONTINUE;
     }
+    return CONTINUE;
   }
-
 }

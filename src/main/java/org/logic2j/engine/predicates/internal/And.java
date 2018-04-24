@@ -22,12 +22,9 @@ import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.SolutionListener;
-import org.logic2j.engine.solver.listener.UnifyContextIterator;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
 
 /**
  * Logical AND.
@@ -84,27 +81,6 @@ public class And extends SolverPredicate implements RDBCompatiblePredicate {
             logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
           }
           return currentVars.getSolver().solveInternalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
-        }
-
-        @Override
-        public int onSolutions(final Iterator<UnifyContext> multiLHS) {
-          final int nextIndex = index + 1;
-          final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
-          final SolutionListener subListener = new SolutionListener() {
-            @Override
-            public int onSolution(UnifyContext currentVars) {
-              throw new UnsupportedOperationException("Should not be here");
-            }
-
-            @Override
-            public int onSolutions(Iterator<UnifyContext> multiRHS) {
-              logger.info("AND sub-listener got multiLHS={} and multiRHS={}", multiLHS, multiRHS);
-              final UnifyContextIterator combined = new UnifyContextIterator(currentVars, multiLHS, multiRHS);
-              return andingListeners[nextIndex].onSolutions(combined);
-            }
-
-          };
-          return solver.solveInternalRecursive(rhs, currentVars.withListener(subListener), cutLevel);
         }
 
         @Override

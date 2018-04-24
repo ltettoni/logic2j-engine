@@ -136,9 +136,8 @@ public abstract class FOPredicate extends Struct {
    */
   protected int unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
     final UnifyContext afterUnification = currentVars.unify(t1, t2);
-
-    final boolean couldUnifySomething = afterUnification != null;
-    return notifySolutionIf(couldUnifySomething, afterUnification);
+    final boolean didUnify = afterUnification != null;
+    return notifySolutionIf(didUnify, afterUnification);
   }
 
   /**

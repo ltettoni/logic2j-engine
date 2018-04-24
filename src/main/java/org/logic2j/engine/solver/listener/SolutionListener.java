@@ -21,10 +21,6 @@ package org.logic2j.engine.solver.listener;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.unify.UnifyContext;
 
-import java.util.Iterator;
-
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
-
 /**
  * The lowest-level API through which the inference engine provides solutions.
  * The return values of the two methods are defined in interface Continuation.
@@ -43,25 +39,4 @@ public interface SolutionListener {
    */
   int onSolution(UnifyContext currentVars);
 
-  /**
-   * Allow specifying multiple solutions in one call to the listener.
-   *
-   * @param allSolutions
-   * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
-   * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation). Never return a positive number.
-   */
-  default int onSolutions(Iterator<UnifyContext> allSolutions) {
-    while (allSolutions.hasNext()) {
-      final UnifyContext next = allSolutions.next();
-      final int continuation = this.onSolution(next);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  default int onSolutions(Iterable<UnifyContext> allSolutions) {
-    return onSolutions(allSolutions.iterator());
-  }
 }
