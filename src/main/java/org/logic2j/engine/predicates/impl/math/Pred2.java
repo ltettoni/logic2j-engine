@@ -87,7 +87,8 @@ public class Pred2<T, R> extends FOPredicate {
           for (final R c1 : values1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
-            final boolean found = Arrays.stream(images).anyMatch(v -> v.equals(c1));
+            final boolean found = Arrays.stream(images).anyMatch(c1::equals);
+            // TODO Perhaps we need to emit as many solutions as matching elements
             final int continuation = notifySolutionIf(found, currentVars);
             if (continuation != CONTINUE) {
               return continuation;
@@ -100,9 +101,7 @@ public class Pred2<T, R> extends FOPredicate {
         final Stream<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
         return unifyAndNotifyMany(currentVars, n1, images);
       }
-    }
-
-    if (isFreeVar(n0)) {
+    } else if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
         final Stream<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
