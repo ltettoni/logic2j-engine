@@ -31,7 +31,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * 2-arguments predicates with a functional relation between the two argument(s),
- * could be a bijection functions, or any mapping actually.
+ * could be a bijection (with 2 functions), or any mapping actually.
  */
 public class Pred2<T, R> extends FOPredicate {
 
