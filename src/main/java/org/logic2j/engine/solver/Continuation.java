@@ -30,6 +30,11 @@ import org.logic2j.engine.unify.UnifyContext;
  * @author tettoni
  */
 public final class Continuation {
+
+  private Continuation() {
+    // Forbid instantiation
+  }
+
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
    * must return for the inference engine to continue solving (search for alternate solutions).

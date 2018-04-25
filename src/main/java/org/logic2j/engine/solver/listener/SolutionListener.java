@@ -25,7 +25,6 @@ import org.logic2j.engine.unify.UnifyContext;
  * The lowest-level API through which the inference engine provides solutions.
  * The return values of the two methods are defined in interface Continuation.
  * Never return a positive value this is used internally to manage the CUT predicate.
- * TODO Should be renamed SolutionConsumer and extend Consumer? Does this make sense re. composability (andThen())?
  */
 @FunctionalInterface
 public interface SolutionListener {

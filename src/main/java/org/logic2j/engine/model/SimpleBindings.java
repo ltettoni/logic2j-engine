@@ -365,7 +365,7 @@ public class SimpleBindings {
         if (this.data == null) {
           final List<T> coll = new ArrayList<>();
           iterator.forEachRemaining(coll::add);
-          if (coll.size() == 0) {
+          if (coll.isEmpty()) {
             throw new IllegalArgumentException("Empty Constant iterator, cannot determine data type of instances.");
           }
           final Class<T> elementType = (Class<T>) coll.get(0).getClass();

@@ -50,9 +50,6 @@ public class SingleVarSolutionListener<T> extends RangeSolutionListener<T> {
   @Override
   public int onSolution(UnifyContext currentVars) {
     final T solution = extractor.extractSolution(currentVars);
-    // Implementation note: there is an opportunity to improve the extraction of distinct Sets.
-    // TODO In this implementation, "results" is a List and we do the set operation later on after all results
-    // have been extracted. This is quite inefficient.
     results.add(solution);
     return super.onSolution(currentVars);
   }
