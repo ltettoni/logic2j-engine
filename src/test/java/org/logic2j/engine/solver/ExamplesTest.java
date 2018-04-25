@@ -33,7 +33,7 @@ import static org.logic2j.engine.model.Var.intVar;
  * Examples to explain what logic2j-engine is.
  */
 public class ExamplesTest {
-  private final SolverTestHelper solver = new SolverTestHelper();
+  private final Solver solver = new Solver();
 
   /**
    * Solving the problem: find all digit integers (0..9) for which the

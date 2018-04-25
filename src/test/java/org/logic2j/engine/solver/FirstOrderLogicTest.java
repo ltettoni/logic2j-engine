@@ -38,7 +38,7 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 import static org.logic2j.engine.predicates.Predicates.or;
 
 public class FirstOrderLogicTest {
-  private final SolverTestHelper solver = new SolverTestHelper();
+  private final Solver solver = new Solver();
 
   @Test
   public void sampleData() {

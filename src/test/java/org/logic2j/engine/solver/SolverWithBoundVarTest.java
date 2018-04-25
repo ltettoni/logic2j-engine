@@ -37,7 +37,7 @@ import static org.logic2j.engine.predicates.Predicates.eq;
 
 public class SolverWithBoundVarTest {
   private static final Logger logger = LoggerFactory.getLogger(SolverWithBoundVarTest.class);
-  private final SolverTestHelper solver = new SolverTestHelper();
+  private final Solver solver = new Solver();
 
   @Test
   public void supplyFromBoundVar() {

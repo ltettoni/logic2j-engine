@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.math.function.Length;
-import org.logic2j.engine.solver.SolverTestHelper;
+import org.logic2j.engine.solver.Solver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -32,7 +32,7 @@ import static org.logic2j.engine.model.Var.strVar;
  * Test the Length operator.
  */
 public class LengthTest {
-  private final SolverTestHelper solver = new SolverTestHelper();
+  private final Solver solver = new Solver();
 
   @Test
   public void twoVars() {

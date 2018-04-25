@@ -22,17 +22,20 @@ import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.Logic2jException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
+import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Call;
 import org.logic2j.engine.predicates.internal.Cut;
 import org.logic2j.engine.predicates.internal.Or;
 import org.logic2j.engine.predicates.internal.SolverPredicate;
+import org.logic2j.engine.solver.holder.GoalHolder;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 import org.logic2j.engine.util.ProfilingInfo;
 
 import static org.logic2j.engine.model.TermApiLocator.termApi;
+import static org.logic2j.engine.predicates.Predicates.and;
 
 /**
  * Solve goals - that's the core of the engine, the resolution algorithm is in this class.
@@ -61,6 +64,17 @@ public class Solver {
    */
   protected boolean isProfiling() {
     return false;
+  }
+
+  /**
+   * Higher-level solver, delaying execution of a conjuction (AND) of goals.
+   * @param goals
+   * @return The {@link GoalHolder} that delays execution until you tell what you want to extract.
+   */
+  public GoalHolder solve(Term... goals) {
+    final Term effective = goals.length == 1 ? goals[0] : and(goals);
+    final Object normalized = termApi().normalize(effective);
+    return new GoalHolder(this, normalized, null);
   }
 
   /**
