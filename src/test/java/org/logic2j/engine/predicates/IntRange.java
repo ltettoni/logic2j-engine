@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
@@ -39,6 +40,10 @@ public class IntRange extends FOPredicate {
 
   public IntRange(Binding<Integer> min, final Binding<Integer> middle, Binding<Integer> max) {
     super("intRange", min, middle, max);
+  }
+
+  public IntRange(Integer min, final Binding<Integer> middle, Integer max) {
+    this(bind(min), middle, bind(max));
   }
 
 
