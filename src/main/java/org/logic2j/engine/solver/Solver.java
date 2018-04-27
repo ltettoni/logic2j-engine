@@ -50,6 +50,11 @@ import static org.logic2j.engine.predicates.Predicates.and;
 public class Solver {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Solver.class);
 
+  /**
+   * Recursion counter uses positive numbers exclusively, see algorithm described in {@link Cut}
+   */
+  private static final int INITIAL_CUT_LEVEL = 1;
+
 
   /**
    * Do we solve the ";" (OR) predicate internally here, or in the predicate.
@@ -117,7 +122,7 @@ public class Solver {
     if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
-    return solveInternalRecursive(goal, currentVars, /* Recursion counter uses positive numbers */1);
+    return solveInternalRecursive(goal, currentVars, INITIAL_CUT_LEVEL);
   }
 
 
