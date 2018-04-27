@@ -63,8 +63,9 @@ public class Cut extends SolverPredicate {
       // Or downstream wanted to abort, in which case we cut it anyway that leads to the same.
       return cutLevel;
     } else {
-      // We've got a cut from processing downstream solutions, we don't need to cut so return what we've received
+      // We've got a cut from processing downstream solutions
       assert downstreamContinuation <= cutLevel;
+      // Just propagate (TODO Explain how it works)
       return downstreamContinuation;
     }
   }
