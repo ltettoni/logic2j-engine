@@ -21,7 +21,8 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
- * Codes that the application or library returns to specify the behaviour that the inference engine should take after
+ * Usual codes that the applications or libraries should return,
+ * that specify the behaviour that the inference engine should take after
  * a solution was found, via
  * {@link SolutionListener#onSolution(UnifyContext)}.
  * <p>
@@ -37,12 +38,13 @@ public final class Continuation {
 
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
-   * must return for the inference engine to continue solving (search for alternate solutions).
+   * must return for the inference engine to continue solving (searching for alternate solutions).
    */
   public static final int CONTINUE = 0;
+
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
-   * must return for the inference engine to stop solving (ie. means caller requests abort).
+   * must return for the inference engine to abort solving (ie. means aborting upon explicit request).
    */
   public static final int USER_ABORT = -1;
 
