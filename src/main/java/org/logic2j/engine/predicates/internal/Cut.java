@@ -22,7 +22,19 @@ import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * Provides one solution and cuts backtracking.
- * The implementation is hard-coded in the Solver, hence we do not provide it here.
+ * When a CUT appears in a clause, it will succeed with one solution and prevent the solver from:
+ * (i) bactracking for other solutions to any terms that precede the CUT in the same clause,
+ * and (ii) considering any further matching clause (fact or
+ * rule) for continuing to solve the parent (calling) goal.
+ *
+ * Algorithm:
+ * - Each time the solver starts iterating from the first clause (from a Prolog theory) in order to prove a goal,
+ *   the recursion counter "cutLevel" is incremented. Solving the initial query starts with cutLevel=1.
+ * - Executing the CUT will invoke the current SolutionListener a single time, without binding any variable.
+ * - The ex
+ *
+ *
+ * Note: The implementation is also hard-coded in the Solver.
  */
 public class Cut extends SolverPredicate {
   public Cut() {
@@ -39,20 +51,21 @@ public class Cut extends SolverPredicate {
    *
    * @param currentVars
    * @param cutLevel
-   * @return
+   * @return Usually will return cutLevel >= 1, meaning caller must stop searching for alternatives.
    */
   public static int cutLogic(UnifyContext currentVars, int cutLevel) {
-    // Cut IS a valid solution in itself. We just ignore what the application asks (via return value) us to do next.
-    final int continuationFromCaller =
-        currentVars.getSolutionListener().onSolution(currentVars);// Signalling one valid solution, but ignoring return value
+    // Cut IS a valid solution in itself. We do not bind any variable but call a single solution.
+    final int downstreamContinuation = currentVars.getSolutionListener().onSolution(currentVars);
+    // When return from the solution above, this means we backtrack ! We must tell our caller that CUT was executed!
 
-    if (continuationFromCaller != Continuation.CONTINUE && continuationFromCaller > 0) {
-      // We've got a cut from the solution listener
-      return continuationFromCaller;
-    } else {
-      // The solution listener notified either a CONTINUE or a FAIL.
-      // Stopping the backtracking here
+    if (downstreamContinuation == Continuation.CONTINUE || downstreamContinuation < 1) {
+      // We are in a typical case: downstream wanted to continue but we will have to cut it.
+      // Or downstream wanted to abort, in which case we cut it anyway that leads to the same.
       return cutLevel;
+    } else {
+      // We've got a cut from processing downstream solutions, we don't need to cut so return what we've received
+      assert downstreamContinuation <= cutLevel;
+      return downstreamContinuation;
     }
   }
 }
