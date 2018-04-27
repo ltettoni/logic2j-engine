@@ -189,7 +189,7 @@ public class Solver {
     else if (Struct.FUNCTOR_CALL == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       result = Call.callLogic(goalStruct, currentVars, cutLevel);
     }
-    // The CUT functor
+    // The CUT functor, all the trick is in the returned value, see comments in the Cut class.
     else if (Struct.FUNCTOR_CUT == functor) {
       result = Cut.cutLogic(currentVars, cutLevel);
     }
@@ -206,6 +206,7 @@ public class Solver {
     else {
       //---------------------------------------------------------------------------
       // Regular prolog inference rule: goal :- subGoal
+      // Note: logic to handle the CUT goal here (incrementing cutLevel)
       //---------------------------------------------------------------------------
       result = solveAgainstClauseProviders(goalTerm, currentVars, cutLevel + 1);
 

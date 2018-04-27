@@ -36,7 +36,7 @@ public interface SolutionListener {
    *
    * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
    * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation).
-   * Never return a positive number this reserved for the backtracking cut '!' operator.
+   * Never return a positive number this is reserved for the backtracking CUT goal.
    */
   int onSolution(UnifyContext currentVars);
 
