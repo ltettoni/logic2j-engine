@@ -80,7 +80,7 @@ public class And extends SolverPredicate implements RDBCompatiblePredicate {
           if (logger.isDebugEnabled()) {
             logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
           }
-          return currentVars.getSolver().solveInternalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
+          return solver.solveInternalRecursive(rhs, currentVars.withListener(andingListeners[nextIndex]), cutLevel);
         }
 
         @Override
