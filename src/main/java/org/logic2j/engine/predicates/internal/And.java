@@ -20,6 +20,7 @@ package org.logic2j.engine.predicates.internal;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.external.RDBCompatiblePredicate;
+import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -96,4 +97,46 @@ public class And extends SolverPredicate implements RDBCompatiblePredicate {
     return solver.solveInternalRecursive(lhs, currentVars.withListener(andingListeners[0]), cutLevel);
   }
 
+  public int newPredicateLogic(UnifyContext currentVars, int cutLevel) {
+    final int arity = this.getArity();
+
+    final SolutionListener[] andingListeners = new SolutionListener[arity];
+    // The last listener is the one that called us (typically the one of the application, if this is the outermost "AND")
+    andingListeners[arity - 1] = currentVars.getSolutionListener();
+    // Allocates N-1 andingListeners, usually this means one.
+    // On solution, each will trigger solving of the next term
+    final Object[] goalStructArgs = this.getArgs();
+    final Object lhs = goalStructArgs[0];
+    for (int i = 0; i < arity - 1; i++) {
+      final int index = i;
+      andingListeners[index] = new SolutionListener() {
+
+        @Override
+        public int onSolution(UnifyContext currentVars) {
+          final int nextIndex = index + 1;
+          final Object rhs = goalStructArgs[nextIndex]; // Usually the right-hand-side of a binary ','
+          if (logger.isDebugEnabled()) {
+            logger.debug("{}: onSolution() called; will now solve rhs={}", this, rhs);
+          }
+          if (rhs instanceof SolverPredicate) {
+            return ((SolverPredicate) rhs).predicateLogic(currentVars.withListener(andingListeners[nextIndex]), cutLevel);
+          }
+          return ((FOPredicate)rhs).predicateLogic(currentVars.withListener(andingListeners[nextIndex]));
+        }
+
+        @Override
+        public String toString() {
+          return "AND sub-listener to " + lhs;
+        }
+      };
+    }
+    // Solve the first goal, redirecting all solutions to the first listener defined above
+    if (logger.isDebugEnabled()) {
+      logger.debug("Handling AND, arity={}, will now solve lhs={}", arity, currentVars.reify(lhs));
+    }
+    if (lhs instanceof SolverPredicate) {
+      return ((SolverPredicate) lhs).predicateLogic(currentVars.withListener(andingListeners[0]), cutLevel);
+    }
+    return ((FOPredicate)lhs).predicateLogic(currentVars.withListener(andingListeners[0]));
+  }
 }
