@@ -62,7 +62,7 @@ public class Solver {
    */
   protected boolean isInternalOr() {
     return true;
-  } // FIXME Bug with false on a number of test case
+  } // FIXME Still dubious re. use of internal or and its behaviour with Cut. See note in logic2j overloaded method
 
   /**
    * Do we acquire profiling information (number of inferences, etc)
