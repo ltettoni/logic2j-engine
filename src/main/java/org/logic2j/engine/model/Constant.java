@@ -17,6 +17,8 @@
 
 package org.logic2j.engine.model;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -67,4 +69,7 @@ public interface Constant<T> extends Binding<T> {
    */
   Stream<T> toStream();
 
+  default List<T> toList() {
+    return Arrays.asList(toArray());
+  }
 }

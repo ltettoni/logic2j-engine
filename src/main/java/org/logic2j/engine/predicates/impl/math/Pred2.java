@@ -24,6 +24,7 @@ import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -82,8 +83,8 @@ public class Pred2<T, R> extends FOPredicate {
   protected int unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final R[] values1 = FOPredicate.<R>stream(n1).toArray(n -> (R[]) new Object[n]);
-        for (T c0 : (Iterable<T>) FOPredicate.<T>stream(n0)::iterator) {
+        final List<R> values1 = FOPredicate.list(n1);
+        for (T c0 : FOPredicate.<T>list(n0)) {
           for (final R c1 : values1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
@@ -111,7 +112,6 @@ public class Pred2<T, R> extends FOPredicate {
         return CONTINUE;
       }
     }
-
     throw new SolverException("Should never be here");
   }
 

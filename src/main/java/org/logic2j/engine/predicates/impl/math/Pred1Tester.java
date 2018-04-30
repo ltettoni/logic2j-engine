@@ -24,6 +24,7 @@ import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.function.Predicate;
 
+import static java.lang.String.format;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
@@ -49,10 +50,10 @@ public class Pred1Tester<T> extends FOPredicate {
 
   @Override
   public final int predicateLogic(UnifyContext currentVars) {
-    final Object n0 = currentVars.reify(getArg(0));
+    final Object reified = currentVars.reify(getArg(0));
 
-    if (isConstant(n0)) {
-      for (T c0 : (Iterable<T>) FOPredicate.<T>stream(n0)::iterator) {
+    if (isConstant(reified)) {
+      for (T c0 : FOPredicate.<T>list(reified)) {
         final boolean found = this.test.test(c0);
         final int continuation = notifySolutionIf(found, currentVars);
         if (continuation != CONTINUE) {
@@ -60,14 +61,13 @@ public class Pred1Tester<T> extends FOPredicate {
         }
       }
       return CONTINUE;
-    }
-
-    if (isFreeVar(n0)) {
+    } else if (isFreeVar(reified)) {
       // free variables - no solution
       return CONTINUE;
+    } else {
+      throw new SolverException(format("Should not be handling %s in %s", reified, this));
     }
 
-    throw new SolverException("Should never be here");
   }
 
   // --------------------------------------------------------------------------
