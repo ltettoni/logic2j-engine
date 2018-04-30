@@ -27,7 +27,9 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
@@ -160,6 +162,16 @@ public abstract class FOPredicate extends Struct {
     return CONTINUE;
   }
 
+  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, List<T> values) {
+    for (final Object value : values) {
+      final int continuation = unifyAndNotify(currentVars, t1, value);
+      if (continuation != CONTINUE) {
+        return continuation;
+      }
+    }
+    return CONTINUE;
+  }
+
   protected int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
     for (final Object value : values) {
       final int continuation = unifyAndNotify(currentVars, t1, value);
@@ -180,7 +192,7 @@ public abstract class FOPredicate extends Struct {
       return unifyAndNotify(currentVars, constant, reified);
     }
     if (isConstant(reified)) {
-      return unifyAndNotifyMany(currentVars, constant, stream(reified));
+      return unifyAndNotifyMany(currentVars, constant, list(reified));
     }
     return CONTINUE;
   }
@@ -203,6 +215,19 @@ public abstract class FOPredicate extends Struct {
       throw new InvalidTermException(
           "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }
+  }
+
+
+
+  protected static <Q> List<Q> list(Object reified) {
+    if (reified == null || isFreeVar(reified)) {
+      return Collections.emptyList();
+    }
+    if (reified instanceof Constant<?>) {
+      return ((Constant<Q>) reified).toList();
+    }
+    // Other object: will be a scalar
+    return Collections.singletonList((Q) reified);
   }
 
 

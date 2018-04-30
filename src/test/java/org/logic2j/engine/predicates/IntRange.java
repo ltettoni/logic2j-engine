@@ -71,7 +71,7 @@ public class IntRange extends FOPredicate {
       }
     } else {
       // Check: notify one solution for any binding within range
-      for (Object val : (Iterable<Object>) stream(iterating)::iterator) {
+      for (Object val : list(iterating)) {
         if (val instanceof Number) {
           final int v = ((Number) val).intValue();
           final int cont = notifySolutionIf(min <= v && v < max, currentVars);

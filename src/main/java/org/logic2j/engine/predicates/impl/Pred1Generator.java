@@ -18,12 +18,14 @@
 package org.logic2j.engine.predicates.impl;
 
 
+import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.lang.String.format;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
@@ -55,11 +57,9 @@ public abstract class Pred1Generator<T> extends FOPredicate {
         return unifyAndNotifyMany(currentVars, reified, allowedValues.toArray());
       }
       return CONTINUE;
-    }
-
-    if (isConstant(reified)) {
+    } else if (isConstant(reified)) {
       // Variable is bound to a value
-      for (T val : (Iterable<T>) FOPredicate.<T>stream(reified)::iterator) {
+      for (T val : FOPredicate.<T>list(reified)) {
         final boolean contains = allowedValues.contains(val);
         final int continuation = notifySolutionIf(contains, currentVars);
         if (continuation != CONTINUE) {
@@ -68,8 +68,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
       }
       return CONTINUE;
     } else {
-      logger.warn("Cannot store instant value {}", reified);
-      return CONTINUE;
+      throw new SolverException(format("Should not be handling %s in %s", reified, this));
     }
   }
 }
