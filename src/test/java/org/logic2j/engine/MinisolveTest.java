@@ -44,7 +44,27 @@ public class MinisolveTest {
   private static final Logger logger = LoggerFactory.getLogger(MinisolveTest.class);
 
   @Test
-  public void justUnifyMultipleBinding() {
+  public void unifyAndNotify_single_multiple() {
+    final SolutionListener listen = mock(SolutionListener.class);
+
+    final UnifyContext initial = new UnifyContext(null, listen);
+    final int cont = initial.unifyAndNotify(3, bind(1,2,3,4));
+    assertThat(cont).isEqualTo(CONTINUE);
+    verify(listen).onSolution(any());
+  }
+
+  @Test
+  public void unifyAndNotify_multiple_multiple() {
+    final SolutionListener listen = mock(SolutionListener.class);
+
+    final UnifyContext initial = new UnifyContext(null, listen);
+    final int cont = initial.unifyAndNotify(bind(1,2,3,4,5,6), bind(0,8,3,2,9,4));
+    assertThat(cont).isEqualTo(CONTINUE);
+    verify(listen, times(3)).onSolution(any());
+  }
+
+  @Test
+  public void unifyAndNotify_var_multiple() {
     final SolutionListener listen = mock(SolutionListener.class);
 
     final UnifyContext initial = new UnifyContext(null, listen);
