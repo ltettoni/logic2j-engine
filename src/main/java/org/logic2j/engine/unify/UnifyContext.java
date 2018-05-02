@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.unify;
 
+import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.DataFact;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
@@ -26,8 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.logic2j.engine.model.TermApiLocator.termApi;
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * A monad-like object that allows dereferencing variables to their effective current values,
@@ -283,6 +286,41 @@ public class UnifyContext {
     }
     return runningMonad;
   }
+
+
+
+  public int unifyAndNotify(Object term1, Object term2) {
+    // In case of multiple binding on term1, recurse on its elements.
+    if (term1 instanceof Constant) {
+      final List<?> values1 = ((Constant) term1).toList();
+      for (Object value1: values1) {
+        final int cont = unifyAndNotify(value1, term2);
+        if (cont != CONTINUE) {
+          return cont;
+        }
+      }
+      return CONTINUE;
+    }
+    // In case of multiple binding on term2, recurse on its elements.
+    if (term2 instanceof Constant) {
+      final List<?> values2 = ((Constant) term2).toList();
+      for (Object value2: values2) {
+        final int cont = unifyAndNotify(term1, value2);
+        if (cont != CONTINUE) {
+          return cont;
+        }
+      }
+      return CONTINUE;
+    }
+    // The "normal" case
+    final UnifyContext afterUnification = unify(term1, term2);
+    final boolean didUnify = afterUnification != null;
+    if (didUnify) {
+      return this.getSolutionListener().onSolution(afterUnification);
+    }
+    return CONTINUE;
+  }
+
 
   // --------------------------------------------------------------------------
   // Reify values

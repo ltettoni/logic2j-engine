@@ -29,15 +29,32 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class MinisolveTest {
   private static final Logger logger = LoggerFactory.getLogger(MinisolveTest.class);
-  
+
+  @Test
+  public void justUnifyMultipleBinding() {
+    final SolutionListener listen = mock(SolutionListener.class);
+
+    final UnifyContext initial = new UnifyContext(null, listen);
+    final Var<Integer> X = intVar("X");
+    termApi().normalize(X);
+    final int cont = initial.unifyAndNotify(X, bind(1,2,3,4));
+    assertThat(cont).isEqualTo(CONTINUE);
+    verify(listen, times(4)).onSolution(any());
+  }
+
   @Test
   public void evenGenerateOnConstant() {
     final FOPredicate goal = new Even(bind(1,2,3,4));
