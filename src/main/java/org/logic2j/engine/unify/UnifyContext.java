@@ -289,6 +289,16 @@ public class UnifyContext {
 
 
 
+  /**
+   * Perform the unification and, when successful, emit a solution. This method works for multiple values
+   * on both term1 and term2, therefore several solutions may be emitted.
+   * @param term1 Any object, in particular {@link org.logic2j.engine.model.Binding} such as {@link Var} or {@link Constant}; multiple values
+   *              supported
+   * @param term2 Any object, in particular {@link org.logic2j.engine.model.Binding} such as {@link Var} or {@link Constant}; multiple values
+   *              supported
+   * @return The result of the last {@link SolutionListener#onSolution(UnifyContext)}, or the first that returned anything else than
+   * Continuation#CONTINUE.
+   */
   public int unifyAndNotify(Object term1, Object term2) {
     // In case of multiple binding on term1, recurse on its elements.
     if (term1 instanceof Constant) {
