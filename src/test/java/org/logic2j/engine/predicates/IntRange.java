@@ -25,12 +25,9 @@ import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * IntRange(min, middle, max) is true when min <= middle < max.
@@ -59,28 +56,6 @@ public class IntRange extends FOPredicate {
     final int min = ((Constant<Integer>) minBound).toScalar();
     final int max = ((Constant<Integer>) maxBound).toScalar();
 
-    if (isFreeVar(iterating)) {
-      final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
-
-      logger.info("{} is going to notify solutions: {}", this, values);
-      for (int increment = min; increment < max; increment++) {
-        final int cont = unifyAndNotify(currentVars, iterating, increment);
-        if (cont != CONTINUE) {
-          return cont;
-        }
-      }
-    } else {
-      // Check: notify one solution for any binding within range
-      for (Object val : list(iterating)) {
-        if (val instanceof Number) {
-          final int v = ((Number) val).intValue();
-          final int cont = notifySolutionIf(min <= v && v < max, currentVars);
-          if (cont != CONTINUE) {
-            return cont;
-          }
-        }
-      }
-    }
-    return CONTINUE;
+    return currentVars.unifyAndNotify(iterating, bind(IntStream.range(min, max).boxed()));
   }
 }

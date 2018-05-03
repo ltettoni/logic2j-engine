@@ -23,6 +23,7 @@ import org.logic2j.engine.predicates.external.RDBComparisonPredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
@@ -59,7 +60,7 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
   protected int comparison(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final T[] values1 = FOPredicate.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
+        final List<T> values1 = FOPredicate.<T>list(n1);
         for (T c0 : FOPredicate.<T>list(n0)) {
           for (final T c1 : values1) {
             // Both bound values - check
