@@ -45,7 +45,7 @@ public class Eq<T> extends Pred2<T, T> implements RDBEqualityPredicate {
   protected int unification(UnifyContext currentVars, Object n0, Object n1) {
     if (isFreeVar(n0) && isFreeVar(n1)) {
       // Special cas because parent class Pred2 cannot handle two free vars. Eq can.
-      return unifyAndNotify(currentVars, n0, n1);
+      return currentVars.unifyAndNotify(n0, n1);
     }
     // Use default implementation for all other cases
     return super.unification(currentVars, n0, n1);
