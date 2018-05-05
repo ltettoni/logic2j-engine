@@ -18,7 +18,6 @@
 package org.logic2j.engine.predicates.impl;
 
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
@@ -27,7 +26,6 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -95,44 +93,6 @@ public abstract class FOPredicate extends Struct {
   }
 
 
-  /**
-   * Unify terms t1 and constant values from iter, and if they could be unified, call theListener with the solution of the newly
-   * unified variables; return the result from notifying. If not, return CONTINUE.
-   *
-   * @param currentVars
-   * @param t1
-   * @param iter
-   * @return
-   */
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator<T> iter) {
-    while (iter.hasNext()) {
-      final T value = iter.next();
-      final int continuation = currentVars.unifyAndNotify(t1, value);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, List<T> values) {
-    for (final Object value : values) {
-      final int continuation = currentVars.unifyAndNotify(t1, value);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Stream<T> values) {
-    return unifyAndNotifyMany(currentVars, t1, values.iterator());
-  }
-
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
-    return currentVars.unifyAndNotify(constant, binding);
-  }
-
   // --------------------------------------------------------------------------
   // Support methods to
   // --------------------------------------------------------------------------
@@ -152,7 +112,6 @@ public abstract class FOPredicate extends Struct {
           "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }
   }
-
 
 
   protected static <Q> List<Q> list(Object reified) {
@@ -190,30 +149,4 @@ public abstract class FOPredicate extends Struct {
     return termApi().isFreeVar(reified);
   }
 
-
-  //  private static Object createBinding(Object arg) {
-  //    if (arg == null) {
-  //      return anon();
-  //    }
-  //    // Here we will convert basic types to their SimpleBindings
-  //    if (arg instanceof Long) {
-  //      return bind((Long) arg);
-  //    }
-  //    if (arg instanceof Integer) {
-  //      return bind((Integer) arg);
-  //    }
-  //    if (arg instanceof String) {
-  //      return bind((String) arg);
-  //    }
-  //    if (arg instanceof Double) {
-  //      return bind((Double) arg);
-  //    }
-  //    if (arg instanceof Float) {
-  //      return bind((Float) arg);
-  //    }
-  //    if (arg instanceof Boolean) {
-  //      return bind((Boolean) arg);
-  //    }
-  //    return arg;
-  //  }
 }

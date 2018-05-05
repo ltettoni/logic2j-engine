@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
@@ -100,13 +101,13 @@ public class Pred2<T, R> extends FOPredicate {
       } else {
         // n0 is constant, n1 is free: just unify in forward direction
         final Stream<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
-        return unifyAndNotifyMany(currentVars, n1, images);
+        return currentVars.unifyAndNotify(n1, bind(images));
       }
     } else if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
         final Stream<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
-        return unifyAndNotifyMany(currentVars, n0, preimages);
+        return currentVars.unifyAndNotify(n0, bind(preimages));
       } else {
         // Two free variables - no solution (exception: this method is overridden in predicate Eq/2)
         return CONTINUE;

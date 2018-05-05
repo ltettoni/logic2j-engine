@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
  * TODO: factories for collections should maybe ensure the data type by scanning all elements, not only checking on the first?
  */
 public class SimpleBindings {
+  private static final Object[] EMPTY_ARRAY = new Object[0];
 
   /**
    * Forbid instantiation
@@ -255,6 +256,7 @@ public class SimpleBindings {
    * @return
    */
   public static <T> Constant<T> bind(Stream<T> stream) {
+
     return new ConstantBase<T>() {
       private T[] data = null;
 
@@ -295,11 +297,15 @@ public class SimpleBindings {
       private void consumeNow() {
         if (this.data == null) {
           final Object[] asObjects = stream.toArray(Object[]::new);
-          if (asObjects.length == 0) {
-            throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+//          if (asObjects.length == 0) {
+//            throw new IllegalArgumentException("Empty SimpleBinding stream, cannot determine data type of instances.");
+//          }
+          if (asObjects.length==0) {
+            this.data = (T[]) EMPTY_ARRAY;
+          } else {
+            final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
+            this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
           }
-          final Class<T> elementClass = (Class<T>) asObjects[0].getClass();
-          this.data = Arrays.stream(asObjects).toArray(n -> (T[]) Array.newInstance(elementClass, n));
         }
       }
 

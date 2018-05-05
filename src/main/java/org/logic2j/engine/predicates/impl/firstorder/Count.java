@@ -47,7 +47,7 @@ public class Count extends FOPredicate implements RDBCompatiblePredicate {
     solver.solveGoal(getArg(0), currentVars.withListener(counter));
 
     final long number = counter.count();
-    return unifyAndNotifyMany(currentVars, number, nbSolutions);
+    return currentVars.unifyAndNotify(number, nbSolutions);
   }
 
 
