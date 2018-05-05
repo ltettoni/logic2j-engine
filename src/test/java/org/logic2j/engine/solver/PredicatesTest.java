@@ -37,6 +37,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.SimpleBindings.empty;
+import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.and;
@@ -170,7 +171,7 @@ public class PredicatesTest {
 
   @Test
   public void testNot1() {
-    final long nbr = solver.solve(not(and(new Digit(null), new Info("sol")))).count();
+    final long nbr = solver.solve(not(and(new Digit(anon()), new Info("sol")))).count();
     assertThat(nbr).isEqualTo(0L);
   }
 

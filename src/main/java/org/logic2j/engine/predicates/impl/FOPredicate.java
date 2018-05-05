@@ -26,13 +26,11 @@ import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
@@ -58,38 +56,9 @@ public abstract class FOPredicate extends Struct {
    * @param arguments
    */
   protected FOPredicate(String functor, Object... arguments) {
-    super(functor, createBindings(arguments));
+    super(functor, arguments);
   }
 
-  private static Object[] createBindings(Object... arguments) {
-    return Arrays.stream(arguments).map(FOPredicate::createBinding).toArray(Object[]::new);
-  }
-
-  private static Object createBinding(Object arg) {
-    if (arg == null) {
-      return anon();
-    }
-    // Here we will convert basic types to their SimpleBindings
-    if (arg instanceof Long) {
-      return bind((Long) arg);
-    }
-    if (arg instanceof Integer) {
-      return bind((Integer) arg);
-    }
-    if (arg instanceof String) {
-      return bind((String) arg);
-    }
-    if (arg instanceof Double) {
-      return bind((Double) arg);
-    }
-    if (arg instanceof Float) {
-      return bind((Float) arg);
-    }
-    if (arg instanceof Boolean) {
-      return bind((Boolean) arg);
-    }
-    return arg;
-  }
 
 
   // ---------------------------------------------------------------------------
@@ -243,4 +212,31 @@ public abstract class FOPredicate extends Struct {
   protected static boolean isFreeVar(Object reified) {
     return termApi().isFreeVar(reified);
   }
+
+
+  //  private static Object createBinding(Object arg) {
+  //    if (arg == null) {
+  //      return anon();
+  //    }
+  //    // Here we will convert basic types to their SimpleBindings
+  //    if (arg instanceof Long) {
+  //      return bind((Long) arg);
+  //    }
+  //    if (arg instanceof Integer) {
+  //      return bind((Integer) arg);
+  //    }
+  //    if (arg instanceof String) {
+  //      return bind((String) arg);
+  //    }
+  //    if (arg instanceof Double) {
+  //      return bind((Double) arg);
+  //    }
+  //    if (arg instanceof Float) {
+  //      return bind((Float) arg);
+  //    }
+  //    if (arg instanceof Boolean) {
+  //      return bind((Boolean) arg);
+  //    }
+  //    return arg;
+  //  }
 }

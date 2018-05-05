@@ -31,6 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.longVar;
 import static org.logic2j.engine.predicates.Predicates.count;
@@ -85,39 +86,39 @@ public class FirstOrderLogicTest {
   @Test
   public void countToVar() {
     final Var<Long> N = longVar("N");
-    final Count goal = count(new Digit(null), N);
+    final Count goal = count(new Digit(anon()), N);
     assertThat(solver.solve(goal).count()).isEqualTo(1L);
     assertThat(solver.solve(goal).var(N).list().toString()).isEqualTo("[10]");
   }
 
   @Test
   public void countCheckValid() {
-    final Count goal = count(new Digit(null), 10);
+    final Count goal = count(new Digit(anon()), 10);
     assertThat(solver.solve(goal).count()).isEqualTo(1L);
   }
 
   @Test
   public void countCheckInvalid() {
-    final Count goal = count(new Digit(null), 11);
+    final Count goal = count(new Digit(anon()), 11);
     assertThat(solver.solve(goal).count()).isEqualTo(0L);
   }
 
 
   @Test
   public void countCheckValids() {
-    final Count goal = count(new Digit(null), bind(9L, 10L, 11L));
+    final Count goal = count(new Digit(anon()), bind(9L, 10L, 11L));
     assertThat(solver.solve(goal).count()).isEqualTo(1L);
   }
 
   @Test
   public void countCheckValids2() {
-    final Count goal = count(new Digit(null), bind(9L, 10L, 11L, 10L, 13L));
+    final Count goal = count(new Digit(anon()), bind(9L, 10L, 11L, 10L, 13L));
     assertThat(solver.solve(goal).count()).isEqualTo(2L);
   }
 
   @Test
   public void countCheckValids0() {
-    final Count goal = count(new Digit(null), bind(9L, 11L, 12L, 13L));
+    final Count goal = count(new Digit(anon()), bind(9L, 11L, 12L, 13L));
     assertThat(solver.solve(goal).count()).isEqualTo(0L);
   }
 

@@ -33,6 +33,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
+import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.model.Var.anyVar;
 import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.model.Var.strVar;
@@ -204,7 +205,7 @@ public class SolverLowLevelTest {
 
   @Test
   public void unifyAnonymousToAnonymous() {
-    final Object goal = eq(null, (Binding) null);
+    final Object goal = eq(anon(), (Binding)anon());
     final long nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(1);
   }
@@ -227,7 +228,7 @@ public class SolverLowLevelTest {
   @Test
   public void unifyVarToAnonymous() {
     final Var<String> Q = strVar("Q");
-    final Object goal = eq(Q, null);
+    final Object goal = eq(Q, anon());
     final ExtractingSolutionListener listener = solve(goal);
     assertThat(listener.count()).isEqualTo(1);
     assertThat(listener.getVariables().toString()).isEqualTo("[Q]");
