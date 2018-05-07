@@ -21,14 +21,19 @@ import org.junit.Test;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
-import org.logic2j.engine.predicates.impl.firstorder.Exists;
+import org.logic2j.engine.predicates.impl.firstorder.FindAll;
 import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.logic2j.engine.model.TermApiLocator.termApi;
 import static org.logic2j.engine.model.Var.booleanVar;
 import static org.logic2j.engine.model.Var.intVar;
+import static org.logic2j.engine.model.Var.longVar;
 import static org.logic2j.engine.predicates.Predicates.and;
+import static org.logic2j.engine.predicates.Predicates.count;
 import static org.logic2j.engine.predicates.Predicates.exists;
 import static org.logic2j.engine.predicates.Predicates.not;
 
@@ -44,7 +49,13 @@ public class ExamplesTest {
   private And expression() {
     final Var<Integer> x = intVar("X");
     final Var<Integer> square = intVar("S");
-    return and(new Digit(x), new Square(x, square), new Mod10(square, x));
+    return and(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */);
+  }
+
+  @Test
+  public void solution_reminder_of_square_equal_to_digit() {
+    final String nbr = solver.solve(expression()).var("X").list().toString();
+    assertThat(nbr).isEqualTo("[0, 1, 5, 6]");
   }
 
   /**
@@ -54,7 +65,7 @@ public class ExamplesTest {
    */
   @Test
   public void reminder_of_square_equal_to_digit() {
-    final long nbr = solver.solve(expression() /*, new Log("info", square) */).count();
+    final long nbr = solver.solve(expression()).count();
     assertThat(nbr).isEqualTo(4L);
   }
 
@@ -74,10 +85,25 @@ public class ExamplesTest {
   @Test
   public void exists_is_false_for_goal_without_solution() {
     final Var<Boolean> R = booleanVar("R");
-    final Boolean res = solver.solve(new Exists(not(expression()), R)).var(R).single();
+    final Boolean res = solver.solve(exists(not(expression()), R)).var(R).single();
     assertThat(res).isFalse();
   }
 
+  @Test
+  public void count_reminder_of_square_equal_to_digit() {
+    final Var<Long> R = longVar("R");
+    final Long res = solver.solve(count(expression(), R)).var(R).single();
+    assertThat(res).isEqualTo(4L);
+  }
+
+  @Test
+  public void findall_reminder_of_square_equal_to_digit() {
+    final Var<List<Integer>> R = new Var(List.class, "R");
+    final And expression = expression();
+    final Var X = termApi().findVar(expression, "X");
+    final List<Integer> res = solver.solve(new FindAll(X, expression, R)).var(R).single();
+    assertThat(res).containsExactly(0, 1, 5, 6);
+  }
 
 
   private class Square extends Pred2<Integer, Integer> {
