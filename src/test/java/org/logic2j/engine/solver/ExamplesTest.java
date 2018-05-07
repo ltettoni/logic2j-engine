@@ -19,7 +19,6 @@ package org.logic2j.engine.solver;
 
 import org.junit.Test;
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Digit;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
@@ -27,7 +26,11 @@ import org.logic2j.engine.predicates.impl.math.Pred2;
 import org.logic2j.engine.predicates.internal.And;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.logic2j.engine.model.Var.booleanVar;
 import static org.logic2j.engine.model.Var.intVar;
+import static org.logic2j.engine.predicates.Predicates.and;
+import static org.logic2j.engine.predicates.Predicates.exists;
+import static org.logic2j.engine.predicates.Predicates.not;
 
 /**
  * Examples to explain what logic2j-engine is.
@@ -36,21 +39,45 @@ public class ExamplesTest {
   private final Solver solver = new Solver();
 
   /**
+   * @return Expression describing: Any digit X for which the reminder (base) 10 of its square is equal to X.
+   */
+  private And expression() {
+    final Var<Integer> x = intVar("X");
+    final Var<Integer> square = intVar("S");
+    return and(new Digit(x), new Square(x, square), new Mod10(square, x));
+  }
+
+  /**
    * Solving the problem: find all digit integers (0..9) for which the
    * reminder (base 10) of their square is equal to themselves.
    * 4 solutions: 0, 1, 5 (=25), 6 (=36)
    */
   @Test
   public void reminder_of_square_equal_to_digit() {
-    final Var<Integer> x = intVar("X");
-    final Var<Integer> square = intVar("S");
-    final long nbr = solver.solve(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */).count();
+    final long nbr = solver.solve(expression() /*, new Log("info", square) */).count();
     assertThat(nbr).isEqualTo(4L);
-    // Solution exists
-    final Term exists = new Exists(new And(new Digit(x), new Square(x, square), new Mod10(square, x)));
-    final long nbrEx = solver.solve(exists).count();
+  }
+
+  @Test
+  public void exists_reminder_of_square_equal_to_digit() {
+    final long nbrEx = solver.solve(exists(expression())).count();
     assertThat(nbrEx).isEqualTo(1L);
   }
+
+  @Test
+  public void exists_is_true_for_reminder_of_square_equal_to_digit() {
+    final Var<Boolean> R = booleanVar("R");
+    final Boolean res = solver.solve(exists(expression(), R)).var(R).single();
+    assertThat(res).isTrue();
+  }
+
+  @Test
+  public void exists_is_false_for_goal_without_solution() {
+    final Var<Boolean> R = booleanVar("R");
+    final Boolean res = solver.solve(new Exists(not(expression()), R)).var(R).single();
+    assertThat(res).isFalse();
+  }
+
 
 
   private class Square extends Pred2<Integer, Integer> {
