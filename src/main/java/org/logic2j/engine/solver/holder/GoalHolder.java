@@ -135,7 +135,7 @@ public class GoalHolder {
   /**
    * @return true if there are more than one solution.
    */
-  public boolean multiple() {
+  public boolean isMultiple() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
     solve(listener);
     return listener.count() > 1;
