@@ -23,7 +23,7 @@ import org.logic2j.engine.unify.UnifyContext;
 /**
  * Always succeeds, provides one solution but does not bind any variables.
  */
-public class True extends FOUniqueSolutionPredicate implements RDBCompatiblePredicate {
+public class True extends FOSingleCallPredicate implements RDBCompatiblePredicate {
   public True() {
     super("true");
   }

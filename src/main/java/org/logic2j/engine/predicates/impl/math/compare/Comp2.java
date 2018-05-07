@@ -60,7 +60,7 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
   protected int comparison(UnifyContext currentVars, Object n0, Object n1) {
     if (isConstant(n0)) {
       if (isConstant(n1)) {
-        final List<T> values1 = FOPredicate.<T>list(n1);
+        final List<T> values1 = FOPredicate.list(n1);
         for (T c0 : FOPredicate.<T>list(n0)) {
           for (final T c1 : values1) {
             // Both bound values - check
@@ -71,11 +71,8 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
           }
         }
         return CONTINUE;
-      } else {
-        throw new SolverException("Should not be here we require bound vars");
       }
     }
-
     throw new SolverException("Should not be here we require bound vars");
   }
 

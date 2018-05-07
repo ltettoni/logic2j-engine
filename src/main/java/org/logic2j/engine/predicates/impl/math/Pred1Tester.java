@@ -28,14 +28,14 @@ import static java.lang.String.format;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
- * 1-arguments first-order predicates with a java testing (predicate) function.
- * Can only test constants or variable with value(s), cannot generate data
+ * 1-arguments first-order predicates with a java testing (Java predicate) function.
+ * Can only test constants or variable bound to a value, cannot produce data
  * into free variables. For that use {@link org.logic2j.engine.predicates.impl.Pred1Generator}.
  */
 public class Pred1Tester<T> extends FOPredicate {
 
   private Predicate<T> test = v -> {
-    throw new UnsupportedOperationException("Predicate \"test()\" of " + Pred1Tester.this + " was not defined");
+    throw new UnsupportedOperationException("Predicate \"" + this.getClass().getName() + ".test\" was not defined");
   };
 
   /**

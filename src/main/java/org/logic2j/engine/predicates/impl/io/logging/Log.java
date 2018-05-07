@@ -17,7 +17,7 @@
 
 package org.logic2j.engine.predicates.impl.io.logging;
 
-import org.logic2j.engine.predicates.impl.FOUniqueSolutionPredicate;
+import org.logic2j.engine.predicates.impl.FOSingleCallPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * Logging.
  */
-public class Log extends FOUniqueSolutionPredicate {
+public class Log extends FOSingleCallPredicate {
   private static final Logger logger = LoggerFactory.getLogger(Log.class);
   private final transient Consumer<String> loggingMethod;
 
