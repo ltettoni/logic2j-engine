@@ -1,10 +1,8 @@
 # Improvements TODO
-- What is the behaviour when passing free vars when not permitted (eg. LT(_, _) : no solution? exception?)
-- limit(min, max) and the LimitSolutionListener
+- What is the behaviour when passing free vars when not permitted, eg. LT(_, _) : no solution? exception?
 - better define aggregation: exists(goal, result), sum(), max(), min(). Probably count() and limit() are different beasts.
 - Functors
 - Reintroduce TermApi.selectTerm() ???
-- Does the cut (!) work in the context of or(), or only in the context of inference???
 - Solution retrieval API. See https://www.jooq.org/doc/3.9/manual/sql-execution/fetching/
   - sync or async ???
   - all in memory or cursor style ???  (JooQ's Cursor: Iterable<R>, AutoCloseable)
@@ -27,10 +25,10 @@
   - list of array
   - list of tuple
   - list of map
-- Naming of SolutionListener.onSolution(): rather Consumer.accept() or Observer.notify() or Subscriber.process() ?
-    --> Listener has a strong async flavour are we are not async at all!
 
 # Improvements DONE
+- Keep as is: Naming of SolutionListener.onSolution(): rather Consumer.accept(UnifyContext) or Observer.notify(UnifyContext) or Subscriber.process(UnifyContext) ?
+    --> Listener has a strong async flavour are we are not async at all! Yes but I don't like consuming a UnifyContext!
 - Predicates binding real data tuples - reintroduce DataFact ????
 - Can and() and or() be implemented in their own predicates not in the Solver? at the cost of sharing which methods / state?
 - NotListener -> FirstSolutionListener
