@@ -2,7 +2,7 @@
 A first-order logic inference engine for Java; the engine underlying logic2j
 
 ## Goals
-This library provides an API to solving logical problems such as:
+This library provides an API to solving logical problems, for example:
 
 ```
 Find all digit integers (0..9) for which the reminder (base 10) of their square is equal to themselves.
@@ -17,7 +17,7 @@ long nbr = solver.solve(expr).count();
 1. Defining typed variables or constants bound to Java data structures
 2. Assembling terms and predicates in abstract syntax trees of logic operators
 3. Solving by inference: java predicate will be invoked to find all solutions
-4. Possibly binding ASTs to expression languages such as SQL and solving against a database
+4. Possibly binding ASTs to expression languages (such as SQL) and solving against a database
 
 
 ## Comparison of logic2j-engine to logic2j prolog engine

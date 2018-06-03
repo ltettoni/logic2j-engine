@@ -44,8 +44,9 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * in effectively setting a value to a variable. Backtracking is done by just forgetting the state, and reusing a previous state, from
  * which the value was not yet set.
  * <p/>
- * This context also stores the current {@link SolutionListener} although this data is not required for inference.
- * In a previous version of logic2j, it was not stored here, the result was that most methods in the code, and in particular
+ * This context also stores the current {@link SolutionListener} although this data is not required for inference,
+ * as well as a reference to the current {@link Solver}.
+ * In a previous version of logic2j, these were not stored here, the consequence was that most methods in the code, and in particular
  * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
  * Since logic2j-engine, the two are now grouped in the context.
  */
