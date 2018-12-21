@@ -85,6 +85,10 @@ public final class Predicates {
     return new Exists(term);
   }
 
+  public static Exists notExists(Term term) {
+    return new Exists(term, bind(false));
+  }
+
   public static Exists exists(Term term, Binding<Boolean> result) {
     return new Exists(term, result);
   }

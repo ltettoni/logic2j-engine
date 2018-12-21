@@ -39,12 +39,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.SimpleBindings.empty;
 import static org.logic2j.engine.model.Var.doubleVar;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.predicates.Predicates.and;
-import static org.logic2j.engine.predicates.Predicates.exists;
-import static org.logic2j.engine.predicates.Predicates.fail;
-import static org.logic2j.engine.predicates.Predicates.filter;
-import static org.logic2j.engine.predicates.Predicates.map;
-import static org.logic2j.engine.predicates.Predicates.not;
+import static org.logic2j.engine.predicates.Predicates.*;
 
 public class PredicatesTest {
   private static final Logger logger = LoggerFactory.getLogger(PredicatesTest.class);
@@ -126,6 +121,16 @@ public class PredicatesTest {
     final Var<Integer> x = intVar("X");
     final long nbr = solver.solve(exists(and(new Digit(x), new Odd(x), new Even(x)))).count();
     assertThat(nbr).isEqualTo(0L);
+  }
+
+  /**
+   * Form notExists/1 in the case of success.
+   */
+  @Test
+  public void testNotExists1_fail() {
+    final Var<Integer> x = intVar("X");
+    final long nbr = solver.solve(notExists(and(new Digit(x), new Odd(x), new Even(x)))).count();
+    assertThat(nbr).isEqualTo(1L);
   }
 
   @Test
