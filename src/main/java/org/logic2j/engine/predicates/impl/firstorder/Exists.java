@@ -27,8 +27,11 @@ import org.logic2j.engine.solver.listener.ExistsSolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
- * Succeeds if the specified goal provides a single solution (and none other is sought); fails if
- * the specified goal does not provide a single one.
+ * Prove existence (common 1-arity form) or bind result of existence or inexistence demonstration (2-arity form).
+ * In the 1-arity form, will try to demonstrate the specified goal up to its first solution
+ * only (no other is sought); succeed if so, fails if the specified goal does not provide a single one.
+ * In the 2-arity form, will expect a bound boolean value and prove existence if true or prove inexistence in
+ * false, or if the second argument is free, will bind the result of the demonstration.
  */
 public class Exists extends FOPredicate implements RDBCompatiblePredicate {
 
@@ -44,8 +47,9 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
   }
 
   /**
-   * Always succeeds, and binds the booleanResult to true in case at least one solution of theGoal exists, false
-   * otherwise.
+   * If booleanResult is bound will succeed if existence of theGoal can be demonstrated (up to the first solution).
+   * If booleanResult is unbound, will always succeed, and bind the booleanResult to true in case at least
+   * one solution of theGoal exists, false otherwise.
    * Notice that theGoal will be solved up to only its first
    * solution, so that enumeration will not be completed, see {@link ExistsSolutionListener}.
    *
