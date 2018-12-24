@@ -49,6 +49,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * obligation (optional, mandatory result, at-least or at-most values)
  * modality (iterable or all-in-memory)
  * structure (List or Array)
+ * TODO: Add management of Java8 streams and spliterator
  */
 public class SolutionHolder<T> implements Iterable<T> {
   private static final Logger logger = LoggerFactory.getLogger(SolutionHolder.class);
@@ -209,8 +210,14 @@ public class SolutionHolder<T> implements Iterable<T> {
   }
 
 
-
-  public <R> R[] array(R[] destinationArray) {
+  /**
+   * Launches the solver.
+   *
+   * @param destinationArray Array to be populated or reallocated.
+   * @param <T>
+   * @return The resulting array.
+   */
+  public <T> T[] array(T[] destinationArray) {
     return list().toArray(destinationArray);
   }
 
