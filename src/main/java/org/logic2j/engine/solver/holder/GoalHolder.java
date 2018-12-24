@@ -43,7 +43,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  * wishes to calculate, being either the existence of, the number of solutions, or individual or multiple values
  * of one particular variable or of all vars.
  * This object will launch the solver only for methods exists() or count(). For other
- * methods it just returns instances of SolutionHolder which further delay the execution.
+ * methods it just returns instances of SolutionHolder which further delays the execution.
  */
 public class GoalHolder {
 
@@ -63,9 +63,11 @@ public class GoalHolder {
 
   /**
    * Entry point for solving, in case we have variable bound to values, we will prepend the goal with
-   * Eq/2 predicates that will bind the variables to the specified values
+   * Eq/2 predicates that will bind the variables to the specified values.
+   * We do not make this method public since implementing SolutionListener requires to know the gutts
+   * of the {@link org.logic2j.engine.unify.UnifyContext}.
    *
-   * @param listener
+   * @param listener Callback for each solution
    * @return Continuation
    */
   private int solve(SolutionListener listener) {
@@ -124,7 +126,7 @@ public class GoalHolder {
   }
 
   /**
-   * @return true if there is exactly ONE solution to goal.
+   * @return true if there is exactly ONE solution to the goal.
    */
   public boolean unique() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
@@ -133,7 +135,7 @@ public class GoalHolder {
   }
 
   /**
-   * @return true if there are more than one solution.
+   * @return true if there are more than one solution to the goal.
    */
   public boolean multiple() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
@@ -141,6 +143,9 @@ public class GoalHolder {
     return listener.count() > 1;
   }
 
+  /**
+   * @return Exact number of all enumerated solutions to the goal.
+   */
   public long count() {
     final CountingSolutionListener listener = new CountingSolutionListener();
     solve(listener);
