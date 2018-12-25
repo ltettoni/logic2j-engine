@@ -49,10 +49,6 @@ public final class Predicates {
   public static final Fail fail = new Fail(); // Singleton
   public static final Cut cut = new Cut(); // Singleton
 
-  public static Var anon() {
-    return Var.anon();
-  }
-
   public static And and(Term... conjunctions) {
     return new And(conjunctions);
   }

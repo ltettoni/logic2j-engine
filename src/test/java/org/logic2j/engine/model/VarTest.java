@@ -21,8 +21,8 @@ import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.model.Var.anyVar;
-import static org.logic2j.engine.predicates.Predicates.anon;
 
 public class VarTest {
 

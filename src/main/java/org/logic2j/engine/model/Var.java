@@ -234,7 +234,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   // ---------------------------------------------------------------------------
 
   /**
-   * Just add this to theCollectedTerms and set {@link Term#index} to {@link Term#NO_INDEX}.
+   * Just add this to theCollectedTerms and set index to {@link Term#NO_INDEX}.
    *
    * @param theCollectedTerms
    */
@@ -273,7 +273,7 @@ public class Var<T> extends Term implements Binding<T>, Comparable<Var<T>> {
   }
 
   /**
-   * Assign a new {@link Term#index} to a Var if it was not assigned before.
+   * Assign a new index to a Var if it was not assigned before.
    */
   int assignIndexes(int theIndexOfNextNonIndexedVar) {
     if (hasIndex()) {
