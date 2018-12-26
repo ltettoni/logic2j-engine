@@ -155,7 +155,7 @@ public class SolutionHolder<T> extends ResultsHolderBase<T> {
    * @return true if solution is not bound to a literal term.
    */
   public boolean isFree() {
-    return termApi().isFreeVar(isUnique());
+    return termApi().isFreeVar(unique());
   }
 
 
