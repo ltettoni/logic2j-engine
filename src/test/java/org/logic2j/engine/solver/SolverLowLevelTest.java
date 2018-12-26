@@ -158,7 +158,7 @@ public class SolverLowLevelTest {
   //
   //  @Test
   //  public void orWithVars() {
-  //    GoalHolder solutions;
+  //    ResultsHolder<?> solutions;
   //    solutions = this.prolog.solve("X=1; Y=2");
   //    final String actual = solutions.vars().list().toString();
   //    assertTrue("[{Y=Y, X=1}, {Y=2, X=X}]".equals(actual) ||
@@ -168,7 +168,7 @@ public class SolverLowLevelTest {
   //  @Test
   //  public void orWithClause() {
   //    loadTheoryFromTestResourcesDir("test-functional.pro");
-  //    GoalHolder solutions;
+  //    ResultsHolder<?> solutions;
   //    solutions = this.prolog.solve("or3(X)");
   //    assertEquals("[a, b, c]", solutions.var("X").list().toString());
   //  }

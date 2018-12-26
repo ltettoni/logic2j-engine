@@ -18,11 +18,11 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
+import org.logic2j.api.result.ResultsHolder;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;
 import org.logic2j.engine.predicates.Odd;
-import org.logic2j.engine.solver.holder.GoalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class SolverWithBoundVarTest {
   public void supplyFromBoundVar() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    final GoalHolder holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed()));
+    final ResultsHolder<?> holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed()));
     assertThat(holder.count()).isEqualTo(19);
     final List<Integer> list = holder.var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
@@ -87,7 +87,7 @@ public class SolverWithBoundVarTest {
     final Var<Integer> Q = intVar("Q");
     final Var<Integer> R = intVar("R");
 
-    final GoalHolder holder = solver.solve(new Even(Q), new Odd(R));
+    final ResultsHolder<?> holder = solver.solve(new Even(Q), new Odd(R));
     final List<Integer> qs = holder.var(Q).list();
     final List<Integer> rs = holder.var(R).list();
     logger.info("Result: {}", qs);
