@@ -18,6 +18,7 @@
 package org.logic2j.engine.solver.holder;
 
 import org.logic2j.api.result.ResultsHolder;
+import org.logic2j.api.result.ResultsHolderBase;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
@@ -34,6 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
@@ -46,7 +48,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  * This object will launch the solver only for methods exists() or count(). For other
  * methods it just returns instances of SolutionHolder which further delays the execution.
  */
-public class GoalHolder implements ResultsHolder<Object> {
+public class GoalHolder extends ResultsHolderBase<Object> {
 
   private final Solver solver;
   private final Object goal;
@@ -113,6 +115,7 @@ public class GoalHolder implements ResultsHolder<Object> {
   /**
    * @return True if at least one solution can be demonstrated. Solving will stop at the first solution.
    */
+  @Override
   public boolean exists() {
     final ExistsSolutionListener listener = new ExistsSolutionListener();
     solve(listener);
@@ -120,25 +123,25 @@ public class GoalHolder implements ResultsHolder<Object> {
   }
 
   /**
-   * @return True if no solution could be demonstrated
-   */
-  public boolean none() {
-    return !exists();
-  }
-
-  /**
    * @return true if there is exactly ONE solution to the goal.
    */
-  public boolean unique() {
+  @Override
+  public boolean isUnique() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
     solve(listener);
     return listener.count() == 1;
   }
 
+  @Override
+  public List<Object> list() {
+    return null;
+  }
+
   /**
    * @return true if there are more than one solution to the goal.
    */
-  public boolean multiple() {
+  @Override
+  public boolean isMultiple() {
     final CountingSolutionListener listener = new CountingSolutionListener(2);
     solve(listener);
     return listener.count() > 1;
@@ -147,6 +150,7 @@ public class GoalHolder implements ResultsHolder<Object> {
   /**
    * @return Exact number of all enumerated solutions to the goal.
    */
+  @Override
   public int count() {
     final CountingSolutionListener listener = new CountingSolutionListener();
     solve(listener);
@@ -173,27 +177,27 @@ public class GoalHolder implements ResultsHolder<Object> {
     return new SolutionHolder<>(this, varName, desiredTypeOfResult, this.termToSolutionFunction);
   }
 
-  /**
-   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
-   *
-   * @param <T>
-   * @param var                 The variable to solve for.
-   * @param desiredTypeOfResult
-   * @return A SolutionHolder for only the specified variable.
-   */
-  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
-    // FIXME temporary implementation this should be the principal implementation (not the one by name)
-    return var(var.getName(), desiredTypeOfResult);
-  }
+//  /**
+//   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
+//   *
+//   * @param <T>
+//   * @param var                 The variable to solve for.
+//   * @param desiredTypeOfResult
+//   * @return A SolutionHolder for only the specified variable.
+//   */
+//  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
+//    // FIXME temporary implementation this should be the principal implementation (not the one by name)
+//    return var(var.getName(), desiredTypeOfResult);
+//  }
 
   /**
-   * Seek solutions for only one variable of the goal, of any type.
+   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
    *
    * @param varName The name of the variable to solve for.
    * @return A SolutionHolder for only the specified variable.
    */
   public SolutionHolder<Object> var(String varName) {
-    return var(varName, Object.class);
+    return new SolutionHolder<>(this, varName, Object.class, this.termToSolutionFunction);
   }
 
   /**
@@ -206,6 +210,12 @@ public class GoalHolder implements ResultsHolder<Object> {
     return var(var, var.getType());
   }
 
+
+  @Override
+  public <R> ResultsHolder<R> map(Function<Object, R> mapping) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
   public SolutionHolder<Map<Var, Object>> vars() {
     return SolutionHolder.extractingMaps(this);
   }
@@ -213,7 +223,6 @@ public class GoalHolder implements ResultsHolder<Object> {
   // --------------------------------------------------------------------------
   // Accessors
   // --------------------------------------------------------------------------
-
 
   public Solver getSolver() {
     return solver;

@@ -17,7 +17,8 @@
 
 package org.logic2j.engine.solver.holder;
 
-import org.logic2j.api.result.ValueHolder;
+import org.logic2j.api.result.ResultsHolder;
+import org.logic2j.api.result.ResultsHolderBase;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.*;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static org.logic2j.engine.model.TermApiLocator.termApi;
 
@@ -40,7 +42,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * modality (iterable or all-in-memory)
  * structure (List or Array)
  */
-public class SolutionHolder<T> implements ValueHolder<T> {
+public class SolutionHolder<T> extends ResultsHolderBase<T> {
   private static final Logger logger = LoggerFactory.getLogger(SolutionHolder.class);
 
   private final GoalHolder goalHolder;
@@ -112,6 +114,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    *
    * @return The only solution or null if none, but will throw an Exception if more than one.
    */
+  @Override
   public T single() {
     initListenerRangesAndSolve(0, 1, 2);
     if (rangeListener.getNbSolutions() == 0) {
@@ -125,6 +128,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    *
    * @return The first solution, or null if none. Will not generate any further - there may be or not - you won't notice.
    */
+  @Override
   public T first() {
     initListenerRangesAndSolve(0, 1, 1);
     if (rangeListener.getNbSolutions() == 0) {
@@ -136,8 +140,9 @@ public class SolutionHolder<T> implements ValueHolder<T> {
   /**
    * Launches the solver.
    *
-   * @return Single and only solution. Will throw an Exception if zero or more than one.
+   * @return Single and only solution. Will throw a RuntimeException if zero or more than one.
    */
+  @Override
   public T unique() {
     initListenerRangesAndSolve(1, 1, 2);
     return (T) rangeListener.getResults().get(0);
@@ -150,12 +155,8 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @return true if solution is not bound to a literal term.
    */
   public boolean isFree() {
-    return termApi().isFreeVar(unique());
+    return termApi().isFreeVar(isUnique());
   }
-
-  // ---------------------------------------------------------------------------
-  // Type conversion
-  // ---------------------------------------------------------------------------
 
 
   // ---------------------------------------------------------------------------
@@ -167,6 +168,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    *
    * @return an ordered List of solutions.
    */
+  @Override
   public List<T> list() {
     initListenerRangesAndSolve(this.minNbr, this.maxNbr, this.maxNbr + 1);
     return (List<T>) rangeListener.getResults();
@@ -179,6 +181,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @param theTargetToAddTo The target collection (with user-chosen semantics) where all solutions should be added to.
    * @return the argument "theTargetToAddTo"
    */
+  @Override
   public <Q extends Collection<T>> Q addTo(Q theTargetToAddTo) {
     // We could have used "this" (which is an Iterable) instead of list(), but this uses two threads and is less efficient
     // than storing all in memory
@@ -195,6 +198,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * into a HashSet. A much better approach would be to calculate the "distinct" feature where
    * SolutionExtractor.extractSolution() is called, ie in one of the various
    */
+  @Override
   public Set<T> set() {
     return new HashSet<>(list());
   }
@@ -207,6 +211,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @param <T>
    * @return The resulting array.
    */
+  @Override
   public <T> T[] array(T[] destinationArray) {
     return list().toArray(destinationArray);
   }
@@ -220,6 +225,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    *
    * @return An iterator for all solutions.
    */
+  @Override
   public Iterator<T> iterator() {
     final SolutionExtractor<?> effectiveExtractor;
     if (SolutionHolder.this.singleVarExtractor != null) {
@@ -292,6 +298,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @return
    * @note Does not apply to #iterator().
    */
+  @Override
   public SolutionHolder<T> exactly(int expectedNumberOfSolutions) {
     return atLeast(expectedNumberOfSolutions).atMost(expectedNumberOfSolutions);
   }
@@ -305,24 +312,10 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @return this instance
    * @note Does not apply to #iterator().
    */
+  @Override
   public SolutionHolder<T> atLeast(int minimalNumberOfSolutions) {
     this.minNbr = minimalNumberOfSolutions;
     return this;
-  }
-
-  @Override
-  public ValueHolder<T> limit(int nbFirst) {
-    return null;
-  }
-
-  @Override
-  public ValueHolder<T> page(int first, int number) {
-    return null;
-  }
-
-  @Override
-  public ValueHolder<T> distinct() {
-    return null;
   }
 
   /**
@@ -333,6 +326,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @return this instance
    * @note Does not apply to #iterator().
    */
+  @Override
   public SolutionHolder<T> atMost(int maximalNumberOfSolutions) {
     this.maxNbr = maximalNumberOfSolutions;
     return this;
@@ -340,17 +334,17 @@ public class SolutionHolder<T> implements ValueHolder<T> {
 
 
   // ---------------------------------------------------------------------------
-  // Interface ValueHolder
+  // Interface ResultsHolder
   // ---------------------------------------------------------------------------
 
   @Override
-  public boolean exists() {
-    return true;
+  public <R> ResultsHolder<R> var(Var<R> variable) {
+    return null;
   }
 
   @Override
-  public int count() {
-    return list().size();
+  public <R> ResultsHolder<R> map(Function<T, R> mapping) {
+    throw new UnsupportedOperationException("Not implemented");
   }
 
 
