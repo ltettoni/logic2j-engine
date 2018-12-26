@@ -177,19 +177,6 @@ public class GoalHolder extends ResultsHolderBase<Object> {
     return new SolutionHolder<>(this, varName, desiredTypeOfResult, this.termToSolutionFunction);
   }
 
-//  /**
-//   * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
-//   *
-//   * @param <T>
-//   * @param var                 The variable to solve for.
-//   * @param desiredTypeOfResult
-//   * @return A SolutionHolder for only the specified variable.
-//   */
-//  public <T> SolutionHolder<T> var(Var<T> var, Class<? extends T> desiredTypeOfResult) {
-//    // FIXME temporary implementation this should be the principal implementation (not the one by name)
-//    return var(var.getName(), desiredTypeOfResult);
-//  }
-
   /**
    * Seek solutions for only one variable of the goal, of the desired type. Does not yet execute the goal.
    *
@@ -207,7 +194,8 @@ public class GoalHolder extends ResultsHolderBase<Object> {
    * @return A SolutionHolder for only the specified variable.
    */
   public <T> SolutionHolder<T> var(Var<T> var) {
-    return var(var, var.getType());
+    // FIXME temporary implementation this should be the principal implementation (not the one by name)
+    return var(var.getName(), var.getType());
   }
 
 
