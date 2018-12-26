@@ -44,12 +44,12 @@ public class ExamplesTest {
   public void reminder_of_square_equal_to_digit() {
     final Var<Integer> x = intVar("X");
     final Var<Integer> square = intVar("S");
-    final long nbr = solver.solve(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */).count();
+    final int nbr = solver.solve(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */).count();
     assertThat(nbr).isEqualTo(4L);
     // Solution exists
     final Term exists = new Exists(new And(new Digit(x), new Square(x, square), new Mod10(square, x)));
-    final long nbrEx = solver.solve(exists).count();
-    assertThat(nbrEx).isEqualTo(1L);
+    final int nbrEx = solver.solve(exists).count();
+    assertThat(nbrEx).isEqualTo(1);
   }
 
 

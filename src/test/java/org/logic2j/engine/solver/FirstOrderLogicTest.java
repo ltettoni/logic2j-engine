@@ -84,41 +84,41 @@ public class FirstOrderLogicTest {
 
   @Test
   public void countToVar() {
-    final Var<Long> N = longVar("N");
+    final Var<Integer> N = intVar("N");
     final Count goal = count(new Digit(null), N);
-    assertThat(solver.solve(goal).count()).isEqualTo(1L);
+    assertThat(solver.solve(goal).count()).isEqualTo(1);
     assertThat(solver.solve(goal).var(N).list().toString()).isEqualTo("[10]");
   }
 
   @Test
   public void countCheckValid() {
     final Count goal = count(new Digit(null), 10);
-    assertThat(solver.solve(goal).count()).isEqualTo(1L);
+    assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void countCheckInvalid() {
     final Count goal = count(new Digit(null), 11);
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
 
   @Test
   public void countCheckValids() {
-    final Count goal = count(new Digit(null), bind(9L, 10L, 11L));
-    assertThat(solver.solve(goal).count()).isEqualTo(1L);
+    final Count goal = count(new Digit(null), bind(9, 10, 11));
+    assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void countCheckValids2() {
-    final Count goal = count(new Digit(null), bind(9L, 10L, 11L, 10L, 13L));
-    assertThat(solver.solve(goal).count()).isEqualTo(2L);
+    final Count goal = count(new Digit(null), bind(9, 10, 11, 10, 13));
+    assertThat(solver.solve(goal).count()).isEqualTo(2);
   }
 
   @Test
   public void countCheckValids0() {
-    final Count goal = count(new Digit(null), bind(9L, 11L, 12L, 13L));
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    final Count goal = count(new Digit(null), bind(9, 11, 12, 13));
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
 

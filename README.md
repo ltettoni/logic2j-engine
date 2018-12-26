@@ -11,7 +11,7 @@ Find all digit integers (0..9) for which the reminder (base 10) of their square 
 Var<Integer> x = intVar("X");
 Var<Integer> square = intVar("S");
 Term expr = new And(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */);
-long nbr = solver.solve(expr).count();
+int nbr = solver.solve(expr).count();
 ```
 
 1. Defining typed variables or constants bound to Java data structures

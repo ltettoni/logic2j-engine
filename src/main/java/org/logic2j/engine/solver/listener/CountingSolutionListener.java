@@ -35,7 +35,7 @@ public class CountingSolutionListener implements SolutionListener {
   /**
    * Number of solutions (so far).
    */
-  private long count = 0L;
+  private int count = 0;
 
   /**
    * Will stop counting after that number of iterations.
@@ -69,7 +69,7 @@ public class CountingSolutionListener implements SolutionListener {
   /**
    * @return the total number of solutions that were demonstrated (to the last one).
    */
-  public long count() {
+  public int count() {
     return this.count;
   }
 

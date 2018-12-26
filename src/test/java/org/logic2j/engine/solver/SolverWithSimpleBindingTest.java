@@ -39,7 +39,7 @@ public class SolverWithSimpleBindingTest {
     final Var<Integer> Q = intVar("Q");
     final Constant<Integer> vals = bind(IntStream.range(1, 5).boxed());
     final Term goal = new Succ<>(vals, Q);
-    assertThat(solver.solve(goal).count()).isEqualTo(4L);
+    assertThat(solver.solve(goal).count()).isEqualTo(4);
   }
 
   @Test
@@ -57,7 +57,7 @@ public class SolverWithSimpleBindingTest {
   @Test
   public void supplyAndConsumeLargeStream() {
     final Var<Integer> Q = intVar("Q");
-    final long largeNumber = (long) 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
+    final int largeNumber = 1000 * 1000; // Works as well with 1000 million but fairly slow for frequent testing!
     final Constant<Integer> vals = bind(new Random().ints().limit(largeNumber).boxed());
     final Term goal = new Succ<>(vals, Q);
     assertThat(solver.solve(goal).count()).isEqualTo(largeNumber);

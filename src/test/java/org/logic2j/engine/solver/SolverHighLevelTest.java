@@ -53,14 +53,14 @@ public class SolverHighLevelTest {
   public void count0() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void count2() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).count()).isEqualTo(2L);
+    assertThat(solver.solve(goal).count()).isEqualTo(2);
   }
 
 

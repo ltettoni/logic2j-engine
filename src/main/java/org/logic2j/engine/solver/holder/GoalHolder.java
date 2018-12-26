@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.solver.holder;
 
+import org.logic2j.api.result.ResultsHolder;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
@@ -146,7 +147,7 @@ public class GoalHolder {
   /**
    * @return Exact number of all enumerated solutions to the goal.
    */
-  public long count() {
+  public int count() {
     final CountingSolutionListener listener = new CountingSolutionListener();
     solve(listener);
     return listener.count();

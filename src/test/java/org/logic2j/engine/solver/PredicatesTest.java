@@ -69,32 +69,32 @@ public class PredicatesTest {
 
   @Test
   public void trace() {
-    final long nbr = solver.solve(new Log("trace", "voluntary trace message - from test case")).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(new Log("trace", "voluntary trace message - from test case")).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   @Test
   public void debug() {
-    final long nbr = solver.solve(new Debug("voluntary debug message - from test case")).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(new Debug("voluntary debug message - from test case")).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   @Test
   public void info() {
-    final long nbr = solver.solve(new Info("voluntary info message - from test case")).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(new Info("voluntary info message - from test case")).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   @Test
   public void warn() {
-    final long nbr = solver.solve(new Warn("voluntary warning message - from test case")).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(new Warn("voluntary warning message - from test case")).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   @Test
   public void error() {
-    final long nbr = solver.solve(new Error("voluntary error message - from test case")).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(new Error("voluntary error message - from test case")).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   // --------------------------------------------------------------------------
@@ -108,8 +108,8 @@ public class PredicatesTest {
   @Test
   public void testExists1_true() {
     final Var<Integer> x = intVar("X");
-    final long nbr = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)))).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)))).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   /**
@@ -119,8 +119,8 @@ public class PredicatesTest {
   @Test
   public void testExists1_fail() {
     final Var<Integer> x = intVar("X");
-    final long nbr = solver.solve(exists(and(new Digit(x), new Odd(x), new Even(x)))).count();
-    assertThat(nbr).isEqualTo(0L);
+    final int nbr = solver.solve(exists(and(new Digit(x), new Odd(x), new Even(x)))).count();
+    assertThat(nbr).isEqualTo(0);
   }
 
   /**
@@ -129,8 +129,8 @@ public class PredicatesTest {
   @Test
   public void testNotExists1_fail() {
     final Var<Integer> x = intVar("X");
-    final long nbr = solver.solve(notExists(and(new Digit(x), new Odd(x), new Even(x)))).count();
-    assertThat(nbr).isEqualTo(1L);
+    final int nbr = solver.solve(notExists(and(new Digit(x), new Odd(x), new Even(x)))).count();
+    assertThat(nbr).isEqualTo(1);
   }
 
   @Test
@@ -153,35 +153,35 @@ public class PredicatesTest {
   @Test
   public void testExists2_check_true() {
     final Var<Integer> x = intVar("X");
-    final long nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true))).count();
-    assertThat(nbr1).isEqualTo(1L);
-    final long nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(false))).count();
-    assertThat(nbr2).isEqualTo(0L);
-    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true, false))).count();
-    assertThat(nbr3).isEqualTo(1L);
+    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true))).count();
+    assertThat(nbr1).isEqualTo(1);
+    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(false))).count();
+    assertThat(nbr2).isEqualTo(0);
+    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true, false))).count();
+    assertThat(nbr3).isEqualTo(1);
   }
 
   @Test
   public void testExists2_check_false() {
     final Var<Integer> x = intVar("X");
-    final long nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(false))).count();
-    assertThat(nbr1).isEqualTo(1L);
-    final long nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true))).count();
-    assertThat(nbr2).isEqualTo(0L);
-    final long nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true, false))).count();
-    assertThat(nbr3).isEqualTo(1L);
+    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(false))).count();
+    assertThat(nbr1).isEqualTo(1);
+    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true))).count();
+    assertThat(nbr2).isEqualTo(0);
+    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true, false))).count();
+    assertThat(nbr3).isEqualTo(1);
   }
 
 
   @Test
   public void testNot1() {
-    final long nbr = solver.solve(not(and(new Digit(null), new Info("sol")))).count();
-    assertThat(nbr).isEqualTo(0L);
+    final int nbr = solver.solve(not(and(new Digit(null), new Info("sol")))).count();
+    assertThat(nbr).isEqualTo(0);
   }
 
   @Test
   public void testNot2() {
-    final long nbr = solver.solve(not(fail)).count();
+    final int nbr = solver.solve(not(fail)).count();
     assertThat(nbr).isEqualTo(1L);
   }
 
@@ -191,27 +191,27 @@ public class PredicatesTest {
 
   @Test
   public void succTwoVars() {
-    assertThat(solver.solve(new Succ<>(intVar("X"), intVar("Y"))).count()).isEqualTo(0L);
+    assertThat(solver.solve(new Succ<>(intVar("X"), intVar("Y"))).count()).isEqualTo(0);
   }
 
   @Test
   public void succIntCheckOk() {
-    assertThat(solver.solve(new Succ<>(5, 6)).count()).isEqualTo(1L);
+    assertThat(solver.solve(new Succ<>(5, 6)).count()).isEqualTo(1);
   }
 
   @Test
   public void succIntCheckNOk() {
-    assertThat(solver.solve(new Succ<>(5, 7)).count()).isEqualTo(0L);
+    assertThat(solver.solve(new Succ<>(5, 7)).count()).isEqualTo(0);
   }
 
   @Test
   public void succDoubleCheckOk() {
-    assertThat(solver.solve(new Succ<>(5.0, 6.0)).count()).isEqualTo(1L);
+    assertThat(solver.solve(new Succ<>(5.0, 6.0)).count()).isEqualTo(1);
   }
 
   @Test
   public void succDoubleCheckNOk() {
-    assertThat(solver.solve(new Succ<>(5.0, 6.1)).count()).isEqualTo(0L);
+    assertThat(solver.solve(new Succ<>(5.0, 6.1)).count()).isEqualTo(0);
   }
 
   @Test
@@ -244,12 +244,12 @@ public class PredicatesTest {
 
   @Test
   public void succIntsCheckOkFully() {
-    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(6, 7, 8))).count()).isEqualTo(3L);
+    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(6, 7, 8))).count()).isEqualTo(3);
   }
 
   @Test
   public void succIntsCheckOk() {
-    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(1, 7, 10, 8))).count()).isEqualTo(2L);
+    assertThat(solver.solve(new Succ<>(bind(5, 6, 7), bind(1, 7, 10, 8))).count()).isEqualTo(2);
   }
 
   @Test

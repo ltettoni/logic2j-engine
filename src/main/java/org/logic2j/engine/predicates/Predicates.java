@@ -89,16 +89,12 @@ public final class Predicates {
     return new Exists(term, result);
   }
 
-  public static Count count(Term term, Binding<Long> number) {
+  public static Count count(Term term, Binding<Integer> number) {
     return new Count(term, number);
   }
 
-  public static Count count(Term term, Long number) {
-    return new Count(term, bind(number));
-  }
-
   public static Count count(Term term, Integer number) {
-    return new Count(term, bind((long) number));
+    return new Count(term, bind(number));
   }
 
   public static Not not(Term term) {

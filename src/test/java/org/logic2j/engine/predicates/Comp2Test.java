@@ -54,36 +54,36 @@ public class Comp2Test {
   @Test
   public void valid1() {
     Term goal = new LT(bind(10), bind(20));
-    assertThat(solver.solve(goal).count()).isEqualTo(1L);
+    assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void valid2() {
     Term goal = new LT(bind(10, 11), bind(20, 21, 22));
-    assertThat(solver.solve(goal).count()).isEqualTo(6L);
+    assertThat(solver.solve(goal).count()).isEqualTo(6);
   }
 
   @Test
   public void valid3() {
     Term goal = new LT(bind(10, 11), bind(20, 11, 22));
-    assertThat(solver.solve(goal).count()).isEqualTo(5L);
+    assertThat(solver.solve(goal).count()).isEqualTo(5);
   }
 
   @Test
   public void invalid1() {
     Term goal = new LT(bind(20), bind(10, 11));
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void invalid2() {
     Term goal = new LT(bind(), bind(10, 11));
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void invalid3() {
     Term goal = new LT(bind(20), bind());
-    assertThat(solver.solve(goal).count()).isEqualTo(0L);
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 }

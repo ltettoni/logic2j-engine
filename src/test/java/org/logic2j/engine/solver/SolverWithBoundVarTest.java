@@ -44,7 +44,7 @@ public class SolverWithBoundVarTest {
     final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
     final GoalHolder holder = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed()));
-    assertThat(holder.count()).isEqualTo(19L);
+    assertThat(holder.count()).isEqualTo(19);
     final List<Integer> list = holder.var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
