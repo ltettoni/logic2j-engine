@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.solver.holder;
 
+import org.logic2j.api.result.ValueHolder;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.ArrayExtractor;
@@ -49,9 +50,8 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * obligation (optional, mandatory result, at-least or at-most values)
  * modality (iterable or all-in-memory)
  * structure (List or Array)
- * TODO: Add management of Java8 streams and spliterator
  */
-public class SolutionHolder<T> implements Iterable<T> {
+public class SolutionHolder<T> implements ValueHolder<T> {
   private static final Logger logger = LoggerFactory.getLogger(SolutionHolder.class);
 
   private final GoalHolder goalHolder;
@@ -153,6 +153,7 @@ public class SolutionHolder<T> implements Iterable<T> {
     initListenerRangesAndSolve(1, 1, 2);
     return (T) rangeListener.getResults().get(0);
   }
+
 
   /**
    * There is one single solution but it is the free Variable (unbound).
@@ -320,6 +321,21 @@ public class SolutionHolder<T> implements Iterable<T> {
     return this;
   }
 
+  @Override
+  public ValueHolder<T> limit(int nbFirst) {
+    return null;
+  }
+
+  @Override
+  public ValueHolder<T> page(int first, int number) {
+    return null;
+  }
+
+  @Override
+  public ValueHolder<T> distinct() {
+    return null;
+  }
+
   /**
    * Specify that the number of solutions to be extracted by this SolutionHolder
    * must at be at most minimalNumberOfSolutions.
@@ -332,6 +348,23 @@ public class SolutionHolder<T> implements Iterable<T> {
     this.maxNbr = maximalNumberOfSolutions;
     return this;
   }
+
+
+
+  // ---------------------------------------------------------------------------
+  // Interface ValueHolder
+  // ---------------------------------------------------------------------------
+
+  @Override
+  public boolean exists() {
+    return true;
+  }
+
+  @Override
+  public int count() {
+    return list().size();
+  }
+
 
   // ---------------------------------------------------------------------------
   // Support methods

@@ -46,7 +46,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  * This object will launch the solver only for methods exists() or count(). For other
  * methods it just returns instances of SolutionHolder which further delays the execution.
  */
-public class GoalHolder {
+public class GoalHolder implements ResultsHolder<Object> {
 
   private final Solver solver;
   private final Object goal;
