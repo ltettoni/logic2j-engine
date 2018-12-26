@@ -75,6 +75,7 @@ public class CountingSolutionListener implements SolutionListener {
 
   /**
    * This is not an efficient way of proving existence, rather look for {@link ExistsSolutionListener}
+   *
    * @return true of there was at least one solution demonstrated.
    */
   public boolean exists() {

@@ -22,7 +22,6 @@ import org.logic2j.engine.model.Binding;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
 
-
 /**
  * Less Than comparison.
  */

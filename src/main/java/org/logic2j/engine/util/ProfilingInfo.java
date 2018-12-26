@@ -45,7 +45,6 @@ public class ProfilingInfo {
   }
 
 
-
   public static void reportAll(String label) {
     final long now = System.currentTimeMillis();
     logger.info("Profile report for: {}", label);

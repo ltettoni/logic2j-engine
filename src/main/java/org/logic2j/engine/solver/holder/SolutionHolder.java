@@ -20,12 +20,7 @@ package org.logic2j.engine.solver.holder;
 import org.logic2j.api.result.ValueHolder;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.solver.extractor.ArrayExtractor;
-import org.logic2j.engine.solver.extractor.FactoryExtractor;
-import org.logic2j.engine.solver.extractor.MapExtractor;
-import org.logic2j.engine.solver.extractor.ObjectFactory;
-import org.logic2j.engine.solver.extractor.SingleVarExtractor;
-import org.logic2j.engine.solver.extractor.SolutionExtractor;
+import org.logic2j.engine.solver.extractor.*;
 import org.logic2j.engine.solver.listener.IterableSolutionListener;
 import org.logic2j.engine.solver.listener.MultiVarSolutionListener;
 import org.logic2j.engine.solver.listener.RangeSolutionListener;
@@ -33,13 +28,7 @@ import org.logic2j.engine.solver.listener.SingleVarSolutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static org.logic2j.engine.model.TermApiLocator.termApi;
@@ -76,7 +65,7 @@ public class SolutionHolder<T> implements ValueHolder<T> {
    * @param termToSolutionFunction
    */
   public SolutionHolder(GoalHolder goalHolder, String varName, Class<? extends T> desiredTypeOfResult,
-      BiFunction<Object, Class, Object> termToSolutionFunction) {
+                        BiFunction<Object, Class, Object> termToSolutionFunction) {
     this.goalHolder = goalHolder;
     this.singleVarExtractor = new SingleVarExtractor<>(goalHolder.effectiveGoal(), varName, desiredTypeOfResult);
     this.singleVarExtractor.setTermToSolutionFunction(termToSolutionFunction);
@@ -348,7 +337,6 @@ public class SolutionHolder<T> implements ValueHolder<T> {
     this.maxNbr = maximalNumberOfSolutions;
     return this;
   }
-
 
 
   // ---------------------------------------------------------------------------

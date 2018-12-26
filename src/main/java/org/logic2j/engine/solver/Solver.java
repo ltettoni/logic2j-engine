@@ -24,11 +24,7 @@ import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.FOPredicate;
-import org.logic2j.engine.predicates.internal.And;
-import org.logic2j.engine.predicates.internal.Call;
-import org.logic2j.engine.predicates.internal.Cut;
-import org.logic2j.engine.predicates.internal.Or;
-import org.logic2j.engine.predicates.internal.SolverPredicate;
+import org.logic2j.engine.predicates.internal.*;
 import org.logic2j.engine.solver.holder.GoalHolder;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
@@ -73,6 +69,7 @@ public class Solver {
 
   /**
    * Higher-level solver, delaying execution of a conjuction (AND) of goals.
+   *
    * @param goals
    * @return The {@link GoalHolder} that delays execution until you tell what you want to extract.
    */
@@ -124,7 +121,6 @@ public class Solver {
     }
     return solveInternalRecursive(goal, currentVars, INITIAL_CUT_LEVEL);
   }
-
 
 
   /**

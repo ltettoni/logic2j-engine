@@ -113,7 +113,6 @@ public class UnifyContextTest {
   }
 
 
-
   @Test
   public void bindVarToLiteral() {
     bind(X, "literal");

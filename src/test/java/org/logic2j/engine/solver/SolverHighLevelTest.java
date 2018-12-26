@@ -28,9 +28,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.predicates.Predicates.and;
-import static org.logic2j.engine.predicates.Predicates.eq;
-import static org.logic2j.engine.predicates.Predicates.or;
+import static org.logic2j.engine.predicates.Predicates.*;
 
 public class SolverHighLevelTest {
   private final Solver solver = new Solver();

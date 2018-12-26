@@ -218,7 +218,6 @@ public abstract class FOPredicate extends Struct {
   }
 
 
-
   protected static <Q> List<Q> list(Object reified) {
     if (reified == null || isFreeVar(reified)) {
       return Collections.emptyList();

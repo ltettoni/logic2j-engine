@@ -69,7 +69,7 @@ public class SolverWithBoundVarTest {
   public void supplyFrom2BoundVarInverse() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = eq(Q, Q);
-    final List<Integer> list = solver.solve(goal).withBoundVar(Q,  bind(IntStream.range(1, 20).boxed())).var(Q).list();
+    final List<Integer> list = solver.solve(goal).withBoundVar(Q, bind(IntStream.range(1, 20).boxed())).var(Q).list();
     assertThat(list.toString()).isEqualTo("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]");
   }
 

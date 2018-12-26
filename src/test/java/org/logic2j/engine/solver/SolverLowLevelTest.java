@@ -33,16 +33,8 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
-import static org.logic2j.engine.model.Var.anyVar;
-import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.model.Var.strVar;
-import static org.logic2j.engine.predicates.Predicates.and;
-import static org.logic2j.engine.predicates.Predicates.cut;
-import static org.logic2j.engine.predicates.Predicates.eq;
-import static org.logic2j.engine.predicates.Predicates.fail;
-import static org.logic2j.engine.predicates.Predicates.not;
-import static org.logic2j.engine.predicates.Predicates.or;
-import static org.logic2j.engine.predicates.Predicates.ttrue;
+import static org.logic2j.engine.model.Var.*;
+import static org.logic2j.engine.predicates.Predicates.*;
 
 public class SolverLowLevelTest {
   private final Solver solver = new Solver();
@@ -125,7 +117,6 @@ public class SolverLowLevelTest {
   }
 
 
-
   @Test
   public void orTest() {
     countNSolutions(2, or(ttrue, ttrue));
@@ -178,7 +169,6 @@ public class SolverLowLevelTest {
     countOneSolution(new Not(fail));
     countNoSolution(new Not(ttrue));
   }
-
 
 
   // ---------------------------------------------------------------------------
@@ -342,7 +332,6 @@ public class SolverLowLevelTest {
     final ExtractingSolutionListener listener = solve(goal);
     assertThat(listener.count()).isEqualTo(0);
   }
-
 
 
   @Test

@@ -32,10 +32,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.model.Var.longVar;
-import static org.logic2j.engine.predicates.Predicates.count;
-import static org.logic2j.engine.predicates.Predicates.eq;
-import static org.logic2j.engine.predicates.Predicates.or;
+import static org.logic2j.engine.predicates.Predicates.*;
 
 public class FirstOrderLogicTest {
   private final Solver solver = new Solver();
