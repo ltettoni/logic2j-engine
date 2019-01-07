@@ -37,13 +37,13 @@ public class LengthTest {
   @Test
   public void twoVars() {
     final Term goal = new Length(strVar(), intVar());
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test
   public void var1() {
     final Term goal = new Length(strVar(), bind(123));
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test

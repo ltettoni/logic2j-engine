@@ -36,19 +36,19 @@ public class Comp2Test {
   @Test(expected = InvalidTermException.class)
   public void twoVars() {
     Term goal = new LT(intVar(), intVar());
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test(expected = InvalidTermException.class)
   public void var1() {
     Term goal = new LT(intVar(), 123);
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test(expected = InvalidTermException.class)
   public void var2() {
     Term goal = new LT(123, intVar());
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test

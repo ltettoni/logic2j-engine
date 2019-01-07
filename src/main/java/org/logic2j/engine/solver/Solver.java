@@ -110,7 +110,7 @@ public class Solver {
   /**
    * This is an alternate entry point when a {@link UnifyContext}
    * is already instantiated; this is needed in custom predicates implementing first-order logic like
-   * not(), exists(), etc.
+   * not(), isPresent(), etc.
    * You enter here when part of the variables have been bound already.
    */
   public int solveGoal(Object goal, UnifyContext currentVars) {

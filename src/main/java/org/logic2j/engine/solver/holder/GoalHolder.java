@@ -18,7 +18,6 @@
 package org.logic2j.engine.solver.holder;
 
 import org.logic2j.api.result.ResultsHolder;
-import org.logic2j.api.result.ResultsHolderBase;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.model.Term;
@@ -48,7 +47,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  * This object will launch the solver only for methods exists() or count(). For other
  * methods it just returns instances of SolutionHolder which further delays the execution.
  */
-public class GoalHolder extends ResultsHolderBase<Object> {
+public class GoalHolder implements ResultsHolder<Object> {
 
   private final Solver solver;
   private final Object goal;
@@ -116,7 +115,7 @@ public class GoalHolder extends ResultsHolderBase<Object> {
    * @return True if at least one solution can be demonstrated. Solving will stop at the first solution.
    */
   @Override
-  public boolean exists() {
+  public boolean isPresent() {
     final ExistsSolutionListener listener = new ExistsSolutionListener();
     solve(listener);
     return listener.exists();

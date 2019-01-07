@@ -61,7 +61,7 @@ public class FirstOrderLogicTest {
   @Test(expected = SolverException.class)
   public void callOnFreeVar() {
     final Var<Integer> Z = intVar();
-    solver.solve(new Call(Z)).exists();
+    solver.solve(new Call(Z)).isPresent();
   }
 
   @Test

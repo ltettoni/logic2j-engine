@@ -18,7 +18,6 @@
 package org.logic2j.engine.solver.holder;
 
 import org.logic2j.api.result.ResultsHolder;
-import org.logic2j.api.result.ResultsHolderBase;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.*;
@@ -42,7 +41,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * modality (iterable or all-in-memory)
  * structure (List or Array)
  */
-public class SolutionHolder<T> extends ResultsHolderBase<T> {
+public class SolutionHolder<T> implements ResultsHolder<T> {
   private static final Logger logger = LoggerFactory.getLogger(SolutionHolder.class);
 
   private final GoalHolder goalHolder;
@@ -115,12 +114,12 @@ public class SolutionHolder<T> extends ResultsHolderBase<T> {
    * @return The only solution or null if none, but will throw an Exception if more than one.
    */
   @Override
-  public T single() {
+  public Optional<T> single() {
     initListenerRangesAndSolve(0, 1, 2);
     if (rangeListener.getNbSolutions() == 0) {
-      return null;
+      return Optional.empty();
     }
-    return (T) rangeListener.getResults().get(0);
+    return Optional.ofNullable((T) rangeListener.getResults().get(0));
   }
 
   /**
@@ -129,12 +128,12 @@ public class SolutionHolder<T> extends ResultsHolderBase<T> {
    * @return The first solution, or null if none. Will not generate any further - there may be or not - you won't notice.
    */
   @Override
-  public T first() {
+  public Optional<T> first() {
     initListenerRangesAndSolve(0, 1, 1);
     if (rangeListener.getNbSolutions() == 0) {
-      return null;
+      return Optional.empty();
     }
-    return (T) rangeListener.getResults().get(0);
+    return Optional.ofNullable((T)rangeListener.getResults().get(0));
   }
 
   /**

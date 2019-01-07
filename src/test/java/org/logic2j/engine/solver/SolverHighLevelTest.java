@@ -37,14 +37,14 @@ public class SolverHighLevelTest {
   public void exists0() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = and(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).exists()).isFalse();
+    assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test
   public void exists2() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = or(eq(Q, bind(11)), eq(Q, bind(12)));
-    assertThat(solver.solve(goal).exists()).isTrue();
+    assertThat(solver.solve(goal).isPresent()).isTrue();
   }
 
   @Test
