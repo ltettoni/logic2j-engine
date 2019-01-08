@@ -33,7 +33,7 @@ public class GT<T extends Number> extends Comp2<T> {
    * @param arg1
    */
   public GT(Binding<T> arg0, Binding<T> arg1) {
-    super("lt", arg0, arg1);
+    super("gt", arg0, arg1);
     setCheck((v0, v1) -> v0.doubleValue() > v1.doubleValue());
   }
 
