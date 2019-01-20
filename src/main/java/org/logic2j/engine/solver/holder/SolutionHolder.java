@@ -207,11 +207,10 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * Launches the solver.
    *
    * @param destinationArray Array to be populated or reallocated.
-   * @param <T>
    * @return The resulting array.
    */
   @Override
-  public <T> T[] array(T[] destinationArray) {
+  public T[] array(T[] destinationArray) {
     return list().toArray(destinationArray);
   }
 
