@@ -335,7 +335,6 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
   // Interface ResultsHolder
   // ---------------------------------------------------------------------------
 
-  @Override
   public <R> ResultsHolder<R> var(Var<R> variable) {
     return null;
   }
