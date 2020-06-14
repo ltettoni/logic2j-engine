@@ -45,7 +45,7 @@ public class ExamplesTest {
     final Var<Integer> x = intVar("X");
     final Var<Integer> square = intVar("S");
     final int nbr = solver.solve(new Digit(x), new Square(x, square), new Mod10(square, x) /*, new Log("info", square) */).count();
-    assertThat(nbr).isEqualTo(4L);
+    assertThat(nbr).isEqualTo(4);
     // Solution exists
     final Term exists = new Exists(new And(new Digit(x), new Square(x, square), new Mod10(square, x)));
     final int nbrEx = solver.solve(exists).count();

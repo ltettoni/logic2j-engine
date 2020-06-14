@@ -179,7 +179,7 @@ public class PredicatesTest {
   @Test
   public void testNot2() {
     final int nbr = solver.solve(not(fail)).count();
-    assertThat(nbr).isEqualTo(1L);
+    assertThat(nbr).isEqualTo(1);
   }
 
   // --------------------------------------------------------------------------
