@@ -58,21 +58,21 @@ public class SolverLowLevelTest {
 
   @Test
   public void dataOnlyAtom() {
-    final Object goal = new Struct("atom");
+    final Object goal = new Struct<>("atom");
     final int nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
   public void dataOnlyStructWithParam() {
-    final Object goal = new Struct("atom", "p1");
+    final Object goal = new Struct<>("atom", "p1");
     final int nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(0);
   }
 
   @Test
   public void dataOnlyStructWithParams() {
-    final Object goal = new Struct("atom", "p1", new Struct("p2", "p21", "p22"));
+    final Object goal = new Struct<>("atom", "p1", new Struct<>("p2", "p21", "p22"));
     final int nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(0);
   }
@@ -80,7 +80,7 @@ public class SolverLowLevelTest {
   @Test
   public void dataOnlyStructWithVar() {
     final Var<Object> X = anyVar("X");
-    final Object goal = new Struct("atom", X);
+    final Object goal = new Struct<>("atom", X);
     final int nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(0);
   }
@@ -89,7 +89,7 @@ public class SolverLowLevelTest {
   public void dataOnlyStructWithVars() {
     final Var<Object> X = anyVar("X");
     final Var<Object> Y = anyVar("Y");
-    final Object goal = new Struct("atom", X, Y);
+    final Object goal = new Struct<>("atom", X, Y);
     final int nbSolutions = solve(goal).count();
     assertThat(nbSolutions).isEqualTo(0);
   }
@@ -378,7 +378,7 @@ public class SolverLowLevelTest {
   }
 
 
-  private class LocalSolutionListener extends ExtractingSolutionListener {
+  private static class LocalSolutionListener extends ExtractingSolutionListener {
 
     public LocalSolutionListener(Object goal) {
       super(goal);

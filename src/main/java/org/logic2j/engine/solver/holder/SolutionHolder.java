@@ -73,7 +73,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
     this.multiVarExtractor = null;
   }
 
-  private SolutionHolder(GoalHolder goalHolder, SolutionExtractor extractor) {
+  private SolutionHolder(GoalHolder goalHolder, SolutionExtractor<?> extractor) {
     this.goalHolder = goalHolder;
     this.singleVarExtractor = null;
     this.multiVarExtractor = extractor;
@@ -85,7 +85,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * @param goalHolder
    * @return Holds solutions as a List of Maps
    */
-  public static SolutionHolder<Map<Var, Object>> extractingMaps(GoalHolder goalHolder) {
+  public static SolutionHolder<Map<Var<?>, Object>> extractingMaps(GoalHolder goalHolder) {
     return new SolutionHolder(goalHolder, new MapExtractor(goalHolder.effectiveGoal()));
   }
 

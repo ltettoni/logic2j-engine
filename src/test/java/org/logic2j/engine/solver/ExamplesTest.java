@@ -53,7 +53,7 @@ public class ExamplesTest {
   }
 
 
-  private class Square extends Pred2<Integer, Integer> {
+  private static class Square extends Pred2<Integer, Integer> {
     public Square(Binding<Integer> arg0, Binding<Integer> arg1) {
       super("square", arg0, arg1);
       setPreimage(val -> (int) Math.sqrt(val));
@@ -62,7 +62,7 @@ public class ExamplesTest {
   }
 
 
-  private class Mod10 extends Pred2<Integer, Integer> {
+  private static class Mod10 extends Pred2<Integer, Integer> {
     public Mod10(Binding<Integer> arg0, Binding<Integer> arg1) {
       super("mod", arg0, arg1);
       setPreimage(null); // Preimage function not defined

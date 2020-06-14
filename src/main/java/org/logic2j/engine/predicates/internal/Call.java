@@ -39,7 +39,7 @@ public class Call extends SolverPredicate {
     return callLogic(this, currentVars, cutLevel);
   }
 
-  public static int callLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+  public static int callLogic(Struct<?> goalStruct, UnifyContext currentVars, int cutLevel) {
     final int arity = goalStruct.getArity();
     if (arity != 1) {
       throw new InvalidTermException("Primitive \"call\" accepts only one argument, got " + arity);

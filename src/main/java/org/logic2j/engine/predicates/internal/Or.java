@@ -46,7 +46,7 @@ public class Or extends SolverPredicate implements RDBCompatiblePredicate {
    * This is the Java implementation of N-arity OR
    * We can also implement a binary OR directly in Prolog, see note re. processing of OR in CoreLibrary.pro
    */
-  public static int orLogic(Struct goalStruct, UnifyContext currentVars, int cutLevel) {
+  public static int orLogic(Struct<?> goalStruct, UnifyContext currentVars, int cutLevel) {
     final int arity = goalStruct.getArity();
     final Solver solver = currentVars.getSolver();
     for (int i = 0; i < arity; i++) {

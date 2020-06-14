@@ -18,7 +18,6 @@
 package org.logic2j.engine.solver;
 
 import org.junit.Test;
-import org.logic2j.api.result.ResultsHolder;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.Even;

@@ -94,7 +94,7 @@ public class Solver {
     if (goal instanceof Struct) {
       // We will need to clone Clauses during resolution, hence the base index
       // for any new var must be higher than any of the currently used vars.
-      initialContext.topVarIndex(((Struct) goal).getIndex());
+      initialContext.topVarIndex(((Struct<?>) goal).getIndex());
     }
     try {
       return solveGoal(goal, initialContext);
@@ -116,7 +116,7 @@ public class Solver {
   public int solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
-    if (goal instanceof Struct && !((Struct) goal).hasIndex()) {
+    if (goal instanceof Struct<?> && !((Struct<?>) goal).hasIndex()) {
       throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
     }
     return solveInternalRecursive(goal, currentVars, INITIAL_CUT_LEVEL);
@@ -144,10 +144,10 @@ public class Solver {
     int result;
 
     // Make sure the term specified is solvable: atoms are not, variables not (yet)
-    final Struct goalStruct;
+    final Struct<?> goalStruct;
     if (goalTerm instanceof String) {
       // Yet we are not capable of handing String everywhere below - so use a Struct atom still
-      goalStruct = new Struct((String) goalTerm);
+      goalStruct = new Struct<>((String) goalTerm);
         /* Prototype code - does actually not work but could
         } else if (termApi().isFreeVar(goalTerm)) {
             // Crazy we, we allow a single Var to be considered as a goal - just assuming it is bound to a Struct
@@ -158,12 +158,12 @@ public class Solver {
             if (! (goalReified instanceof Struct)) {
                 throw new UnsupportedOperationException("Vars used as a goal must always be bound to a Struct, was: \"" + goalReified + '"');
             }
-            goalStruct = (Struct) goalReified;
+            goalStruct = (Struct<?>) goalReified;
         */
     } else {
-      assert goalTerm instanceof Struct :
+      assert goalTerm instanceof Struct<?> :
           "Calling solveGoalRecursive with a goal that is not a Struct but: \"" + goalTerm + "\" of " + goalTerm.getClass();
-      goalStruct = (Struct) goalTerm;
+      goalStruct = (Struct<?>) goalTerm;
     }
 
     // Extract all features of the goal to solve
@@ -224,11 +224,11 @@ public class Solver {
     return result;
   }
 
-  protected boolean isJava(Struct goalStruct) {
+  protected boolean isJava(Struct<?> goalStruct) {
     return goalStruct instanceof FOPredicate;
   }
 
-  protected int invokeJava(Struct goal, UnifyContext currentVars) {
+  protected int invokeJava(Struct<?> goal, UnifyContext currentVars) {
     final FOPredicate javaPredicate = (FOPredicate) goal;
     // The result will be the continuation code or CUT level
     return javaPredicate.predicateLogic(currentVars);

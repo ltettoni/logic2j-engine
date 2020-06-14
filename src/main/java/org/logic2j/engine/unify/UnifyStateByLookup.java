@@ -36,7 +36,7 @@ class UnifyStateByLookup {
   private static final int INITIAL_SIZE = 500;
 
   private int[] transaction;
-  private Var[] var;
+  private Var<?>[] var;
   private Object[] literal;
   private int[] boundVarIndex;
   private int[] logOfWrittenSlots;  // Indexed by transaction number
@@ -82,17 +82,17 @@ class UnifyStateByLookup {
    * @param theRef
    * @return
    */
-  UnifyContext bind(UnifyContext currentVars, Var theVar, Object theRef) {
+  UnifyContext bind(UnifyContext currentVars, Var<?> theVar, Object theRef) {
     if (logger.isDebugEnabled()) {
       logger.debug(" bind {}->{}", theVar, theRef);
     }
     final int transactionNumber = currentVars.currentTransaction;
     if (theVar == Var.anon()) {
-      final Object finalRef = (theRef instanceof Var) ? dereference((Var) theRef, transactionNumber) : theRef;
+      final Object finalRef = (theRef instanceof Var) ? dereference((Var<?>) theRef, transactionNumber) : theRef;
       if (finalRef == Var.anon()) {
         return currentVars; // Nothing done
       } else if (finalRef instanceof Var) {
-        return bind(currentVars, (Var) theRef, theVar);
+        return bind(currentVars, (Var<?>) theRef, theVar);
       } else {
         return currentVars;
       }
@@ -106,13 +106,13 @@ class UnifyStateByLookup {
     transaction[slot] = transactionNumber;
     var[slot] = theVar;
 
-    final Object finalRef = (theRef instanceof Var) ? dereference((Var) theRef, transactionNumber) : theRef;
-    if (finalRef instanceof Var && finalRef != Var.anon()) {
+    final Object finalRef = (theRef instanceof Var) ? dereference((Var<?>) theRef, transactionNumber) : theRef;
+    if (finalRef instanceof Var<?> && finalRef != Var.anon()) {
       if (finalRef == theVar) {
         // OOps, trying to bound Var to same Var (after its the ref was dereferenced)
         return currentVars; // So no change
       }
-      final Var finalVar = (Var) finalRef;
+      final Var<?> finalVar = (Var<?>) finalRef;
       final int finalVarIndex = finalVar.getIndex();
       var[finalVarIndex] = finalVar;
       literal[slot] = null; // Not a literal!
@@ -128,11 +128,11 @@ class UnifyStateByLookup {
   }
 
 
-  Object dereference(Var theVar, int transactionNumber) {
+  Object dereference(Var<?> theVar, int transactionNumber) {
     if (theVar.isAnon()) {
       return theVar;
     }
-    Var runningVar = theVar;
+    Var<?> runningVar = theVar;
 
     int slot = runningVar.getIndex();
     int limiter = Integer.MAX_VALUE;

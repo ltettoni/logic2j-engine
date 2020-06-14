@@ -20,7 +20,7 @@ package org.logic2j.engine.predicates.impl.math.function;
 import java.util.function.Function;
 
 /**
- * A {@link java.util.function.Function} that delegates its apply{@link #apply(Object)}
+ * A {@link java.util.function.Function} that delegates its apply{@link Function#apply(Object)}
  * to dedicated implementations for Integer, Long, Float and Double.
  */
 public interface NumericFunction extends Function<Number, Number> {

@@ -58,7 +58,7 @@ public class And extends SolverPredicate implements RDBCompatiblePredicate {
    * @param cutLevel
    * @return
    */
-  public static int andLogic(Struct goal, UnifyContext currentVars, final int cutLevel) {
+  public static int andLogic(Struct<?> goal, UnifyContext currentVars, final int cutLevel) {
     final int arity = goal.getArity();
 
     final SolutionListener[] andingListeners = new SolutionListener[arity];

@@ -82,7 +82,7 @@ public class SolverHighLevelTest {
   public void vars() {
     final Var<Integer> Q = intVar("Q");
     final Term goal = new Even(Q);
-    final List<Map<Var, Object>> list = solver.solve(goal).vars().list();
+    final List<Map<Var<?>, Object>> list = solver.solve(goal).vars().list();
     assertThat(list.toString()).isEqualTo("[{Q=0}, {Q=2}, {Q=4}, {Q=6}, {Q=8}]");
   }
 

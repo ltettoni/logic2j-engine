@@ -159,7 +159,7 @@ public class UnifyContext {
    * @param ref
    * @return
    */
-  UnifyContext bind(Var var, Object ref) {
+  UnifyContext bind(Var<?> var, Object ref) {
     if (var == ref) {
       if (logger.isDebugEnabled()) {
         logger.debug("Not mapping {} onto itself", var);
@@ -194,18 +194,18 @@ public class UnifyContext {
     }
     if (termApi().isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
-      Var var1 = (Var) term1;
+      Var<?> var1 = (Var<?>) term1;
       final Object final1 = reifiedVar(var1);
       if (!(termApi().isFreeVar(final1))) {
         // term1 is bound - unify
         return unify(final1, term2);
       }
       // Ended up with final1 being a free Var, so term1 was a free var
-      var1 = (Var) final1;
+      var1 = (Var<?>) final1;
       // free Var var1 need to be bound
       if (termApi().isFreeVar(term2)) {
         // Binding two vars
-        final Var var2 = (Var) term2;
+        final Var<?> var2 = (Var<?>) term2;
         // Link one to two (should we link to the final or the initial value???)
         // Now do the binding of two vars
         return bind(var1, var2);
@@ -219,8 +219,8 @@ public class UnifyContext {
         // Not unified - we can only unify 2 Struct
         return null;
       }
-      final Struct s1 = (Struct) term1;
-      final Struct s2 = (Struct) term2;
+      final Struct<?> s1 = (Struct<?>) term1;
+      final Struct<?> s2 = (Struct<?>) term2;
       // The two Struct must have compatible signatures (functor and arity)
       //noinspection StringEquality
       if (s1.getPredicateSignature() != s2.getPredicateSignature()) {
@@ -258,7 +258,7 @@ public class UnifyContext {
       // Only Struct could match a DataFact
       return null;
     }
-    final Struct struct = (Struct) term1;
+    final Struct<?> struct = (Struct<?>) term1;
     final Object[] dataFactElements = dataFact.getElements();
     if (struct.getName() != dataFactElements[0]) {// Names are {@link String#intern()}alized so OK to check by reference
       // Functor must match
@@ -295,7 +295,7 @@ public class UnifyContext {
    * @param theVar
    * @return The dereferenced content of theVar, or theVar if it was free
    */
-  private Object reifiedVar(Var theVar) {
+  private Object reifiedVar(Var<?> theVar) {
     return this.stateStorage.dereference(theVar, this.currentTransaction);
   }
 
@@ -308,19 +308,19 @@ public class UnifyContext {
    */
   public Object reify(Object term) {
     if (termApi().isFreeVar(term)) {
-      term = reifiedVar((Var) term);
+      term = reifiedVar((Var<?>) term);
       // The var might end up on a Struct, that needs recursive reification
     }
     if (term instanceof Struct) {
       //            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
-      final Struct s = (Struct) term;
+      final Struct<?> s = (Struct<?>) term;
       if (s.getIndex() == 0) {
         // Structure is an atom or a constant term - no need to further transform
         return term;
       }
       // Structure has arguments
       final Object[] reifiedArgs = Arrays.stream(s.getArgs()).map(this::reify).toArray(Object[]::new);
-      final Struct res = s.cloneWithNewArguments(reifiedArgs);
+      final Struct<?> res = s.cloneWithNewArguments(reifiedArgs);
       if (s.getIndex() > 0) {
         // The original structure had variables, maybe the cloned one will still have (if those were free)
         // We need to reassign indexes. It's costly, unfortunately.

@@ -34,11 +34,11 @@ import static org.logic2j.engine.model.Var.anyVar;
 public class UnifyContextTest {
   private static final Logger logger = LoggerFactory.getLogger(UnifyContextTest.class);
 
-  protected Var X;
+  protected Var<?> X;
 
-  protected Var Y;
+  protected Var<?> Y;
 
-  protected Var Z;
+  protected Var<?> Z;
 
   protected Object _anon;
 
@@ -66,10 +66,10 @@ public class UnifyContextTest {
     Z = anyVar("Z");
     Z.setIndex(3);
 
-    Var X2 = anyVar("X2");
-    Var X3 = anyVar("X3");
-    Var X4 = anyVar("X4");
-    Var X5 = anyVar("X5");
+    Var<?> X2 = anyVar("X2");
+    Var<?> X3 = anyVar("X3");
+    Var<?> X4 = anyVar("X4");
+    Var<?> X5 = anyVar("X5");
 
     f_ab = termApi().normalize(Struct.valueOf("f", "a", "b"));
     f_aZ = termApi().normalize(Struct.valueOf("f", "a", Z));
@@ -83,7 +83,7 @@ public class UnifyContextTest {
   }
 
 
-  private UnifyContext bind(Var v, Object t2) {
+  private UnifyContext bind(Var<?> v, Object t2) {
     logger.info("Binding   : {} -> {}", v, t2);
     UnifyContext m = initialContext;
     assertThat(m).isNotNull();

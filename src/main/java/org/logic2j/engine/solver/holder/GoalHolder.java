@@ -96,7 +96,7 @@ public class GoalHolder implements ResultsHolder<Object> {
       final List<Term> effectiveGoals = new ArrayList<>();
       for (Map.Entry<Var, Constant> binding : varBindings.entrySet()) {
         Constant values = binding.getValue();
-        final Var var = binding.getKey();
+        final Var<?> var = binding.getKey();
         if (values.isUniqueFeed()) {
           values = bind(values.toArray());
         }
@@ -203,7 +203,7 @@ public class GoalHolder implements ResultsHolder<Object> {
     throw new UnsupportedOperationException("Not implemented");
   }
 
-  public SolutionHolder<Map<Var, Object>> vars() {
+  public SolutionHolder<Map<Var<?>, Object>> vars() {
     return SolutionHolder.extractingMaps(this);
   }
 
