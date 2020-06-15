@@ -23,7 +23,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 
 
 /**
- * Less Than comparison.
+ * Greater Than comparison.
  */
 public class GT<T extends Number> extends Comp2<T> {
   /**
