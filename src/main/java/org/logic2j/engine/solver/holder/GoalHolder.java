@@ -198,13 +198,13 @@ public class GoalHolder implements ResultsHolder<Object> {
   }
 
 
+  public SolutionHolder<Map<Var<?>, Object>> vars() {
+    return SolutionHolder.extractingMaps(this);
+  }
+
   @Override
   public <R> ResultsHolder<R> map(Function<Object, R> mapping) {
     throw new UnsupportedOperationException("Not implemented");
-  }
-
-  public SolutionHolder<Map<Var<?>, Object>> vars() {
-    return SolutionHolder.extractingMaps(this);
   }
 
   // --------------------------------------------------------------------------
