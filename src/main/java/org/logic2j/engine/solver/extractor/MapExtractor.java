@@ -34,8 +34,21 @@ public class MapExtractor implements SolutionExtractor<Map<Var, Object>> {
 
   private final Var<?>[] vars;
 
+  /**
+   * Extract values of a solution for the specified variables, in positional order.
+   * @param vars
+   */
+  public MapExtractor(Var<?>... vars) {
+    this.vars = vars;
+  }
+
+
+  /**
+   * Extract values of a solution for all the variables of goal.
+   * @param goal
+   */
   public MapExtractor(Object goal) {
-    this.vars = termApi().distinctVars(goal);
+    this(termApi().distinctVars(goal));
   }
 
 

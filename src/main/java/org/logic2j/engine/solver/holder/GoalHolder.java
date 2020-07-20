@@ -202,6 +202,10 @@ public class GoalHolder implements ResultsHolder<Object> {
     return SolutionHolder.extractingMaps(this);
   }
 
+  public SolutionHolder<Map<Var<?>, Object>> vars(Var<?>... vars) {
+    return SolutionHolder.extractingMaps(this, vars);
+  }
+
   @Override
   public <R> ResultsHolder<R> map(Function<Object, R> mapping) {
     throw new UnsupportedOperationException("Not implemented");
@@ -244,6 +248,14 @@ public class GoalHolder implements ResultsHolder<Object> {
    */
   public SolutionHolder<Object[]> varsArray() {
     return SolutionHolder.extractingArrays(this);
+  }
+
+  /**
+   * @return A SolutionHolder that returns solutions as array of Objects, for the speicified variables
+   * @param vars The variables of interest
+   */
+  public SolutionHolder<Object[]> varsArray(Var<?>... vars) {
+    return SolutionHolder.extractingArrays(this, vars);
   }
 
   /**

@@ -25,34 +25,44 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A {@link SolutionExtractor} that will extract values of
- * a set of variables, returned as an Array, indiced by every Var's index.
+ * multiple variables, returned as an Array, indiced by the position specified.
  * Typically used to find all bindings of a multi-variable goal, in a very efficient way.
  */
 public class ArrayExtractor implements SolutionExtractor<Object[]> {
 
   private final Var<?>[] vars;
-  private final int highestIndex;
+  private final int nbVars;
 
-  public ArrayExtractor(Object goal) {
+  /**
+   * Extract values of a solution for the specified variables, in positional order.
+   * @param vars The variables to extract values from, in the order desired
+   */
+  public ArrayExtractor(Var<?>... vars) {
     int high = 0;
-    this.vars = termApi().distinctVars(goal);
-    for (final Var<?> var : this.vars) {
-      high = Math.max(high, var.getIndex());
-    }
-    this.highestIndex = high;
+    this.vars = vars;
+    this.nbVars = this.vars.length;
   }
 
+  /**
+   * Extract values of a solution for all the variables of goal, the order
+   * is determined by TermApi#distinctVars()
+   * @param goal
+   */
+  public ArrayExtractor(Object goal) {
+    this(termApi().distinctVars(goal));
+  }
 
   /**
    * @param currentVars
-   * @return Actually a HashMap, meaning there is no particular order in the Var keys.
+   * @return The values reified from the currentVars, in the order specified by constructor
    */
   @Override
   public Object[] extractSolution(UnifyContext currentVars) {
-    final Object[] result = new Object[this.highestIndex + 1];
-    for (final Var<?> var : this.vars) {
+    final Object[] result = new Object[this.nbVars];
+    for (int i = 0; i < this.nbVars; i++) {
+      final Var<?> var = this.vars[i];
       final Object value = currentVars.reify(var);
-      result[var.getIndex()] = value;
+      result[i] = value;
     }
     return result;
   }

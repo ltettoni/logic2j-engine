@@ -90,6 +90,17 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
   }
 
   /**
+   * Factory: extract all variables in Maps (the not-so-efficient way)
+   *
+   * @param goalHolder
+   * @param vars The variables of interest
+   * @return Holds solutions as a List of Maps
+   */
+  public static SolutionHolder<Map<Var<?>, Object>> extractingMaps(GoalHolder goalHolder, Var<?>... vars) {
+    return new SolutionHolder(goalHolder, new MapExtractor(vars));
+  }
+
+  /**
    * Factory: extract all variables in Arrays (the efficient way)
    *
    * @param goalHolder
@@ -97,6 +108,16 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    */
   public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder) {
     return new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.effectiveGoal()));
+  }
+
+  /**
+   * Factory: extract all variables in Arrays (the efficient way)
+   * @param goalHolder
+   * @param vars The variables of interest
+   * @return Holds solutions as a List of Arrays
+   */
+  public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder, Var<?>... vars) {
+    return new SolutionHolder(goalHolder, new ArrayExtractor(vars));
   }
 
   public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
