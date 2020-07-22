@@ -26,12 +26,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
  * Less Than comparison.
  */
 public class LT<T extends Number> extends Comp2<T> {
-  /**
-   * A binary predicate with two functions defining the forward and reverse mappings.
-   *
-   * @param arg0
-   * @param arg1
-   */
+
   public LT(Binding<T> arg0, Binding<T> arg1) {
     super("lt", arg0, arg1);
     setCheck((v0, v1) -> v0.doubleValue() < v1.doubleValue());
