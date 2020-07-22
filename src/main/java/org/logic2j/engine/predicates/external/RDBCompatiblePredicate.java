@@ -18,7 +18,7 @@
 package org.logic2j.engine.predicates.external;
 
 /**
- * Used to mark predicates that are supported in SQL query language.
+ * Used to mark predicates that are supported to build SQL queries.
  * Predicates marked with this interface are subject to be directly converted into queries,
  * making inference much more efficient rather than retrieving more data and filtering later on via
  * regular inference.
