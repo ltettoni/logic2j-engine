@@ -41,7 +41,7 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
    *
    * @param theFunctor
    */
-  public Comp2(String theFunctor, Binding<T> arg0, Binding<T> arg1) {
+  protected Comp2(String theFunctor, Binding<T> arg0, Binding<T> arg1) {
     super(theFunctor, arg0, arg1);
   }
 
