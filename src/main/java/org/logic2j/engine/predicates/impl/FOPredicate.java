@@ -39,10 +39,11 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * First-Order logic Predicate (not to be confused with java.function.Predicate).
- * First-order logic is about binding variables to all solutions, not just checking one value.
- * <p>
- * All subclasses are required to implement {@link #predicateLogic(UnifyContext)}.
- * <p>
+ * This is a bridge between inference and the Java implementation of the user's logic.
+ * <p/>
+ * All subclasses will implement {@link #predicateLogic(UnifyContext)} which is called by the
+ * inference engine to bind solutions.
+ * <p/>
  * Support methods are provided to check the {@link Var}iables received from the {@link UnifyContext},
  * and unify variables to values, or check if unification of terms is possible, and then
  * send solutions to the {@link SolutionListener}.
@@ -97,7 +98,7 @@ public abstract class FOPredicate extends Struct {
   // ---------------------------------------------------------------------------
 
   /**
-   * This method will implement the logic of the predicate.
+   * Override this method with the logic of the predicate.
    *
    * @param currentVars
    * @return The continuation, one of {@link org.logic2j.engine.solver.Continuation} values.

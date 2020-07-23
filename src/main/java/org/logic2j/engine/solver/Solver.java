@@ -40,7 +40,7 @@ import static org.logic2j.engine.predicates.Predicates.and;
  * ";" (OR)
  * "call(X)"
  * "!" (CUT)
- * ( and in the future, ":-" (RULE) )
+ * ( possibly in the future, ":-" (RULE) )
  * All other predicates are delegated in implementations of {@link FOPredicate#predicateLogic(UnifyContext)}.
  */
 public class Solver {

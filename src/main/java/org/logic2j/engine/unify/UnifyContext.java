@@ -152,7 +152,7 @@ public class UnifyContext {
 
   /**
    * Bind var to ref (var will be altered in the returned UnifyContext); ref is untouched.
-   * <p>
+   * <p/>
    * (private except that used from test case)
    *
    * @param var

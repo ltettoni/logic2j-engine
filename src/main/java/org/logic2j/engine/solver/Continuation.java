@@ -25,7 +25,7 @@ import org.logic2j.engine.unify.UnifyContext;
  * that specify the behaviour that the inference engine should take after
  * a solution was found, via
  * {@link SolutionListener#onSolution(UnifyContext)}.
- * <p>
+ * <p/>
  * NOTE: Only those two possible values should be returned, see documentation of SolutionListener.
  *
  * @author tettoni
