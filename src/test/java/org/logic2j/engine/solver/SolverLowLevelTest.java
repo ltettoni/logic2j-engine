@@ -21,10 +21,10 @@ import org.junit.Test;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.Digit;
-import org.logic2j.engine.predicates.Even;
+import org.logic2j.engine.predicates.impl.generator.Digit;
+import org.logic2j.engine.predicates.impl.generator.Even;
 import org.logic2j.engine.predicates.EvenCheck;
-import org.logic2j.engine.predicates.IntRange;
+import org.logic2j.engine.predicates.impl.generator.IntRange;
 import org.logic2j.engine.predicates.impl.firstorder.Not;
 
 import java.util.ArrayList;

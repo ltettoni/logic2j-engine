@@ -21,9 +21,10 @@ import org.junit.Test;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.Digit;
+import org.logic2j.engine.predicates.impl.generator.Digit;
 import org.logic2j.engine.predicates.impl.firstorder.Exists;
 import org.logic2j.engine.predicates.impl.math.Pred2;
+import org.logic2j.engine.predicates.impl.math.function.Square;
 import org.logic2j.engine.predicates.internal.And;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -50,15 +51,6 @@ public class ExamplesTest {
     final Term exists = new Exists(new And(new Digit(x), new Square(x, square), new Mod10(square, x)));
     final int nbrEx = solver.solve(exists).count();
     assertThat(nbrEx).isEqualTo(1);
-  }
-
-
-  private static class Square extends Pred2<Integer, Integer> {
-    public Square(Binding<Integer> arg0, Binding<Integer> arg1) {
-      super("square", arg0, arg1);
-      setPreimage(val -> (int) Math.sqrt(val));
-      setImage(val -> val * val);
-    }
   }
 
 

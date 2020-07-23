@@ -19,9 +19,9 @@ package org.logic2j.engine.solver;
 
 import org.junit.Test;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.Digit;
-import org.logic2j.engine.predicates.Even;
-import org.logic2j.engine.predicates.Odd;
+import org.logic2j.engine.predicates.impl.generator.Digit;
+import org.logic2j.engine.predicates.impl.generator.Even;
+import org.logic2j.engine.predicates.impl.generator.Odd;
 import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.io.logging.*;
 import org.logic2j.engine.predicates.impl.math.function.Abs;

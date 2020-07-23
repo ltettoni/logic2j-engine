@@ -15,19 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates;
+package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
+import java.util.stream.IntStream;
+
+import static org.logic2j.engine.model.SimpleBindings.bind;
+
 /**
  * Generate digits
  */
-public class Odd extends Pred1Generator<Integer> {
+public class Digit extends Pred1Generator<Integer> {
 
-  public Odd(Binding<Integer> term) {
-    super("odd", term, 1, 3, 5, 7, 9);
+  public Digit(Binding<Integer> term) {
+    super("digit", term, bind(IntStream.range(0, 10).boxed()));
   }
-
 }

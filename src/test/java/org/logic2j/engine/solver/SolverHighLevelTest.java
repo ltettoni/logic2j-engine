@@ -20,7 +20,7 @@ package org.logic2j.engine.solver;
 import org.junit.Test;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.Even;
+import org.logic2j.engine.predicates.impl.generator.Even;
 
 import java.util.List;
 import java.util.Map;

@@ -15,22 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates;
+package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
-
-import java.util.stream.IntStream;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
  * Generate digits
  */
-public class Digit extends Pred1Generator<Integer> {
+public class Even extends Pred1Generator<Integer> {
 
-  public Digit(Binding<Integer> term) {
-    super("digit", term, bind(IntStream.range(0, 10).boxed()));
+  public Even(Binding<Integer> term) {
+    super("even", term, 0, 2, 4, 6, 8);
+  }
+
+
+  public Even(Integer v0) {
+    this(bind(v0));
   }
 }

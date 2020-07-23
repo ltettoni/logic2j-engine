@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates;
+package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;

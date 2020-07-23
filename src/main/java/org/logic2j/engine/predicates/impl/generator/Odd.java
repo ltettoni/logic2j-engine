@@ -15,25 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.predicates;
+package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
-import static org.logic2j.engine.model.SimpleBindings.bind;
-
 /**
  * Generate digits
  */
-public class Even extends Pred1Generator<Integer> {
+public class Odd extends Pred1Generator<Integer> {
 
-  public Even(Binding<Integer> term) {
-    super("even", term, 0, 2, 4, 6, 8);
+  public Odd(Binding<Integer> term) {
+    super("odd", term, 1, 3, 5, 7, 9);
   }
 
-
-  public Even(Integer v0) {
-    this(bind(v0));
-  }
 }
