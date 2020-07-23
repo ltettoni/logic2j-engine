@@ -40,7 +40,7 @@ public class CountingSolutionListener implements SolutionListener {
   /**
    * Will stop counting after that number of iterations.
    */
-  private long maxIteration;
+  private final long maxIteration;
 
   public CountingSolutionListener() {
     this(Long.MAX_VALUE);
