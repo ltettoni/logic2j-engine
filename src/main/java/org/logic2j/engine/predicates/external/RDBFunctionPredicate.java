@@ -18,12 +18,12 @@
 package org.logic2j.engine.predicates.external;
 
 /**
- * Used to mark predicates that available as database functions.
+ * Used to mark predicates that are available as database functions.
  */
 public interface RDBFunctionPredicate extends RDBCompatiblePredicate {
 
   /**
-   * @return A TextFormat that renders the SQL function.
+   * @return TextFormats that render the SQL function depending on the binding of args
    */
   String[] sqlFunctionTextFormat();
 
