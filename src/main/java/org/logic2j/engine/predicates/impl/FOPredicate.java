@@ -17,6 +17,16 @@
 
 package org.logic2j.engine.predicates.impl;
 
+import static org.logic2j.engine.model.SimpleBindings.newBinding;
+import static org.logic2j.engine.model.TermApiLocator.termApi;
+import static org.logic2j.engine.model.Var.anon;
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
@@ -25,17 +35,6 @@ import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.logic2j.engine.model.SimpleBindings.bind;
-import static org.logic2j.engine.model.TermApiLocator.termApi;
-import static org.logic2j.engine.model.Var.anon;
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * First-Order logic Predicate (not to be confused with java.function.Predicate).
@@ -59,39 +58,29 @@ public abstract class FOPredicate extends Struct {
    * @param arguments
    */
   protected FOPredicate(String functor, Object... arguments) {
-    super(functor, createBindings(arguments));
+    super(functor, newBindingsOrStructs(arguments));
   }
 
-  private static Object[] createBindings(Object... arguments) {
-    return Arrays.stream(arguments).map(FOPredicate::createBinding).toArray(Object[]::new);
+  /**
+   * Convert to valid arguments to a {@link FOPredicate}
+   * @param arguments
+   * @return See {@link #newBindingOrStruct(Object)}
+   */
+  public static Object[] newBindingsOrStructs(Object... arguments) {
+    return Arrays.stream(arguments).map(FOPredicate::newBindingOrStruct).toArray(Object[]::new);
   }
 
-  private static Object createBinding(Object arg) {
-    if (arg == null) {
-      return anon();
+  /**
+   * Make any object as a good argument to a {@link Struct} for binding values
+   * @param arg Any object
+   * @return Usually a {@link Binding}, or a {@link Struct}.
+   */
+  public static Object newBindingOrStruct(Object arg) {
+    if (arg instanceof Struct) {
+      return arg;
     }
-    // Here we will convert basic types to their SimpleBindings
-    if (arg instanceof Long) {
-      return bind((Long) arg);
-    }
-    if (arg instanceof Integer) {
-      return bind((Integer) arg);
-    }
-    if (arg instanceof String) {
-      return bind((String) arg);
-    }
-    if (arg instanceof Double) {
-      return bind((Double) arg);
-    }
-    if (arg instanceof Float) {
-      return bind((Float) arg);
-    }
-    if (arg instanceof Boolean) {
-      return bind((Boolean) arg);
-    }
-    return arg;
+    return newBinding(arg);
   }
-
 
   // ---------------------------------------------------------------------------
   // The logic of this predicate
@@ -214,7 +203,7 @@ public abstract class FOPredicate extends Struct {
       final int positionOfArgument = indexOfArg + 1;
       final String nameOfPrimitive = getName();
       throw new InvalidTermException(
-          "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
+              "Cannot invoke primitive \"" + nameOfPrimitive + "\" with a free variable, check argument #" + positionOfArgument);
     }
   }
 
