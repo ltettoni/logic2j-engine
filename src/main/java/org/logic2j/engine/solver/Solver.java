@@ -117,7 +117,7 @@ public class Solver {
     // Check if we will have to deal with DataFacts in this session of solving.
     // This slightly improves performance - we can bypass calling the method that deals with that
     if (goal instanceof Struct<?> && !((Struct<?>) goal).hasIndex()) {
-      throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call termApi().normalize()");
+      throw new InvalidTermException("Struct must be normalized before it can be solved: \"" + goal + "\" - call TermApi.normalize()");
     }
     return solveInternalRecursive(goal, currentVars, INITIAL_CUT_LEVEL);
   }
