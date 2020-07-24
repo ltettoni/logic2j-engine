@@ -38,11 +38,13 @@ import java.util.function.Predicate;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
 /**
- * Factory methods for common predicates.
+ * Factory methods for frequently-used instances of
+ * {@link org.logic2j.engine.predicates.impl.FOPredicate}.
  */
 public final class Predicates {
 
   private Predicates() {
+      // Forbid instantiation - only static methods here
   }
 
   public static final True ttrue = new True(); // Singleton
