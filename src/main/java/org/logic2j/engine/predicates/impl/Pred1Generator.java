@@ -33,7 +33,6 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
  * Generate list of values in sequence.
  */
 public abstract class Pred1Generator<T> extends FOPredicate {
-  private static final Logger logger = LoggerFactory.getLogger(Pred1Generator.class);
 
   private final Constant<T> allowedValues;
 
