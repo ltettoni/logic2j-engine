@@ -18,6 +18,8 @@
 package org.logic2j.engine.predicates.impl.math.compare;
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBindings;
+import org.logic2j.engine.model.Struct;
 
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
@@ -38,6 +40,14 @@ public class LT<T extends Number> extends Comp2<T> {
 
   public LT(T arg0, Binding<T> arg1) {
     this(bind(arg0), arg1);
+  }
+
+  public static LT valueOf(Struct struct) {
+    if (struct.getPredicateSignature().equals("</2")) {
+      return new LT(SimpleBindings.newBinding(struct.getArg(0)),
+              SimpleBindings.newBinding(struct.getArg(1)));
+    }
+    return null;
   }
 
   @Override

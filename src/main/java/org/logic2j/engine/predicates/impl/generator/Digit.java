@@ -19,6 +19,8 @@ package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBindings;
+import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
 import java.util.stream.IntStream;
@@ -32,5 +34,12 @@ public class Digit extends Pred1Generator<Integer> {
 
   public Digit(Binding<Integer> term) {
     super("digit", term, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  }
+
+  public static Digit valueOf(Struct struct) {
+    if (struct.getPredicateSignature().equals("digit/1")) {
+      return new Digit((Binding<Integer>) SimpleBindings.newBinding(struct.getArg(0)));
+    }
+    return null;
   }
 }
