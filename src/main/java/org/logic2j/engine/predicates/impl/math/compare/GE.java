@@ -20,16 +20,18 @@ package org.logic2j.engine.predicates.impl.math.compare;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBindings;
+import org.logic2j.engine.model.Struct;
 
 
 /**
  * Greater or Equal Than comparison.
  */
-public class GE<T extends Number> extends Comp2<T> {
+public class GE<T extends Comparable<T>> extends Comp2<T> {
 
   public GE(Binding<T> arg0, Binding<T> arg1) {
     super("ge", arg0, arg1);
-    setCheck((v0, v1) -> v0.doubleValue() >= v1.doubleValue());
+    setCheck((v0, v1) -> v0.compareTo(v1) >= 0);
   }
 
   public GE(Binding<T> arg0, T arg1) {
@@ -38,6 +40,14 @@ public class GE<T extends Number> extends Comp2<T> {
 
   public GE(T arg0, Binding<T> arg1) {
     this(bind(arg0), arg1);
+  }
+
+  public static GE valueOf(Struct struct) {
+    if (struct.getPredicateSignature().equals(">=/2")) {
+      return new GE(SimpleBindings.newBinding(struct.getArg(0)),
+              SimpleBindings.newBinding(struct.getArg(1)));
+    }
+    return null;
   }
 
   @Override

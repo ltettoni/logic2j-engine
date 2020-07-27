@@ -20,16 +20,18 @@ package org.logic2j.engine.predicates.impl.math.compare;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.SimpleBindings;
+import org.logic2j.engine.model.Struct;
 
 
 /**
  * Less or Equal Than comparison.
  */
-public class LE<T extends Number> extends Comp2<T> {
+public class LE<T extends Comparable<T>> extends Comp2<T> {
 
   public LE(Binding<T> arg0, Binding<T> arg1) {
     super("le", arg0, arg1);
-    setCheck((v0, v1) -> v0.doubleValue() <= v1.doubleValue());
+    setCheck((v0, v1) -> v0.compareTo(v1) <= 0);
   }
 
   public LE(Binding<T> arg0, T arg1) {
@@ -38,6 +40,14 @@ public class LE<T extends Number> extends Comp2<T> {
 
   public LE(T arg0, Binding<T> arg1) {
     this(bind(arg0), arg1);
+  }
+
+  public static LE valueOf(Struct struct) {
+    if (struct.getPredicateSignature().equals("=</2")) {
+      return new LE(SimpleBindings.newBinding(struct.getArg(0)),
+              SimpleBindings.newBinding(struct.getArg(1)));
+    }
+    return null;
   }
 
   @Override

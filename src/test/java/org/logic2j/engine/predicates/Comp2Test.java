@@ -19,6 +19,7 @@ package org.logic2j.engine.predicates;
 
 import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
+import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.math.compare.LT;
 import org.logic2j.engine.solver.Solver;
@@ -35,7 +36,7 @@ public class Comp2Test {
 
   @Test(expected = InvalidTermException.class)
   public void twoVars() {
-    Term goal = new LT(intVar(), intVar());
+    Term goal = new LT((Binding<Integer>)intVar(), (Binding<Integer>)intVar());
     assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
@@ -67,6 +68,18 @@ public class Comp2Test {
   public void valid3() {
     Term goal = new LT(bind(10, 11), bind(20, 11, 22));
     assertThat(solver.solve(goal).count()).isEqualTo(5);
+  }
+
+  @Test
+  public void validString() {
+    Term goal = new LT(bind("ab"), bind("cd"));
+    assertThat(solver.solve(goal).count()).isEqualTo(1);
+  }
+
+  @Test
+  public void invalidString() {
+    Term goal = new LT(bind("cd"), bind("ab"));
+    assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test

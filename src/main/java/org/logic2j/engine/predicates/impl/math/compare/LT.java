@@ -27,11 +27,11 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 /**
  * Less Than comparison.
  */
-public class LT<T extends Number> extends Comp2<T> {
+public class LT<T extends Comparable<T>> extends Comp2<T> {
 
   public LT(Binding<T> arg0, Binding<T> arg1) {
     super("lt", arg0, arg1);
-    setCheck((v0, v1) -> v0.doubleValue() < v1.doubleValue());
+    setCheck((v0, v1) -> v0.compareTo(v1) < 0);
   }
 
   public LT(Binding<T> arg0, T arg1) {
