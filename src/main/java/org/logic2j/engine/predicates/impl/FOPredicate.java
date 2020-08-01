@@ -109,6 +109,12 @@ public abstract class FOPredicate extends Struct {
   }
 
 
+  /**
+   * Will notify a solution to the {@link org.logic2j.engine.solver.Solver} if condition is true.
+   * @param condition
+   * @param currentVars
+   * @return The result of {@link #notifySolution(UnifyContext)} if condition is true, otherwise CONTINUE.
+   */
   protected int notifySolutionIf(boolean condition, UnifyContext currentVars) {
     if (condition) {
       return notifySolution(currentVars);

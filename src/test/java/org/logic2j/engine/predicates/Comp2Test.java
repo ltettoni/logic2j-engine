@@ -29,7 +29,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
 
 /**
- * Test the comparison operators.
+ * Test the comparison predicates.
  */
 public class Comp2Test {
   private final Solver solver = new Solver();

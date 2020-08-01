@@ -30,7 +30,7 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
- * Bind one value form a {@link Constant}, in sequence.
+ * Unify one value from a {@link Constant}.
  */
 public abstract class Pred1Generator<T> extends FOPredicate {
 
