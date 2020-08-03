@@ -11,9 +11,9 @@ import org.logic2j.engine.unify.UnifyContext;
 public class Difference<T extends Number> extends FOPredicate {
 
 
-  private Binding<T> lower;
-  private Binding<T> delta;
-  private Binding<T> upper;
+  private final Binding<T> lower;
+  private final Binding<T> delta;
+  private final Binding<T> upper;
 
   protected Difference(Binding<T> lower, Binding<T> delta, Binding<T> upper) {
     super("difference", lower, delta, upper);
