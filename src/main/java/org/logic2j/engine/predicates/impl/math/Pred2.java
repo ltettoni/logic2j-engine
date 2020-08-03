@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
+import java.util.stream.Collectors;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
@@ -100,14 +102,20 @@ public class Pred2<T, R> extends FOPredicate {
         return CONTINUE;
       } else {
         // n0 is constant, n1 is free: just unify in forward direction
-        final Stream<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream);
-        return unifyAndNotifyMany(currentVars, n1, images);
+        final List<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream).collect(Collectors.toList());
+        if (images.isEmpty()) {
+          return CONTINUE;
+        }
+        return unifyAndNotify(currentVars, n1, bind(images));
       }
     } else if (isFreeVar(n0)) {
       // n0 is a free variable, unify in reverse direction
       if (isConstant(n1)) {
-        final Stream<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream);
-        return unifyAndNotifyMany(currentVars, n0, preimages);
+        final List<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream).collect(Collectors.toList());
+        if (preimages.isEmpty()) {
+          return CONTINUE;
+        }
+        return unifyAndNotify(currentVars, n0, bind(preimages));
       } else {
         // Two free variables - no solution (exception: this method is overridden in predicate Eq/2)
         return CONTINUE;

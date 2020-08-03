@@ -20,8 +20,10 @@ package org.logic2j.engine.predicates.impl.math.compare;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 import java.util.function.BiFunction;
+import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
+import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.external.RDBComparisonPredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;

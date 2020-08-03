@@ -53,7 +53,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
       // Still a free var, we will attempt to read values from the getter and provide bindings
 
       if (allowedValues != null) {
-        return unifyAndNotifyMany(currentVars, reified, allowedValues.toArray());
+        return unifyAndNotify(currentVars, reified, allowedValues);
       }
       return CONTINUE;
     } else if (isConstant(reified)) {

@@ -133,68 +133,36 @@ public abstract class FOPredicate extends Struct {
    * @return
    */
   protected int unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
+    if (t1 instanceof Constant) {
+      final Constant<?> c1 = (Constant<?>)t1;
+      for (Object e1 : c1.toList()) {
+        final int continuation = unifyAndNotify(currentVars, e1, t2);
+        if (continuation != CONTINUE) {
+          return continuation;
+        }
+      }
+      return CONTINUE;
+    }
+    if (t2 instanceof Constant) {
+      final Constant<?> c2 = (Constant<?>)t2;
+      for (Object e2 : c2.toList()) {
+        final int continuation = unifyAndNotify(currentVars, t1, e2);
+        if (continuation != CONTINUE) {
+          return continuation;
+        }
+      }
+      return CONTINUE;
+    }
+    // Normal scalar unification
     final UnifyContext afterUnification = currentVars.unify(t1, t2);
     final boolean didUnify = afterUnification != null;
     return notifySolutionIf(didUnify, afterUnification);
   }
 
-  /**
-   * Unify terms t1 and constant values from iter, and if they could be unified, call theListener with the solution of the newly
-   * unified variables; return the result from notifying. If not, return CONTINUE.
-   *
-   * @param currentVars
-   * @param t1
-   * @param iter
-   * @return
-   */
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Iterator<T> iter) {
-    while (iter.hasNext()) {
-      final T value = iter.next();
-      final int continuation = unifyAndNotify(currentVars, t1, value);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
 
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, List<T> values) {
-    for (final Object value : values) {
-      final int continuation = unifyAndNotify(currentVars, t1, value);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  protected int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Object[] values) {
-    for (final Object value : values) {
-      final int continuation = unifyAndNotify(currentVars, t1, value);
-      if (continuation != CONTINUE) {
-        return continuation;
-      }
-    }
-    return CONTINUE;
-  }
-
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, Object t1, Stream<T> values) {
-    return unifyAndNotifyMany(currentVars, t1, values.iterator());
-  }
-
-  protected <T> int unifyAndNotifyMany(UnifyContext currentVars, T constant, Binding<T> binding) {
-    final Object reified = currentVars.reify(binding);
-    if (isFreeVar(reified)) {
-      return unifyAndNotify(currentVars, constant, reified);
-    }
-    if (isConstant(reified)) {
-      return unifyAndNotifyMany(currentVars, constant, list(reified));
-    }
-    return CONTINUE;
-  }
 
   // --------------------------------------------------------------------------
-  // Support methods to
+  // Support methods to help writing predicates
   // --------------------------------------------------------------------------
 
   /**
