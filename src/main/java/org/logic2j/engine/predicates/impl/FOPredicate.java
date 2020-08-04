@@ -205,6 +205,29 @@ public abstract class FOPredicate extends Struct {
     return Stream.of((Q) reified);
   }
 
+
+
+  protected Integer toInt(Object value) {
+    return toTypedValue(value, Integer.class);
+  }
+
+  protected <T> T toTypedValue(Object value, Class<T> type) {
+    assert value != null : "Value of binding cannot be null";
+    assert type != null : "Expected type of binding must be specified";
+    if (isFreeVar(value)) {
+      return null;
+    }
+    if (value instanceof Constant) {
+      final Constant constant = (Constant) value;
+      return (T) toTypedValue(constant.toScalar(), constant.getType());
+    }
+    if (!type.isAssignableFrom(value.getClass())) {
+      throw new InvalidTermException("Term of " + value.getClass() + " not allowed where expecting " + type + "; value was " + value);
+    }
+    return (T) value;
+  }
+
+
   /**
    * @param reified Result of {@link UnifyContext#reify(Object)}
    * @return true if reified is not a free {@link Var}, including true when reified is null

@@ -2,9 +2,7 @@ package org.logic2j.engine.predicates;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
-import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 
@@ -28,6 +26,7 @@ public class Difference<T extends Number> extends FOPredicate {
     final Integer del = toInt(currentVars.reify(delta));
     final Integer up = toInt(currentVars.reify(upper));
 
+    // Different logic depending on which is the free variable
     if (low!=null && del!=null) {
       return unifyAndNotify(currentVars, low + del, upper);
     }
@@ -39,26 +38,6 @@ public class Difference<T extends Number> extends FOPredicate {
     }
     // No solution
     return CONTINUE;
-  }
-
-  protected Integer toInt(Object value) {
-    return toTypedValue(value, Integer.class);
-  }
-
-  protected <T> T toTypedValue(Object value, Class<T> type) {
-    assert value != null : "Value of binding cannot be null";
-    assert type != null : "Expected type of binding must be specified";
-    if (isFreeVar(value)) {
-      return null;
-    }
-    if (value instanceof Constant) {
-      final Constant constant = (Constant) value;
-      return (T) toTypedValue(constant.toScalar(), constant.getType());
-    }
-    if (!type.isAssignableFrom(value.getClass())) {
-      throw new InvalidTermException("Term of " + value.getClass() + " not allowed where expecting " + type + "; value was " + value);
-    }
-    return (T) value;
   }
 
 }
