@@ -17,6 +17,7 @@
 
 package org.logic2j.engine.unify;
 
+import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,6 +136,9 @@ class UnifyStateByLookup {
     Var<?> runningVar = theVar;
 
     int slot = runningVar.getIndex();
+    if (slot<0) {
+      throw new SolverException("Cannot dereference variable " + theVar + " whose index is not set. Goals must be normalized before solving");
+    }
     int limiter = Integer.MAX_VALUE;
     while (--limiter >= 0) {
       // Handle array sizing overflow
