@@ -58,7 +58,7 @@ public abstract class Pred1Generator<T> extends FOPredicate {
       return CONTINUE;
     } else if (isConstant(reified)) {
       // Variable is bound to a value
-      for (T val : FOPredicate.<T>list(reified)) {
+      for (T val : this.<T>toIterable(reified)) {
         final boolean contains = allowedValues.contains(val);
         final int continuation = notifySolutionIf(contains, currentVars);
         if (continuation != CONTINUE) {

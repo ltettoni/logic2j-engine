@@ -50,10 +50,10 @@ public class Pred1Tester<T> extends FOPredicate {
 
   @Override
   public final int predicateLogic(UnifyContext currentVars) {
-    final Object reified = currentVars.reify(getArg(0));
+    final Iterable<T> iter = this.toIterable(currentVars.reify(getArg(0)));
 
-    if (isConstant(reified)) {
-      for (T c0 : FOPredicate.<T>list(reified)) {
+    if (iter != null) {
+      for (T c0 : iter) {
         final boolean found = this.test.test(c0);
         final int continuation = notifySolutionIf(found, currentVars);
         if (continuation != CONTINUE) {
@@ -61,11 +61,9 @@ public class Pred1Tester<T> extends FOPredicate {
         }
       }
       return CONTINUE;
-    } else if (isFreeVar(reified)) {
+    } else {
       // free variables - no solution
       return CONTINUE;
-    } else {
-      throw new SolverException(format("Should not be handling %s in %s", reified, this));
     }
 
   }
@@ -82,7 +80,6 @@ public class Pred1Tester<T> extends FOPredicate {
   // --------------------------------------------------------------------------
   // Accessors
   // --------------------------------------------------------------------------
-
 
   public Predicate<T> getTest() {
     return test;

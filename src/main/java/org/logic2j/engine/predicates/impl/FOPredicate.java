@@ -17,16 +17,12 @@
 
 package org.logic2j.engine.predicates.impl;
 
+import static java.util.Collections.singletonList;
 import static org.logic2j.engine.model.SimpleBindings.newBinding;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
-import static org.logic2j.engine.model.Var.anon;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
 import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
@@ -182,36 +178,13 @@ public abstract class FOPredicate extends Struct {
   }
 
 
-  protected static <Q> List<Q> list(Object reified) {
-    if (reified == null || isFreeVar(reified)) {
-      return Collections.emptyList();
-    }
-    if (reified instanceof Constant<?>) {
-      return ((Constant<Q>) reified).toList();
-    }
-    // Other object: will be a scalar
-    return Collections.singletonList((Q) reified);
-  }
-
-
-  protected static <Q> Stream<Q> stream(Object reified) {
-    if (reified == null || isFreeVar(reified)) {
-      return Stream.empty();
-    }
-    if (reified instanceof Constant<?>) {
-      return ((Constant<Q>) reified).toStream();
-    }
-    // Other object: will be a scalar
-    return Stream.of((Q) reified);
-  }
-
 
 
   protected Integer toInt(Object value) {
     return toTypedValue(value, Integer.class);
   }
 
-  protected <T> T toTypedValue(Object value, Class<T> type) {
+  protected <Q> Q toTypedValue(Object value, Class<Q> type) {
     assert value != null : "Value of binding cannot be null";
     assert type != null : "Expected type of binding must be specified";
     if (isFreeVar(value)) {
@@ -219,24 +192,36 @@ public abstract class FOPredicate extends Struct {
     }
     if (value instanceof Constant) {
       final Constant constant = (Constant) value;
-      return (T) toTypedValue(constant.toScalar(), constant.getType());
+      return (Q) toTypedValue(constant.toScalar(), constant.getType());
     }
     if (!type.isAssignableFrom(value.getClass())) {
       throw new InvalidTermException("Term of " + value.getClass() + " not allowed where expecting " + type + "; value was " + value);
     }
-    return (T) value;
+    return (Q) value;
   }
 
+
+  protected <Q> Iterable<Q> toIterable(Object value) {
+    if (isFreeVar(value)) {
+      return null;
+    }
+    if (value instanceof Constant) {
+      final Constant constant = (Constant) value;
+      return constant.toList();
+    }
+    return singletonList((Q)value);
+  }
 
   /**
    * @param reified Result of {@link UnifyContext#reify(Object)}
    * @return true if reified is not a free {@link Var}, including true when reified is null
    */
   protected static boolean isConstant(Object reified) {
-    return !termApi().isFreeVar(reified) && reified != anon();
+    return !termApi().isFreeVar(reified)/* && reified != anon() */;
   }
 
   protected static boolean isFreeVar(Object reified) {
     return termApi().isFreeVar(reified);
   }
+
 }

@@ -56,8 +56,8 @@ public class IntRange extends FOPredicate {
     ensureBindingIsNotAFreeVar(minBound, 0);
     ensureBindingIsNotAFreeVar(maxBound, 2);
 
-    final int min = ((Constant<Integer>) minBound).toScalar();
-    final int max = ((Constant<Integer>) maxBound).toScalar();
+    final int min = toInt(minBound);
+    final int max = toInt(maxBound);
 
     if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class IntRange extends FOPredicate {
       }
     } else {
       // Check: notify one solution for any binding within range
-      for (Object val : list(iterating)) {
+      for (Object val : toIterable(iterating)) {
         if (val instanceof Number) {
           final int v = ((Number) val).intValue();
           final int cont = notifySolutionIf(min <= v && v < max, currentVars);

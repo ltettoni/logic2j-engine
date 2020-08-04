@@ -20,10 +20,8 @@ package org.logic2j.engine.predicates.impl.math.compare;
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 import java.util.function.BiFunction;
-import org.logic2j.engine.exception.InvalidTermException;
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.external.RDBComparisonPredicate;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
@@ -54,17 +52,19 @@ public abstract class Comp2<T> extends FOPredicate implements RDBComparisonPredi
     ensureBindingIsNotAFreeVar(n0, 0);
     ensureBindingIsNotAFreeVar(n1, 1);
 
-    return comparison(currentVars, n0, n1);
+    final Iterable<T> iter0 = this.toIterable(n0);
+    final Iterable<T> iter1 = this.toIterable(n1);
+
+    return comparison(currentVars, iter0, iter1);
   }
 
-  protected int comparison(UnifyContext currentVars, Object n0, Object n1) {
-    if (isConstant(n0)) {
-      if (isConstant(n1)) {
-        final T[] values1 = FOPredicate.<T>stream(n1).toArray(n -> (T[]) new Object[n]);
-        for (T c0 : FOPredicate.<T>list(n0)) {
-          for (final T c1 : values1) {
+  protected int comparison(UnifyContext currentVars, Iterable<T> iter0, Iterable<T> iter1) {
+    if (iter0 != null) {
+      if (iter1 != null) {
+        for (T e0 : iter0) {
+          for (final T e1 : iter1) {
             // Both bound values - check
-            final int continuation = notifySolutionIf(check.apply(c0, c1), currentVars);
+            final int continuation = notifySolutionIf(check.apply(e0, e1), currentVars);
             if (continuation != CONTINUE) {
               return continuation;
             }

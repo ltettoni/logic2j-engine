@@ -17,20 +17,17 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
-import java.util.stream.Collectors;
-import org.logic2j.engine.exception.SolverException;
+import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import static org.logic2j.engine.model.SimpleBindings.bind;
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * 2-arguments predicates with a functional relation between the two argument(s),
@@ -84,11 +81,12 @@ public class Pred2<T, R> extends FOPredicate {
   }
 
   protected int unification(UnifyContext currentVars, Object n0, Object n1) {
-    if (isConstant(n0)) {
-      if (isConstant(n1)) {
-        final List<R> values1 = FOPredicate.list(n1);
-        for (T c0 : FOPredicate.<T>list(n0)) {
-          for (final R c1 : values1) {
+    final Iterable<T> iter0 = this.toIterable(n0);
+    final Iterable<R> iter1 = this.toIterable(n1);
+    if (iter0 != null) {
+      if (iter1 != null) {
+        for (T c0 : iter0) {
+          for (final R c1 : iter1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
             final boolean found = Arrays.stream(images).anyMatch(c1::equals);
@@ -102,26 +100,35 @@ public class Pred2<T, R> extends FOPredicate {
         return CONTINUE;
       } else {
         // n0 is constant, n1 is free: just unify in forward direction
-        final List<R> images = FOPredicate.<T>stream(n0).map(this.images).flatMap(Arrays::stream).collect(Collectors.toList());
-        if (images.isEmpty()) {
+        final List<R> img = new ArrayList<>();
+        for (T n: iter0) {
+          for (R im: this.images.apply(n)) {
+            img.add(im);
+          }
+        }
+        if (img.isEmpty()) {
           return CONTINUE;
         }
-        return unifyAndNotify(currentVars, n1, bind(images));
+        return unifyAndNotify(currentVars, n1, bind(img));
       }
-    } else if (isFreeVar(n0)) {
+    } else {
       // n0 is a free variable, unify in reverse direction
-      if (isConstant(n1)) {
-        final List<T> preimages = FOPredicate.<R>stream(n1).map(this.preimages).flatMap(Arrays::stream).collect(Collectors.toList());
-        if (preimages.isEmpty()) {
+      if (iter1 != null) {
+        final List<T> pri = new ArrayList<>();
+        for (R n: iter1) {
+          for (T pre: this.preimages.apply(n)) {
+            pri.add(pre);
+          }
+        }
+        if (pri.isEmpty()) {
           return CONTINUE;
         }
-        return unifyAndNotify(currentVars, n0, bind(preimages));
+        return unifyAndNotify(currentVars, n0, bind(pri));
       } else {
         // Two free variables - no solution (exception: this method is overridden in predicate Eq/2)
         return CONTINUE;
       }
     }
-    throw new SolverException("Should never be here");
   }
 
   // --------------------------------------------------------------------------
