@@ -184,6 +184,11 @@ public abstract class FOPredicate extends Struct {
     return toTypedValue(value, Integer.class);
   }
 
+  protected String toString(Object value) {
+    final CharSequence cs = toTypedValue(value, CharSequence.class);
+    return cs != null ? cs.toString() : null;
+  }
+
   protected <Q> Q toTypedValue(Object value, Class<Q> type) {
     assert value != null : "Value of binding cannot be null";
     assert type != null : "Expected type of binding must be specified";
