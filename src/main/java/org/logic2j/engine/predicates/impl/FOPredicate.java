@@ -59,6 +59,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * Convert to valid arguments to a {@link FOPredicate}
+   *
    * @param arguments
    * @return See {@link #newBindingOrStruct(Object)}
    */
@@ -68,6 +69,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * Make any object as a good argument to a {@link Struct} for binding values
+   *
    * @param arg Any object
    * @return Usually a {@link Binding}, or a {@link Struct}.
    */
@@ -107,6 +109,7 @@ public abstract class FOPredicate extends Struct {
 
   /**
    * Will notify a solution to the {@link org.logic2j.engine.solver.Solver} if condition is true.
+   *
    * @param condition
    * @param currentVars
    * @return The result of {@link #notifySolution(UnifyContext)} if condition is true, otherwise CONTINUE.
@@ -130,7 +133,7 @@ public abstract class FOPredicate extends Struct {
    */
   protected int unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
     if (t1 instanceof Constant) {
-      final Constant<?> c1 = (Constant<?>)t1;
+      final Constant<?> c1 = (Constant<?>) t1;
       for (Object e1 : c1.toList()) {
         final int continuation = unifyAndNotify(currentVars, e1, t2);
         if (continuation != CONTINUE) {
@@ -140,7 +143,7 @@ public abstract class FOPredicate extends Struct {
       return CONTINUE;
     }
     if (t2 instanceof Constant) {
-      final Constant<?> c2 = (Constant<?>)t2;
+      final Constant<?> c2 = (Constant<?>) t2;
       for (Object e2 : c2.toList()) {
         final int continuation = unifyAndNotify(currentVars, t1, e2);
         if (continuation != CONTINUE) {
@@ -154,7 +157,6 @@ public abstract class FOPredicate extends Struct {
     final boolean didUnify = afterUnification != null;
     return notifySolutionIf(didUnify, afterUnification);
   }
-
 
 
   // --------------------------------------------------------------------------
@@ -178,10 +180,20 @@ public abstract class FOPredicate extends Struct {
   }
 
 
-
-
   protected Integer toInt(Object value) {
     return toTypedValue(value, Integer.class);
+  }
+
+  protected Long toLong(Object value) {
+    return toTypedValue(value, Long.class);
+  }
+
+  protected Float toFloat(Object value) {
+    return toTypedValue(value, Float.class);
+  }
+
+  protected Double toDouble(Object value) {
+    return toTypedValue(value, Double.class);
   }
 
   protected String toString(Object value) {
@@ -197,11 +209,28 @@ public abstract class FOPredicate extends Struct {
     }
     if (value instanceof Constant) {
       final Constant constant = (Constant) value;
-      return (Q) toTypedValue(constant.toScalar(), constant.getType());
+      return (Q) toTypedValue(constant.toScalar(), type);
     }
-    if (!type.isAssignableFrom(value.getClass())) {
+    final boolean castable = type.isAssignableFrom(value.getClass());
+    if (!castable) {
+      if (type == Long.class) {
+        return (Q) new Long(value.toString());
+      }
+      if (type == Integer.class) {
+        return (Q) new Integer(value.toString());
+      }
+      if (type == Float.class) {
+        return (Q) new Float(value.toString());
+      }
+      if (type == Double.class) {
+        return (Q) new Double(value.toString());
+      }
+      if (type == String.class) {
+        return (Q) value.toString();
+      }
       throw new InvalidTermException("Term of " + value.getClass() + " not allowed where expecting " + type + "; value was " + value);
     }
+    // Do the cast
     return (Q) value;
   }
 
@@ -214,7 +243,7 @@ public abstract class FOPredicate extends Struct {
       final Constant constant = (Constant) value;
       return constant.toList();
     }
-    return singletonList((Q)value);
+    return singletonList((Q) value);
   }
 
   /**
