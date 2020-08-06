@@ -9,32 +9,25 @@ import org.logic2j.engine.unify.UnifyContext;
 public class Difference<T extends Number> extends FOPredicate {
 
 
-  private final Binding<T> lower;
-  private final Binding<T> delta;
-  private final Binding<T> upper;
-
   protected Difference(Binding<T> lower, Binding<T> delta, Binding<T> upper) {
     super("difference", lower, delta, upper);
-    this.lower = lower;
-    this.delta = delta;
-    this.upper = upper;
   }
 
   @Override
   public int predicateLogic(UnifyContext currentVars) {
-    final Integer low = toInt(currentVars.reify(lower));
-    final Integer del = toInt(currentVars.reify(delta));
-    final Integer up = toInt(currentVars.reify(upper));
+    final Integer low = toInt(currentVars.reify(getArg(0)));
+    final Integer del = toInt(currentVars.reify(getArg(1)));
+    final Integer up = toInt(currentVars.reify(getArg(2)));
 
     // Different logic depending on which is the free variable
     if (low!=null && del!=null) {
-      return unifyAndNotify(currentVars, low + del, upper);
+      return unifyAndNotify(currentVars, low + del, getArg(2));
     }
     if (del!=null && up!=null) {
-      return unifyAndNotify(currentVars, up - del, lower);
+      return unifyAndNotify(currentVars, up - del, getArg(0));
     }
     if (low!=null && up!=null) {
-      return unifyAndNotify(currentVars, up - low, delta);
+      return unifyAndNotify(currentVars, up - low, getArg(1));
     }
     // No solution
     return CONTINUE;

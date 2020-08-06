@@ -31,11 +31,8 @@ import org.logic2j.engine.unify.UnifyContext;
  */
 public class Count extends FOPredicate implements RDBCompatiblePredicate {
 
-  private final Binding<Integer> nbSolutions;
-
   public Count(Term theGoal, Binding<Integer> nbSolutions) {
     super("count", theGoal, nbSolutions);
-    this.nbSolutions = nbSolutions;
   }
 
   @Override
@@ -47,7 +44,7 @@ public class Count extends FOPredicate implements RDBCompatiblePredicate {
     solver.solveGoal(getArg(0), currentVars.withListener(counter));
 
     final int nbr = counter.count();
-    return unifyAndNotify(currentVars, nbr, nbSolutions);
+    return unifyAndNotify(currentVars, nbr, getArg(1));
   }
 
 
