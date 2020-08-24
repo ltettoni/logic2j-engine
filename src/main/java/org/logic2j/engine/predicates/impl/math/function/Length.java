@@ -25,9 +25,11 @@ import org.logic2j.engine.predicates.impl.math.Pred2;
  * Length of a character sequence.
  */
 public class Length<T extends CharSequence, R extends Number> extends Pred2<T, R> implements RDBFunctionPredicate {
+  private static final String PREDICATE_NAME = "length";
+
 
   public Length(Binding<T> arg0, Binding<R> arg1) {
-    super("length", arg0, arg1);
+    super(PREDICATE_NAME, arg0, arg1);
     setPreimage(null); // Preimage function not defined - cannot infer a CharSequence of known length
     setImage(str -> (R) Integer.valueOf(str.length()));
   }

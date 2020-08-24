@@ -25,8 +25,10 @@ import org.logic2j.engine.predicates.impl.math.Pred2;
  */
 public class Abs<T extends Number> extends Pred2<T, T> {
 
+  private static final String PREDICATE_NAME = "abs";
+
   public Abs(Binding<T> n0, Binding<T> n1) {
-    super("succ", n0, n1);
+    super(PREDICATE_NAME, n0, n1);
     setImage(t -> (T) forward.apply(t));
     setPreimages(t -> (T[]) reverse.apply(t));
   }

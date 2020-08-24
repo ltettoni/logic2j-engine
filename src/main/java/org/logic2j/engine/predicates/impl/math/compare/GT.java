@@ -29,8 +29,10 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
  */
 public class GT<T extends Comparable<T>> extends Comp2<T> {
 
+  private static final String PREDICATE_NAME = "gt";
+
   public GT(Binding<T> arg0, Binding<T> arg1) {
-    super("gt", arg0, arg1);
+    super(PREDICATE_NAME, arg0, arg1);
     setCheck((v0, v1) -> v0.compareTo(v1) > 0);
   }
 

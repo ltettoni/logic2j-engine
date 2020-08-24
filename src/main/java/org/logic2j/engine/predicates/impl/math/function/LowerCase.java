@@ -30,15 +30,18 @@ import org.logic2j.engine.predicates.impl.math.compare.LT;
  */
 public class LowerCase<T extends CharSequence, R extends CharSequence> extends Pred2<T, R> implements RDBFunctionPredicate {
 
+  private static final String PREDICATE_NAME = "lc";
+
+
   public LowerCase(Binding<T> arg0, Binding<R> arg1) {
-    super("lc", arg0, arg1);
+    super(PREDICATE_NAME, arg0, arg1);
     setPreimage(null); // Preimage function not defined
     setImage(str -> (R) str.toString().toLowerCase(Locale.ENGLISH));
   }
 
 
   public static LowerCase valueOf(Struct struct) {
-    if (struct.getPredicateSignature().equals("lc/2")) {
+    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) {
       return new LowerCase(SimpleBindings.newBinding(struct.getArg(0)),
               SimpleBindings.newBinding(struct.getArg(1)));
     }

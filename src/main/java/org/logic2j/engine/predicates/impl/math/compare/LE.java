@@ -29,8 +29,10 @@ import org.logic2j.engine.model.Struct;
  */
 public class LE<T extends Comparable<T>> extends Comp2<T> {
 
+  private static final String PREDICATE_NAME = "le";
+
   public LE(Binding<T> arg0, Binding<T> arg1) {
-    super("le", arg0, arg1);
+    super(PREDICATE_NAME, arg0, arg1);
     setCheck((v0, v1) -> v0.compareTo(v1) <= 0);
   }
 

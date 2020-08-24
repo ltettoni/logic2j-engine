@@ -27,9 +27,11 @@ import static org.logic2j.engine.model.SimpleBindings.bind;
  * Successor value.
  */
 public class Succ<T extends Number> extends Pred2<T, T> {
+  private static final String PREDICATE_NAME = "succ";
+
 
   public Succ(Binding<T> n0, Binding<T> n1) {
-    super("succ", n0, n1);
+    super(PREDICATE_NAME, n0, n1);
     setImage(t -> (T) nextNumber.apply(t));
     setPreimage(t -> (T) previousNumber.apply(t));
   }

@@ -28,16 +28,18 @@ import org.logic2j.engine.predicates.impl.math.Pred2;
  * Convert to lowercase (in the English locale)
  */
 public class UpperCase<T extends CharSequence, R extends CharSequence> extends Pred2<T, R> implements RDBFunctionPredicate {
+  private static final String PREDICATE_NAME = "uc";
+
 
   public UpperCase(Binding<T> arg0, Binding<R> arg1) {
-    super("uc", arg0, arg1);
+    super(PREDICATE_NAME, arg0, arg1);
     setPreimage(null); // Preimage function not defined
     setImage(str -> (R) str.toString().toUpperCase(Locale.ENGLISH));
   }
 
 
   public static UpperCase valueOf(Struct struct) {
-    if (struct.getPredicateSignature().equals("uc/2")) {
+    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) {
       return new UpperCase(SimpleBindings.newBinding(struct.getArg(0)),
               SimpleBindings.newBinding(struct.getArg(1)));
     }
