@@ -17,15 +17,12 @@
 
 package org.logic2j.engine.predicates.impl.math;
 
-import org.logic2j.engine.exception.SolverException;
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
+import java.util.function.Predicate;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
-
-import java.util.function.Predicate;
-
-import static java.lang.String.format;
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * 1-arguments first-order predicates with a java testing (predicate) function.

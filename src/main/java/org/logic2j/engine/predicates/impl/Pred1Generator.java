@@ -18,16 +18,14 @@
 package org.logic2j.engine.predicates.impl;
 
 
+import static java.lang.String.format;
+import static org.logic2j.engine.model.SimpleBindings.bind;
+import static org.logic2j.engine.solver.Continuation.CONTINUE;
+
 import org.logic2j.engine.exception.SolverException;
 import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.unify.UnifyContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.lang.String.format;
-import static org.logic2j.engine.model.SimpleBindings.bind;
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 /**
  * Unify one value from a {@link Constant}.
