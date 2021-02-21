@@ -73,10 +73,6 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
     this.termToSolutionFunction = termToSolutionFunction;
   }
 
-  public BiFunction<Object, Class, Object> getTermToSolutionFunction() {
-    return termToSolutionFunction;
-  }
-
   @Override
   public T extractSolution(UnifyContext currentVars) {
     Object reifiedValue;
@@ -93,6 +89,14 @@ public class SingleVarExtractor<T> implements SolutionExtractor<T> {
       }
     }
     return (T) reifiedValue;
+  }
+
+  // --------------------------------------------------------------------------
+  // Accessors
+  // --------------------------------------------------------------------------
+
+  public BiFunction<Object, Class, Object> getTermToSolutionFunction() {
+    return termToSolutionFunction;
   }
 
 }

@@ -28,17 +28,18 @@ import java.util.Map;
 /**
  * A {@link SolutionListener} that will count and limit
  * the number of solutions generated, and possibly handle underflow or overflow.
+ * FIXME LT MultiVarSolutionListener no longer necessary the generics makes it the same as SingleVarSolutionListener - we can remove this one
  */
-public class MultiVarSolutionListener extends RangeSolutionListener {
-  private final SolutionExtractor<Map<Var, Object>> extractor;
-  private final List<Map<Var, Object>> results;
+public class MultiVarSolutionListener<T> extends RangeSolutionListener<T> {
+  private final SolutionExtractor<T> extractor;
+  private final List<T> results;
 
   /**
    * Create a {@link SolutionListener} that will enumerate
    * solutions up to theMaxCount before aborting by "user request". We will usually
    * supply 1 or 2, see derived classes.
    */
-  public MultiVarSolutionListener(SolutionExtractor<Map<Var, Object>> extractor) {
+  public MultiVarSolutionListener(SolutionExtractor<T> extractor) {
     this.extractor = extractor;
     this.results = new ArrayList<>();
   }
@@ -56,7 +57,7 @@ public class MultiVarSolutionListener extends RangeSolutionListener {
 
 
   @Override
-  public List<Map<Var, Object>> getResults() {
+  public List<T> getResults() {
     return results;
   }
 
