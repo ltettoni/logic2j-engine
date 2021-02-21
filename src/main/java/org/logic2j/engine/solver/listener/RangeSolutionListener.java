@@ -26,12 +26,11 @@ import org.logic2j.engine.unify.UnifyContext;
 import java.util.List;
 
 /**
- * A {@link SolutionListener} that will count and limit
- * the number of solutions generated, and possibly handle underflow or overflow.
+ * A {@link SolutionListener} that will count effective solutions found, and limit
+ * the number of solutions to be generated, and possibly handle underflow or overflow.
  */
 public class RangeSolutionListener<T> implements SolutionListener {
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RangeSolutionListener.class);
-
 
   private long minCount; // Minimal number of solutions allowed
   private long maxCount; // Maximal number of solutions allowed
@@ -43,7 +42,7 @@ public class RangeSolutionListener<T> implements SolutionListener {
   protected long counter;
 
   /**
-   * Create a {@link SolutionListener} that will enumerate
+   * Create a {@link RangeSolutionListener} that will enumerate
    * solutions up to theMaxCount before aborting by "user request". We will usually
    * supply 1 or 2, see derived classes.
    */
@@ -116,12 +115,17 @@ public class RangeSolutionListener<T> implements SolutionListener {
   }
 
   /**
-   * @return The number of solutions found
+   * @return The number of solutions found so far
    */
   public long getNbSolutions() {
     return this.counter;
   }
 
+  /**
+   * Implement in derived classes - to obtain the solutions.
+   * @return Nohting in this parent method
+   * @throws UnsupportedOperationException
+   */
   public List<T> getResults() {
     throw new UnsupportedOperationException("Feature not yet implemented");
   }

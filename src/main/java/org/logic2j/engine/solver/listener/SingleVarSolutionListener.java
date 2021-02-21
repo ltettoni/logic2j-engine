@@ -25,10 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A {@link SolutionListener} that will count and limit
- * the number of solutions generated, and possibly handle underflow or overflow.
+ * A {@link SolutionListener} that will collect single solutions in a {@link List}.
  */
 public class SingleVarSolutionListener<T> extends RangeSolutionListener<T> {
+
+  /**
+   * The extractor to obtain individual solutions.
+   */
   private final SolutionExtractor<T> extractor;
 
   // Implementation note: there is an opportunity to improve the extraction of distinct Sets.

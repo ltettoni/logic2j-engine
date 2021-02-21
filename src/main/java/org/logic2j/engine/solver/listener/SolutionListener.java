@@ -23,8 +23,8 @@ import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * The lowest-level API through which the inference engine provides solutions.
- * The return values of the two methods are defined in interface Continuation.
- * Never return a positive value this is used internally to manage the CUT predicate.
+ * The return values of the method are defined in interface Continuation.
+ * Never return a positive value this is used internally to manage the CUT goal!
  */
 @FunctionalInterface
 public interface SolutionListener {
@@ -36,7 +36,7 @@ public interface SolutionListener {
    *
    * @return The caller must return {@link Continuation#CONTINUE} for the inference engine to continue searching for other solutions, or
    * {@link Continuation#USER_ABORT} to break the search for other solutions (ie. user cancellation).
-   * Never return a positive number this is reserved for the backtracking CUT goal.
+   * Never return a positive number this is reserved for the backtracking CUT goal!
    */
   int onSolution(UnifyContext currentVars);
 
