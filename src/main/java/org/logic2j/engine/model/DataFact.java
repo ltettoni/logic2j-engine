@@ -40,8 +40,14 @@ public final class DataFact {
    * @param arguments The element at index 0 is assumed to be the functor. At least 2 elements required.
    */
   public DataFact(Object... arguments) {
+    // Thorough checking args and reporting of exceptions
     if (arguments == null || arguments.length < 2) {
       throw new InvalidTermException("Dubious instantiation of DataFact with null record, or arity < 1");
+    }
+    for (int i = 1; i < arguments.length; i++) {
+      if (arguments[i]==null) {
+        throw new InvalidTermException("Cannot instantiate DataFact when value at index " + i + " is null. Complete array was: " + Arrays.asList(arguments));
+      }
     }
     this.elements = new Object[arguments.length];
     this.elements[0] = ((String) arguments[0]).intern();
