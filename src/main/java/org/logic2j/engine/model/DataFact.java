@@ -49,11 +49,26 @@ public final class DataFact {
         throw new InvalidTermException("Cannot instantiate DataFact when value at index " + i + " is null. Complete array was: " + Arrays.asList(arguments));
       }
     }
+    if (! (arguments[0] instanceof CharSequence)) {
+      throw new InvalidTermException("First argument of a DataFact is a functor and must be a character sequence, was " + arguments[0] + ". Complete array was: " + Arrays.asList(arguments));
+    }
+
     this.elements = new Object[arguments.length];
-    this.elements[0] = ((String) arguments[0]).intern();
-    // Will internalize all strings
+
+    // Functor
+    this.elements[0] = (String.valueOf(arguments[0])).intern();
+
     for (int i = 1; i < arguments.length; i++) {
-      this.elements[i] = termApi().valueOf(arguments[i]);
+      // We used to use the TermApi, this is probably not a good idea (static reference)
+      // this.elements[i] = termApi().valueOf(arguments[i]);
+
+      // Strings are internalized for unification
+      if (arguments[i] instanceof CharSequence) {
+        this.elements[i] = (String.valueOf(arguments[i])).intern();
+      } else {
+        this.elements[i] = arguments[i];
+      }
+
     }
   }
 
