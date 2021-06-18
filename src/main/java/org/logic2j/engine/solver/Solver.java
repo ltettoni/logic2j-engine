@@ -103,7 +103,7 @@ public class Solver {
       throw e;
     } catch (RuntimeException e) {
       // Anything not a Logic2jException will be encapsulated
-      throw new SolverException("Solver failed with: " + e, e);
+      throw new SolverException("Solver failed for goal \"" + goal + " with : " + e, e);
     }
   }
 
