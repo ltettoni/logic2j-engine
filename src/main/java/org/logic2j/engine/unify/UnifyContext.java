@@ -168,11 +168,12 @@ public class UnifyContext {
 
 
   /**
-   * Unify two terms. Most optimal invocation is Var against non-Var.
+   * Unify two terms. The most optimal invocation is Var against non-Var.
    *
    * @param term1
    * @param term2
-   * @return
+   * @return null if not unifyable, this if unifyable without any change to a free variable,
+   * and a new UnifyContext if any var(s) were changed.
    */
   public UnifyContext unify(Object term1, Object term2) {
     //        audit.info("Unify  {}  ~  {}", term1, term2);
@@ -180,7 +181,7 @@ public class UnifyContext {
       return this;
     }
     if (termApi().isFreeVar(term2)) {
-      // Switch arguments - we prefer having term1 being the var.
+      // Switch arguments - we prefer having term1 being the variable.
       // Notice that formally, we should check  && !(term1 instanceof Var)
       // to avoid possible useless switching when unifying Var <-> Var.
       // However, the extra instanceof total costs 3% more than a useless switch.
@@ -191,17 +192,23 @@ public class UnifyContext {
     if (termApi().isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
       Var<?> var1 = (Var<?>) term1;
+      // Check if the reified term1 is bound or not
       final Object final1 = reifiedVar(var1);
       if (!(termApi().isFreeVar(final1))) {
-        // term1 is bound - unify
+        // Yes term1 was a real value we now unify it with term2
         return unify(final1, term2);
       }
       // Ended up with final1 being a free Var, so term1 was a free var
       var1 = (Var<?>) final1;
       // free Var var1 need to be bound
       if (termApi().isFreeVar(term2)) {
-        // Binding two vars
         final Var<?> var2 = (Var<?>) term2;
+        if (var2.isAnon()) {
+          // Unification of a free var to anonymous must succeed but won't bind the variable
+          // to the anonymous. We return this context to indicate unification success but no change.
+          return this;
+        }
+        // Binding two vars
         // Link one to two (should we link to the final or the initial value???)
         // Now do the binding of two vars
         return bind(var1, var2);
