@@ -31,23 +31,22 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
 
 /**
  * A monad-like object that allows dereferencing variables to their effective current values,
- * or to set values to free variables (and return a new UnifyContext).
+ * or to set values of free variables (and return a new UnifyContext).
  * This is a lightweight object that is very frequently instantiated.
  * It contains logic to bind variables, unify structures, and reify variables to their effective current
- * values. The real data store is the more heavy {@link UnifyStateByLookup} object.
+ * values. The real data store for variable's values is the more complex {@link UnifyStateByLookup} object.
  * <p/>
  * In the early phases of logic2j we needed to unify (bind) variables, then undo the work explicitly while backtracking.
- * This needed cumbersome programming. Now UnifyContext is like a state monad, a new value is returned after each bind that results
- * in effectively setting a value to a variable. Backtracking is done by just forgetting the state, and reusing a previous state, from
- * which the value was not yet set.
+ * This required cumbersome programming. Now UnifyContext is like a state monad or value object: it is immutable, and
+ * a new value is returned after a "bind" that results in effectively setting a value to a variable.
+ * Backtracking is achieved by just forgetting the context, and continuing with a previous context.
  * <p/>
- * This context also stores the current {@link SolutionListener} although this data is not required for inference.
- * In a previous version of logic2j, it was not stored here, the result was that most methods in the code, and in particular
+ * This context also stores the current {@link SolutionListener} although that object is not needed for inference.
+ * In a previous version of logic2j, it was not stored here, the consequence was that most methods in the code, and in particular
  * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
- * Since logic2j-engine, the two are now grouped in the context.
+ * Since logic2j-engine, the SolutionListener is wrapped in the context to shorten methods signatures.
  */
 public class UnifyContext {
-  private static final Logger logger = LoggerFactory.getLogger(UnifyContext.class);
   //    static final Logger audit = LoggerFactory.getLogger("audit");
 
   /**
@@ -161,9 +160,6 @@ public class UnifyContext {
    */
   UnifyContext bind(Var<?> var, Object ref) {
     if (var == ref) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("Not mapping {} onto itself", var);
-      }
       return this;
     }
     //        audit.info("Bind   {} -> {} at t=" + this.currentTransaction, var, ref);
