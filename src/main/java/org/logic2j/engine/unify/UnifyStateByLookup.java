@@ -78,10 +78,11 @@ class UnifyStateByLookup {
    * Binding theVar to theRef; theVar will further appear "modified" in
    * the resulting UnifyContext; theRef is not altered.
    *
+   * @note This method may bind a Var to the anonymous variable - this case to avoid is handled in calling code.
    * @param currentVars
    * @param theVar
    * @param theRef
-   * @return
+   * @return The resulting context after modification or this if unchanged.
    */
   UnifyContext bind(UnifyContext currentVars, Var<?> theVar, Object theRef) {
     if (logger.isDebugEnabled()) {
@@ -110,7 +111,7 @@ class UnifyStateByLookup {
     final Object finalRef = (theRef instanceof Var) ? dereference((Var<?>) theRef, transactionNumber) : theRef;
     if (finalRef instanceof Var<?> && finalRef != Var.anon()) {
       if (finalRef == theVar) {
-        // OOps, trying to bound Var to same Var (after its the ref was dereferenced)
+        // OOps, trying to bind Var to same Var (after its ref was dereferenced)
         return currentVars; // So no change
       }
       final Var<?> finalVar = (Var<?>) finalRef;
