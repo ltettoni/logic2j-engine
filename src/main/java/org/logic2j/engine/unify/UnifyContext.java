@@ -154,6 +154,7 @@ public class UnifyContext {
    * <p/>
    * (private except that used from test case)
    *
+   * @note This method may bind a Var to the anonymous variable - this case to avoid is handled in calling code.
    * @param var
    * @param ref
    * @return
@@ -192,6 +193,11 @@ public class UnifyContext {
     if (termApi().isFreeVar(term1)) {
       // term1 is a Var: we need to check if it is bound or not
       Var<?> var1 = (Var<?>) term1;
+      if (var1.isAnon()) {
+        // Unification of a free var to anonymous must succeed but won't bind the variable
+        // to the anonymous. We return this context to indicate unification success but no change.
+        return this;
+      }
       // Check if the reified term1 is bound or not
       final Object final1 = reifiedVar(var1);
       if (!(termApi().isFreeVar(final1))) {
