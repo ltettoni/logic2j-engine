@@ -120,23 +120,55 @@ public class UnifyContextTest {
 
   @Test
   public void bindVarToVar() {
-    UnifyContext m2 = bind(X, Y);
+    final UnifyContext m2 = bind(X, Y);
     assertThat(m2.reify(X)).isEqualTo(Y);
+    assertThat(m2).isNotSameAs(initialContext);
+  }
+
+  /**
+   * Binding a variable to anonymous is still possible yet normal unification prevents this case.
+   */
+  @Test
+  public void bindVarToAnonymous() {
+    final UnifyContext m2 = bind(X, Var.anon());
+    assertThat(m2.reify(X)).isEqualTo(Var.anon());
+    assertThat(m2).isNotSameAs(initialContext);
+  }
+
+  /**
+   * Binding a variable to anonymous is still possible yet normal unification prevents this case.
+   */
+  @Test
+  public void bindAnonymousToVar() {
+    final UnifyContext m2 = bind(Var.anon(), X);
+    assertThat(m2.reify(X)).isEqualTo(Var.anon());
+    assertThat(m2).isNotSameAs(initialContext);
   }
 
   @Test
   public void varToAtom() {
-    unify(X, a);
-  }
-
-  @Test
-  public void varToAnon() {
-    unify(X, _anon);
+    final UnifyContext m2 = unify(X, a);
+    assertThat(m2.reify(X)).isEqualTo(a);
+    assertThat(m2).isNotSameAs(initialContext);
   }
 
   @Test
   public void atomToVar() {
-    unify(a, X);
+    final UnifyContext m2 = unify(a, X);
+    assertThat(m2.reify(X)).isEqualTo(a);
+    assertThat(m2).isNotSameAs(initialContext);
+  }
+
+  @Test
+  public void unifyVarToAnonymous() {
+    final UnifyContext m2 = unify(X, Var.anon());
+    assertThat(m2).isSameAs(initialContext);
+  }
+
+  @Test
+  public void unifyAnonymousVarTo() {
+    final UnifyContext m2 = unify(Var.anon(), X);
+    assertThat(m2).isSameAs(initialContext);
   }
 
 
