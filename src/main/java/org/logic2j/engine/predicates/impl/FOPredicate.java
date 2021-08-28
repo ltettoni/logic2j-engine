@@ -214,19 +214,28 @@ public abstract class FOPredicate extends Struct {
     final boolean castable = type.isAssignableFrom(value.getClass());
     if (!castable) {
       if (type == Long.class) {
-        return (Q) new Long(value.toString());
+        return (Q) Long.valueOf(value.toString());
       }
       if (type == Integer.class) {
-        return (Q) new Integer(value.toString());
+        return (Q) Integer.valueOf(value.toString());
       }
       if (type == Float.class) {
-        return (Q) new Float(value.toString());
+        return (Q) Float.valueOf(value.toString());
       }
       if (type == Double.class) {
-        return (Q) new Double(value.toString());
+        return (Q) Double.valueOf(value.toString());
       }
       if (type == String.class) {
         return (Q) value.toString();
+      }
+      // Broader cases when an interface is asked for
+      if (CharSequence.class.isAssignableFrom(type)) {
+        return (Q) value.toString();
+      }
+      // Numbers will convert to Double - that's the broadest representation
+      if (Number.class.isAssignableFrom(type)) {
+        final double val = ((Number)value).doubleValue();
+        return (Q) Double.valueOf(val);
       }
       throw new InvalidTermException("Term of " + value.getClass() + " not allowed where expecting " + type + "; value was " + value);
     }
