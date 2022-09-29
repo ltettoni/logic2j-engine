@@ -24,7 +24,10 @@ import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.generator.Digit;
 import org.logic2j.engine.predicates.impl.generator.Even;
 import org.logic2j.engine.predicates.impl.firstorder.Count;
+import org.logic2j.engine.predicates.impl.generator.Odd;
+import org.logic2j.engine.predicates.internal.And;
 import org.logic2j.engine.predicates.internal.Call;
+import org.logic2j.engine.predicates.internal.Optional;
 import org.logic2j.engine.predicates.internal.Or;
 
 import java.util.List;
@@ -61,7 +64,7 @@ public class FirstOrderLogicTest {
   @Test(expected = SolverException.class)
   public void callOnFreeVar() {
     final Var<Integer> Z = intVar();
-    solver.solve(new Call(Z)).isPresent();
+    assertThat(solver.solve(new Call(Z)).isPresent()).isTrue();
   }
 
   @Test
@@ -77,7 +80,6 @@ public class FirstOrderLogicTest {
   // --------------------------------------------------------------------------
   // Testing count()
   // --------------------------------------------------------------------------
-
 
   @Test
   public void countToVar() {
@@ -99,7 +101,6 @@ public class FirstOrderLogicTest {
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
-
   @Test
   public void countCheckValids() {
     final Count goal = count(new Digit(null), bind(9, 10, 11));
@@ -118,5 +119,23 @@ public class FirstOrderLogicTest {
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
+  // --------------------------------------------------------------------------
+  // Testing optional()
+  // --------------------------------------------------------------------------
+  @Test
+  public void optionalWithSolutions() {
+    final Var<Integer> X = intVar("X");
+    final And and = and(new Digit(X), new Even(X));
+    final List<Integer> list = solver.solve(new Optional(and)).var(X).list();
+    assertThat(list.toString()).isEqualTo("[0, 2, 4, 6, 8]");
+  }
+
+  @Test
+  public void optionalWithoutSolutions() {
+    final Var<Integer> X = intVar("X");
+    final And and = and(new Odd(X), new Even(X));
+    final List<Integer> list = solver.solve(new Optional(and)).var(X).list();
+    assertThat(list.toString()).isEqualTo("[X]");
+  }
 
 }
