@@ -28,6 +28,7 @@ import static org.logic2j.engine.predicates.Predicates.conjunction;
 
 /**
  * Invoke the solver on a sub-goal or conjunction (AND) of sub-goals.
+ * Sub-goals can be variables (they will be reified).
  */
 public class Call extends SolverPredicate {
   public Call(Term... goals) {

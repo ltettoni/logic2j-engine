@@ -126,7 +126,7 @@ public class GoalHolder implements ResultsHolder<Object> {
    */
   @Override
   public boolean isUnique() {
-    final CountingSolutionListener listener = new CountingSolutionListener(2);
+    final CountingSolutionListener listener = new CountingSolutionListener(2); // Stop seeking solution after 2 as the goal is to prove unicity
     solve(listener);
     return listener.count() == 1;
   }
@@ -141,7 +141,7 @@ public class GoalHolder implements ResultsHolder<Object> {
    */
   @Override
   public boolean isMultiple() {
-    final CountingSolutionListener listener = new CountingSolutionListener(2);
+    final CountingSolutionListener listener = new CountingSolutionListener(2); // Stop seeking solution after 2 as the goal is to prove multiplicity
     solve(listener);
     return listener.count() > 1;
   }

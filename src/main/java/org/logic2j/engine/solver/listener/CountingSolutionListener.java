@@ -38,12 +38,15 @@ public class CountingSolutionListener implements SolutionListener {
   private int count = 0;
 
   /**
-   * Will stop counting after that number of iterations.
+   * Will stop counting (hence stop fetching new solutions) after that number of iterations.
    */
   private final long maxIteration;
 
+  /**
+   * Solve by counting the number of solution up to the last one.
+   */
   public CountingSolutionListener() {
-    this(Long.MAX_VALUE);
+    this(Long.MAX_VALUE); // Virtually: infinite
   }
 
   public CountingSolutionListener(long maxIteration) {
@@ -74,7 +77,8 @@ public class CountingSolutionListener implements SolutionListener {
   }
 
   /**
-   * This is not an efficient way of proving existence, rather look for {@link ExistsSolutionListener}
+   * This is not an efficient way of proving existence, unless this object was instantiated
+   * with maxIteration=1; rather look for {@link ExistsSolutionListener}
    *
    * @return true of there was at least one solution demonstrated.
    */

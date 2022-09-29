@@ -26,8 +26,8 @@ import org.logic2j.engine.solver.listener.CountingSolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
- * Succeeds if the specified goal provides a single solution (and none other is sought); fails if
- * the specified goal does not provide a single one.
+ * Succeeds if the specified first-argument goal admits a number of
+ * solutions that unifies with the second argument.
  */
 public class Count extends FOPredicate implements RDBCompatiblePredicate {
 
@@ -38,12 +38,12 @@ public class Count extends FOPredicate implements RDBCompatiblePredicate {
   @Override
   public int predicateLogic(UnifyContext currentVars) {
 
-    // Solve against a minimal SolutionListener just interested on the first solution
-    final CountingSolutionListener counter = new CountingSolutionListener();
+    // Solve against a minimal SolutionListener that counts all solutions to the last.
+    final CountingSolutionListener countingListener = new CountingSolutionListener();
     final Solver solver = currentVars.getSolver();
-    solver.solveGoal(getArg(0), currentVars.withListener(counter));
+    solver.solveGoal(getArg(0), currentVars.withListener(countingListener));
 
-    final int nbr = counter.count();
+    final int nbr = countingListener.count();
     return unifyAndNotify(currentVars, nbr, getArg(1));
   }
 

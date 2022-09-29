@@ -15,23 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.logic2j.engine.solver.listener;/*
- * logic2j - "Bring Logic to your Java" - Copyright (C) 2011 Laurent.Tettoni@gmail.com
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+package org.logic2j.engine.solver.listener;
 
 
 import org.logic2j.engine.solver.Continuation;
@@ -41,6 +25,8 @@ import org.logic2j.engine.unify.UnifyContext;
  * The simplest {@link SolutionListener} that only checks existence of the first solution, and then aborts execution of subsequent ones.
  * Watch out, due to aborting execution after the first solution, there may be less execution that you might expect. The side-effect
  * is similar to evaluating a function in the middle of logical ANDs: previous results may not necessitate further executions.
+ *
+ * Note: {@link CountingSolutionListener} with a max number of solutions of 1 offers the same functionality. But this code is dead simple.
  */
 public class ExistsSolutionListener implements SolutionListener {
   private boolean atLeastOneSolution = false;
