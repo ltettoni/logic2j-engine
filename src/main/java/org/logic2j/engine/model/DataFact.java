@@ -90,7 +90,7 @@ public final class DataFact {
 
   @Override
   public String toString() {
-    return this.getClass().getSimpleName() + Arrays.asList(this.elements).toString();
+    return this.getClass().getSimpleName() + Arrays.asList(this.elements);
   }
 
 }

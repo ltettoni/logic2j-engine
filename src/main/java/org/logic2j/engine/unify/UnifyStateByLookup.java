@@ -109,12 +109,11 @@ class UnifyStateByLookup {
     var[slot] = theVar;
 
     final Object finalRef = (theRef instanceof Var) ? dereference((Var<?>) theRef, transactionNumber) : theRef;
-    if (finalRef instanceof Var<?> && finalRef != Var.anon()) {
+    if (finalRef instanceof Var<?> finalVar && finalRef != Var.anon()) {
       if (finalRef == theVar) {
         // OOps, trying to bind Var to same Var (after its ref was dereferenced)
         return currentVars; // So no change
       }
-      final Var<?> finalVar = (Var<?>) finalRef;
       final int finalVarIndex = finalVar.getIndex();
       var[finalVarIndex] = finalVar;
       literal[slot] = null; // Not a literal!

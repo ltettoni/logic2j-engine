@@ -132,8 +132,7 @@ public abstract class FOPredicate extends Struct {
    * @return
    */
   protected int unifyAndNotify(UnifyContext currentVars, Object t1, Object t2) {
-    if (t1 instanceof Constant) {
-      final Constant<?> c1 = (Constant<?>) t1;
+    if (t1 instanceof Constant<?> c1) {
       for (Object e1 : c1.toList()) {
         final int continuation = unifyAndNotify(currentVars, e1, t2);
         if (continuation != CONTINUE) {
@@ -142,8 +141,7 @@ public abstract class FOPredicate extends Struct {
       }
       return CONTINUE;
     }
-    if (t2 instanceof Constant) {
-      final Constant<?> c2 = (Constant<?>) t2;
+    if (t2 instanceof Constant<?> c2) {
       for (Object e2 : c2.toList()) {
         final int continuation = unifyAndNotify(currentVars, t1, e2);
         if (continuation != CONTINUE) {
@@ -207,9 +205,8 @@ public abstract class FOPredicate extends Struct {
     if (isFreeVar(value)) {
       return null;
     }
-    if (value instanceof Constant) {
-      final Constant constant = (Constant) value;
-      return (Q) toTypedValue(constant.toScalar(), type);
+    if (value instanceof Constant constant) {
+      return toTypedValue(constant.toScalar(), type);
     }
     final boolean castable = type.isAssignableFrom(value.getClass());
     if (!castable) {
@@ -248,8 +245,7 @@ public abstract class FOPredicate extends Struct {
     if (isFreeVar(value)) {
       return null;
     }
-    if (value instanceof Constant) {
-      final Constant constant = (Constant) value;
+    if (value instanceof Constant constant) {
       return constant.toList();
     }
     return singletonList((Q) value);

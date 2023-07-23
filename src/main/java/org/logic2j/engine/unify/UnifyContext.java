@@ -222,14 +222,12 @@ public class UnifyContext {
         // Do the binding of one var to a literal
         return bind(var1, term2);
       }
-    } else if (term1 instanceof Struct) {
+    } else if (term1 instanceof Struct<?> s1) {
       // Case of Struct <-> Var: already taken care of by switching, see above
-      if (!(term2 instanceof Struct)) {
+      if (!(term2 instanceof Struct<?> s2)) {
         // Not unified - we can only unify 2 Struct
         return null;
       }
-      final Struct<?> s1 = (Struct<?>) term1;
-      final Struct<?> s2 = (Struct<?>) term2;
       // The two Struct must have compatible signatures (functor and arity)
       //noinspection StringEquality
       if (s1.getPredicateSignature() != s2.getPredicateSignature()) {
@@ -263,11 +261,10 @@ public class UnifyContext {
    * @return
    */
   public UnifyContext unify(Object term1, DataFact dataFact) {
-    if (!(term1 instanceof Struct)) {
+    if (!(term1 instanceof Struct<?> struct)) {
       // Only Struct could match a DataFact
       return null;
     }
-    final Struct<?> struct = (Struct<?>) term1;
     final Object[] dataFactElements = dataFact.getElements();
     if (struct.getName() != dataFactElements[0]) {// Names are {@link String#intern()}alized so OK to check by reference
       // Functor must match
@@ -320,9 +317,8 @@ public class UnifyContext {
       term = reifiedVar((Var<?>) term);
       // The var might end up on a Struct, that needs recursive reification
     }
-    if (term instanceof Struct) {
+    if (term instanceof Struct<?> s) {
       //            audit.info("Reify Struct at t={}  {}", this.currentTransaction, term);
-      final Struct<?> s = (Struct<?>) term;
       if (s.getIndex() == 0) {
         // Structure is an atom or a constant term - no need to further transform
         return term;
