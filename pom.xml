@@ -6,10 +6,10 @@
 
     <groupId>org.logic2j</groupId>
     <artifactId>logic2j-engine</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0</version>
 
     <properties>
-        <logic2j-api.version>1.2.0-SNAPSHOT</logic2j-api.version>
+        <logic2j-api.version>1.2.0</logic2j-api.version>
 
         <slf4j-api.version>1.7.36</slf4j-api.version>
         <logback.version>1.2.12</logback.version>
@@ -110,5 +110,13 @@
             -->
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>ltettoni Maven Packages on GitHub</name>
+            <url>https://maven.pkg.github.com/ltettoni/logic2j-api</url>
+        </repository>
+    </distributionManagement>
 
 </project>
