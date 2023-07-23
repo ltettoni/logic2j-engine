@@ -10,12 +10,19 @@
 
     <properties>
         <logic2j-api.version>1.2.0-SNAPSHOT</logic2j-api.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <logback.version>1.2.11</logback.version>
+
+        <slf4j-api.version>1.7.36</slf4j-api.version>
+        <logback.version>1.2.12</logback.version>
         <junit.version>4.13.2</junit.version>
-        <assertj.version>3.23.1</assertj.version>
+        <assertj.version>3.24.2</assertj.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release> <!-- New way to configure cross-compiling -->
+        <maven.compiler.source>17</maven.compiler.source> <!-- IntelliJ will autoconfigure module source compatibility from this maven property -->
+        <maven.compiler.target>17</maven.compiler.target> <!-- IntelliJ will autoconfigure module source compatibility from this maven property -->
+
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     </properties>
 
 
@@ -28,7 +35,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
+            <version>${slf4j-api.version}</version>
         </dependency>
 
         <dependency>
@@ -58,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -82,10 +89,11 @@
                 </executions>
             </plugin>
             -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>logback.xml</exclude>
@@ -99,6 +107,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
     </build>
 
