@@ -86,7 +86,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * @return Holds solutions as a List of Maps
    */
   public static SolutionHolder<Map<Var<?>, Object>> extractingMaps(GoalHolder goalHolder) {
-    return new SolutionHolder(goalHolder, new MapExtractor(goalHolder.effectiveGoal()));
+    return new SolutionHolder<>(goalHolder, new MapExtractor(goalHolder.effectiveGoal()));
   }
 
   /**
@@ -97,7 +97,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * @return Holds solutions as a List of Maps
    */
   public static SolutionHolder<Map<Var<?>, Object>> extractingMaps(GoalHolder goalHolder, Var<?>... vars) {
-    return new SolutionHolder(goalHolder, new MapExtractor(vars));
+    return new SolutionHolder<>(goalHolder, new MapExtractor(vars));
   }
 
   /**
@@ -107,7 +107,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * @return Holds solutions as a List of Arrays
    */
   public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder) {
-    return new SolutionHolder(goalHolder, new ArrayExtractor(goalHolder.effectiveGoal()));
+    return new SolutionHolder<>(goalHolder, new ArrayExtractor(goalHolder.effectiveGoal()));
   }
 
   /**
@@ -117,11 +117,11 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
    * @return Holds solutions as a List of Arrays
    */
   public static SolutionHolder<Object[]> extractingArrays(GoalHolder goalHolder, Var<?>... vars) {
-    return new SolutionHolder(goalHolder, new ArrayExtractor(vars));
+    return new SolutionHolder<>(goalHolder, new ArrayExtractor(vars));
   }
 
   public static <T> SolutionHolder<T> extractingFactory(GoalHolder goalHolder, ObjectFactory<T> factory) {
-    return new SolutionHolder(goalHolder, new FactoryExtractor<>(goalHolder.effectiveGoal(), factory));
+    return new SolutionHolder<>(goalHolder, new FactoryExtractor<>(goalHolder.effectiveGoal(), factory));
   }
 
 

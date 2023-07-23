@@ -41,27 +41,17 @@ public class Log extends FOUniqueSolutionPredicate {
    */
   public Log(String level, Object... argList) {
     super("log", argList);
-    switch (level.toLowerCase()) {
-      case "trace":
-        loggingMethod = logger::trace;
-        break;
-      case "debug":
-        loggingMethod = logger::debug;
-        break;
-      case "info":
-        loggingMethod = logger::info;
-        break;
-      case "warn":
-        loggingMethod = logger::warn;
-        break;
-      case "error":
-        loggingMethod = logger::error;
-        break;
-      default:
-        logger.error("{} predicate sets level to {} which is unknown - using info instead", this, level);
-        loggingMethod = logger::info;
-        break;
-    }
+      switch (level.toLowerCase()) {
+          case "trace" -> loggingMethod = logger::trace;
+          case "debug" -> loggingMethod = logger::debug;
+          case "info" -> loggingMethod = logger::info;
+          case "warn" -> loggingMethod = logger::warn;
+          case "error" -> loggingMethod = logger::error;
+          default -> {
+              logger.error("{} predicate sets level to {} which is unknown - using info instead", this, level);
+              loggingMethod = logger::info;
+          }
+      }
   }
 
   @Override

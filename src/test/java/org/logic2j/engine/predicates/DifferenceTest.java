@@ -34,27 +34,27 @@ public class DifferenceTest {
 
   @Test
   public void iii_valid() {
-    final Term goal = new Difference(bind(1), bind(10), bind(11));
+    final Term goal = new Difference<>(bind(1), bind(10), bind(11));
     assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void iii_invalid() {
-    final Term goal = new Difference(bind(1), bind(2), bind(11));
+    final Term goal = new Difference<>(bind(1), bind(2), bind(11));
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void iiv() {
     final Var<Integer> x = intVar("X");
-    final Term goal = new Difference(bind(1), bind(10), x);
+    final Term goal = new Difference<>(bind(1), bind(10), x);
     assertThat(solver.solve(goal).var(x).unique()).isEqualTo(11);
   }
 
   @Test
   public void ivi() {
     final Var<Integer> x = intVar("X");
-    final Term goal = new Difference(bind(1), x, bind(10));
+    final Term goal = new Difference<>(bind(1), x, bind(10));
     assertThat(solver.solve(goal).var(x).unique()).isEqualTo(9);
   }
 
@@ -62,26 +62,26 @@ public class DifferenceTest {
   @Test
   public void vii() {
     final Var<Integer> x = intVar("X");
-    final Term goal = new Difference(x, bind(1), bind(10));
+    final Term goal = new Difference<>(x, bind(1), bind(10));
     assertThat(solver.solve(goal).var(x).unique()).isEqualTo(9);
   }
 
 
   @Test
   public void ivv() {
-    final Term goal = new Difference(bind(1), intVar(), intVar());
+    final Term goal = new Difference<>(bind(1), intVar(), intVar());
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void viv() {
-    final Term goal = new Difference(intVar(), bind(1), intVar());
+    final Term goal = new Difference<>(intVar(), bind(1), intVar());
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void vvi() {
-    final Term goal = new Difference(intVar(), intVar(), bind(1));
+    final Term goal = new Difference<>(intVar(), intVar(), bind(1));
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 

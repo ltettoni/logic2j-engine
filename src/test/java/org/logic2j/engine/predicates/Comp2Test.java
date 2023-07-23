@@ -36,67 +36,67 @@ public class Comp2Test {
 
   @Test(expected = InvalidTermException.class)
   public void twoVars() {
-    Term goal = new LT((Binding<Integer>)intVar(), (Binding<Integer>)intVar());
+    Term goal = new LT<>(intVar(), intVar());
     assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test(expected = InvalidTermException.class)
   public void var1() {
-    Term goal = new LT(intVar(), 123);
+    Term goal = new LT<>(intVar(), 123);
     assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test(expected = InvalidTermException.class)
   public void var2() {
-    Term goal = new LT(123, intVar());
+    Term goal = new LT<>(123, intVar());
     assertThat(solver.solve(goal).isPresent()).isFalse();
   }
 
   @Test
   public void valid1() {
-    Term goal = new LT(bind(10), bind(20));
+    Term goal = new LT<>(bind(10), bind(20));
     assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void valid2() {
-    Term goal = new LT(bind(10, 11), bind(20, 21, 22));
+    Term goal = new LT<>(bind(10, 11), bind(20, 21, 22));
     assertThat(solver.solve(goal).count()).isEqualTo(6);
   }
 
   @Test
   public void valid3() {
-    Term goal = new LT(bind(10, 11), bind(20, 11, 22));
+    Term goal = new LT<>(bind(10, 11), bind(20, 11, 22));
     assertThat(solver.solve(goal).count()).isEqualTo(5);
   }
 
   @Test
   public void validString() {
-    Term goal = new LT(bind("ab"), bind("cd"));
+    Term goal = new LT<>(bind("ab"), bind("cd"));
     assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
   @Test
   public void invalidString() {
-    Term goal = new LT(bind("cd"), bind("ab"));
+    Term goal = new LT<>(bind("cd"), bind("ab"));
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void invalid1() {
-    Term goal = new LT(bind(20), bind(10, 11));
+    Term goal = new LT<>(bind(20), bind(10, 11));
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void invalid2() {
-    Term goal = new LT(bind(), bind(10, 11));
+    Term goal = new LT<>(bind(), bind(10, 11));
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
   @Test
   public void invalid3() {
-    Term goal = new LT(bind(20), bind());
+    Term goal = new LT<>(bind(20), bind());
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 }

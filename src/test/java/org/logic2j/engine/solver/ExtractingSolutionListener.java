@@ -70,17 +70,11 @@ class ExtractingSolutionListener extends CountingSolutionListener {
   }
 
   public void report() {
-    switch (count()) {
-      case 0:
-        logger.info("Solving \"{}\" yields no solution", goal);
-        break;
-      case 1:
-        logger.info("Solving \"{}\" yields a single solution", goal);
-        break;
-      default:
-        logger.info("Solving \"{}\" yields {} solution(s)", goal, count());
-        break;
-    }
+      switch (count()) {
+          case 0 -> logger.info("Solving \"{}\" yields no solution", goal);
+          case 1 -> logger.info("Solving \"{}\" yields a single solution", goal);
+          default -> logger.info("Solving \"{}\" yields {} solution(s)", goal, count());
+      }
   }
 
   public Collection<Var<?>> getVariables() {
