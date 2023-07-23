@@ -23,7 +23,7 @@ import org.logic2j.engine.unify.UnifyContext;
 
 /**
  * The simplest {@link SolutionListener} that only checks existence of the first solution, and then aborts execution of subsequent ones.
- * Watch out, due to aborting execution after the first solution, there may be less execution that you might expect. The side-effect
+ * Watch out, due to aborting execution after the first solution, there may be less execution that you might expect. The side effect
  * is similar to evaluating a function in the middle of logical ANDs: previous results may not necessitate further executions.
  *
  * Note: {@link CountingSolutionListener} with a max number of solutions of 1 offers the same functionality. But this code is dead simple.

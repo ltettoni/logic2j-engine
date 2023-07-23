@@ -83,7 +83,7 @@ public class IterableSolutionListener<T> implements SolutionListener {
     T content = null;
 
     /**
-     * Indicate that the peer thread can be restart - but there is no data exchanged.
+     * Indicate that the peer thread can be restarted - but there is no data exchanged.
      */
     public synchronized void wakeUp() {
       this.ready = true;
@@ -92,7 +92,7 @@ public class IterableSolutionListener<T> implements SolutionListener {
     }
 
     /**
-     * Indicate that the peer thread can be restart - with exchanged data.
+     * Indicate that the peer thread can be restarted - with exchanged data.
      *
      * @param theContent
      */

@@ -43,7 +43,7 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * <p/>
  * This context also stores the current {@link SolutionListener} although that object is not needed for inference.
  * In a previous version of logic2j, it was not stored here, the consequence was that most methods in the code, and in particular
- * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener}.
+ * user-level libraries, received systematically the two arguments (the {@link UnifyContext} and the {@link SolutionListener})).
  * Since logic2j-engine, the SolutionListener is wrapped in the context to shorten methods signatures.
  */
 public class UnifyContext {

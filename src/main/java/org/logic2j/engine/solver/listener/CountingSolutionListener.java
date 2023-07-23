@@ -25,7 +25,7 @@ import static org.logic2j.engine.solver.Continuation.USER_ABORT;
 
 /**
  * A base implementation of {@link SolutionListener} that holds a counter of the number of solutions reached.
- * The {@link #onSolution(UnifyContext)} method always returns Continuation.CONTINUE (dangerously allowing for potential
+ * The {@link #onSolution(UnifyContext)} method always returns Continuation#CONTINUE (dangerously allowing for potential
  * infinite generation). Derive from this class to ease the programming of
  * {@link SolutionListener}s in application code, and DO NOT FORGET to call super.onSolution() in order to count!
  */

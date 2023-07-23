@@ -72,7 +72,7 @@ public class Exists extends FOPredicate implements RDBCompatiblePredicate {
     switch (getArity()) {
       case 1:
         // Normal use, the predicate will succeed with one solution if theGoal was proven to provide at least
-        // one solution. Otherwise will fail.
+        // one solution. Otherwise, will fail.
         return notifySolutionIf(exists, currentVars);
       case 2:
         // Alternate signature: will unify the proof of existence with the second argument.

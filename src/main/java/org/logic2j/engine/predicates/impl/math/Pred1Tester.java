@@ -36,7 +36,7 @@ public class Pred1Tester<T> extends FOPredicate {
   };
 
   /**
-   * An unary predicate with a testing function.
+   * A unary predicate with a testing function.
    *
    * @param theFunctor
    */

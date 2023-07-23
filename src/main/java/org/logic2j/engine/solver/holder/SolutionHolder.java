@@ -170,7 +170,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
 
 
   /**
-   * There is one single solution but it is the free Variable (unbound).
+   * There is one single solution, but it is the free Variable (unbound).
    *
    * @return true if solution is not bound to a literal term.
    */
@@ -260,7 +260,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
       // and will wait for the main thread to extract it
       SolutionHolder.this.goalHolder.getSolver().solveGoal(SolutionHolder.this.goalHolder.effectiveGoal(), listener);
       logger.debug("Producer (prolog solver engine) thread finishes");
-      // Last solution was extracted. Producer's callback won't now be called any more - so to
+      // Last solution was extracted. Producer's callback won't now be called anymore - so to
       // prevent the consumer for listening forever for the next solution that won't come...
       // We wait from a last notify from our client
       listener.clientToEngineInterface().waitUntilAvailable();

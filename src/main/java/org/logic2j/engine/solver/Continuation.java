@@ -44,7 +44,7 @@ public final class Continuation {
 
   /**
    * Value that {@link SolutionListener#onSolution(UnifyContext)}
-   * must return for the inference engine to abort solving (ie. means aborting upon explicit request).
+   * must return for the inference engine to abort solving (i.e. means aborting upon explicit request).
    */
   public static final int USER_ABORT = -1;
 

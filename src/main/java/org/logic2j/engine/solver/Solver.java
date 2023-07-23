@@ -53,7 +53,7 @@ public class Solver {
 
 
   /**
-   * Do we solve the ";" (OR) predicate internally here, or in the predicate.
+   * Do we solve the ";" (OR) predicate internally here or via using the external predicate?
    * (see note re. processing of OR in CoreLibrary.pro)
    */
   protected boolean isInternalOr() {
@@ -61,7 +61,7 @@ public class Solver {
   } // FIXME Still dubious re. use of internal or and its behaviour with Cut. See note in logic2j overloaded method
 
   /**
-   * Do we acquire profiling information (number of inferences, etc)
+   * Do we acquire profiling information (number of inferences, etc.)
    */
   protected boolean isProfiling() {
     return false;
