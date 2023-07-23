@@ -39,7 +39,7 @@ public class UpperCase<T extends CharSequence, R extends CharSequence> extends P
 
 
   public static UpperCase valueOf(Struct struct) {
-    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) {
+    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) { // Names are {@link String#intern()}alized so OK to check by reference
       return new UpperCase(SimpleBindings.newBinding(struct.getArg(0)),
               SimpleBindings.newBinding(struct.getArg(1)));
     }

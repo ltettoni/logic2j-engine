@@ -22,8 +22,6 @@ import org.logic2j.engine.exception.InvalidTermException;
 
 import java.util.Arrays;
 
-import static org.logic2j.engine.model.TermApiLocator.termApi;
-
 /**
  * Represent one constant data element that can unify to an n-arity flat {@link Struct},
  * for example functor(a, 'B', 12).

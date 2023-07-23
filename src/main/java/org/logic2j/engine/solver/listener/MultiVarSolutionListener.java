@@ -17,13 +17,11 @@
 
 package org.logic2j.engine.solver.listener;
 
-import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.extractor.SolutionExtractor;
 import org.logic2j.engine.unify.UnifyContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A {@link SolutionListener} that will count and limit

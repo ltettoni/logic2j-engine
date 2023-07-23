@@ -18,12 +18,15 @@
 package org.logic2j.engine.exception;
 
 
+import java.io.Serial;
+
 /**
  * Thrown by the Solution API when no solution could be found and one is required by the calling context.
  *
  * @author tettoni
  */
 public class MissingSolutionException extends Logic2jException {
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public MissingSolutionException(CharSequence theMessage) {

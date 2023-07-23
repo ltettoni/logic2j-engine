@@ -17,10 +17,13 @@
 
 package org.logic2j.engine.exception;
 
+import java.io.Serial;
+
 /**
  * Root class for all logic2j Prolog Exceptions - all a {@link RuntimeException}s.
  */
 public class SolverException extends Logic2jException {
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public SolverException(CharSequence theMessage) {

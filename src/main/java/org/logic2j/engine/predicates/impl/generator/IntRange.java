@@ -19,7 +19,6 @@ package org.logic2j.engine.predicates.impl.generator;
 
 
 import org.logic2j.engine.model.Binding;
-import org.logic2j.engine.model.Constant;
 import org.logic2j.engine.predicates.impl.FOPredicate;
 import org.logic2j.engine.unify.UnifyContext;
 import org.slf4j.Logger;

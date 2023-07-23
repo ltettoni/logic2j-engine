@@ -23,7 +23,6 @@ import org.logic2j.engine.model.SimpleBindings;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.external.RDBFunctionPredicate;
 import org.logic2j.engine.predicates.impl.math.Pred2;
-import org.logic2j.engine.predicates.impl.math.compare.LT;
 
 /**
  * Convert to lowercase (in the English locale)
@@ -41,7 +40,7 @@ public class LowerCase<T extends CharSequence, R extends CharSequence> extends P
 
 
   public static LowerCase valueOf(Struct struct) {
-    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) {
+    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) { // Names are {@link String#intern()}alized so OK to check by reference
       return new LowerCase(SimpleBindings.newBinding(struct.getArg(0)),
               SimpleBindings.newBinding(struct.getArg(1)));
     }

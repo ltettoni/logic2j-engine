@@ -191,7 +191,7 @@ public class Solver {
       result = Call.callLogic(goalStruct, currentVars, cutLevel);
     }
     // The CUT functor, all the trick is in the returned value, see comments in the Cut class.
-    else if (Struct.FUNCTOR_CUT == functor) {
+    else if (Struct.FUNCTOR_CUT == functor) { // Names are {@link String#intern()}alized so OK to check by reference
       result = Cut.cutLogic(currentVars, cutLevel);
     }
     // ---------------------------------------------------------------------------

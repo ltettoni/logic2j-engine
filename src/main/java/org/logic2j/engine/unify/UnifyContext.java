@@ -22,8 +22,6 @@ import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.Solver;
 import org.logic2j.engine.solver.listener.SolutionListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 

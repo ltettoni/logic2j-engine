@@ -90,7 +90,7 @@ public class Pred2<T, R> extends FOPredicate {
           for (final R c1 : iter1) {
             // Both bound values - check
             final R[] images = this.images.apply(c0);
-            final boolean found = Arrays.stream(images).anyMatch(c1::equals);
+            final boolean found = Arrays.asList(images).contains(c1);
             // TODO Perhaps we need to emit as many solutions as matching elements, not only one
             final int continuation = notifySolutionIf(found, currentVars);
             if (continuation != CONTINUE) {

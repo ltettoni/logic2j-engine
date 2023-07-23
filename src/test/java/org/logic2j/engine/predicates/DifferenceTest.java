@@ -20,12 +20,10 @@ package org.logic2j.engine.predicates;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.SimpleBindings.bind;
 import static org.logic2j.engine.model.Var.intVar;
-import static org.logic2j.engine.model.Var.strVar;
 
 import org.junit.Test;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.model.Var;
-import org.logic2j.engine.predicates.impl.math.function.Length;
 import org.logic2j.engine.solver.Solver;
 
 /**

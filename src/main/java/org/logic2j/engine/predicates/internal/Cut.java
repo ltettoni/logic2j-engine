@@ -26,13 +26,13 @@ import org.logic2j.engine.unify.UnifyContext;
  * (i) bactracking for other solutions to any terms that precede the CUT in the same clause,
  * and (ii) considering any further matching clause (fact or
  * rule) for continuing to solve the parent (calling) goal.
- *
+ * <p>
  * Algorithm:
  * - Each time the solver starts iterating from the first clause (from a Prolog theory) in order to prove a goal,
  * the recursion counter "cutLevel" is incremented. Solving the initial query starts with cutLevel=1.
  * - Executing the CUT will invoke the current SolutionListener a single time, without binding any variable.
  * - The ex
- *
+ * <p>
  *
  * Note: The implementation is also hard-coded in the Solver.
  */

@@ -18,12 +18,15 @@
 package org.logic2j.engine.exception;
 
 
+import java.io.Serial;
+
 /**
  * Thrown by the Solution API when too many solutions could be found.
  *
  * @author tettoni
  */
 public class TooManySolutionsException extends Logic2jException {
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public TooManySolutionsException(CharSequence theMessage) {

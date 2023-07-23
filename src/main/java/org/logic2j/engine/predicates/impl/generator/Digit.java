@@ -23,10 +23,6 @@ import org.logic2j.engine.model.SimpleBindings;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.predicates.impl.Pred1Generator;
 
-import java.util.stream.IntStream;
-
-import static org.logic2j.engine.model.SimpleBindings.bind;
-
 /**
  * Generate digits
  */

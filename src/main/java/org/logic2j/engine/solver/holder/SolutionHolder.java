@@ -270,7 +270,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
     };
     new Thread(prologSolverThread).start();
 
-    return new Iterator<T>() {
+    return new Iterator<>() {
 
       private Object solution;
 
@@ -288,7 +288,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
       public T next() {
         if (this.solution == null) {
           throw new NoSuchElementException(
-              "Program error: next() called when either hasNext() did not return true previously, or next() was called more than once");
+                  "Program error: next() called when either hasNext() did not return true previously, or next() was called more than once");
         }
         final Object toReturn = this.solution;
         // Indicate that we have just "consumed" the solution, and any subsequent call to next() without first calling hasNext()
