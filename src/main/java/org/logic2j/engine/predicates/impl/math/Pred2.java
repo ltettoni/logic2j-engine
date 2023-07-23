@@ -22,6 +22,7 @@ import static org.logic2j.engine.solver.Continuation.CONTINUE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import org.logic2j.engine.model.Binding;
@@ -102,9 +103,7 @@ public class Pred2<T, R> extends FOPredicate {
         // n0 is constant, n1 is free: just unify in forward direction
         final List<R> img = new ArrayList<>();
         for (T n: iter0) {
-          for (R im: this.images.apply(n)) {
-            img.add(im);
-          }
+            Collections.addAll(img, this.images.apply(n));
         }
         if (img.isEmpty()) {
           return CONTINUE;
@@ -116,9 +115,7 @@ public class Pred2<T, R> extends FOPredicate {
       if (iter1 != null) {
         final List<T> pri = new ArrayList<>();
         for (R n: iter1) {
-          for (T pre: this.preimages.apply(n)) {
-            pri.add(pre);
-          }
+            Collections.addAll(pri, this.preimages.apply(n));
         }
         if (pri.isEmpty()) {
           return CONTINUE;
