@@ -115,7 +115,7 @@
         <repository>
             <id>github</id>
             <name>ltettoni Maven Packages on GitHub</name>
-            <url>https://maven.pkg.github.com/ltettoni/logic2j-api</url>
+            <url>https://maven.pkg.github.com/ltettoni/logic2j-engine</url>
         </repository>
     </distributionManagement>
 
