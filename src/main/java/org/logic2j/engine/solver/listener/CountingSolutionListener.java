@@ -18,6 +18,7 @@
 package org.logic2j.engine.solver.listener;
 
 
+import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.unify.UnifyContext;
 
 import static org.logic2j.engine.solver.Continuation.CONTINUE;
@@ -59,10 +60,7 @@ public class CountingSolutionListener implements SolutionListener {
     if (logger.isDebugEnabled()) {
       logger.debug(" onSolution(#{})", this.count);
     }
-    if (this.count >= this.maxIteration) {
-      return USER_ABORT;
-    }
-    return CONTINUE;
+    return Continuation.continueElseAbort(this.count < this.maxIteration);
   }
 
   // ---------------------------------------------------------------------------

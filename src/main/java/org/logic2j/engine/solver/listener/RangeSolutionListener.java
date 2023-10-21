@@ -64,7 +64,7 @@ public class RangeSolutionListener<T> implements SolutionListener {
     if (logger.isDebugEnabled()) {
       logger.debug(" >>>>>>>>> onSolution() #{}", this.counter);
     }
-    return this.counter < this.maxFetch ? Continuation.CONTINUE : Continuation.USER_ABORT;
+    return Continuation.continueElseAbort(this.counter < this.maxFetch);
   }
 
   public void checkRange() {

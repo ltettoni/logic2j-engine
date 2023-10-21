@@ -58,9 +58,10 @@ public class Cut extends SolverPredicate {
     final int downstreamContinuation = currentVars.getSolutionListener().onSolution(currentVars);
     // When return from the solution above, this means we backtrack ! We must tell our caller that CUT was executed!
 
-    if (downstreamContinuation == Continuation.CONTINUE || downstreamContinuation < 1) {
-      // We are in a typical case: downstream wanted to continue, but we will have to cut it.
-      // Or downstream wanted to abort, in which case we cut it anyway that leads to the same.
+    if (Continuation.isRegularContinueOrAbort(downstreamContinuation)) {
+      // We are in a typical case:
+      // (1) Downstream wanted to continue, but we will have to cut it.
+      // Or (2) downstream wanted to abort, in which case we cut it anyway that leads to the same.
       return cutLevel;
     } else {
       // We've got a cut from processing downstream solutions

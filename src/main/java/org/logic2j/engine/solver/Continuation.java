@@ -23,13 +23,12 @@ import org.logic2j.engine.unify.UnifyContext;
 /**
  * Usual codes that applications or libraries should return,
  * that specify which behaviour the inference engine should take after
- * a solution was found, via
- * {@link SolutionListener#onSolution(UnifyContext)}.
+ * a solution was found, via {@link SolutionListener#onSolution(UnifyContext)}.
  * <p/>
  * Continuations are int constants.
  * Several methods return such an int whose interpretation is a {@link Continuation}, and most often one of the two
  * constants defined below are returned; however in the case of {@link org.logic2j.engine.predicates.internal.Cut},
- * a value > 0 can be returned too.
+ * a value >= 1 can be returned too.
  * See documentation in {@link SolutionListener}.
  *
  * @author tettoni
@@ -52,4 +51,16 @@ public final class Continuation {
    */
   public static final int USER_ABORT = -1;
 
+  public static boolean isRegularContinueOrAbort(int continuationValue) {
+    return continuationValue == CONTINUE || continuationValue == USER_ABORT;
+  }
+
+  /**
+   * Return a Continuation depending on a boolean condition.
+   * @param condition A positive condition, true will propose continuation
+   * @return Continuation#CONTINUE when condition is true, otherwise {@link Continuation#USER_ABORT}
+   */
+  public static int continueElseAbort(boolean condition) {
+    return condition ? CONTINUE : USER_ABORT;
+  }
 }
