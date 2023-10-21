@@ -48,6 +48,14 @@ public class FirstOrderLogicTest {
     assertThat(list.toString()).isEqualTo("[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8]");
   }
 
+  @Test
+  public void oddAndEven() {
+    final Var<Integer> X = intVar("X");
+    final And and = and(new Odd(X), new Even(X));
+    final List<Integer> list = solver.solve(and).var(X).list();
+    assertThat(list).isEmpty();
+  }
+
   // --------------------------------------------------------------------------
   // Testing call()
   // --------------------------------------------------------------------------
@@ -139,7 +147,7 @@ public class FirstOrderLogicTest {
   /**
    * Using Optional on a goal that has no numeric solution (even AND odd) will still
    * yield the free variable, so one solution.
-   * The pendant of this test yields zero results, see {{@link PredicatesTest#testExists1_fail()}
+   * The pendant of this test yields zero results, see {{@link #oddAndEven()}
    */
   @Test
   public void optionalWithoutSolutions() {
