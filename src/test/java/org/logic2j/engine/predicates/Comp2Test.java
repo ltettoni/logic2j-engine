@@ -19,7 +19,6 @@ package org.logic2j.engine.predicates;
 
 import org.junit.Test;
 import org.logic2j.engine.exception.InvalidTermException;
-import org.logic2j.engine.model.Binding;
 import org.logic2j.engine.model.Term;
 import org.logic2j.engine.predicates.impl.math.compare.LT;
 import org.logic2j.engine.solver.Solver;

@@ -23,7 +23,7 @@ import org.logic2j.engine.unify.UnifyContext;
 /**
  * A predicate that implements core {@link org.logic2j.engine.solver.Solver} functionality.
  */
-public abstract class SolverPredicate extends Struct {
+public abstract class SolverPredicate extends Struct<Void> {
 
   protected SolverPredicate(String functor, Object... arguments) {
     super(functor, arguments);

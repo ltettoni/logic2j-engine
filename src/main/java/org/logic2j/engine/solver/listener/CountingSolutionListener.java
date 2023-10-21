@@ -21,9 +21,6 @@ package org.logic2j.engine.solver.listener;
 import org.logic2j.engine.solver.Continuation;
 import org.logic2j.engine.unify.UnifyContext;
 
-import static org.logic2j.engine.solver.Continuation.CONTINUE;
-import static org.logic2j.engine.solver.Continuation.USER_ABORT;
-
 /**
  * A base implementation of {@link SolutionListener} that holds a counter of the number of solutions reached.
  * The {@link #onSolution(UnifyContext)} method always returns Continuation#CONTINUE (dangerously allowing for potential

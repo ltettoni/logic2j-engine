@@ -101,12 +101,18 @@ public class FirstOrderLogicTest {
     assertThat(solver.solve(goal).count()).isEqualTo(0);
   }
 
+  /**
+   * There are 10 digits, so one solution to saying the count is either 9, 10, 11
+   */
   @Test
   public void countCheckValids() {
     final Count goal = count(new Digit(null), bind(9, 10, 11));
     assertThat(solver.solve(goal).count()).isEqualTo(1);
   }
 
+  /**
+   * There are 10 digits, so two solutions to saying the count is either 9, 10, 11, 10, 13
+   */
   @Test
   public void countCheckValids2() {
     final Count goal = count(new Digit(null), bind(9, 10, 11, 10, 13));
@@ -130,6 +136,11 @@ public class FirstOrderLogicTest {
     assertThat(list.toString()).isEqualTo("[0, 2, 4, 6, 8]");
   }
 
+  /**
+   * Using Optional on a goal that has no numeric solution (even AND odd) will still
+   * yield the free variable, so one solution.
+   * The pendant of this test yields zero results, see {{@link PredicatesTest#testExists1_fail()}
+   */
   @Test
   public void optionalWithoutSolutions() {
     final Var<Integer> X = intVar("X");
