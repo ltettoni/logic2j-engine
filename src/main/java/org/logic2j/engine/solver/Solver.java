@@ -84,7 +84,7 @@ public class Solver {
    *
    * @param goal
    * @param solutionListener
-   * @return Continuation
+   * @return A {@link Continuation} or exceptionally another int value (in case of cut)
    */
   public int solveGoal(Object goal, SolutionListener solutionListener) {
     if (termApi().isFreeVar(goal)) {
@@ -112,6 +112,7 @@ public class Solver {
    * is already instantiated; this is needed in custom predicates implementing first-order logic like
    * not(), isPresent(), etc.
    * You enter here when part of the variables have been bound already.
+   * @return A {@link Continuation} or exceptionally another int value (in case of cut).
    */
   public int solveGoal(Object goal, UnifyContext currentVars) {
     // Check if we will have to deal with DataFacts in this session of solving.

@@ -29,5 +29,12 @@ public abstract class SolverPredicate extends Struct {
     super(functor, arguments);
   }
 
+  /**
+   *
+   * @param currentVars
+   * @param cutLevel
+   * @return Typically one of the {@link org.logic2j.engine.solver.Continuation} values, but there is
+   * a notable exception with the handling of the {@link Cut} predicate.
+   */
   public abstract int predicateLogic(UnifyContext currentVars, final int cutLevel);
 }

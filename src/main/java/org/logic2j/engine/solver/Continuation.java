@@ -21,12 +21,16 @@ import org.logic2j.engine.solver.listener.SolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
 
 /**
- * Usual codes that the applications or libraries should return,
- * that specify the behaviour that the inference engine should take after
+ * Usual codes that applications or libraries should return,
+ * that specify which behaviour the inference engine should take after
  * a solution was found, via
  * {@link SolutionListener#onSolution(UnifyContext)}.
  * <p/>
- * NOTE: Only those two possible values should be returned, see documentation of SolutionListener.
+ * Continuations are int constants.
+ * Several methods return such an int whose interpretation is a {@link Continuation}, and most often one of the two
+ * constants defined below are returned; however in the case of {@link org.logic2j.engine.predicates.internal.Cut},
+ * a value > 0 can be returned too.
+ * See documentation in {@link SolutionListener}.
  *
  * @author tettoni
  */
