@@ -36,7 +36,8 @@ public class Format extends FOPredicate {
   }
 
   public static Format valueOf(Struct struct) {
-    if (struct.getName() == PREDICATE_NAME && struct.getArity()>=2) { // Names are {@link String#intern()}alized so OK to check by reference
+      //noinspection StringEquality
+      if (struct.getName() == PREDICATE_NAME && struct.getArity()>=2) { // Names are {@link String#intern()}alized so OK to check by reference
       return new Format(struct.getArgs());
     }
     return null;
