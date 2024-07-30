@@ -1,3 +1,7 @@
-*.iml
-.idea
-target
+# maven
+/target
+# MacOS
+.DS_Store
+# IntelliJ
+/.idea/
+logic2j-engine.iml
