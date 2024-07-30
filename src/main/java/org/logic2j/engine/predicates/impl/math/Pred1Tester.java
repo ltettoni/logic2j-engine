@@ -57,11 +57,10 @@ public class Pred1Tester<T> extends FOPredicate {
           return continuation;
         }
       }
-      return CONTINUE;
     } else {
       // free variables - no solution
-      return CONTINUE;
     }
+      return CONTINUE;
 
   }
 

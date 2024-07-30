@@ -40,7 +40,8 @@ public class LowerCase<T extends CharSequence, R extends CharSequence> extends P
 
 
   public static LowerCase valueOf(Struct struct) {
-    if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) { // Names are {@link String#intern()}alized so OK to check by reference
+      //noinspection StringEquality
+      if (struct.getName() == PREDICATE_NAME && struct.getArity()==2) { // Names are {@link String#intern()}alized so OK to check by reference
       return new LowerCase(SimpleBindings.newBinding(struct.getArg(0)),
               SimpleBindings.newBinding(struct.getArg(1)));
     }

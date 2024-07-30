@@ -101,8 +101,8 @@ public class UnifyContext {
     this.solutionListener = solutionListener;
     this.currentTransaction = 0;
     this.topVarIndex = 0;
-    //        audit.info("New at t={}", currentTransaction);
-    //        audit.info("    this={}", this);
+    // audit.info("New at t={}", currentTransaction);
+    // audit.info("    this={}", this);
   }
 
   /**

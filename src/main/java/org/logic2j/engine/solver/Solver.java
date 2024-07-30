@@ -133,6 +133,7 @@ public class Solver {
    * @param cutLevel
    * @return
    */
+  @SuppressWarnings("StringEquality")
   public int solveInternalRecursive(final Object goalTerm, final UnifyContext currentVars, final int cutLevel) {
     final long inferenceCounter = ProfilingInfo.nbInferences;
     if (logger.isDebugEnabled()) {

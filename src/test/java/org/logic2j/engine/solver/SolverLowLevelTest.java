@@ -125,9 +125,9 @@ public class SolverLowLevelTest {
     //
     final Var<Integer> Q = intVar("Q");
     countNSolutions(3, or(eq(Q, bind(1)), eq(Q, bind(2)), eq(Q, bind(3))));
-    //      GoalHolder solutions;
-    //      solutions = this.prolog.solve("X=a; X=b; X=c");
-    //      assertEquals("[a, b, c]", solutions.var("X").list().toString());
+    // GoalHolder solutions;
+    // solutions = this.prolog.solve("X=a; X=b; X=c");
+    // assertEquals("[a, b, c]", solutions.var("X").list().toString());
   }
 
 

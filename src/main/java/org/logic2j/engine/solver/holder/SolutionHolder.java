@@ -140,7 +140,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
     if (rangeListener.getNbSolutions() == 0) {
       return Optional.empty();
     }
-    return Optional.ofNullable((T) rangeListener.getResults().get(0));
+    return Optional.ofNullable((T) rangeListener.getResults().getFirst());
   }
 
   /**
@@ -154,7 +154,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
     if (rangeListener.getNbSolutions() == 0) {
       return Optional.empty();
     }
-    return Optional.ofNullable((T)rangeListener.getResults().get(0));
+    return Optional.ofNullable((T)rangeListener.getResults().getFirst());
   }
 
   /**
@@ -165,7 +165,7 @@ public class SolutionHolder<T> implements ResultsHolder<T> {
   @Override
   public T unique() {
     initListenerRangesAndSolve(1, 1, 2);
-    return (T) rangeListener.getResults().get(0);
+    return (T) rangeListener.getResults().getFirst();
   }
 
 
