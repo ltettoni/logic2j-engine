@@ -47,7 +47,7 @@ public class PredicatesTest {
   public void usingPlainJavaPredicate() {
     final Var<Integer> Q = intVar("Q");
     final List<Integer> list = solver.solve(new Digit(Q), new Odd(Q), filter(Q, i -> i != 5)).var(Q).list();
-    logger.info("Result: {}", list);
+    logger.debug("Result: {}", list);
     assertThat(list.toString()).isEqualTo("[1, 3, 7, 9]");
   }
 
@@ -56,7 +56,7 @@ public class PredicatesTest {
     final Var<Integer> Q = intVar("Q");
     final Var<Integer> R = intVar("R");
     final List<Integer> list = solver.solve(new Digit(Q), map(Q, x -> x * x, R)).var(R).list();
-    logger.info("Result: {}", list);
+    logger.debug("Result: {}", list);
     assertThat(list.toString()).isEqualTo("[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]");
   }
 
@@ -105,7 +105,7 @@ public class PredicatesTest {
   @Test
   public void testExists1_true() {
     final Var<Integer> x = intVar("X");
-    final int nbr = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)))).count();
+    final int nbr = solver.solve(exists(and(new Digit(x), new Info("info log testExists1_true", x), new Odd(x)))).count();
     assertThat(nbr).isEqualTo(1);
   }
 
@@ -134,7 +134,7 @@ public class PredicatesTest {
   public void testExists2_solve_true() {
     final Var<Integer> x = intVar("X");
     final Var<Boolean> result = new Var<>(Boolean.class, "Result");
-    final String res = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), result)).var(result).list().toString();
+    final String res = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_solve_true", x), new Odd(x)), result)).var(result).list().toString();
     assertThat(res).isEqualTo("[true]");
   }
 
@@ -143,36 +143,36 @@ public class PredicatesTest {
     final Var<Integer> x = intVar("X");
     final Var<Boolean> result = new Var<>(Boolean.class, "Result");
     final String res =
-        solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), result)).var(result).list().toString();
+        solver.solve(exists(and(new Digit(x), new Info("info log testExists2_solve_false", x), new Odd(x), new Even(x)), result)).var(result).list().toString();
     assertThat(res).isEqualTo("[false]");
   }
 
   @Test
   public void testExists2_check_true() {
     final Var<Integer> x = intVar("X");
-    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true))).count();
+    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_true A", x), new Odd(x)), bind(true))).count();
     assertThat(nbr1).isEqualTo(1);
-    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(false))).count();
+    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_true B", x), new Odd(x)), bind(false))).count();
     assertThat(nbr2).isEqualTo(0);
-    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x)), bind(true, false))).count();
+    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_true C", x), new Odd(x)), bind(true, false))).count();
     assertThat(nbr3).isEqualTo(1);
   }
 
   @Test
   public void testExists2_check_false() {
     final Var<Integer> x = intVar("X");
-    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(false))).count();
+    final int nbr1 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_false A", x), new Odd(x), new Even(x)), bind(false))).count();
     assertThat(nbr1).isEqualTo(1);
-    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true))).count();
+    final int nbr2 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_false B", x), new Odd(x), new Even(x)), bind(true))).count();
     assertThat(nbr2).isEqualTo(0);
-    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("generated", x), new Odd(x), new Even(x)), bind(true, false))).count();
+    final int nbr3 = solver.solve(exists(and(new Digit(x), new Info("info log testExists2_check_false C", x), new Odd(x), new Even(x)), bind(true, false))).count();
     assertThat(nbr3).isEqualTo(1);
   }
 
 
   @Test
   public void testNot1() {
-    final int nbr = solver.solve(not(and(new Digit(null), new Info("sol")))).count();
+    final int nbr = solver.solve(not(and(new Digit(null), new Info("info log testNot1")))).count();
     assertThat(nbr).isEqualTo(0);
   }
 
