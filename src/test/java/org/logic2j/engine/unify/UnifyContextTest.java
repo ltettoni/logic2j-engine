@@ -84,7 +84,7 @@ public class UnifyContextTest {
 
 
   private UnifyContext bind(Var<?> v, Object t2) {
-    logger.info("Binding   : {} -> {}", v, t2);
+    logger.debug("Binding   : {} -> {}", v, t2);
     UnifyContext m = initialContext;
     assertThat(m).isNotNull();
     UnifyContext m2 = m.bind(v, t2);
@@ -92,22 +92,22 @@ public class UnifyContextTest {
     assertThat(m2).isNotEqualTo(m);
     //
     assertThat(m.reify(v)).isEqualTo(v);
-    //logger.info("Reify under original monad: {}", reified(m, v));
-    //    logger.info("Term reified with returned UnifyContext: {}", reified(m2, v));
+    // logger.debug("Reify under original monad: {}", reified(m, v));
+    // logger.debug("Term reified with returned UnifyContext: {}", reified(m2, v));
     return m2;
   }
 
 
   private UnifyContext unify(Object t1, Object t2) {
-    logger.info("Unifying   : {}  ~  {}", t1, t2);
+    logger.debug("Unifying   : {}  ~  {}", t1, t2);
     UnifyContext m = initialContext;
     UnifyContext m2 = m.unify(t1, t2);
     if (m2 != null) {
-      logger.info("Unified");
-      logger.info("Monad after: {}", m2);
-      //      logger.info("Terms after: {}  =  {}", reified(m2, t1), reified(m2, t2));
+      logger.debug("Unified");
+      logger.debug("Monad after: {}", m2);
+      // logger.debug("Terms after: {}  =  {}", reified(m2, t1), reified(m2, t2));
     } else {
-      logger.info("Not unified");
+      logger.debug("Not unified");
     }
     return m2;
   }

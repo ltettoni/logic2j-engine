@@ -50,13 +50,13 @@ class ExtractingSolutionListener extends CountingSolutionListener {
 
     this.solutions = new ArrayList<>();
 
-    logger.info("Init listener for \"{}\"", theGoal);
+    logger.debug("Init listener for \"{}\"", theGoal);
   }
 
   @Override
   public int onSolution(UnifyContext currentVars) {
     final Object solution = currentVars.reify(goal);
-    logger.info(" solution: {}", solution);
+    logger.debug(" solution: {}", solution);
 
     final Map<String, Object> solutionVars = new HashMap<>();
     solutionVars.put(Var.WHOLE_SOLUTION_VAR_NAME, solution); // The global solution
@@ -71,9 +71,9 @@ class ExtractingSolutionListener extends CountingSolutionListener {
 
   public void report() {
       switch (count()) {
-          case 0 -> logger.info("Solving \"{}\" yields no solution", goal);
-          case 1 -> logger.info("Solving \"{}\" yields a single solution", goal);
-          default -> logger.info("Solving \"{}\" yields {} solution(s)", goal, count());
+          case 0 -> logger.debug("Solving \"{}\" yields no solution", goal);
+          case 1 -> logger.debug("Solving \"{}\" yields a single solution", goal);
+          default -> logger.debug("Solving \"{}\" yields {} solution(s)", goal, count());
       }
   }
 

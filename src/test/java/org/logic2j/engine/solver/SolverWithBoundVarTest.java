@@ -90,8 +90,8 @@ public class SolverWithBoundVarTest {
     final GoalHolder holder = solver.solve(new Even(Q), new Odd(R));
     final List<Integer> qs = holder.var(Q).list();
     final List<Integer> rs = holder.var(R).list();
-    logger.info("Result: {}", qs);
-    logger.info("Result: {}", rs);
+    logger.debug("Result: {}", qs);
+    logger.debug("Result: {}", rs);
     assertThat(qs.toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
     assertThat(rs.toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
   }

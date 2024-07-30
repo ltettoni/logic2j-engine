@@ -61,7 +61,7 @@ public class IntRange extends FOPredicate {
     if (isFreeVar(iterating)) {
       final List<Integer> values = IntStream.range(min, max).boxed().collect(Collectors.toList());
 
-      logger.info("{} is going to notify solutions: {}", this, values);
+      logger.debug("{} is going to notify solutions: {}", this, values);
       for (int increment = min; increment < max; increment++) {
         final int cont = unifyAndNotify(currentVars, iterating, increment);
         if (cont != CONTINUE) {
