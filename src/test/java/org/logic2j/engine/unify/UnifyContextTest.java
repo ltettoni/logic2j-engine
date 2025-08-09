@@ -21,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.logic2j.engine.model.Struct;
 import org.logic2j.engine.model.Var;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.logic2j.engine.model.TermApiLocator.termApi;
@@ -32,8 +30,6 @@ import static org.logic2j.engine.model.Var.anyVar;
  * Created by tettoni on 2017-01-20.
  */
 public class UnifyContextTest {
-  private static final Logger logger = LoggerFactory.getLogger(UnifyContextTest.class);
-
   protected Var<?> X;
 
   protected Var<?> Y;
@@ -84,7 +80,6 @@ public class UnifyContextTest {
 
 
   private UnifyContext bind(Var<?> v, Object t2) {
-    logger.debug("Binding   : {} -> {}", v, t2);
     UnifyContext m = initialContext;
     assertThat(m).isNotNull();
     UnifyContext m2 = m.bind(v, t2);
@@ -92,23 +87,13 @@ public class UnifyContextTest {
     assertThat(m2).isNotEqualTo(m);
     //
     assertThat(m.reify(v)).isEqualTo(v);
-    // logger.debug("Reify under original monad: {}", reified(m, v));
-    // logger.debug("Term reified with returned UnifyContext: {}", reified(m2, v));
     return m2;
   }
 
 
   private UnifyContext unify(Object t1, Object t2) {
-    logger.debug("Unifying   : {}  ~  {}", t1, t2);
     UnifyContext m = initialContext;
     UnifyContext m2 = m.unify(t1, t2);
-    if (m2 != null) {
-      logger.debug("Unified");
-      logger.debug("Monad after: {}", m2);
-      // logger.debug("Terms after: {}  =  {}", reified(m2, t1), reified(m2, t2));
-    } else {
-      logger.debug("Not unified");
-    }
     return m2;
   }
 

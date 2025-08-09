@@ -23,8 +23,6 @@ import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.generator.Even;
 import org.logic2j.engine.predicates.impl.generator.Odd;
 import org.logic2j.engine.solver.holder.GoalHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -36,7 +34,6 @@ import static org.logic2j.engine.model.Var.strVar;
 import static org.logic2j.engine.predicates.Predicates.eq;
 
 public class SolverWithBoundVarTest {
-  private static final Logger logger = LoggerFactory.getLogger(SolverWithBoundVarTest.class);
   private final Solver solver = new Solver();
 
   @Test
@@ -90,8 +87,6 @@ public class SolverWithBoundVarTest {
     final GoalHolder holder = solver.solve(new Even(Q), new Odd(R));
     final List<Integer> qs = holder.var(Q).list();
     final List<Integer> rs = holder.var(R).list();
-    logger.debug("Result: {}", qs);
-    logger.debug("Result: {}", rs);
     assertThat(qs.toString()).isEqualTo("[0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8]");
     assertThat(rs.toString()).isEqualTo("[1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 1, 3, 5, 7, 9]");
   }

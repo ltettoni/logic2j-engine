@@ -20,8 +20,6 @@ package org.logic2j.engine.solver;
 import org.logic2j.engine.model.Var;
 import org.logic2j.engine.solver.listener.CountingSolutionListener;
 import org.logic2j.engine.unify.UnifyContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -31,8 +29,6 @@ import static org.logic2j.engine.model.TermApiLocator.termApi;
  * Used in test cases to extract number of solutions and solutions to a goal.
  */
 class ExtractingSolutionListener extends CountingSolutionListener {
-  private static final Logger logger = LoggerFactory.getLogger(ExtractingSolutionListener.class);
-
   private final Object goal;
   private final Var<?>[] vars;
   private final Set<String> varNames;
@@ -49,14 +45,11 @@ class ExtractingSolutionListener extends CountingSolutionListener {
     this.varNames.add(Var.WHOLE_SOLUTION_VAR_NAME); // This pseudo var means the whole solution
 
     this.solutions = new ArrayList<>();
-
-    logger.debug("Init listener for \"{}\"", theGoal);
   }
 
   @Override
   public int onSolution(UnifyContext currentVars) {
     final Object solution = currentVars.reify(goal);
-    logger.debug(" solution: {}", solution);
 
     final Map<String, Object> solutionVars = new HashMap<>();
     solutionVars.put(Var.WHOLE_SOLUTION_VAR_NAME, solution); // The global solution
@@ -67,14 +60,6 @@ class ExtractingSolutionListener extends CountingSolutionListener {
     this.solutions.add(solutionVars);
 
     return super.onSolution(currentVars);
-  }
-
-  public void report() {
-      switch (count()) {
-          case 0 -> logger.debug("Solving \"{}\" yields no solution", goal);
-          case 1 -> logger.debug("Solving \"{}\" yields a single solution", goal);
-          default -> logger.debug("Solving \"{}\" yields {} solution(s)", goal, count());
-      }
   }
 
   public Collection<Var<?>> getVariables() {

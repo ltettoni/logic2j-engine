@@ -22,12 +22,10 @@ import org.logic2j.engine.model.Var;
 import org.logic2j.engine.predicates.impl.generator.Digit;
 import org.logic2j.engine.predicates.impl.generator.Even;
 import org.logic2j.engine.predicates.impl.generator.Odd;
-import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.io.logging.*;
+import org.logic2j.engine.predicates.impl.io.logging.Error;
 import org.logic2j.engine.predicates.impl.math.function.Abs;
 import org.logic2j.engine.predicates.impl.math.function.Succ;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -39,7 +37,6 @@ import static org.logic2j.engine.model.Var.intVar;
 import static org.logic2j.engine.predicates.Predicates.*;
 
 public class PredicatesTest {
-  private static final Logger logger = LoggerFactory.getLogger(PredicatesTest.class);
   private final Solver solver = new Solver();
 
 
@@ -47,7 +44,6 @@ public class PredicatesTest {
   public void usingPlainJavaPredicate() {
     final Var<Integer> Q = intVar("Q");
     final List<Integer> list = solver.solve(new Digit(Q), new Odd(Q), filter(Q, i -> i != 5)).var(Q).list();
-    logger.debug("Result: {}", list);
     assertThat(list.toString()).isEqualTo("[1, 3, 7, 9]");
   }
 
@@ -56,7 +52,6 @@ public class PredicatesTest {
     final Var<Integer> Q = intVar("Q");
     final Var<Integer> R = intVar("R");
     final List<Integer> list = solver.solve(new Digit(Q), map(Q, x -> x * x, R)).var(R).list();
-    logger.debug("Result: {}", list);
     assertThat(list.toString()).isEqualTo("[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]");
   }
 
